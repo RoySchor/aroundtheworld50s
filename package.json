@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fontsource-variable/dosis": "^5.1.0",
+    "@fontsource/dancing-script": "^5.1.0",
+    "@fontsource/scope-one": "^5.1.0",
     "@heroicons/react": "^2.2.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",

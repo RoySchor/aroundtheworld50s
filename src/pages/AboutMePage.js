@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/aboutMePage.css";
-import aboutMeImage from "../images/about_me_page_image.png";
+import aboutMeImage from "../assets/about_me_page_image.png";
 
 const AboutMePage = () => {
   return (
@@ -29,7 +29,7 @@ const AboutMePage = () => {
       </div>
 
       <div className="container">
-        <div className="p-16 rounded-lg">
+        <div className="p-16 lg:max-w-4xl mx-auto rounded-lg">
           <h2 className="text-2xl font-serif font-semibold text-gray-800">
             All About Me
           </h2>

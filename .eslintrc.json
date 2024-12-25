@@ -6,7 +6,8 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "react-app"
   ],
   "parserOptions": {
     "ecmaFeatures": {
@@ -28,6 +29,7 @@
     ],
     "no-unused-vars": "warn",
     "react/react-in-jsx-scope": "warn",
-    "no-undef": "warn"
+    "no-undef": "warn",
+    "react/no-unescaped-entities": "off"
   }
 }
