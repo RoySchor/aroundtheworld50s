@@ -1,0 +1,39 @@
+.navbar {
+  @apply bg-white shadow-sm;
+}
+
+.navbar-container {
+  @apply flex justify-between items-center py-4;
+}
+
+.navbar-brand {
+  @apply flex-shrink-0;
+}
+
+.brand-title {
+  @apply text-2xl font-bold;
+}
+
+.brand-subtitle {
+  @apply text-sm text-gray-600;
+}
+
+.nav-links {
+  @apply hidden md:block;
+}
+
+.nav-links-container {
+  @apply flex items-center space-x-8;
+}
+
+.nav-link {
+  @apply text-gray-900 hover:text-gray-600;
+}
+
+.social-links {
+  @apply flex items-center space-x-4;
+}
+
+.social-icon {
+  @apply w-6 h-6 text-gray-900 hover:text-gray-600;
+}
