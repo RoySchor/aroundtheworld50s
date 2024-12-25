@@ -1,0 +1,19 @@
+.container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.page-container {
+  @apply min-h-screen bg-gray-50;
+}
+
+.page-content {
+  @apply py-12;
+}
+
+.page-title {
+  @apply text-4xl font-bold mb-4;
+}
+
+.home-title {
+  @apply text-6xl font-bold mb-4;
+}

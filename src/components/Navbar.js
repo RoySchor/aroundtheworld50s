@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaInstagram, FaGithub, FaLinkedin } from "react-icons/fa";
+import { FaInstagram, FaTiktok } from "react-icons/fa";
 import "../styles/navbar.css";
 
 const Navbar = () => {
@@ -39,28 +39,18 @@ const Navbar = () => {
 
           <div className="social-links">
             <a
-              href="https://instagram.com/dummy"
+              href="https://www.instagram.com/aroundtheworld50s/"
               target="_blank"
               rel="noopener noreferrer"
             >
               <FaInstagram className="social-icon" />
             </a>
             <a
-              href="https://github.com/dummy"
+              href="https://www.tiktok.com/@aroundtheworld50s"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <FaGithub className="social-icon" />
-            </a>
-            <a
-              href="https://linkedin.com/in/dummy"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FaLinkedin className="social-icon" />
-            </a>
-            <a href="https://royschor.com" className="nav-link">
-              ROYSCHOR.COM
+              <FaTiktok className="social-icon" />
             </a>
           </div>
         </div>
