@@ -31,7 +31,7 @@ const HomePage = () => {
       <div className="bg-white py-20 px-8">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-4xl font-scope text-left mb-6 text-gray-800">
-            Discover. Wonder. Experience. Live
+            Discover. Wonder. Experience. Live.
           </h2>
         </div>
 
