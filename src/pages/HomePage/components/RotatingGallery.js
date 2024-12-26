@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import "../../styles/layout.css";
+import "../../../styles/layout.css";
 
 const RotatingGallery = () => {
   const importAll = (r) => r.keys().map(r);
   const images = importAll(
     require.context(
-      "../../assets/homePageGallery",
+      "../../../assets/homePageGallery",
       false,
       /\.(png|jpe?g|svg)$/,
     ),
