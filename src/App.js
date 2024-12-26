@@ -11,17 +11,15 @@ import TipsPage from "./pages/TipsPage";
 function App() {
   return (
     <Router>
-      <div>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutMePage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/blog" element={<BlogPage />} />
-          <Route path="/gallery" element={<GalleryPage />} />
-          <Route path="/tips" element={<TipsPage />} />
-        </Routes>
-      </div>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutMePage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/gallery" element={<GalleryPage />} />
+        <Route path="/tips" element={<TipsPage />} />
+      </Routes>
     </Router>
   );
 }
