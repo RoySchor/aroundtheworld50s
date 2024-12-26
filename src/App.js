@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/Navbar/Navbar";
 import HomePage from "./pages/HomePage/HomePage";
-import AboutMePage from "./pages/AboutMePage";
+import AboutMePage from "./pages/AboutMePage/AboutMePage";
 import ContactPage from "./pages/ContactPage";
 import BlogPage from "./pages/BlogPage";
 import GalleryPage from "./pages/GalleryPage";

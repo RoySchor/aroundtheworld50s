@@ -1,0 +1,39 @@
+.page-container {
+  @apply relative min-h-screen bg-gray-50;
+}
+
+.fixed-background-container {
+ @apply relative h-screen bg-cover bg-center bg-fixed flex items-center justify-center;
+}
+
+.background-configure {
+  @apply absolute inset-0 bg-black bg-opacity-50;
+}
+
+.fixed-background-text-container {
+ @apply relative z-10 text-center text-white px-4;
+}
+
+.fixed-background-title {
+  @apply md:text-8xl font-cursive font-bold leading-tight;
+}
+
+.fixed-background-subtitle {
+  @apply md:text-5xl mt-20 font-cursive font-bold;
+}
+
+.fixed-background-button {
+  @apply mt-32 px-8 py-4 text-xl font-bold font-cursive border-4 border-white rounded-full hover:border-tan hover:text-tan transition duration-300;
+}
+
+.sliding-gallery-container {
+  @apply bg-white py-20 px-8;
+}
+
+.sliding-gallery-text-container {
+  @apply max-w-3xl mx-auto text-center;
+}
+
+.sliding-gallery-title {
+  @apply text-4xl font-scope text-left mb-6 text-gray-800;
+}

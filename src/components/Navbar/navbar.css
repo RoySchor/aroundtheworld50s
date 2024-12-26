@@ -1,9 +1,9 @@
 .navbar {
-  @apply bg-white shadow-sm;
+  @apply bg-white shadow-sm max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
 }
 
 .navbar-container {
-  @apply flex justify-between items-center py-4;
+  @apply flex justify-between items-center py-10;
 }
 
 .navbar-brand {
