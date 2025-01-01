@@ -4,7 +4,7 @@ import aboutMeImage from "../../assets/about_me_page_image.png";
 
 const AboutMePage = () => {
   return (
-    <div className="page-container">
+    <div className="page-container about-me">
       <div className="section-container">
         <div className="top-section-container">
           <img src={aboutMeImage} alt="About Me" className="image-container" />
