@@ -1,25 +1,17 @@
 .navbar {
-  @apply bg-white shadow-sm max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  @apply absolute top-0 left-0 w-full p-4 z-10 flex items-center justify-center;
 }
 
 .navbar-container {
-  @apply flex justify-between items-center py-10;
+  @apply flex items-center mx-auto;
 }
 
-.navbar-brand {
-  @apply flex-shrink-0;
+.navbar-light {
+  @apply bg-gray-600 shadow-md;
 }
 
-.brand-title {
-  @apply text-2xl font-bold;
-}
-
-.brand-subtitle {
-  @apply text-sm text-gray-600;
-}
-
-.nav-links {
-  @apply hidden md:block;
+.navbar-transparent {
+  @apply bg-transparent;
 }
 
 .nav-links-container {
@@ -27,7 +19,19 @@
 }
 
 .nav-link {
-  @apply text-gray-900 hover:text-gray-600;
+  @apply text-white text-lg font-bold hover:text-gray-300 transition duration-300;
+}
+
+.navbar-logo {
+  @apply flex justify-center items-center mx-8;
+}
+
+.navbar-logo img {
+  @apply transition-transform duration-300 ease-in-out transform hover:opacity-80;
+}
+
+.logo {
+  @apply h-40 w-40 object-contain;
 }
 
 .social-links {
@@ -35,5 +39,5 @@
 }
 
 .social-icon {
-  @apply w-6 h-6 text-gray-900 hover:text-gray-600;
+  @apply text-white w-6 h-6 hover:text-gray-300;
 }

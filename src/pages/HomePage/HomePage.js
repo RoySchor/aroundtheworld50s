@@ -1,7 +1,7 @@
 import React from "react";
 import "../../styles/layout.css";
 import "./HomePage.css";
-import homePageBackground from "../../assets/home_page_background_img.JPG";
+import homePageBackground from "../../assets/home-page-bg.webp";
 import { Link } from "react-router-dom";
 import RotatingGallery from "./components/RotatingGallery";
 
@@ -17,9 +17,11 @@ const HomePage = () => {
         <div className="background-configure" />
 
         <div className="fixed-background-text-container">
-          <h1 className="fixed-background-title">Hi!</h1>
           <p className="fixed-background-subtitle">
-            I'm just a mom traveling the world in my 50s
+            EXPLORE WITH EMOTION.
+            <br />
+            <br />
+            LIVE FOR THE JOURNEY.
           </p>
           <button className="fixed-background-button">
             <Link to="/about">Get to know me</Link>

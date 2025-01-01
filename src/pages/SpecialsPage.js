@@ -1,12 +1,12 @@
 import React from "react";
 import "../styles/layout.css";
 
-const GalleryPage = () => {
+const SpecialsPage = () => {
   return (
     <div className="page-container">
       <div className="container">
         <div className="page-content">
-          <h1 className="page-title">Gallery</h1>
+          <h1 className="page-title">specials</h1>
           {/* Add your gallery page content here */}
         </div>
       </div>
@@ -14,4 +14,4 @@ const GalleryPage = () => {
   );
 };
 
-export default GalleryPage;
+export default SpecialsPage;

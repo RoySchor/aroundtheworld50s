@@ -3,9 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import HomePage from "./pages/HomePage/HomePage";
 import AboutMePage from "./pages/AboutMePage/AboutMePage";
-import ContactPage from "./pages/ContactPage";
+import DestinationsPage from "./pages/DestinationsPage";
 import BlogPage from "./pages/BlogPage";
-import GalleryPage from "./pages/GalleryPage";
+import SpecialsPage from "./pages/SpecialsPage";
 import TipsPage from "./pages/TipsPage";
 
 function App() {
@@ -15,9 +15,9 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutMePage />} />
-        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/destinations" element={<DestinationsPage />} />
         <Route path="/blog" element={<BlogPage />} />
-        <Route path="/gallery" element={<GalleryPage />} />
+        <Route path="/special-pop-ups" element={<SpecialsPage />} />
         <Route path="/tips" element={<TipsPage />} />
       </Routes>
     </Router>

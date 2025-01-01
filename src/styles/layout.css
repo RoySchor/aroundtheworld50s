@@ -6,6 +6,10 @@
   @apply min-h-screen bg-gray-50;
 }
 
+.about-me {
+  @apply mt-44;
+}
+
 .page-content {
   @apply py-12;
 }
