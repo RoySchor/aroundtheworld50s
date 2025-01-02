@@ -1,25 +1,92 @@
-.fixed-background-container {
-  @apply relative h-screen bg-cover bg-center flex items-center justify-center;
- }
-
- .fixed-background-container::before {
-  content: '';
-  @apply absolute top-0 left-0 w-full h-full bg-black opacity-20;
+.page-title {
+  @apply text-center font-inter;
 }
 
- .fixed-background-text-container {
-  @apply relative z-10 text-center font-kalam font-bold text-7xl -mt-40 text-black px-4;
-  -webkit-text-stroke: 0px;
- }
+.page-content {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 2em;
+}
 
- .fixed-background-button {
-   @apply mt-32 px-8 py-4 text-xl font-bold font-caveat border-4 border-white rounded-full hover:border-tan hover:text-tan transition duration-300;
- }
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1em;
+  justify-content: center;
+  align-items: center;
+}
+
+.blog-item-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.blog-item {
+  position: relative;
+  overflow: hidden;
+  border: 0.75em solid transparent;
+  transition: border 0.3s;
+}
+
+.blog-image-wrapper {
+  position: relative;
+  padding: 0.75em;
+  border: 0.75em solid transparent;
+  transition: border 0.3s;
+}
 
 .blog-title {
-  @apply font-inter font-black text-4xl py-8;
+  @apply text-base font-bold mb-2;
+  align-items: center;
+  justify-content: center;
+}
+
+.blog-image {
+  position: relative;
+  height: 400px;
+  width: 400px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s;
+  overflow: hidden;
+}
+
+.blog-image::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  transition: background-color 0.3s;
+}
+
+.blog-link:hover .blog-image-wrapper {
+  border: 0.75em solid #02ad9f;
 }
 
 .blog-description {
-  @apply font-grandstander text-2xl;
+  position: absolute;
+  color: white;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
+  z-index: 2;
+  padding: 0.625em 1.25em;
+  border-radius: 0.625em;
+  opacity: 0;
+}
+
+.blog-link:hover .blog-description {
+  opacity: 1;
+}
+
+.blog-link:hover .blog-image::before {
+  background-color: rgba(131, 197, 190, 0.7);
 }

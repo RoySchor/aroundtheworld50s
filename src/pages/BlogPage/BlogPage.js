@@ -1,7 +1,8 @@
 import React from "react";
 import "../../styles/layout.css";
+import "./BlogPage.css";
 import { Link } from "react-router-dom";
-import TrinidadTobegoPost1 from "./Blogs/TrinidadTobegoBlog/TrinidadTobegoPost1";
+import blogs from "../../data/blogs";
 
 const BlogPage = () => {
   return (
@@ -9,8 +10,33 @@ const BlogPage = () => {
       <div className="container">
         <div className="page-content">
           <h1 className="page-title">Blog</h1>
-          <Link to="/blog/trinidad-tobego-post/1">Trinidad Tobego Blog</Link>
-          <TrinidadTobegoPost1 />
+          <div className="blog-grid">
+            {blogs.map((blog) => {
+              const imagePath = require(
+                `../../assets/blog/${blog.folder}/${blog.backgroundImage}.jpg`,
+              );
+              return (
+                <div className="blog-item-wrapper" key={blog.id}>
+                  <div className="blog-item">
+                    <Link to={blog.path} className="blog-link">
+                      <div className="blog-image-wrapper">
+                        <div className="blog-title">{blog.title}</div>
+
+                        <div
+                          className="blog-image"
+                          style={{ backgroundImage: `url(${imagePath})` }}
+                        >
+                          <div className="blog-description">
+                            {blog.blogDescription}
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

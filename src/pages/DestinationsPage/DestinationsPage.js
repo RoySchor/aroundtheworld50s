@@ -13,9 +13,9 @@ const DestinationsPage = () => {
           backgroundImage: `url(${background})`,
         }}
       >
-        <div className="background-configure" />
+        <div className="destination-page-background-configure" />
 
-        <div className="fixed-background-text-container">
+        <div className="destination-page-fixed-background-text-container">
           Choose your destinations
         </div>
       </div>

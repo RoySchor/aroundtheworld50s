@@ -2,24 +2,24 @@
   @apply relative min-h-screen bg-gray-50;
 }
 
-.fixed-background-container {
+.home-page-fixed-background-container {
  @apply relative h-screen bg-cover bg-center flex items-center justify-center;
 }
 
-.background-configure {
+.home-page-background-configure {
   @apply absolute inset-0 bg-black bg-opacity-10;
 }
 
-.fixed-background-text-container {
+.home-page-fixed-background-text-container {
  @apply relative z-10 text-center text-white px-4;
 }
 
-.fixed-background-title {
-  @apply md:text-6xl mt-56 font-kalam text-gray-100;
-  -webkit-text-stroke: 1px black;
+.home-page-fixed-background-title {
+  @apply md:text-7xl mt-56 font-kalam text-gray-100;
+  -webkit-text-stroke: 0.75px black;
 }
 
-.fixed-background-button {
+.home-page-fixed-background-button {
   @apply mt-32 px-8 py-4 text-xl font-bold font-caveat border-4 border-white rounded-full hover:border-tan hover:text-tan transition duration-300;
 }
 
