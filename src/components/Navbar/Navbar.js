@@ -6,7 +6,8 @@ import siteLogo from "../../assets/around_the_world_50s_logo.png";
 
 const Navbar = () => {
   const location = useLocation();
-  const isHomePage = location.pathname === "/";
+  const isHomePage =
+    location.pathname === "/" || location.pathname === "/destinations";
 
   return (
     <nav

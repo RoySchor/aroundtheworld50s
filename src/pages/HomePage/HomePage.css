@@ -3,11 +3,11 @@
 }
 
 .fixed-background-container {
- @apply relative h-screen bg-cover bg-center bg-fixed flex items-center justify-center;
+ @apply relative h-screen bg-cover bg-center flex items-center justify-center;
 }
 
 .background-configure {
-  @apply absolute inset-0 bg-black bg-opacity-30;
+  @apply absolute inset-0 bg-black bg-opacity-10;
 }
 
 .fixed-background-text-container {

@@ -1,0 +1,15 @@
+.page-container {
+  @apply relative min-h-screen bg-gray-50;
+}
+
+.fixed-background-container {
+ @apply relative h-screen bg-cover bg-center bg-fixed flex items-center justify-center;
+}
+
+.background-configure {
+  @apply absolute inset-0 bg-black bg-opacity-20;
+}
+
+.world-map {
+  @apply h-full w-full object-contain;
+}

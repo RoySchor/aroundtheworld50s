@@ -7,7 +7,7 @@
 }
 
 .image-container {
-  @apply w-full h-auto max-h-[400px] object-cover rounded-lg shadow-lg;
+  @apply w-full h-auto max-h-[600px] object-cover rounded-lg shadow-lg;
 }
 
 .overlap-text-container-box {
@@ -19,7 +19,7 @@
 }
 
 .overlap-text-container-box-description {
-  @apply text-base text-gray-600 leading-relaxed;
+  @apply text-lg text-gray-600 leading-relaxed;
 }
 
 .bottom-section-container {
