@@ -14,7 +14,7 @@ import SpecialsPage from "./pages/SpecialsPage";
 import TipsPage from "./pages/TipsPage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
-import TrinidadTobegoBlog from "./pages/BlogPage/Blogs/TrinidadTobegoBlog/TrinidadTobegoBlog";
+import TrinidadTobegoPost1 from "./pages/BlogPage/Blogs/TrinidadTobegoBlog/TrinidadTobegoPost1";
 
 function App() {
   return (
@@ -28,7 +28,7 @@ function App() {
         <Route path="/tips" element={<TipsPage />} />
 
         <Route path="/blog" element={<BlogPage />} />
-        <Route path="/blog/:blogName" element={<BlogPost />} />
+        <Route path="/blog/:postName/:index" element={<BlogPost />} />
 
         <Route path="*" element={<ErrorPage />} />
       </Routes>
@@ -37,11 +37,14 @@ function App() {
 }
 
 function BlogPost() {
-  const { blogName } = useParams();
+  const { postName, index } = useParams();
 
-  switch (blogName) {
-    case "trinidad-tobego-blog":
-      return <TrinidadTobegoBlog />;
+  switch (postName) {
+    case "trinidad-tobego-post":
+      if (index === "1") {
+        return <TrinidadTobegoPost1 />;
+      }
+      break;
     default:
       return <ErrorPage />;
   }

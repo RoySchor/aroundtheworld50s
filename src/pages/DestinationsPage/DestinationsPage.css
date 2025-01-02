@@ -15,11 +15,6 @@
   -webkit-text-stroke: 1px black;
  }
 
- .fixed-background-title {
-   @apply font-inter text-gray-50;
-   -webkit-text-stroke: 1px black;
- }
-
 .world-map {
   @apply h-full w-full object-contain;
 }
