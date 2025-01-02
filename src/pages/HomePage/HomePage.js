@@ -1,7 +1,7 @@
 import React from "react";
 import "../../styles/layout.css";
 import "./HomePage.css";
-import background1 from "../../assets/home-page-bg.webp";
+import background from "../../assets/home-page-bg.webp";
 import { Link } from "react-router-dom";
 import RotatingGallery from "./components/RotatingGallery";
 
@@ -11,13 +11,13 @@ const HomePage = () => {
       <div
         className="fixed-background-container"
         style={{
-          backgroundImage: `url(${background1})`,
+          backgroundImage: `url(${background})`,
         }}
       >
         <div className="background-configure" />
 
         <div className="fixed-background-text-container">
-          <p className="fixed-background-subtitle">
+          <p className="fixed-background-title">
             EXPLORE WITH EMOTION.
             <br />
             <br />
