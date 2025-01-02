@@ -11,6 +11,8 @@ module.exports = {
         inter: ['"Inter Variable"', 'sans-serif'],
         caveat: ['"Caveat Variable"', 'cursive'],
         kalam: ['"Kalam"', 'cursive'],
+        grandstander: ['"Grandstander Variable"', 'system-ui'],
+        playpensands: ['"Playpen Sans Variable"', 'cursive'],
       },
       colors: {
         tan: '#ccbca5'

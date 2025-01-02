@@ -6,12 +6,15 @@ import siteLogo from "../../assets/around_the_world_50s_logo.png";
 
 const Navbar = () => {
   const location = useLocation();
-  const isHomePage =
-    location.pathname === "/" || location.pathname === "/destinations";
+  const nonTransparentNavBar =
+    location.pathname === "/about" ||
+    location.pathname === "/blog" ||
+    location.pathname === "/special-pop-ups" ||
+    location.pathname === "/tips";
 
   return (
     <nav
-      className={`navbar ${isHomePage ? "navbar-transparent" : "navbar-light"}`}
+      className={`navbar ${nonTransparentNavBar ? "navbar-light" : "navbar-transparent"}`}
     >
       <div className="navbar-container">
         <div className="nav-links-container">
@@ -23,9 +26,6 @@ const Navbar = () => {
           </Link>
           <Link to="/destinations" className="nav-link">
             DESTINATIONS
-          </Link>
-          <Link to="/blog" className="nav-link">
-            BLOG
           </Link>
         </div>
 
@@ -40,6 +40,9 @@ const Navbar = () => {
         </div>
 
         <div className="nav-links-container">
+          <Link to="/blog" className="nav-link">
+            BLOG
+          </Link>
           <Link to="/special-pop-ups" className="nav-link">
             SPECIALS/ POP-UPS
           </Link>

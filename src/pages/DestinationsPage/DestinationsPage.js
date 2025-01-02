@@ -16,13 +16,12 @@ const DestinationsPage = () => {
         <div className="background-configure" />
 
         <div className="fixed-background-text-container">
-          Choose your destinations.
+          Choose your destinations
         </div>
       </div>
 
       <div className="container">
         <div className="page-content">
-          <h1 className="page-title">Choose your Desitnations</h1>
           <img src={worldMap} alt="world map" className="world-map" />
         </div>
       </div>
