@@ -14,6 +14,10 @@ const DestinationsPage = () => {
         }}
       >
         <div className="background-configure" />
+
+        <div className="fixed-background-text-container">
+          Choose your destinations.
+        </div>
       </div>
 
       <div className="container">
