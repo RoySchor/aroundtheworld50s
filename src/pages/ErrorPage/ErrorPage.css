@@ -1,0 +1,11 @@
+.error-gif {
+  @apply mx-auto my-8 w-full max-w-3xl object-contain;
+}
+
+.error-text {
+  @apply text-center text-gray-600 text-lg mt-4;
+}
+
+.back-home-link {
+  @apply text-blue-500 font-bold hover:text-blue-700 transition duration-300 mt-6 inline-block text-center;
+}

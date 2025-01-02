@@ -6,8 +6,13 @@
   @apply min-h-screen bg-gray-50;
 }
 
-.about-me {
+.about-me,
+.blog {
   @apply mt-44;
+}
+
+.error-page {
+  @apply mt-20;
 }
 
 .page-content {
