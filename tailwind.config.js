@@ -10,6 +10,7 @@ module.exports = {
         scope: ['"Dosis Variable"', 'sans-serif'],
         inter: ['"Inter Variable"', 'sans-serif'],
         caveat: ['"Caveat Variable"', 'cursive'],
+        kalam: ['"Kalam"', 'cursive'],
       },
       colors: {
         tan: '#ccbca5'

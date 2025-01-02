@@ -15,8 +15,8 @@
 }
 
 .fixed-background-title {
-  @apply md:text-7xl mt-20 font-caveat text-gray-50;
-  -webkit-text-stroke: 1.5px black;
+  @apply md:text-6xl mt-56 font-kalam text-gray-100;
+  -webkit-text-stroke: 1px black;
 }
 
 .fixed-background-button {

@@ -1,5 +1,17 @@
+@keyframes rotateY {
+  0% {
+    transform: rotateY(0deg);
+  }
+  90% {
+    transform: rotateY(360deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+
 .navbar {
-  @apply absolute top-0 left-0 w-full p-4 z-10 flex items-center justify-center;
+  @apply absolute top-0 left-0 w-full z-10 flex items-center justify-center;
 }
 
 .navbar-container {
@@ -38,7 +50,12 @@
 }
 
 .logo {
-  @apply h-40 w-40 object-contain;
+  @apply h-44 w-44 object-contain;
+  transform-origin: center;
+}
+
+.navbar-logo img:hover {
+  animation: rotateY 4s linear infinite;
 }
 
 .social-links {
