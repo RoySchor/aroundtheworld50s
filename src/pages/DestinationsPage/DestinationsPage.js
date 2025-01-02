@@ -1,7 +1,7 @@
 import React from "react";
 import "../../styles/layout.css";
 import "./DestinationsPage.css";
-import background from "../../assets/destinations-page-bg.webp";
+import background from "../../assets/destinations-page-bg.jpg";
 import worldMap from "../../assets/flat-world-map.webp";
 
 const DestinationsPage = () => {

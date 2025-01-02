@@ -6,8 +6,10 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        cursive: ['"Dancing Script"', 'cursive'],
+        dancing: ['"Dancing Script"', 'cursive'],
         scope: ['"Dosis Variable"', 'sans-serif'],
+        inter: ['"Inter Variable"', 'sans-serif'],
+        caveat: ['"Caveat Variable"', 'cursive'],
       },
       colors: {
         tan: '#ccbca5'

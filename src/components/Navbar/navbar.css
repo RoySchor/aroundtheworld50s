@@ -19,7 +19,14 @@
 }
 
 .nav-link {
-  @apply text-white text-lg font-bold hover:text-gray-300 transition duration-300;
+  @apply text-white text-2xl font-black font-inter;
+  -webkit-text-stroke: 1px black;
+}
+
+.nav-link:hover {
+  -webkit-text-stroke: 1px black;
+  color: rgb(209 213 219 / var(--tw-text-opacity, 1));
+  transition-duration: 300ms;
 }
 
 .navbar-logo {
@@ -27,7 +34,7 @@
 }
 
 .navbar-logo img {
-  @apply transition-transform duration-300 ease-in-out transform hover:opacity-80;
+  @apply transition-transform duration-300 ease-in-out transform hover:opacity-85;
 }
 
 .logo {
