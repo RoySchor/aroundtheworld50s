@@ -90,3 +90,8 @@
 .blog-link:hover .blog-image::before {
   background-color: rgba(131, 197, 190, 0.7);
 }
+
+.blog-sections-fixed-background-text-container {
+  @apply relative z-10 font-inter font-black text-5xl text-center text-gray-50;
+  -webkit-text-stroke: 1px black;
+}
