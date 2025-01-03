@@ -15,6 +15,19 @@
   -webkit-text-stroke: 1px black;
  }
 
+ .dropdown-container {
+  @apply flex justify-center my-2;
+}
+
+.destination-dropdown {
+  @apply w-1/2 p-2 text-lg rounded border border-gray-300 shadow-sm;
+  appearance: none;
+}
+
+.destination-dropdown:focus {
+  @apply outline-none ring-2 ring-indigo-500;
+}
+
 .world-map {
   @apply h-full w-full object-contain;
 }

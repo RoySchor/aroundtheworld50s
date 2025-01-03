@@ -5,11 +5,14 @@ import {
   Route,
   useParams,
 } from "react-router-dom";
+import blogs from "./data/blogs";
+
 import Navbar from "./components/Navbar/Navbar";
 import HomePage from "./pages/HomePage/HomePage";
 import AboutMePage from "./pages/AboutMePage/AboutMePage";
 import DestinationsPage from "./pages/DestinationsPage/DestinationsPage";
 import BlogPage from "./pages/BlogPage/BlogPage";
+import BlogSection from "./pages/BlogPage/BlogSections/BlogSection";
 import SpecialsPage from "./pages/SpecialsPage";
 import TipsPage from "./pages/TipsPage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
@@ -30,6 +33,8 @@ function App() {
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:postName/:index" element={<BlogPost />} />
 
+        <Route path="blog/:country" element={<BlogSectionPage />} />
+
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
@@ -48,6 +53,20 @@ function BlogPost() {
     default:
       return <ErrorPage />;
   }
+}
+
+function BlogSectionPage() {
+  const { country } = useParams();
+
+  const originalCountry = blogs.find(
+    (blog) => blog.country.toLowerCase().replace(/ /g, "-") === country,
+  )?.country;
+
+  if (!originalCountry) {
+    return <ErrorPage />;
+  }
+
+  return <BlogSection country={originalCountry} />;
 }
 
 export default App;

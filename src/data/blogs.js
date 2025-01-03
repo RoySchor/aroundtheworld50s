@@ -1,6 +1,7 @@
 const blogs = [
   {
     id: 1,
+    country: "Trinidad and Tobago",
     title: "📍🇹🇹Trinidad & Tobago, a tale of 2 islands",
     folder: "trinidadTobagoPost1",
     backgroundImage: "trinidad-tobego-post-1-bg",
