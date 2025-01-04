@@ -9,15 +9,13 @@ const HomePage = () => {
   return (
     <div className="page-container">
       <div
-        className="home-page-fixed-background-container"
+        className="fixed-background-container"
         style={{
           backgroundImage: `url(${background})`,
         }}
       >
-        <div className="home-page-background-configure" />
-
-        <div className="home-page-fixed-background-text-container">
-          <p className="home-page-fixed-background-title">
+        <div className="fixed-background-text-container">
+          <p className="fixed-background-title">
             EXPLORE WITH EMOTION.
             <br />
             <br />

@@ -13,7 +13,7 @@ const BlogPage = () => {
           <div className="blog-grid">
             {blogs.map((blog) => {
               const imagePath = require(
-                `../../assets/blog/${blog.folder}/${blog.backgroundImage}.jpg`,
+                `../../assets/blog/${blog.folder}/${blog.background_image}.jpg`,
               );
               return (
                 <div className="blog-item-wrapper" key={blog.id}>
@@ -27,7 +27,7 @@ const BlogPage = () => {
                           style={{ backgroundImage: `url(${imagePath})` }}
                         >
                           <div className="blog-description">
-                            {blog.blogDescription}
+                            {blog.blog_description}
                           </div>
                         </div>
                       </div>
