@@ -11,7 +11,7 @@ const BlogSection = ({ country }) => {
   const background =
     filteredBlogs.length > 0
       ? require(
-          `../../../assets/blog/${filteredBlogs[0].folder}/${filteredBlogs[0].backgroundImage}.jpg`,
+          `../../../assets/blog/${filteredBlogs[0].folder}/${filteredBlogs[0].background_image}.jpg`,
         )
       : null;
 
@@ -23,10 +23,10 @@ const BlogSection = ({ country }) => {
           backgroundImage: `url(${background})`,
         }}
       >
-        <div className="destination-page-background-configure" />
-
-        <div className="blog-sections-fixed-background-text-container">
-          Category: {country}
+        <div className="fixed-background-text-container">
+          <div className="fixed-background-title fixed-background-no-margin">
+            Category: {country}
+          </div>
         </div>
       </div>
 
@@ -36,7 +36,7 @@ const BlogSection = ({ country }) => {
           <div className="blog-grid">
             {filteredBlogs.map((blog) => {
               const imagePath = require(
-                `../../../assets/blog/${blog.folder}/${blog.backgroundImage}.jpg`,
+                `../../../assets/blog/${blog.folder}/${blog.background_image}.jpg`,
               );
               return (
                 <div className="blog-item-wrapper" key={blog.id}>
@@ -50,7 +50,7 @@ const BlogSection = ({ country }) => {
                           style={{ backgroundImage: `url(${imagePath})` }}
                         >
                           <div className="blog-description">
-                            {blog.blogDescription}
+                            {blog.blog_description}
                           </div>
                         </div>
                       </div>

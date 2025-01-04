@@ -1,19 +1,21 @@
 import React from "react";
 import "../../../../styles/layout.css";
 import "../BlogPost.css";
-import background from "../../../../assets/blog/trinidadTobagoPost1/trinidad-tobego-post-1-bg.jpg";
+import background from "../../../../assets/blog/TrinidadTobagoPost1/trinidad-tobego-post-1-bg.jpg";
 
 const TrinidadTobegoPost1 = () => {
   return (
     <div className="page-container">
       <div
-        className="blog-post-fixed-background-container"
+        className="fixed-background-container"
         style={{
           backgroundImage: `url(${background})`,
         }}
       >
-        <div className="blog-post-fixed-background-text-container">
-          📍🇹🇹Trinidad & Tobago, a tale of 2 islands
+        <div className="fixed-background-text-container">
+          <div className="fixed-background-title fixed-background-no-margin">
+            📍🇹🇹Trinidad & Tobago, a tale of 2 islands
+          </div>
         </div>
       </div>
 
