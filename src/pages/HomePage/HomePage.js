@@ -3,7 +3,8 @@ import "../../styles/layout.css";
 import "./HomePage.css";
 import background from "../../assets/home-page-bg.webp";
 import { Link } from "react-router-dom";
-import RotatingGallery from "./components/RotatingGallery";
+import MostRecentPosts from "./components/MostRecentPosts/MostRecentPosts";
+import RotatingGallery from "./components/RotatingGallery/RotatingGallery";
 
 const HomePage = () => {
   return (
@@ -27,15 +28,9 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="sliding-gallery-container">
-        <div className="sliding-gallery-text-container">
-          <h2 className="sliding-gallery-title">
-            Discover. Wonder. Experience. Live.
-          </h2>
-        </div>
+      <MostRecentPosts />
 
-        <RotatingGallery />
-      </div>
+      <RotatingGallery />
     </div>
   );
 };

@@ -1,0 +1,35 @@
+.gallery-container {
+  @apply py-20 px-8;
+}
+
+.sliding-gallery-text-container {
+  @apply max-w-3xl mx-auto text-center;
+}
+
+.sliding-gallery-title {
+  @apply text-4xl font-scope text-left mb-6 text-gray-800;
+}
+
+.rotating-gallery-container {
+  @apply relative py-10 max-w-5xl mx-auto px-4;
+}
+
+.rotating-gallery-image-container {
+  @apply flex gap-4 justify-center;
+}
+
+.rotating-gallery-image-box {
+  @apply relative w-1/3 h-64 bg-gray-200 rounded-lg overflow-hidden shadow-lg;
+}
+
+.rotating-gallery-image {
+  @apply w-full h-full object-cover;
+}
+
+.rotating-gallery-nav-button {
+  @apply absolute top-1/3 right-4 transform translate-y-1/2 bg-gray-800 text-white w-10 h-10 rounded-md hover:bg-gray-700 focus:outline-none;
+}
+
+.rotating-gallery-image-counter {
+  @apply text-center mt-4 text-lg text-gray-600;
+}
