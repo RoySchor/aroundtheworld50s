@@ -2,7 +2,7 @@ import React from "react";
 import "../../styles/layout.css";
 import "./DestinationsPage.css";
 import background from "../../assets/destinations-page-bg.jpg";
-import worldMap from "../../assets/flat-world-map.webp";
+import WorldMap from "./components/WorldMap";
 import blogs from "../../data/blogs";
 
 const DestinationsPage = () => {
@@ -45,7 +45,7 @@ const DestinationsPage = () => {
           </select>
         </div>
         <div className="page-content">
-          <img src={worldMap} alt="world map" className="world-map" />
+          <WorldMap />
         </div>
       </div>
     </div>

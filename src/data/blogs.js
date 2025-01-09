@@ -5,7 +5,7 @@ const blogs = [
     country: "Trinidad and Tobago",
     title: "📍🇹🇹Trinidad & Tobago, a tale of 2 islands",
     folder: "TrinidadTobagoPost1",
-    background_image: "trinidad-tobego-post-1-bg",
+    background_image: "trinidad-tobego-post-1-bg.jpg",
     path: "/blog/trinidad-tobego-post/1",
     blog_description:
       "⛱️10 days of Caribbean Charm: Uncovering the Soul and beaches✨",
