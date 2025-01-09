@@ -1,0 +1,31 @@
+.world-map-container {
+  @apply relative w-full;
+}
+
+.world-map {
+  @apply h-full w-full object-contain;
+}
+
+.country-box-selector {
+  @apply absolute w-5 h-5 border-4 border-red-500 cursor-pointer transition-all duration-300 ease-in-out hover:border-red-300 hover:scale-150;
+}
+
+.hover-info-container {
+  @apply fixed bottom-8 right-28 flex flex-col gap-4;
+}
+
+.hover-info-image-container {
+  @apply w-28 h-24 shadow-lg overflow-hidden transform translate-x-40 translate-y-10;
+}
+
+.hover-info-image {
+  @apply w-full h-full object-cover;
+}
+
+.hover-info-country-blog-container {
+  @apply w-48 border-4 border-red-300 p-4;
+}
+
+.hover-info-country-blog-title {
+  @apply text-sm font-semibold;
+}

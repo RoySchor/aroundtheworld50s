@@ -17,7 +17,7 @@ const MostRecentPosts = () => {
       <div className="blog-grid">
         {mostRecentBlogs.map((blog) => {
           const imagePath = require(
-            `../../../../assets/blog/${blog.folder}/${blog.background_image}.jpg`,
+            `../../../../assets/blog/${blog.folder}/${blog.background_image}`,
           );
           return (
             <div className="blog-item-wrapper" key={blog.id}>
