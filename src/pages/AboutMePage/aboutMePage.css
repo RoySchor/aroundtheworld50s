@@ -1,12 +1,12 @@
-.section-container {
+.about-me-section-container {
   @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8;
 }
 
-.top-section-container {
+.about-me-top-section-container {
   @apply relative md:w-2/3;
 }
 
-.image-container {
+.about-me-image-container {
   @apply w-full h-auto max-h-[600px] object-cover rounded-lg shadow-lg;
 }
 
@@ -22,14 +22,14 @@
   @apply text-lg text-gray-600 leading-relaxed;
 }
 
-.bottom-section-container {
+.about-me-bottom-section-container {
   @apply p-16 lg:max-w-4xl mx-auto rounded-lg;
 }
 
-.bottom-section-container-title {
+.about-me-bottom-section-container-title {
   @apply text-2xl font-serif font-semibold text-gray-800;
 }
 
-.bottom-section-container-description {
+.about-me-bottom-section-container-description {
   @apply text-lg text-gray-600 leading-relaxed mt-4;
 }
