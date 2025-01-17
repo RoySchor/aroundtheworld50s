@@ -2,18 +2,20 @@ import React, { useState } from "react";
 import "./WorldMap.css";
 import worldMap from "../../../assets/flat-world-map.webp";
 import blogs from "../../../data/blogs";
-import { countryCoordinates } from "./WorldMap.constants";
-import { serializeCountry } from "../DestinationPage.utils";
+import { locationCoordinates } from "./WorldMap.constants";
+import { serializeLocation } from "../DestinationPage.utils";
 
 const WorldMap = () => {
-  const [hoveredCountry, setHoveredCountry] = useState(null);
+  const [hoveredLocation, setHoveredLocation] = useState(null);
 
   const uniqueCountryBlogs = Object.values(
-    blogs.reduce((acc, blog) => {
-      if (!acc[blog.country]) {
-        acc[blog.country] = blog;
+    blogs.reduce((accumulator, blog) => {
+      const locationKey = `${blog.country}${blog.state ? `-${blog.state}` : ""}`;
+
+      if (!accumulator[locationKey]) {
+        accumulator[locationKey] = blog;
       }
-      return acc;
+      return accumulator;
     }, {}),
   );
 
@@ -22,11 +24,15 @@ const WorldMap = () => {
       <img src={worldMap} alt="World Map" className="world-map" />
 
       {uniqueCountryBlogs.map((blog) => {
-        const coordinates = countryCoordinates[blog.country];
+        const locationKey = `${blog.country}${blog.state ? `-${blog.state}` : ""}`;
+        const coordinates = locationCoordinates[locationKey];
         if (!coordinates) return null;
 
         return (
-          <a href={`/blog/${serializeCountry(blog.country)}`} key={blog.id}>
+          <a
+            href={`/blog/${serializeLocation(blog.country)}/${blog.state ? serializeLocation(blog.state) : ""}`}
+            key={blog.id}
+          >
             <div
               className="country-box-selector"
               style={{
@@ -34,28 +40,32 @@ const WorldMap = () => {
                 top: coordinates.top,
                 transform: "translate(-50%, -50%)",
               }}
-              onMouseEnter={() => setHoveredCountry(blog)}
-              onMouseLeave={() => setHoveredCountry(null)}
+              onMouseEnter={() => setHoveredLocation(blog)}
+              onMouseLeave={() => setHoveredLocation(null)}
             />
           </a>
         );
       })}
 
-      {hoveredCountry && (
+      {hoveredLocation && (
         <div className="hover-info-container">
           <div className="hover-info-image-container">
             <img
               src={require(
-                `../../../assets/blog/${hoveredCountry.folder}/${hoveredCountry.background_image}`,
+                `../../../assets/blog/${hoveredLocation.folder}/${hoveredLocation.background_image}`,
               )}
-              alt={hoveredCountry.country}
+              // alt={hoveredLocation.country}
+              alt={hoveredLocation.state || hoveredLocation.country}
               className="hover-info-image"
             />
           </div>
 
           <div className="hover-info-country-blog-container">
             <div className="hover-info-country-blog-title">
-              {hoveredCountry.country}
+              {/* {hoveredLocation.country} */}
+              {hoveredLocation.state
+                ? `${hoveredLocation.state}, ${hoveredLocation.country}`
+                : hoveredLocation.country}
             </div>
           </div>
         </div>

@@ -7,7 +7,7 @@
 }
 
 .country-box-selector {
-  @apply absolute w-5 h-5 border-4 border-red-500 cursor-pointer transition-all duration-300 ease-in-out hover:border-red-300 hover:scale-150;
+  @apply absolute w-3 h-3 border-2 border-red-800 cursor-pointer transition-all duration-300 ease-in-out hover:border-blue-600 hover:border-4 hover:w-5 hover:h-5;
 }
 
 .hover-info-container {

@@ -4,7 +4,7 @@ import "./DestinationsPage.css";
 import background from "../../assets/destinations-page-bg.jpg";
 import WorldMap from "./components/WorldMap";
 import blogs from "../../data/blogs";
-import { serializeCountry } from "./DestinationPage.utils";
+import { serializeLocation } from "./DestinationPage.utils";
 
 const DestinationsPage = () => {
   const uniqueCountries = [...new Set(blogs.map((blog) => blog.country))];
@@ -30,7 +30,7 @@ const DestinationsPage = () => {
             className="destination-dropdown"
             onChange={(e) => {
               if (e.target.value) {
-                const serializedCountry = serializeCountry(e.target.value);
+                const serializedCountry = serializeLocation(e.target.value);
                 window.location.href = `/blog/${serializedCountry}`;
               }
             }}
