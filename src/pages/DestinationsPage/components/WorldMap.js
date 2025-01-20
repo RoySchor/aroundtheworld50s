@@ -4,6 +4,7 @@ import worldMap from "../../../assets/flat-world-map.webp";
 import blogs from "../../../data/blogs";
 import { locationCoordinates } from "./WorldMap.constants";
 import { serializeLocation } from "../DestinationPage.utils";
+import Flag from "react-world-flags";
 
 const WorldMap = () => {
   const [hoveredLocation, setHoveredLocation] = useState(null);
@@ -42,7 +43,18 @@ const WorldMap = () => {
               }}
               onMouseEnter={() => setHoveredLocation(blog)}
               onMouseLeave={() => setHoveredLocation(null)}
-            />
+            >
+              {hoveredLocation && (
+                <div className="flag-pole">
+                  <div className="flag">
+                    <Flag
+                      code={hoveredLocation.country_code || "US"}
+                      alt={hoveredLocation.country}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
           </a>
         );
       })}
@@ -54,7 +66,6 @@ const WorldMap = () => {
               src={require(
                 `../../../assets/blog/${hoveredLocation.folder}/${hoveredLocation.background_image}`,
               )}
-              // alt={hoveredLocation.country}
               alt={hoveredLocation.state || hoveredLocation.country}
               className="hover-info-image"
             />
@@ -62,7 +73,6 @@ const WorldMap = () => {
 
           <div className="hover-info-country-blog-container">
             <div className="hover-info-country-blog-title">
-              {/* {hoveredLocation.country} */}
               {hoveredLocation.state
                 ? `${hoveredLocation.state}, ${hoveredLocation.country}`
                 : hoveredLocation.country}
