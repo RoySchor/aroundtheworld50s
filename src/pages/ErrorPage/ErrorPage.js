@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 const ErrorPage = () => {
   return (
-    <div className="page-container error-page">
+    <div className="page-container">
       <div className="container">
         <div className="page-content">
           <Link to="/" className="nav-link">
