@@ -1,5 +1,5 @@
 .error-gif {
-  @apply mx-auto my-8 w-full max-w-3xl object-contain;
+  @apply mx-auto my-8 w-full max-w-3xl object-contain mt-32;
 }
 
 .error-text {

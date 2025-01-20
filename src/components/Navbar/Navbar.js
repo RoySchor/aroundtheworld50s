@@ -6,15 +6,14 @@ import siteLogo from "../../assets/around_the_world_50s_logo.png";
 
 const Navbar = () => {
   const location = useLocation();
-  const nonTransparentNavBar =
-    location.pathname === "/about" ||
-    location.pathname === "/blog" ||
-    location.pathname === "/special-pop-ups" ||
-    location.pathname === "/tips";
+  const transparentNavBar =
+    location.pathname === "/" ||
+    location.pathname === "/destinations" ||
+    location.pathname.startsWith("/blog/");
 
   return (
     <nav
-      className={`navbar ${nonTransparentNavBar ? "navbar-light" : "navbar-transparent"}`}
+      className={`navbar ${transparentNavBar ? "navbar-transparent" : "navbar-light"}`}
     >
       <div className="navbar-container">
         <div className="nav-links-container">

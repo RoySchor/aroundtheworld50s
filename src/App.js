@@ -6,6 +6,7 @@ import {
   useParams,
 } from "react-router-dom";
 import blogs from "./data/blogs";
+import { serializeLocation } from "./pages/DestinationsPage/DestinationPage.utils";
 
 import Navbar from "./components/Navbar/Navbar";
 import HomePage from "./pages/HomePage/HomePage";
@@ -14,7 +15,7 @@ import DestinationsPage from "./pages/DestinationsPage/DestinationsPage";
 import BlogPage from "./pages/BlogPage/BlogPage";
 import BlogSection from "./pages/BlogPage/BlogSections/BlogSection";
 import SpecialsPage from "./pages/SpecialsPage";
-import TipsPage from "./pages/TipsPage";
+import TipsPage from "./pages/TipsPage/TipsPage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
 import TrinidadTobegoPost1 from "./pages/BlogPage/Blogs/TrinidadTobegoBlog/TrinidadTobegoPost1";
@@ -59,7 +60,7 @@ function BlogSectionPage() {
   const { country } = useParams();
 
   const originalCountry = blogs.find(
-    (blog) => blog.country.toLowerCase().replace(/ /g, "-") === country,
+    (blog) => serializeLocation(blog.country) === country,
   )?.country;
 
   if (!originalCountry) {
