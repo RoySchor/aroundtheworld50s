@@ -3,6 +3,7 @@ import "../../../../styles/layout.css";
 import "../../../BlogPage/BlogPage.css";
 import "./MostRecentPosts.css";
 import blogs from "../../../../data/blogs";
+import { Link } from "react-router-dom";
 
 const MostRecentPosts = () => {
   const mostRecentBlogs = blogs
@@ -22,7 +23,7 @@ const MostRecentPosts = () => {
           return (
             <div className="blog-item-wrapper" key={blog.id}>
               <div className="blog-item">
-                <a href={blog.path} className="blog-link">
+                <Link to={blog.path} className="blog-link">
                   <div className="blog-image-wrapper">
                     <div className="most-recent-blog-title">{blog.title}</div>
 
@@ -35,7 +36,7 @@ const MostRecentPosts = () => {
                       </div>
                     </div>
                   </div>
-                </a>
+                </Link>
               </div>
             </div>
           );

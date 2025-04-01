@@ -29,11 +29,12 @@ const WorldMap = () => {
         const coordinates = locationCoordinates[locationKey];
         if (!coordinates) return null;
 
+        const serializedCountry = serializeLocation(blog.country);
+        const serializedState = blog.state ? serializeLocation(blog.state) : "";
+        const href = `/#/blog/${serializedCountry}${serializedState ? `/${serializedState}` : ""}`;
+
         return (
-          <a
-            href={`/blog/${serializeLocation(blog.country)}/${blog.state ? serializeLocation(blog.state) : ""}`}
-            key={blog.id}
-          >
+          <a href={href} key={blog.id}>
             <div
               className="country-box-selector"
               style={{
