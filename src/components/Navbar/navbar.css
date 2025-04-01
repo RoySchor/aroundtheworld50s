@@ -11,8 +11,7 @@
 }
 
 .navbar {
-  /* @apply absolute top-0 left-0 w-full z-10 flex items-center justify-center; */
-  @apply fixed top-0 left-0 w-full z-50 flex items-center justify-center;
+  @apply absolute top-0 left-0 w-full z-50 flex items-center justify-center;
 }
 
 .navbar-container {
@@ -27,8 +26,24 @@
   @apply bg-transparent;
 }
 
-.nav-links-container {
-  @apply flex items-center space-x-8;
+.mobile-nav {
+  @apply lg:hidden flex;
+}
+
+.mobile-menu-button {
+  @apply text-white text-3xl;
+}
+
+.desktop-nav {
+  @apply hidden lg:flex items-center justify-between w-full;
+}
+
+.nav-links-left {
+  @apply flex space-x-6;
+}
+
+.nav-links-right {
+  @apply flex items-center space-x-6;
 }
 
 .nav-link {
@@ -66,4 +81,12 @@
 
 .social-icon {
   @apply text-white w-5 h-5 hover:text-gray-300;
+}
+
+.mobile-menu {
+  @apply lg:hidden w-full mt-4 space-y-4 text-center;
+}
+
+.mobile-nav-link {
+  @apply nav-link block;
 }
