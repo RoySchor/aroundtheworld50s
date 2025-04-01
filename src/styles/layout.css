@@ -22,26 +22,26 @@
 
 .fixed-background-container {
   @apply relative h-screen bg-cover bg-center bg-fixed flex items-center justify-center;
- }
+}
 
- .fixed-background-container::before {
+.fixed-background-container::before {
   content: '';
   @apply absolute top-0 left-0 w-full h-full bg-black opacity-30;
 }
 
- .fixed-background-configure {
-   @apply absolute inset-0 bg-black bg-opacity-10;
- }
+.fixed-background-configure {
+  @apply absolute inset-0 bg-black bg-opacity-10;
+}
 
- .fixed-background-text-container {
+.fixed-background-text-container {
   @apply relative z-10 text-center text-white px-4;
- }
+}
 
- .fixed-background-title {
-   @apply md:text-7xl mt-56 font-kalam text-gray-100;
-   -webkit-text-stroke: 0.75px black;
- }
+.fixed-background-title {
+  @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl mt-32 sm:mt-40 md:mt-48 lg:mt-56 font-kalam text-gray-100;
+  -webkit-text-stroke: 0.75px black;
+}
 
- .fixed-background-no-margin {
+.fixed-background-no-margin {
   @apply mt-0;
- }
+}

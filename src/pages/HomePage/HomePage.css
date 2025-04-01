@@ -1,15 +1,15 @@
 .home-page-fixed-background-button {
-  @apply mt-32 px-8 py-4 text-xl font-bold font-caveat border-4 border-white rounded-full hover:border-tan hover:text-tan transition duration-300;
+  @apply mt-16 sm:mt-24 md:mt-32 px-6 sm:px-8 py-3 sm:py-4 text-lg sm:text-xl font-bold font-caveat border-4 border-white rounded-full hover:border-tan hover:text-tan transition duration-300;
 }
 
 .home-page-section-container {
-  @apply mx-auto lg:max-w-5xl px-4 sm:px-6 lg:px-8 py-14;
+  @apply mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-14;
 }
 
 .home-page-section-container-title {
-  @apply text-3xl font-serif font-semibold text-black text-center;
+  @apply text-2xl sm:text-3xl font-serif font-semibold text-black text-center;
 }
 
 .home-page-section-container-description {
-  @apply text-lg text-black leading-relaxed mt-4;
+  @apply text-base sm:text-lg text-black leading-relaxed mt-4;
 }
