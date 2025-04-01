@@ -1,17 +1,29 @@
 .recent-posts-container {
-  @apply pt-10 px-8;
+  @apply pt-6 sm:pt-8 lg:pt-10 px-4 sm:px-8;
 }
 
 .recent-posts-text-container {
-  @apply text-center text-4xl font-scope text-gray-800;
+  @apply text-center text-2xl sm:text-3xl lg:text-4xl font-scope text-gray-800;
 }
 
 .blog-grid {
   display: grid;
-  grid-template-columns: repeat(4, 0fr);
+  grid-template-columns: repeat(1, 1fr);
   justify-content: center;
   align-items: center;
   text-align: center;
+}
+
+@media (min-width: 640px) {
+  .blog-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .blog-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .blog-item-wrapper {
@@ -36,15 +48,15 @@
 }
 
 .most-recent-blog-title {
-  @apply text-base font-bold mb-2;
+  @apply text-sm sm:text-base font-bold mb-2;
   align-items: center;
   justify-content: center;
 }
 
 .blog-image {
   position: relative;
-  height: 275px;
-  width: 275px;
+  height: 200px;
+  width: 100%;
   background-size: cover;
   background-position: center;
   display: flex;
@@ -52,6 +64,13 @@
   justify-content: center;
   transition: transform 0.3s;
   overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .blog-image {
+    height: 275px;
+    width: 275px;
+  }
 }
 
 .blog-image::before {
@@ -72,13 +91,19 @@
 .blog-description {
   position: absolute;
   color: white;
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: bold;
   text-align: center;
   z-index: 2;
   padding: 0.625em 1.25em;
   border-radius: 0.625em;
   opacity: 0;
+}
+
+@media (min-width: 640px) {
+  .blog-description {
+    font-size: 1.25rem;
+  }
 }
 
 .blog-link:hover .blog-description {
