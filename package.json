@@ -2,6 +2,7 @@
   "name": "around-the-world-50s",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://royschor.github.io/aroundtheworld50s",
   "dependencies": {
     "@fontsource-variable/caveat": "^5.1.1",
     "@fontsource-variable/dosis": "^5.1.0",
@@ -34,7 +35,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint 'src/**/*.{js,jsx}'",
-    "lint:fix": "eslint 'src/**/*.{js,jsx}' --fix"
+    "lint:fix": "eslint 'src/**/*.{js,jsx}' --fix",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -60,6 +63,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.37.3",
+    "gh-pages": "^6.3.0",
     "globals": "^15.14.0",
     "prettier": "^3.4.2",
     "typescript-eslint": "^8.18.2"
