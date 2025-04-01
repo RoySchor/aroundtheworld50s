@@ -65,7 +65,7 @@ const RotatingGallery = () => {
             </div>
           ))}
         </div>
-        <button onClick={prevSlide} className="rotating-gallery-nav-button ">
+        <button onClick={prevSlide} className="rotating-gallery-nav-button">
           ❮
         </button>
         <button onClick={nextSlide} className="rotating-gallery-nav-button">
