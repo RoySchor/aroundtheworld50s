@@ -79,15 +79,18 @@ function BlogPost() {
 function BlogSectionPage() {
   const { country } = useParams();
 
-  const originalCountry = blogs.find(
-    (blog) => serializeLocation(blog.country) === country,
-  )?.country;
+  // Find the blog by matching either the serialized country name or the original country name
+  const blog = blogs.find(
+    (blog) =>
+      serializeLocation(blog.country) === country ||
+      blog.country.toLowerCase().replace(/\s+/g, "-") === country,
+  );
 
-  if (!originalCountry) {
+  if (!blog) {
     return <ErrorPage />;
   }
 
-  return <BlogSection country={originalCountry} />;
+  return <BlogSection country={blog.country} />;
 }
 
 export default App;
