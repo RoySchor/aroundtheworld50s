@@ -85,13 +85,21 @@ const Navbar = () => {
             <Link to="/about" className="mobile-nav-link" onClick={toggleMenu}>
               ABOUT ME
             </Link>
-            <Link to="/destinations" className="mobile-nav-link" onClick={toggleMenu}>
+            <Link
+              to="/destinations"
+              className="mobile-nav-link"
+              onClick={toggleMenu}
+            >
               DESTINATIONS
             </Link>
             <Link to="/blog" className="mobile-nav-link" onClick={toggleMenu}>
               BLOG
             </Link>
-            <Link to="/special-pop-ups" className="mobile-nav-link" onClick={toggleMenu}>
+            <Link
+              to="/special-pop-ups"
+              className="mobile-nav-link"
+              onClick={toggleMenu}
+            >
               SPECIALS / POP-UPS
             </Link>
             <Link to="/tips" className="mobile-nav-link" onClick={toggleMenu}>
