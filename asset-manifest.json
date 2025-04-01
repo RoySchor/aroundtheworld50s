@@ -1,30 +1,30 @@
 {
   "files": {
-    "main.css": "/aroundtheworld50s/static/css/main.cc0ef120.css",
-    "main.js": "/aroundtheworld50s/static/js/main.07144c01.js",
-    "static/js/453.fe2aba05.chunk.js": "/aroundtheworld50s/static/js/453.fe2aba05.chunk.js",
-    "static/media/IMG_1628.jpeg": "/aroundtheworld50s/static/media/IMG_1628.e5987312a97fbcd61ec9.jpeg",
-    "static/media/IMG_1650.jpeg": "/aroundtheworld50s/static/media/IMG_1650.c266d23292fe8c56881e.jpeg",
-    "static/media/IMG_1911.jpeg": "/aroundtheworld50s/static/media/IMG_1911.e0d4defef8f0363253c0.jpeg",
-    "static/media/IMG_1904.jpeg": "/aroundtheworld50s/static/media/IMG_1904.9014dca85a51eac6ba64.jpeg",
-    "static/media/IMG_1508.jpeg": "/aroundtheworld50s/static/media/IMG_1508.1dc65c4929160ee887cc.jpeg",
-    "static/media/IMG_1892.jpeg": "/aroundtheworld50s/static/media/IMG_1892.e58f4f3f42ec99cd195d.jpeg",
-    "static/media/IMG_1634.jpeg": "/aroundtheworld50s/static/media/IMG_1634.eacf8507b9ec6313a513.jpeg",
-    "static/media/IMG_1631.jpeg": "/aroundtheworld50s/static/media/IMG_1631.ea3be42c16b4a5a1a413.jpeg",
-    "static/media/destinations-page-bg.jpg": "/aroundtheworld50s/static/media/destinations-page-bg.39c6198efe8cf2185193.jpg",
-    "static/media/trinidad-tobego-post-1-bg.jpg": "/aroundtheworld50s/static/media/trinidad-tobego-post-1-bg.630aac59c170678ffb25.jpg",
-    "static/media/home-page-bg.webp": "/aroundtheworld50s/static/media/home-page-bg.0088e8f406dddfb127e7.webp",
-    "static/media/error-page-gif-no-bg.gif": "/aroundtheworld50s/static/media/error-page-gif-no-bg.64065e07fdd8d54560f6.gif",
-    "static/media/around_the_world_50s_logo.png": "/aroundtheworld50s/static/media/around_the_world_50s_logo.23d34d66928880786c68.png",
-    "static/media/about-me-page-bg.webp": "/aroundtheworld50s/static/media/about-me-page-bg.dc31fa0927ea11efdc00.webp",
-    "static/media/flat-world-map.webp": "/aroundtheworld50s/static/media/flat-world-map.93be244b96785ff75d03.webp",
-    "index.html": "/aroundtheworld50s/index.html",
-    "main.cc0ef120.css.map": "/aroundtheworld50s/static/css/main.cc0ef120.css.map",
-    "main.07144c01.js.map": "/aroundtheworld50s/static/js/main.07144c01.js.map",
-    "453.fe2aba05.chunk.js.map": "/aroundtheworld50s/static/js/453.fe2aba05.chunk.js.map"
+    "main.css": "/static/css/main.cc0ef120.css",
+    "main.js": "/static/js/main.df500cc5.js",
+    "static/js/453.fe2aba05.chunk.js": "/static/js/453.fe2aba05.chunk.js",
+    "static/media/IMG_1628.jpeg": "/static/media/IMG_1628.e5987312a97fbcd61ec9.jpeg",
+    "static/media/IMG_1650.jpeg": "/static/media/IMG_1650.c266d23292fe8c56881e.jpeg",
+    "static/media/IMG_1911.jpeg": "/static/media/IMG_1911.e0d4defef8f0363253c0.jpeg",
+    "static/media/IMG_1904.jpeg": "/static/media/IMG_1904.9014dca85a51eac6ba64.jpeg",
+    "static/media/IMG_1508.jpeg": "/static/media/IMG_1508.1dc65c4929160ee887cc.jpeg",
+    "static/media/IMG_1892.jpeg": "/static/media/IMG_1892.e58f4f3f42ec99cd195d.jpeg",
+    "static/media/IMG_1634.jpeg": "/static/media/IMG_1634.eacf8507b9ec6313a513.jpeg",
+    "static/media/IMG_1631.jpeg": "/static/media/IMG_1631.ea3be42c16b4a5a1a413.jpeg",
+    "static/media/destinations-page-bg.jpg": "/static/media/destinations-page-bg.39c6198efe8cf2185193.jpg",
+    "static/media/trinidad-tobego-post-1-bg.jpg": "/static/media/trinidad-tobego-post-1-bg.630aac59c170678ffb25.jpg",
+    "static/media/home-page-bg.webp": "/static/media/home-page-bg.0088e8f406dddfb127e7.webp",
+    "static/media/error-page-gif-no-bg.gif": "/static/media/error-page-gif-no-bg.64065e07fdd8d54560f6.gif",
+    "static/media/around_the_world_50s_logo.png": "/static/media/around_the_world_50s_logo.23d34d66928880786c68.png",
+    "static/media/about-me-page-bg.webp": "/static/media/about-me-page-bg.dc31fa0927ea11efdc00.webp",
+    "static/media/flat-world-map.webp": "/static/media/flat-world-map.93be244b96785ff75d03.webp",
+    "index.html": "/index.html",
+    "main.cc0ef120.css.map": "/static/css/main.cc0ef120.css.map",
+    "main.df500cc5.js.map": "/static/js/main.df500cc5.js.map",
+    "453.fe2aba05.chunk.js.map": "/static/js/453.fe2aba05.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.cc0ef120.css",
-    "static/js/main.07144c01.js"
+    "static/js/main.df500cc5.js"
   ]
 }
