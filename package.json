@@ -2,7 +2,7 @@
   "name": "around-the-world-50s",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://royschor.github.io/around-the-world-50s",
+  "homepage": "https://royschor.github.io/aroundtheworld50s",
   "dependencies": {
     "@fontsource-variable/caveat": "^5.1.1",
     "@fontsource-variable/dosis": "^5.1.0",
