@@ -22,6 +22,9 @@
 
 .fixed-background-container {
   @apply relative h-screen bg-cover bg-center bg-fixed flex items-center justify-center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .fixed-background-container::before {
