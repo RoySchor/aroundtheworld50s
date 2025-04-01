@@ -20,17 +20,17 @@ const Navbar = () => {
       className={`navbar ${transparentNavBar ? "navbar-transparent" : "navbar-light"}`}
     >
       <div className="navbar-container">
-        <div className="lg:hidden flex">
+        <div className="mobile-nav">
           <Link to="/" className="navbar-logo">
             <img src={siteLogo} alt="Logo" className="logo" />
           </Link>
-          <button onClick={toggleMenu} className="text-white text-3xl">
+          <button onClick={toggleMenu} className="mobile-menu-button">
             {menuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
 
-        <div className="hidden lg:flex items-center justify-between w-full">
-          <div className="flex space-x-6">
+        <div className="desktop-nav">
+          <div className="nav-links-left">
             <Link to="/" className="nav-link">
               HOME
             </Link>
@@ -48,7 +48,7 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <div className="flex items-center space-x-6">
+          <div className="nav-links-right">
             <Link to="/blog" className="nav-link">
               BLOG
             </Link>
@@ -58,7 +58,7 @@ const Navbar = () => {
             <Link to="/tips" className="nav-link">
               TIPS
             </Link>
-            <div className="social-links flex space-x-4">
+            <div className="social-links">
               <a
                 href="https://www.instagram.com/aroundtheworld50s/"
                 target="_blank"
@@ -78,34 +78,26 @@ const Navbar = () => {
         </div>
 
         {menuOpen && (
-          <div className="lg:hidden w-full mt-4 space-y-4 text-center">
-            <Link to="/" className="nav-link block" onClick={toggleMenu}>
+          <div className="mobile-menu">
+            <Link to="/" className="mobile-nav-link" onClick={toggleMenu}>
               HOME
             </Link>
-            <Link to="/about" className="nav-link block" onClick={toggleMenu}>
+            <Link to="/about" className="mobile-nav-link" onClick={toggleMenu}>
               ABOUT ME
             </Link>
-            <Link
-              to="/destinations"
-              className="nav-link block"
-              onClick={toggleMenu}
-            >
+            <Link to="/destinations" className="mobile-nav-link" onClick={toggleMenu}>
               DESTINATIONS
             </Link>
-            <Link to="/blog" className="nav-link block" onClick={toggleMenu}>
+            <Link to="/blog" className="mobile-nav-link" onClick={toggleMenu}>
               BLOG
             </Link>
-            <Link
-              to="/special-pop-ups"
-              className="nav-link block"
-              onClick={toggleMenu}
-            >
+            <Link to="/special-pop-ups" className="mobile-nav-link" onClick={toggleMenu}>
               SPECIALS / POP-UPS
             </Link>
-            <Link to="/tips" className="nav-link block" onClick={toggleMenu}>
+            <Link to="/tips" className="mobile-nav-link" onClick={toggleMenu}>
               TIPS
             </Link>
-            <div className="flex justify-center space-x-4">
+            <div className="social-links">
               <a
                 href="https://www.instagram.com/aroundtheworld50s/"
                 target="_blank"
