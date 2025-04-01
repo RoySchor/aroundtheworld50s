@@ -1,5 +1,5 @@
 .home-page-fixed-background-button {
-  @apply mt-16 sm:mt-24 md:mt-32 px-6 sm:px-8 py-3 sm:py-4 text-lg sm:text-xl font-bold font-caveat border-4 border-white rounded-full hover:border-tan hover:text-tan transition duration-300;
+  @apply mt-16 sm:mt-24 md:mt-32 px-6 sm:px-8 py-3 sm:py-4 text-lg sm:text-xl font-bold font-inter sm:font-caveat border-4 border-white rounded-full hover:border-tan hover:text-tan transition duration-300;
 }
 
 .home-page-section-container {

@@ -38,8 +38,14 @@
 }
 
 .fixed-background-title {
-  @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl mt-32 sm:mt-40 md:mt-48 lg:mt-56 font-kalam text-gray-100;
-  -webkit-text-stroke: 0.75px black;
+  @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl mt-32 sm:mt-40 md:mt-48 lg:mt-56 font-inter text-white;
+}
+
+@media (min-width: 640px) {
+  .fixed-background-title {
+    @apply font-kalam text-gray-100;
+    -webkit-text-stroke: 0.75px black;
+  }
 }
 
 .fixed-background-no-margin {
