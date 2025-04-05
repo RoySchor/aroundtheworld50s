@@ -24,6 +24,25 @@ const Navbar = () => {
           <Link to="/" className="navbar-logo">
             <img src={siteLogo} alt="Logo" className="logo" />
           </Link>
+
+          {/* Mobile social links */}
+          <div className="mobile-social-links">
+            <a
+              href="https://www.instagram.com/aroundtheworld50s/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaInstagram className="social-icon" />
+            </a>
+            <a
+              href="https://www.tiktok.com/@aroundtheworld50s"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaTiktok className="social-icon" />
+            </a>
+          </div>
+
           <button onClick={toggleMenu} className="mobile-menu-button">
             {menuOpen ? <FaTimes /> : <FaBars />}
           </button>
@@ -105,22 +124,6 @@ const Navbar = () => {
             <Link to="/tips" className="mobile-nav-link" onClick={toggleMenu}>
               TIPS
             </Link>
-            <div className="social-links">
-              <a
-                href="https://www.instagram.com/aroundtheworld50s/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaInstagram className="social-icon" />
-              </a>
-              <a
-                href="https://www.tiktok.com/@aroundtheworld50s"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaTiktok className="social-icon" />
-              </a>
-            </div>
           </div>
         )}
       </div>

@@ -27,7 +27,11 @@
 }
 
 .mobile-nav {
-  @apply lg:hidden flex;
+  @apply lg:hidden flex items-center justify-between w-full px-4;
+}
+
+.mobile-social-links {
+  @apply flex items-center space-x-4 ml-auto mr-4;
 }
 
 .mobile-menu-button {
@@ -84,9 +88,22 @@
 }
 
 .mobile-menu {
-  @apply lg:hidden w-full mt-4 space-y-4 text-center;
+  @apply lg:hidden absolute top-full left-1/2 w-2/3 space-y-4 py-6 px-4;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
 }
 
 .mobile-nav-link {
-  @apply nav-link block;
+  @apply nav-link block text-center py-2;
+}
+
+@media (max-width: 640px) {
+  .logo {
+    @apply h-24 w-24;
+  }
+
+  .mobile-menu {
+    @apply mt-0;
+  }
 }
