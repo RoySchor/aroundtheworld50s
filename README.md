@@ -7,7 +7,7 @@ A website of adventures, exploration, and life for my mother :)
 ### Overview
 This website is being developed for my mother, who has limited experience with coding. The core idea is to simplify the blog publishing process down to a single script:
 ```
-./scripts/blog_management/add_blog.sh
+python3 -m scripts.blog_management.blog_manager
 ```
 #### How It Works
 1. **Prompt for Blog Folder Name**
