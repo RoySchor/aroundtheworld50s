@@ -97,7 +97,7 @@ def update_blogs_js(base_dir, blog_data, post_index):
         new_blog['state'] = blog_data['state']
 
     # Convert to string and remove quotes only from keys
-    blog_entry = ",\n  " + json.dumps(new_blog, indent=2, ensure_ascii=False)
+    blog_entry = json.dumps(new_blog, indent=2, ensure_ascii=False)
     # Remove quotes from keys but keep them for values
     blog_entry = re.sub(r'(\s+)"([^"]+)":', r'\1\2:', blog_entry)
 
