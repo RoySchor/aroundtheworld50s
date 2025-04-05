@@ -231,11 +231,17 @@ def kill_npm_process():
     """Kill any running npm start process."""
     try:
         if sys.platform == "darwin":  # macOS
-            subprocess.run(['pkill', '-f', 'npm start'], check=False)
+            # Kill all node processes running npm start
+            subprocess.run(['pkill', '-f', 'node.*npm start'], check=False)
+            # Also kill any node processes that might be running the server
+            subprocess.run(['pkill', '-f', 'node.*react-scripts start'], check=False)
         elif sys.platform == "win32":  # Windows
+            # Kill all node processes
             subprocess.run(['taskkill', '/F', '/IM', 'node.exe'], check=False)
+            subprocess.run(['taskkill', '/F', '/FI', 'WINDOWTITLE eq npm start'], check=False)
         else:  # Linux
-            subprocess.run(['pkill', '-f', 'npm start'], check=False)
+            subprocess.run(['pkill', '-f', 'node.*npm start'], check=False)
+            subprocess.run(['pkill', '-f', 'node.*react-scripts start'], check=False)
     except subprocess.CalledProcessError:
         pass  # Ignore errors if no process is running
 
@@ -280,6 +286,18 @@ def deploy_changes(base_dir):
         print(f"⚠️ Error during deployment: {e}")
         print("You may need to deploy manually")
 
+def force_webpack_rebuild(base_dir):
+    """Force webpack to rebuild by touching the webpack config."""
+    webpack_config = base_dir / "node_modules/react-scripts/config/webpack.config.js"
+    if webpack_config.exists():
+        webpack_config.touch()
+
+def clear_webpack_cache(base_dir):
+    """Clear webpack cache to ensure fresh build."""
+    cache_dir = base_dir / "node_modules/.cache"
+    if cache_dir.exists():
+        shutil.rmtree(cache_dir)
+
 def main():
     print("Welcome to the blog addition tool!")
 
@@ -316,6 +334,9 @@ def main():
     # Validate JSON data
     validate_json(blog_data)
 
+    # Kill any existing npm processes first
+    kill_npm_process()
+
     # Setup directories
     base_dir = Path.cwd()
     post_index = get_next_post_index(base_dir / "src/assets/blog" / serialize_location(blog_data['country']))
@@ -336,7 +357,11 @@ def main():
     # Run lint:fix
     run_lint_fix(base_dir)
 
-    # Start development server
+    # Clear webpack cache and force rebuild
+    clear_webpack_cache(base_dir)
+    force_webpack_rebuild(base_dir)
+
+    # Start new development server
     run_npm_start(base_dir)
 
     # Ask for confirmation
@@ -355,6 +380,9 @@ def main():
         deploy_changes(base_dir)
         print("\n✨ Blog post has been successfully added and deployed! ✨")
         print("\nYou can now remove the folder from your Desktop if you want!")
+
+    # Kill npm process at the end
+    kill_npm_process()
 
 if __name__ == "__main__":
     main()
