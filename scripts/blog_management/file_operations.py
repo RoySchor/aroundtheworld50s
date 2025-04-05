@@ -76,37 +76,38 @@ def update_blogs_js(base_dir, blog_data, post_index):
 def create_blog_component(blog_component_dir, blog_data, post_index):
     """Create a new blog component file."""
     serialized_country = serialize_location(blog_data['country'])
-    component_content = f'''import React from "react";
-import "../../../../../styles/layout.css";
-import "../../BlogPost.css";
-import background from "../../../../../assets/blog/{serialized_country}/{post_index}/{blog_data['background_image']}";
+    component_content = f'''
+      import React from "react";
+      import "../../../../../styles/layout.css";
+      import "../../BlogPost.css";
+      import background from "../../../../../assets/blog/{serialized_country}/{post_index}/{blog_data['background_image']}";
 
-const {serialized_country.replace("-", "").title()}Post{post_index} = () => {{
-  return (
-    <div className="page-container">
-      <div
-        className="fixed-background-container"
-        style={{{{
-          backgroundImage: `url(${{background}})`,
-        }}}}
-      >
-        <div className="fixed-background-text-container">
-          <div className="fixed-background-title fixed-background-no-margin">
-            {blog_data['title']}
+      const {serialized_country.replace("-", "").title()}Post{post_index} = () => {{
+        return (
+          <div className="page-container">
+            <div
+              className="fixed-background-container"
+              style={{{{
+                backgroundImage: `url(${{background}})`,
+              }}}}
+            >
+              <div className="fixed-background-text-container">
+                <div className="fixed-background-title fixed-background-no-margin">
+                  {blog_data['title']}
+                </div>
+              </div>
+            </div>
+
+            <div className="container">
+              <div className="page-content">
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        );
+      }};
 
-      <div className="container">
-        <div className="page-content">
-        </div>
-      </div>
-    </div>
-  );
-}};
-
-export default {serialized_country.replace("-", "").title()}Post{post_index};
-'''
+      export default {serialized_country.replace("-", "").title()}Post{post_index};
+    '''
 
     with open(blog_component_dir / "index.js", 'w') as f:
         f.write(component_content)
