@@ -22,9 +22,6 @@
 
 .fixed-background-container {
   @apply relative h-screen bg-cover bg-center bg-fixed flex items-center justify-center;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
 }
 
 .fixed-background-container::before {
@@ -49,12 +46,13 @@
     @apply font-kalam text-gray-100;
     -webkit-text-stroke: 0.75px black;
   }
+}
 
+@media (max-width: 640px) {
   .fixed-background-container {
-    @apply h-[100dvh];
+    @apply h-screen;
     background-position: center;
-    background-size: cover;
-    min-height: -webkit-fill-available;
+    background-attachment: scroll;
   }
 }
 
