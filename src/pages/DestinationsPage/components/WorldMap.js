@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "./WorldMap.css";
 import worldMap from "../../../assets/flat-world-map.webp";
 import blogs from "../../../data/blogs";
@@ -29,12 +30,12 @@ const WorldMap = () => {
         const coordinates = locationCoordinates[locationKey];
         if (!coordinates) return null;
 
+        // Create URL using the serialized country name
         const serializedCountry = serializeLocation(blog.country);
-        const serializedState = blog.state ? serializeLocation(blog.state) : "";
-        const href = `/#/blog/${serializedCountry}${serializedState ? `/${serializedState}` : ""}`;
+        const to = `/blog/${serializedCountry}`;
 
         return (
-          <a href={href} key={blog.id}>
+          <Link to={to} key={blog.id}>
             <div
               className="country-box-selector"
               style={{
@@ -45,7 +46,7 @@ const WorldMap = () => {
               onMouseEnter={() => setHoveredLocation(blog)}
               onMouseLeave={() => setHoveredLocation(null)}
             >
-              {hoveredLocation && (
+              {hoveredLocation && hoveredLocation.id === blog.id && (
                 <div className="flag-pole">
                   <div className="flag">
                     <Flag
@@ -56,7 +57,7 @@ const WorldMap = () => {
                 </div>
               )}
             </div>
-          </a>
+          </Link>
         );
       })}
 
