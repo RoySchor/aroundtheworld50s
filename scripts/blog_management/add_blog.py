@@ -80,10 +80,11 @@ def update_blogs_js(base_dir, blog_data, post_index):
     with open(blogs_file, 'r') as f:
         content = f.read()
 
-    # Create new blog entry
+    # Create new blog entry with unique ID
     serialized_country = serialize_location(blog_data['country'])
+    unique_id = f"{serialized_country}-{post_index}"  # Create unique ID from country and post index
     new_blog = {
-        "id": post_index,
+        "id": unique_id,
         "created_at": datetime.now().strftime('%Y-%m-%d'),
         "country": blog_data['country'],
         "country_code": blog_data['country_code'],
