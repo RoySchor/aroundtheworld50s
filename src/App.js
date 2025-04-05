@@ -65,8 +65,20 @@ function App() {
 function BlogPost() {
   const { postName, index } = useParams();
 
+  // Find the blog post by country name and index
+  const blog = blogs.find(
+    (blog) =>
+      serializeLocation(blog.country) === postName &&
+      blog.path.endsWith(`/${index}`),
+  );
+
+  if (!blog) {
+    return <ErrorPage />;
+  }
+
+  // Render the appropriate blog post component
   switch (postName) {
-    case "trinidad-tobego-post":
+    case "trinidad-and-tobago":
       if (index === "1") {
         return <TrinidadTobegoPost1 />;
       }
@@ -79,18 +91,16 @@ function BlogPost() {
 function BlogSectionPage() {
   const { country } = useParams();
 
-  // Find the blog by matching either the serialized country name or the original country name
-  const blog = blogs.find(
-    (blog) =>
-      serializeLocation(blog.country) === country ||
-      blog.country.toLowerCase().replace(/\s+/g, "-") === country,
+  // Find all blogs for this country
+  const countryBlogs = blogs.filter(
+    (blog) => serializeLocation(blog.country) === country,
   );
 
-  if (!blog) {
+  if (countryBlogs.length === 0) {
     return <ErrorPage />;
   }
 
-  return <BlogSection country={blog.country} />;
+  return <BlogSection country={countryBlogs[0].country} />;
 }
 
 export default App;
