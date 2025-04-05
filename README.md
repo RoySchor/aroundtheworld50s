@@ -1,8 +1,7 @@
-# Aroundtheworld50s blogging website
+# [Aroundtheworld50s](https://royschor.github.io/aroundtheworld50s) blogging website
 
 A website of adventures, exploration, and life for my mother :)
 
-[aroundtheworld50s.com](https://royschor.github.io/aroundtheworld50s)
 ## 🚧 Work in Progress
 
 ### Overview
