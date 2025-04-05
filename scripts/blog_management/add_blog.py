@@ -6,6 +6,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 import re
+import subprocess
 
 REQUIRED_FIELDS = {
     "country": "Country name",
@@ -191,6 +192,16 @@ def update_app_js(base_dir, blog_data, post_index):
     with open(app_file, 'w') as f:
         f.write(content)
 
+def run_lint_fix(base_dir):
+    """Run npm run lint:fix to fix any linting issues."""
+    print("\nRunning npm run lint:fix to fix any formatting issues...")
+    try:
+        subprocess.run(['npm', 'run', 'lint:fix'], cwd=base_dir, check=True)
+        print("✅ Linting completed successfully!")
+    except subprocess.CalledProcessError as e:
+        print(f"⚠️ Warning: Linting failed with error: {e}")
+        print("You may want to run 'npm run lint:fix' manually to fix any issues")
+
 def main():
     print("Welcome to the blog addition tool!")
 
@@ -244,12 +255,16 @@ def main():
     # Update App.js with new route
     update_app_js(base_dir, blog_data, post_index)
 
+    # Run lint:fix
+    run_lint_fix(base_dir)
+
     print(f"\n✨ Blog post successfully added! ✨")
     print(f"\nWhat happened:")
     print(f"1. Images copied to: {assets_dir}")
     print(f"2. Blog component created at: {blog_component_dir}/index.js")
     print(f"3. blogs.js has been updated")
     print(f"4. App.js has been updated with the new route")
+    print(f"5. npm run lint:fix has been run to fix any formatting issues")
     print("\nNext steps:")
     print("1. Commit and push your changes")
     print("\nYou can now remove the folder from your Desktop if you want!")
