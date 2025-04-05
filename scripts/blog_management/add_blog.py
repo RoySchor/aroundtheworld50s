@@ -202,6 +202,78 @@ def run_lint_fix(base_dir):
         print(f"⚠️ Warning: Linting failed with error: {e}")
         print("You may want to run 'npm run lint:fix' manually to fix any issues")
 
+def run_npm_start(base_dir):
+    """Run npm start in a new terminal window."""
+    print("\nStarting the development server in a new window...")
+    try:
+        if sys.platform == "darwin":  # macOS
+            # Create a shell script to run npm start
+            script_path = base_dir / "start_dev_server.sh"
+            with open(script_path, 'w') as f:
+                f.write('#!/bin/bash\n')
+                f.write(f'cd "{base_dir}"\n')
+                f.write('npm start\n')
+            # Make the script executable
+            subprocess.run(['chmod', '+x', str(script_path)], check=True)
+            # Open in new Terminal window
+            subprocess.run(['open', '-a', 'Terminal', str(script_path)], check=True)
+        elif sys.platform == "win32":  # Windows
+            subprocess.run(['start', 'cmd', '/k', 'npm', 'start'], cwd=base_dir, check=True)
+        else:  # Linux
+            subprocess.run(['gnome-terminal', '--', 'npm', 'start'], cwd=base_dir, check=True)
+        print("✅ Development server started in a new window!")
+        print("Please check the new terminal window for the development server.")
+    except subprocess.CalledProcessError as e:
+        print(f"⚠️ Warning: Failed to start development server: {e}")
+        print("You may need to start it manually with 'npm start' in a new terminal")
+
+def kill_npm_process():
+    """Kill any running npm start process."""
+    try:
+        if sys.platform == "darwin":  # macOS
+            subprocess.run(['pkill', '-f', 'npm start'], check=False)
+        elif sys.platform == "win32":  # Windows
+            subprocess.run(['taskkill', '/F', '/IM', 'node.exe'], check=False)
+        else:  # Linux
+            subprocess.run(['pkill', '-f', 'npm start'], check=False)
+    except subprocess.CalledProcessError:
+        pass  # Ignore errors if no process is running
+
+def revert_changes(base_dir, assets_dir, blog_component_dir, blog_data, post_index):
+    """Revert all changes made by the script."""
+    print("\nReverting all changes...")
+
+    # Kill npm start process
+    kill_npm_process()
+
+    try:
+        # Get the current commit hash
+        result = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=base_dir, capture_output=True, text=True, check=True)
+        current_commit = result.stdout.strip()
+
+        # Reset to the current commit, discarding all changes
+        subprocess.run(['git', 'reset', '--hard', current_commit], cwd=base_dir, check=True)
+        print("✅ All changes have been reverted to the last commit!")
+    except subprocess.CalledProcessError as e:
+        print(f"⚠️ Error reverting changes: {e}")
+        print("You may need to revert changes manually with 'git reset --hard HEAD'")
+
+def deploy_changes(base_dir):
+    """Commit, push, and deploy the changes."""
+    print("\nDeploying changes...")
+    try:
+        # Commit changes
+        subprocess.run(['git', 'add', '.'], cwd=base_dir, check=True)
+        subprocess.run(['git', 'commit', '-m', 'Add new blog post'], cwd=base_dir, check=True)
+        # Push changes
+        subprocess.run(['git', 'push'], cwd=base_dir, check=True)
+        # Deploy
+        subprocess.run(['npm', 'run', 'deploy'], cwd=base_dir, check=True)
+        print("✅ Changes have been deployed successfully!")
+    except subprocess.CalledProcessError as e:
+        print(f"⚠️ Error during deployment: {e}")
+        print("You may need to deploy manually")
+
 def main():
     print("Welcome to the blog addition tool!")
 
@@ -258,16 +330,25 @@ def main():
     # Run lint:fix
     run_lint_fix(base_dir)
 
-    print(f"\n✨ Blog post successfully added! ✨")
-    print(f"\nWhat happened:")
-    print(f"1. Images copied to: {assets_dir}")
-    print(f"2. Blog component created at: {blog_component_dir}/index.js")
-    print(f"3. blogs.js has been updated")
-    print(f"4. App.js has been updated with the new route")
-    print(f"5. npm run lint:fix has been run to fix any formatting issues")
-    print("\nNext steps:")
-    print("1. Commit and push your changes")
-    print("\nYou can now remove the folder from your Desktop if you want!")
+    # Start development server
+    run_npm_start(base_dir)
+
+    # Ask for confirmation
+    while True:
+        response = input("\nDoes the blog post look good? (yes/no): ").strip().lower()
+        if response in ['yes', 'no']:
+            break
+        print("Please answer 'yes' or 'no'")
+
+    if response == 'no':
+        # Revert all changes
+        revert_changes(base_dir, assets_dir, blog_component_dir, blog_data, post_index)
+        print("\nAll changes have been reverted. You can try again with different content.")
+    else:
+        # Deploy changes
+        deploy_changes(base_dir)
+        print("\n✨ Blog post has been successfully added and deployed! ✨")
+        print("\nYou can now remove the folder from your Desktop if you want!")
 
 if __name__ == "__main__":
     main()
