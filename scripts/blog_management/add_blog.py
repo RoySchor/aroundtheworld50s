@@ -253,10 +253,16 @@ def revert_changes(base_dir, assets_dir, blog_component_dir, blog_data, post_ind
 
         # Reset to the current commit, discarding all changes
         subprocess.run(['git', 'reset', '--hard', current_commit], cwd=base_dir, check=True)
-        print("✅ All changes have been reverted to the last commit!")
+
+        # Clean untracked files and directories
+        subprocess.run(['git', 'clean', '-fd'], cwd=base_dir, check=True)
+
+        print("✅ All changes have been reverted to the last commit and untracked files have been removed!")
     except subprocess.CalledProcessError as e:
         print(f"⚠️ Error reverting changes: {e}")
-        print("You may need to revert changes manually with 'git reset --hard HEAD'")
+        print("You may need to revert changes manually with:")
+        print("1. git reset --hard HEAD")
+        print("2. git clean -fd")
 
 def deploy_changes(base_dir):
     """Commit, push, and deploy the changes."""
