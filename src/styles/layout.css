@@ -49,6 +49,13 @@
     @apply font-kalam text-gray-100;
     -webkit-text-stroke: 0.75px black;
   }
+
+  .fixed-background-container {
+    @apply h-[100dvh];
+    background-position: center;
+    background-size: cover;
+    min-height: -webkit-fill-available;
+  }
 }
 
 .fixed-background-no-margin {
