@@ -1,7 +1,7 @@
 import React from "react";
-import "../../../../styles/layout.css";
-import "../BlogPost.css";
-import background from "../../../../assets/blog/TrinidadTobagoPost1/trinidad-tobego-post-1-bg.jpg";
+import "../../../../../styles/layout.css";
+import "../../BlogPost.css";
+import background from "../../../../../assets/blog/trinidad-and-tobago/1/trinidad-tobego-post-1-bg.jpg";
 
 const TrinidadTobegoPost1 = () => {
   return (
