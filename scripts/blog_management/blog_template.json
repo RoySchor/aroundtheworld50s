@@ -1,0 +1,17 @@
+{
+  "required_fields": {
+    "country": "Country Name",
+    "country_code": "Two letter country code (e.g., TT)",
+    "title": "Blog post title with emojis",
+    "background_image": "Name of the main background image file in your folder",
+    "blog_description": "Short description of the blog post with emojis"
+  },
+  "optional_fields": {
+    "state": "State or region name (if applicable)"
+  },
+  "instructions": {
+    "images": "Place all blog images in the folder",
+    "background_image": "Must be a jpg, png, or webp file",
+    "naming": "Use lowercase letters, numbers, and hyphens only for image names"
+  }
+}

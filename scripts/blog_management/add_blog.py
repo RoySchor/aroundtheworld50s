@@ -1,0 +1,258 @@
+#!/usr/bin/env python3
+import json
+import os
+import shutil
+import sys
+from datetime import datetime
+from pathlib import Path
+import re
+
+REQUIRED_FIELDS = {
+    "country": "Country name",
+    "country_code": "Two letter country code",
+    "title": "Blog post title",
+    "background_image": "Main background image filename",
+    "blog_description": "Short blog description"
+}
+
+def get_desktop_path():
+    """Get the path to the user's Desktop directory."""
+    return Path.home() / "Desktop"
+
+def serialize_location(name):
+    """Convert a location name to URL-friendly format."""
+    return name.lower().replace(" ", "-").replace("&", "and")
+
+def get_next_post_index(country_path):
+    """Get the next available post index for a country."""
+    if not country_path.exists():
+        return 1
+
+    existing_indices = [int(p.name) for p in country_path.iterdir() if p.name.isdigit()]
+    return max(existing_indices, default=0) + 1
+
+def validate_json(json_data):
+    """Validate that all required fields are present in the JSON."""
+    missing_fields = []
+    for field, description in REQUIRED_FIELDS.items():
+        if field not in json_data:
+            missing_fields.append(f"{field} ({description})")
+
+    if missing_fields:
+        print("Error: Missing required fields:")
+        for field in missing_fields:
+            print(f"- {field}")
+        sys.exit(1)
+
+def setup_directories(base_dir, country_name, post_index):
+    """Create necessary directories for assets and data."""
+    serialized_country = serialize_location(country_name)
+
+    # Create directories
+    assets_dir = base_dir / "src/assets/blog" / serialized_country / str(post_index)
+    data_dir = base_dir / "src/data" / serialized_country
+    blog_component_dir = base_dir / "src/pages/BlogPage/Blogs" / serialized_country / str(post_index)
+
+    for directory in [assets_dir, data_dir, blog_component_dir]:
+        directory.mkdir(parents=True, exist_ok=True)
+
+    return assets_dir, data_dir, blog_component_dir
+
+def copy_images(source_dir, assets_dir, background_image):
+    """Copy images from source directory to assets directory."""
+    # Verify background image exists
+    bg_path = source_dir / background_image
+    if not bg_path.exists():
+        print(f"Error: Background image '{background_image}' not found in the source folder")
+        sys.exit(1)
+
+    # Copy all images
+    for file in source_dir.glob("*"):
+        if file.suffix.lower() in ['.jpg', '.jpeg', '.png', '.webp', '.gif']:
+            shutil.copy2(file, assets_dir)
+
+def update_blogs_js(base_dir, blog_data, post_index):
+    """Update the blogs.js file with the new blog entry."""
+    blogs_file = base_dir / "src/data/blogs.js"
+
+    # Read existing blogs.js content
+    with open(blogs_file, 'r') as f:
+        content = f.read()
+
+    # Create new blog entry
+    serialized_country = serialize_location(blog_data['country'])
+    new_blog = {
+        "id": post_index,
+        "created_at": datetime.now().strftime('%Y-%m-%d'),
+        "country": blog_data['country'],
+        "country_code": blog_data['country_code'],
+        "title": blog_data['title'],
+        "folder": f"{serialized_country}/{post_index}",
+        "background_image": blog_data['background_image'],
+        "path": f"/blog/{serialized_country}/{post_index}",
+        "blog_description": blog_data['blog_description']
+    }
+
+    if 'state' in blog_data:
+        new_blog['state'] = blog_data['state']
+
+    # Convert to string and remove quotes only from keys
+    blog_entry = ",\n  " + json.dumps(new_blog, indent=2, ensure_ascii=False)
+    # Remove quotes from keys but keep them for values
+    blog_entry = re.sub(r'(\s+)"([^"]+)":', r'\1\2:', blog_entry)
+
+    # Insert new blog entry
+    blogs_array_end = content.rindex('];')
+    new_content = content[:blogs_array_end] + blog_entry + content[blogs_array_end:]
+
+    # Write updated content
+    with open(blogs_file, 'w') as f:
+        f.write(new_content)
+
+def create_blog_component(blog_component_dir, blog_data, post_index):
+    """Create a new blog component file."""
+    serialized_country = serialize_location(blog_data['country'])
+    component_content = f'''import React from "react";
+import "../../../../../styles/layout.css";
+import "../../BlogPost.css";
+import background from "../../../../../assets/blog/{serialized_country}/{post_index}/{blog_data['background_image']}";
+
+const {serialized_country.replace("-", "").title()}Post{post_index} = () => {{
+  return (
+    <div className="page-container">
+      <div
+        className="fixed-background-container"
+        style={{{{
+          backgroundImage: `url(${{background}})`,
+        }}}}
+      >
+        <div className="fixed-background-text-container">
+          <div className="fixed-background-title fixed-background-no-margin">
+            {blog_data['title']}
+          </div>
+        </div>
+      </div>
+
+      <div className="container">
+        <div className="page-content">
+        </div>
+      </div>
+    </div>
+  );
+}};
+
+export default {serialized_country.replace("-", "").title()}Post{post_index};
+'''
+
+    with open(blog_component_dir / "index.js", 'w') as f:
+        f.write(component_content)
+
+def update_app_js(base_dir, blog_data, post_index):
+    """Update App.js with the new blog route."""
+    app_file = base_dir / "src/App.js"
+    serialized_country = serialize_location(blog_data['country'])
+    component_name = f"{serialized_country.replace('-', '').title()}Post{post_index}"
+
+    with open(app_file, 'r') as f:
+        content = f.read()
+
+    # Add import statement after the last import
+    import_line = f"import {component_name} from './pages/BlogPage/Blogs/{serialized_country}/{post_index}';\n"
+    last_import_index = content.rindex('import')
+    last_import_line_end = content.find('\n', last_import_index) + 1
+    content = content[:last_import_line_end] + import_line + content[last_import_line_end:]
+
+    # Add case to switch statement in BlogPost function
+    switch_case = f'''    case "{serialized_country}":
+      if (index === "{post_index}") {{
+        return <{component_name} />;
+      }}
+      break;\n'''
+
+    # Find the switch statement
+    switch_index = content.find('switch (postName) {')
+    default_case_index = content.find('default:', switch_index)
+
+    # If this is the first case for this country, add the whole case
+    # If the country case exists, add just the if statement
+    country_case_index = content.find(f'case "{serialized_country}":', switch_index, default_case_index)
+
+    if country_case_index == -1:
+        # Country doesn't exist yet, add new case before default
+        content = content[:default_case_index] + switch_case + content[default_case_index:]
+    else:
+        # Country exists, find the break statement and add before it
+        break_index = content.find('break;', country_case_index)
+        if_statement = f'''      if (index === "{post_index}") {{
+        return <{component_name} />;
+      }}\n'''
+        content = content[:break_index] + if_statement + content[break_index:]
+
+    with open(app_file, 'w') as f:
+        f.write(content)
+
+def main():
+    print("Welcome to the blog addition tool!")
+
+    # Get the Desktop path
+    desktop_path = get_desktop_path()
+    print(f"\nLooking for blog folders on your Desktop: {desktop_path}")
+
+    # Get the source folder name
+    folder_name = input("\nPlease enter the name of your blog folder (it should be on your Desktop): ").strip()
+    source_dir = desktop_path / folder_name
+
+    if not source_dir.exists():
+        print(f"\nError: Folder '{folder_name}' not found on your Desktop")
+        print(f"Make sure the folder is located at: {source_dir}")
+        sys.exit(1)
+
+    # Find and load the JSON file
+    json_files = list(source_dir.glob("*.json"))
+    if not json_files:
+        print("\nError: No JSON file found in the folder")
+        print("Make sure you have a file ending in .json in your folder")
+        print("You can copy the template from: scripts/blog_management/blog_template.json")
+        sys.exit(1)
+
+    with open(json_files[0], 'r', encoding='utf-8') as f:
+        try:
+            blog_data = json.load(f)
+        except json.JSONDecodeError as e:
+            print(f"\nError: Your JSON file is not formatted correctly")
+            print(f"Error details: {str(e)}")
+            print("\nMake sure your JSON file follows the template format")
+            sys.exit(1)
+
+    # Validate JSON data
+    validate_json(blog_data)
+
+    # Setup directories
+    base_dir = Path.cwd()
+    post_index = get_next_post_index(base_dir / "src/assets/blog" / serialize_location(blog_data['country']))
+    assets_dir, data_dir, blog_component_dir = setup_directories(base_dir, blog_data['country'], post_index)
+
+    # Copy images
+    copy_images(source_dir, assets_dir, blog_data['background_image'])
+
+    # Update blogs.js
+    update_blogs_js(base_dir, blog_data, post_index)
+
+    # Create blog component
+    create_blog_component(blog_component_dir, blog_data, post_index)
+
+    # Update App.js with new route
+    update_app_js(base_dir, blog_data, post_index)
+
+    print(f"\n✨ Blog post successfully added! ✨")
+    print(f"\nWhat happened:")
+    print(f"1. Images copied to: {assets_dir}")
+    print(f"2. Blog component created at: {blog_component_dir}/index.js")
+    print(f"3. blogs.js has been updated")
+    print(f"4. App.js has been updated with the new route")
+    print("\nNext steps:")
+    print("1. Commit and push your changes")
+    print("\nYou can now remove the folder from your Desktop if you want!")
+
+if __name__ == "__main__":
+    main()
