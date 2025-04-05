@@ -10,6 +10,7 @@ const blogs = [
     path: "/blog/trinidad-and-tobago/1",
     blog_description:
       "⛱️10 days of Caribbean Charm: Uncovering the Soul and beaches✨",
-  }];
+  },
+];
 
 export default blogs;
