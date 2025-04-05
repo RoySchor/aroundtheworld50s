@@ -4,7 +4,6 @@ import {
   Routes,
   Route,
   useParams,
-  Navigate,
 } from "react-router-dom";
 import blogs from "./data/blogs";
 import { serializeLocation } from "./pages/DestinationsPage/DestinationPage.utils";
@@ -35,27 +34,7 @@ function App() {
         <Route path="/blog/:postName/:index" element={<BlogPost />} />
         <Route path="/blog/:country" element={<BlogSectionPage />} />
 
-        {/* Redirect non-hash routes to hash routes */}
-        <Route path="about" element={<Navigate to="/#/about" replace />} />
-        <Route
-          path="destinations"
-          element={<Navigate to="/#/destinations" replace />}
-        />
-        <Route
-          path="special-pop-ups"
-          element={<Navigate to="/#/special-pop-ups" replace />}
-        />
-        <Route path="tips" element={<Navigate to="/#/tips" replace />} />
-        <Route path="blog" element={<Navigate to="/#/blog" replace />} />
-        <Route
-          path="blog/:postName/:index"
-          element={<Navigate to="/#/blog/:postName/:index" replace />}
-        />
-        <Route
-          path="blog/:country"
-          element={<Navigate to="/#/blog/:country" replace />}
-        />
-
+        {/* Catch all invalid routes */}
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
