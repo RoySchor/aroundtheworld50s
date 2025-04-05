@@ -52,7 +52,7 @@ def update_blogs_js(base_dir, blog_data, post_index):
         "country_code": blog_data['country_code'],
         "title": blog_data['title'],
         "folder": f"{serialized_country}/{post_index}",
-        "background_image": f"blog/{serialized_country}/{post_index}/{blog_data['background_image']}",
+        "background_image": blog_data['background_image'],
         "path": f"/blog/{serialized_country}/{post_index}",
         "blog_description": blog_data['blog_description']
     }
