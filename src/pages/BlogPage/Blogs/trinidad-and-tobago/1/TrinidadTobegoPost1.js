@@ -35,6 +35,65 @@ const TrinidadTobegoPost1 = () => {
     />
   );
 
+  let itinerary;
+
+  const maps = [portOfSpainMap, downtownMap];
+
+  const renderContent = (section) => {
+    switch (section.layout.type) {
+      case "text":
+        return (
+          <div key={section.key} className="post-description">
+            {section.content}
+          </div>
+        );
+      case "itinerary-with-map":
+        itinerary = TRINIDAD_TOBAGO_POST_1.itineraries[section.layout.mapIndex];
+        return (
+          <TwoColumnLayout
+            key={section.key}
+            leftPane={{
+              type: "list",
+              listTitle: itinerary.title,
+              listItems: itinerary.items,
+            }}
+            rightPane={{
+              type: "map",
+              mapComponent: maps[section.layout.mapIndex],
+            }}
+          />
+        );
+      case "image-grid":
+        return <ImageGrid key={section.key} images={images} />;
+      case "two-column":
+        return (
+          <TwoColumnLayout
+            key={section.key}
+            leftPane={{
+              type: section.layout.leftType,
+              imageUrl: background,
+              imageAlt: "Port of Spain",
+              content:
+                section.layout.leftType === "text"
+                  ? section.content
+                  : undefined,
+            }}
+            rightPane={{
+              type: section.layout.rightType,
+              imageUrl: background,
+              imageAlt: "Port of Spain",
+              content:
+                section.layout.rightType === "text"
+                  ? section.content
+                  : undefined,
+            }}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="page-container">
       <div
@@ -60,111 +119,13 @@ const TrinidadTobegoPost1 = () => {
             {TRINIDAD_TOBAGO_POST_1.description}
           </div>
 
-          <div className="post-bolded-text post-tips-section-container">
-            {TRINIDAD_TOBAGO_POST_1.tipsSection}
-          </div>
+          {TRINIDAD_TOBAGO_POST_1.tipsSection && (
+            <div className="post-bolded-text post-tips-section-container">
+              {TRINIDAD_TOBAGO_POST_1.tipsSection}
+            </div>
+          )}
 
-          <TwoColumnLayout
-            leftPane={{
-              type: "list",
-              listTitle: TRINIDAD_TOBAGO_POST_1.itineraryOne.title,
-              listItems: TRINIDAD_TOBAGO_POST_1.itineraryOne.items,
-            }}
-            rightPane={{
-              type: "map",
-              mapComponent: portOfSpainMap,
-            }}
-          />
-
-          <ImageGrid images={images} />
-
-          <TwoColumnLayout
-            leftPane={{
-              type: "image",
-              imageUrl: background,
-              imageAlt: "Port of Spain",
-            }}
-            rightPane={{
-              type: "text",
-              content: TRINIDAD_TOBAGO_POST_1.sections.arrivalDescription,
-            }}
-          />
-
-          <div className="post-description">
-            {TRINIDAD_TOBAGO_POST_1.sections.magnificentSeven}
-          </div>
-
-          <ImageGrid images={images} />
-
-          <TwoColumnLayout
-            leftPane={{
-              type: "image",
-              imageUrl: background,
-              imageAlt: "Port of Spain",
-            }}
-            rightPane={{
-              type: "text",
-              content: TRINIDAD_TOBAGO_POST_1.sections.memorialPark,
-            }}
-          />
-
-          <div className="post-description">
-            {TRINIDAD_TOBAGO_POST_1.sections.downtownDescription}
-          </div>
-
-          <TwoColumnLayout
-            leftPane={{
-              type: "list",
-              listTitle: TRINIDAD_TOBAGO_POST_1.itineraryTwo.title,
-              listItems: TRINIDAD_TOBAGO_POST_1.itineraryTwo.items,
-            }}
-            rightPane={{
-              type: "map",
-              mapComponent: downtownMap,
-            }}
-          />
-
-          <TwoColumnLayout
-            leftPane={{
-              type: "image",
-              imageUrl: background,
-              imageAlt: "Port of Spain",
-            }}
-            rightPane={{
-              type: "text",
-              content: TRINIDAD_TOBAGO_POST_1.sections.independenceSquare,
-            }}
-          />
-
-          <ImageGrid images={images} />
-
-          <div className="post-description">
-            {TRINIDAD_TOBAGO_POST_1.sections.cathedral}
-          </div>
-
-          <div className="post-description">
-            {TRINIDAD_TOBAGO_POST_1.sections.market}
-          </div>
-
-          <div className="post-description">
-            {TRINIDAD_TOBAGO_POST_1.sections.trinityCathedral}
-          </div>
-
-          <div className="post-description">
-            {TRINIDAD_TOBAGO_POST_1.sections.ariapitaAvenue}
-          </div>
-
-          <div className="post-description">
-            {TRINIDAD_TOBAGO_POST_1.sections.memorialParkDinner}
-          </div>
-
-          <div className="post-description">
-            {TRINIDAD_TOBAGO_POST_1.sections.evening}
-          </div>
-
-          <div className="post-description">
-            {TRINIDAD_TOBAGO_POST_1.sections.surprise}
-          </div>
+          {TRINIDAD_TOBAGO_POST_1.content.map(renderContent)}
         </div>
       </div>
     </div>
