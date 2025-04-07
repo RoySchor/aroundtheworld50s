@@ -30,7 +30,7 @@ const TrinidadTobegoPost1 = () => {
   const downtownMap = (
     <MapEmbed
       title="Downtown Port of Spain Map"
-      url="https://www.google.com/maps/embed?pb=!1m52!1m12!1m3!1d15684.004408994995!2d-61.52428469221804!3d10.657021531751937!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m37!3e2!4m5!1s0x8c36080e40b8d411%3A0x6208586c6f6dc38f!2sAriapita%20Ave%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.6617622!2d-61.523201099999994!4m5!1s0x8c3607e0e1493be1%3A0x6309c523240869dd!2sMemorial%20Park%2C%20MF7R%2BC5V%2C%20Frederick%20St%2C%20Port%20of%20Spain%2C%20Trinidad%20%26%20Tobago!3m2!1d10.6636028!2d-61.509577799999995!4m5!1s0x8c3607e288036ef9%3A0x151605af19573381!2sDowntown%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.659713499999999!2d-61.5121439!4m5!1s0x8c3607fc4b99ed0b%3A0x98beed9e7918873d!2sTrinity%20Cathedral%2C%20Abercromby%20Street%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.6521017!2d-61.5105016!4m5!1s0x8c3607005d63b933%3A0x6d53250b28d09a8!2sCathedral%20of%20the%20Immaculate%20Conception%2C%20Independence%20Square%20South%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.6497878!2d-61.507347499999995!4m5!1s0x8c3607feaf1fecf5%3A0xdc1681a7e287d238!2sIndependence%20Square%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.6501178!2d-61.504768799999994!5e0!3m2!1sen!2sus!4v1743993989630!5m2!1sen!2sus"
+      url="https://www.google.com/maps/embed?pb=!1m52!1m12!1m3!1d15684.004408995012!2d-61.52428470154345!3d10.657021531751628!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m37!3e2!4m5!1s0x8c36080e40b8d411%3A0x6208586c6f6dc38f!2sAriapita%20Ave%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.6617622!2d-61.523201099999994!4m5!1s0x8c3607e0e1493be1%3A0x6309c523240869dd!2sMemorial%20Park%2C%20MF7R%2BC5V%2C%20Frederick%20St%2C%20Port%20of%20Spain%2C%20Trinidad%20%26%20Tobago!3m2!1d10.6636028!2d-61.509577799999995!4m5!1s0x8c3607e288036ef9%3A0x151605af19573381!2sDowntown%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.659713499999999!2d-61.5121439!4m5!1s0x8c3607fc4b99ed0b%3A0x98beed9e7918873d!2sTrinity%20Cathedral%2C%20Abercromby%20Street%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.6521017!2d-61.5105016!4m5!1s0x8c3607005d63b933%3A0x6d53250b28d09a8!2sCathedral%20of%20the%20Immaculate%20Conception%2C%20Independence%20Square%20South%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.6497878!2d-61.507347499999995!4m5!1s0x8c3607feaf1fecf5%3A0xdc1681a7e287d238!2sIndependence%20Square%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.6501178!2d-61.504768799999994!5e0!3m2!1sen!2sus!4v1744001699541!5m2!1sen!2sus"
     />
   );
 
@@ -73,19 +73,15 @@ const TrinidadTobegoPost1 = () => {
 
           <TwoColumnLayout
             leftPane={{
-              type: "custom",
-              content: (
-                <div className="post-itinerary-section">
-                  <div className="post-itinerary-title">Itinerary 📍</div>
-                  <ul>
-                    <li>📌 The BRIX, Autograph Collection</li>
-                    <li>📌 Queen's Hall</li>
-                    <li>📌 Stollmeyer's Castle Killarney</li>
-                    <li>📌 Memorial Park</li>
-                    <li>📌 Queen's Park Savannah</li>
-                  </ul>
-                </div>
-              ),
+              type: "list",
+              listTitle: "Itinerary 📍",
+              listItems: [
+                "📌 The BRIX, Autograph Collection",
+                "📌 Queen's Hall",
+                "📌 Stollmeyer's Castle Killarney",
+                "📌 Memorial Park",
+                "📌 Queen's Park Savannah",
+              ],
             }}
             // To Retreive the Embeded map url you need:
             // 1. Go to the Google Maps created map
@@ -155,21 +151,17 @@ const TrinidadTobegoPost1 = () => {
 
           <TwoColumnLayout
             leftPane={{
-              type: "custom",
-              content: (
-                <div className="post-itinerary-section">
-                  <div className="post-itinerary-title">Itinerary 📍</div>
-                  <ul>
-                    <li>📌 Ariapita Avenue</li>
-                    <li>📌 Independence Square</li>
-                    <li>📌 Memorial Park</li>
-                    <li>📌 Downtown Port of Spain</li>
-                    <li>📌 Trinity Cathedral</li>
-                    <li>📌 Cathedral of the Immaculate Conception</li>
-                    <li>📌 Independence Square</li>
-                  </ul>
-                </div>
-              ),
+              type: "list",
+              listTitle: "Itinerary 📍",
+              listItems: [
+                "📌 Ariapita Avenue",
+                "📌 Independence Square",
+                "📌 Memorial Park",
+                "📌 Downtown Port of Spain",
+                "📌 Trinity Cathedral",
+                "📌 Cathedral of the Immaculate Conception",
+                "📌 Independence Square",
+              ],
             }}
             rightPane={{
               type: "map",

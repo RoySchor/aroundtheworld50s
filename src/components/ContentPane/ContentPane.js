@@ -1,18 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./ContentPane.css";
 import "../../pages/BlogPage/Blogs/BlogPost.css";
 
-const ContentPane = ({
-  type,
-  title,
-  description,
-  content,
-  imageAlt,
-  imageUrl,
-  mapComponent,
-  className,
-}) => {
+const ContentPane = ({ type, content, imageAlt, imageUrl, mapComponent }) => {
   const renderContent = () => {
     switch (type) {
       case "text":
@@ -32,24 +22,15 @@ const ContentPane = ({
     }
   };
 
-  return (
-    <div className={`content-pane ${className || ""}`}>
-      {title && <h3 className="content-pane-title">{title}</h3>}
-      {description && <p className="content-pane-description">{description}</p>}
-      {renderContent()}
-    </div>
-  );
+  return renderContent();
 };
 
 ContentPane.propTypes = {
   type: PropTypes.oneOf(["text", "image", "map", "custom"]).isRequired,
-  title: PropTypes.string,
-  description: PropTypes.string,
   content: PropTypes.node,
   imageAlt: PropTypes.string,
   imageUrl: PropTypes.string,
   mapComponent: PropTypes.node,
-  className: PropTypes.string,
 };
 
 export default ContentPane;
