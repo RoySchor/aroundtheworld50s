@@ -20,6 +20,20 @@ const TrinidadTobegoPost1 = () => {
     "trinidad-tobego-post-1-bg.jpg",
   ];
 
+  const portOfSpainMap = (
+    <MapEmbed
+      title="Port of Spain Map"
+      url="https://www.google.com/maps/embed?pb=!1m52!1m12!1m3!1d15683.427881537722!2d-61.524383801540914!3d10.668208131583249!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m37!3e0!4m5!1s0x8c3607d0be7ebb55%3A0x2dd4764afb66c4d6!2sThe%20BRIX%2C%20Autograph%20Collection%2C%20Coblentz%20Avenue%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.6730318!2d-61.5088929!4m5!1s0x8c3607b9acef9d09%3A0xebc97d2236bdd499!2sQueen&#39;s%20Hall%2C%201-3%20St%20Ann&#39;s%20Rd%2C%20Port%20of%20Spain%2C%20Trinidad%20%26%20Tobago!3m2!1d10.6726361!2d-61.510602299999995!4m5!1s0x8c36080ae020b87d%3A0x9331045e7a215764!2sQueen&#39;s%20Park%20W%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.6665236!2d-61.5163863!4m5!1s0x8c360876ae030299%3A0x274e0b4cadf67adb!2sStollmeyer%E2%80%99s%20Castle%20Killarney%2C%2031%20Maraval%20Road%2C%20Port%20of%20Spain%2C%20Trinidad%20%26%20Tobago!3m2!1d10.672433!2d-61.518896899999994!4m5!1s0x8c3607e0e1493be1%3A0x6309c523240869dd!2sMF7R%2BC5V%20Memorial%20Park%2C%20Frederick%20St%2C%20Port%20of%20Spain%2C%20Trinidad%20%26%20Tobago!3m2!1d10.6636028!2d-61.509577799999995!4m5!1s0x8c3608757d0f84eb%3A0x7891e3ceea281d80!2sQueen&#39;s%20Park%20Savannah%2C%2011%20Queen&#39;s%20Park%20E%2C%20Port%20of%20Spain%2C%20Trinidad%20%26%20Tobago!3m2!1d10.6687426!2d-61.514367699999994!5e0!3m2!1sen!2sus!4v1743990738788!5m2!1sen!2sus"
+    />
+  );
+
+  const downtownMap = (
+    <MapEmbed
+      title="Downtown Port of Spain Map"
+      url="https://www.google.com/maps/embed?pb=!1m52!1m12!1m3!1d15684.004408994995!2d-61.52428469221804!3d10.657021531751937!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m37!3e2!4m5!1s0x8c36080e40b8d411%3A0x6208586c6f6dc38f!2sAriapita%20Ave%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.6617622!2d-61.523201099999994!4m5!1s0x8c3607e0e1493be1%3A0x6309c523240869dd!2sMemorial%20Park%2C%20MF7R%2BC5V%2C%20Frederick%20St%2C%20Port%20of%20Spain%2C%20Trinidad%20%26%20Tobago!3m2!1d10.6636028!2d-61.509577799999995!4m5!1s0x8c3607e288036ef9%3A0x151605af19573381!2sDowntown%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.659713499999999!2d-61.5121439!4m5!1s0x8c3607fc4b99ed0b%3A0x98beed9e7918873d!2sTrinity%20Cathedral%2C%20Abercromby%20Street%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.6521017!2d-61.5105016!4m5!1s0x8c3607005d63b933%3A0x6d53250b28d09a8!2sCathedral%20of%20the%20Immaculate%20Conception%2C%20Independence%20Square%20South%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.6497878!2d-61.507347499999995!4m5!1s0x8c3607feaf1fecf5%3A0xdc1681a7e287d238!2sIndependence%20Square%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.6501178!2d-61.504768799999994!5e0!3m2!1sen!2sus!4v1743993989630!5m2!1sen!2sus"
+    />
+  );
+
   return (
     <div className="page-container">
       <div
@@ -58,18 +72,21 @@ const TrinidadTobegoPost1 = () => {
           </div>
 
           <TwoColumnLayout
-            leftContent={
-              <div className="post-itinerary-section">
-                <div className="post-itinerary-title">Itinerary 📍</div>
-                <ul>
-                  <li>📌 The BRIX, Autograph Collection</li>
-                  <li>📌 Queen's Hall</li>
-                  <li>📌 Stollmeyer's Castle Killarney</li>
-                  <li>📌 Memorial Park</li>
-                  <li>📌 Queen's Park Savannah</li>
-                </ul>
-              </div>
-            }
+            leftPane={{
+              type: "custom",
+              content: (
+                <div className="post-itinerary-section">
+                  <div className="post-itinerary-title">Itinerary 📍</div>
+                  <ul>
+                    <li>📌 The BRIX, Autograph Collection</li>
+                    <li>📌 Queen's Hall</li>
+                    <li>📌 Stollmeyer's Castle Killarney</li>
+                    <li>📌 Memorial Park</li>
+                    <li>📌 Queen's Park Savannah</li>
+                  </ul>
+                </div>
+              ),
+            }}
             // To Retreive the Embeded map url you need:
             // 1. Go to the Google Maps created map
             // 2. Click on the hamburger / menu button on the top left
@@ -77,30 +94,25 @@ const TrinidadTobegoPost1 = () => {
             // 4. Go to the "Embed a map" tab
             // 5. Copy just the link from the provided html code.
             // 5. Paste it in the url field
-            rightContent={
-              <MapEmbed
-                title="Port of Spain Map"
-                url="https://www.google.com/maps/embed?pb=!1m52!1m12!1m3!1d15683.427881537722!2d-61.524383801540914!3d10.668208131583249!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m37!3e0!4m5!1s0x8c3607d0be7ebb55%3A0x2dd4764afb66c4d6!2sThe%20BRIX%2C%20Autograph%20Collection%2C%20Coblentz%20Avenue%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.6730318!2d-61.5088929!4m5!1s0x8c3607b9acef9d09%3A0xebc97d2236bdd499!2sQueen&#39;s%20Hall%2C%201-3%20St%20Ann&#39;s%20Rd%2C%20Port%20of%20Spain%2C%20Trinidad%20%26%20Tobago!3m2!1d10.6726361!2d-61.510602299999995!4m5!1s0x8c36080ae020b87d%3A0x9331045e7a215764!2sQueen&#39;s%20Park%20W%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.6665236!2d-61.5163863!4m5!1s0x8c360876ae030299%3A0x274e0b4cadf67adb!2sStollmeyer%E2%80%99s%20Castle%20Killarney%2C%2031%20Maraval%20Road%2C%20Port%20of%20Spain%2C%20Trinidad%20%26%20Tobago!3m2!1d10.672433!2d-61.518896899999994!4m5!1s0x8c3607e0e1493be1%3A0x6309c523240869dd!2sMF7R%2BC5V%20Memorial%20Park%2C%20Frederick%20St%2C%20Port%20of%20Spain%2C%20Trinidad%20%26%20Tobago!3m2!1d10.6636028!2d-61.509577799999995!4m5!1s0x8c3608757d0f84eb%3A0x7891e3ceea281d80!2sQueen&#39;s%20Park%20Savannah%2C%2011%20Queen&#39;s%20Park%20E%2C%20Port%20of%20Spain%2C%20Trinidad%20%26%20Tobago!3m2!1d10.6687426!2d-61.514367699999994!5e0!3m2!1sen!2sus!4v1743990738788!5m2!1sen!2sus"
-              />
-            }
+            rightPane={{
+              type: "map",
+              mapComponent: portOfSpainMap,
+            }}
           />
 
+          <ImageGrid images={images} />
+
           <TwoColumnLayout
-            leftContent={
-              <div className="image-container">
-                <img src={background} alt="Port of Spain" />
-              </div>
-            }
-            rightContent={
-              <div className="arrival-section">
-                <div className="post-description">
-                  The 🛩️ touched down in 📌Port of Spain just before noon. We
-                  hailed a 🚕taxi to our hotel, The #BRIX, Autograph Collection.
-                  We selected this 🏨for its upscale accommodations, great deal,
-                  and proximity to key attractions like 📌Queen's Park.
-                </div>
-              </div>
-            }
+            leftPane={{
+              type: "image",
+              imageUrl: background,
+              imageAlt: "Port of Spain",
+            }}
+            rightPane={{
+              type: "text",
+              content:
+                "The 🛩️ touched down in 📌Port of Spain just before noon. We hailed a 🚕taxi to our hotel, The #BRIX, Autograph Collection. We selected this 🏨for its upscale accommodations, great deal, and proximity to key attractions like 📌Queen's Park.",
+            }}
           />
 
           <div className="post-description">
@@ -118,18 +130,16 @@ const TrinidadTobegoPost1 = () => {
           <ImageGrid images={images} />
 
           <TwoColumnLayout
-            leftContent={
-              <div className="image-container">
-                <img src={background} alt="Port of Spain" />
-              </div>
-            }
-            rightContent={
-              <div className="post-description">
-                As we strolled leisurely through 📌Memorial Park and the iconic
-                📌Queen's Park Oval, we couldn't resist indulging in this cold,
-                refreshing 🥥coconut water from street vendors.
-              </div>
-            }
+            leftPane={{
+              type: "image",
+              imageUrl: background,
+              imageAlt: "Port of Spain",
+            }}
+            rightPane={{
+              type: "text",
+              content:
+                "As we strolled leisurely through 📌Memorial Park and the iconic 📌Queen's Park Oval, we couldn't resist indulging in this cold, refreshing 🥥coconut water from street vendors.",
+            }}
           />
 
           <div className="post-description">
@@ -144,51 +154,40 @@ const TrinidadTobegoPost1 = () => {
           </div>
 
           <TwoColumnLayout
-            leftContent={
-              <div className="post-itinerary-section">
-                <div className="post-itinerary-title">Itinerary 📍</div>
-                <ul>
-                  <li>📌 Ariapita Avenue</li>
-                  <li>📌 Independence Square</li>
-                  <li>📌 Memorial Park</li>
-                  <li>📌 Downtown Port of Spain</li>
-                  <li>📌 Trinity Cathedral</li>
-                  <li>📌 Cathedral of the Immaculate Conception</li>
-                  <li>📌 Independence Square</li>
-                </ul>
-              </div>
-            }
-            rightContent={
-              <MapEmbed
-                title="Downtown Port of Spain Map"
-                url="https://www.google.com/maps/embed?pb=!1m52!1m12!1m3!1d15684.004408994995!2d-61.52428469221804!3d10.657021531751937!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m37!3e2!4m5!1s0x8c36080e40b8d411%3A0x6208586c6f6dc38f!2sAriapita%20Ave%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.6617622!2d-61.523201099999994!4m5!1s0x8c3607e0e1493be1%3A0x6309c523240869dd!2sMemorial%20Park%2C%20MF7R%2BC5V%2C%20Frederick%20St%2C%20Port%20of%20Spain%2C%20Trinidad%20%26%20Tobago!3m2!1d10.6636028!2d-61.509577799999995!4m5!1s0x8c3607e288036ef9%3A0x151605af19573381!2sDowntown%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.659713499999999!2d-61.5121439!4m5!1s0x8c3607fc4b99ed0b%3A0x98beed9e7918873d!2sTrinity%20Cathedral%2C%20Abercromby%20Street%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.6521017!2d-61.5105016!4m5!1s0x8c3607005d63b933%3A0x6d53250b28d09a8!2sCathedral%20of%20the%20Immaculate%20Conception%2C%20Independence%20Square%20South%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.6497878!2d-61.507347499999995!4m5!1s0x8c3607feaf1fecf5%3A0xdc1681a7e287d238!2sIndependence%20Square%2C%20Port%20of%20Spain%2C%20Trinidad%20and%20Tobago!3m2!1d10.6501178!2d-61.504768799999994!5e0!3m2!1sen!2sus!4v1743993989630!5m2!1sen!2sus"
-              />
-            }
+            leftPane={{
+              type: "custom",
+              content: (
+                <div className="post-itinerary-section">
+                  <div className="post-itinerary-title">Itinerary 📍</div>
+                  <ul>
+                    <li>📌 Ariapita Avenue</li>
+                    <li>📌 Independence Square</li>
+                    <li>📌 Memorial Park</li>
+                    <li>📌 Downtown Port of Spain</li>
+                    <li>📌 Trinity Cathedral</li>
+                    <li>📌 Cathedral of the Immaculate Conception</li>
+                    <li>📌 Independence Square</li>
+                  </ul>
+                </div>
+              ),
+            }}
+            rightPane={{
+              type: "map",
+              mapComponent: downtownMap,
+            }}
           />
 
           <TwoColumnLayout
-            leftContent={
-              <div className="image-container">
-                <img src={background} alt="Port of Spain" />
-              </div>
-            }
-            rightContent={
-              <div className="post-description">
-                We asked the driver to drop us off few blocks from
-                📌Independence Square, so we could soak in the vibrant
-                #atmosphere of downtown. Independence Square was a bustling hub
-                of activity, with people going about their day and street
-                vendors selling their wares. We wandered through the square,
-                soaking up the vibrant atmosphere and admiring the architecture
-                of the surrounding buildings. Towering government buildings,
-                like silent sentinels, watched over the square. We passed the
-                Red House, the seat of Parliament, a grand building that
-                whispered tales of political history. The Supreme Court, a
-                majestic edifice, stood nearby, a reminder of the island's legal
-                system. It was a fascinating walk, a journey through the heart
-                of Trinidad and Tobago's governance.
-              </div>
-            }
+            leftPane={{
+              type: "image",
+              imageUrl: background,
+              imageAlt: "Port of Spain",
+            }}
+            rightPane={{
+              type: "text",
+              content:
+                "We asked the driver to drop us off few blocks from 📌Independence Square, so we could soak in the vibrant #atmosphere of downtown. Independence Square was a bustling hub of activity, with people going about their day and street vendors selling their wares. We wandered through the square, soaking up the vibrant atmosphere and admiring the architecture of the surrounding buildings. Towering government buildings, like silent sentinels, watched over the square. We passed the Red House, the seat of Parliament, a grand building that whispered tales of political history. The Supreme Court, a majestic edifice, stood nearby, a reminder of the island's legal system. It was a fascinating walk, a journey through the heart of Trinidad and Tobago's governance.",
+            }}
           />
 
           <ImageGrid images={images} />
