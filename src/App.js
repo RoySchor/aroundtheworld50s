@@ -18,7 +18,7 @@ import SpecialsPage from "./pages/SpecialsPage";
 import TipsPage from "./pages/TipsPage/TipsPage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
-import TrinidadTobegoPost1 from "./pages/BlogPage/Blogs/trinidad-and-tobago/1";
+import TrinidadTobegoPost1 from "./pages/BlogPage/Blogs/trinidad-and-tobago/1/TrinidadTobegoPost1";
 
 function App() {
   return (

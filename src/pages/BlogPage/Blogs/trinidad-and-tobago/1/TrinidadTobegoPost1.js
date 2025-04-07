@@ -6,7 +6,7 @@ import TwoColumnLayout from "../../../../../components/TwoColumnLayout/TwoColumn
 import ImageGrid from "../../../../../components/ImageGrid/ImageGrid";
 import MapEmbed from "../../../../../components/MapEmbed/MapEmbed";
 
-const TrinidadTobegoPost2 = () => {
+const TrinidadTobegoPost1 = () => {
   const images = [
     "trinidad-tobego-post-1-bg.jpg",
     "trinidad-tobego-post-1-bg.jpg",
@@ -268,4 +268,4 @@ const TrinidadTobegoPost2 = () => {
   );
 };
 
-export default TrinidadTobegoPost2;
+export default TrinidadTobegoPost1;
