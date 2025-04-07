@@ -1,0 +1,16 @@
+.image-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8;
+}
+
+.image-grid-item {
+  @apply relative overflow-hidden rounded-lg transition-transform duration-300;
+  aspect-ratio: 1;
+}
+
+.image-grid-image {
+  @apply w-full h-full object-cover;
+}
+
+.image-grid-item:hover {
+  @apply transform scale-125 z-10;
+}

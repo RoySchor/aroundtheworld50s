@@ -1,0 +1,15 @@
+.two-column-layout {
+  @apply flex flex-col md:flex-row gap-8 mb-8;
+}
+
+.column {
+  @apply flex-1;
+}
+
+.left-column {
+  @apply order-1 md:order-1;
+}
+
+.right-column {
+  @apply order-2 md:order-2;
+}
