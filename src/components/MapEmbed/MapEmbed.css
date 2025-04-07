@@ -1,5 +1,5 @@
 .map-embed {
-  @apply bg-white p-6 rounded-lg shadow-lg;
+  @apply bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl;
 }
 
 .map-title {
