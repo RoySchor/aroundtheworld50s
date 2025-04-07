@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ContentPane from "../ContentPane/ContentPane";
 import "./TwoColumnLayout.css";
 
 const TwoColumnLayout = ({ leftContent, rightContent }) => {

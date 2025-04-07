@@ -38,7 +38,6 @@
   @apply mb-2;
 }
 
-
 .image-container {
   @apply bg-gray-200 rounded-lg mx-auto;
   min-height: 300px;
