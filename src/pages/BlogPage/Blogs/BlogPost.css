@@ -23,7 +23,7 @@
 }
 
 .post-itinerary-section {
-  @apply bg-white p-6 rounded-lg shadow-md;
+  @apply bg-white p-6 rounded-lg shadow-md w-4/5;
 }
 
 .post-itinerary-title {
@@ -53,7 +53,7 @@
   }
 
   .post-itinerary-section {
-    @apply mx-6;
+    @apply w-full mx-6;
   }
 
   .image-container {
