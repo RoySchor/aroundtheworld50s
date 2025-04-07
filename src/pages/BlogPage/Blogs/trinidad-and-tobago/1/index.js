@@ -1,7 +1,6 @@
 import React from "react";
 import "../../../../../styles/layout.css";
 import "../../BlogPost.css";
-import "./TrinidadTobegoPost2.css";
 import background from "../../../../../assets/blog/trinidad-and-tobago/1/trinidad-tobego-post-1-bg.jpg";
 import TwoColumnLayout from "../../../../../components/TwoColumnLayout/TwoColumnLayout";
 import ImageGrid from "../../../../../components/ImageGrid/ImageGrid";
@@ -53,10 +52,15 @@ const TrinidadTobegoPost2 = () => {
             quickly took hold. And so, our Caribbean escape began.
           </div>
 
+          {/* TODO: Wrap this in Link to Tips Page */}
+          <div className="post-bolded-text post-tips-section-container">
+            💥 Insider Tips: Your Key to an Unforgettable Trip (read more…)
+          </div>
+
           <TwoColumnLayout
             leftContent={
-              <div className="itinerary-section">
-                <div>Itinerary 📍</div>
+              <div className="post-itinerary-section">
+                <div className="post-itinerary-title">Itinerary 📍</div>
                 <ul>
                   <li>📌 The BRIX, Autograph Collection</li>
                   <li>📌 Queen's Hall</li>
@@ -83,7 +87,7 @@ const TrinidadTobegoPost2 = () => {
 
           <TwoColumnLayout
             leftContent={
-              <div className="image-placeholder">
+              <div className="image-container">
                 <img src={background} alt="Port of Spain" />
               </div>
             }
@@ -115,7 +119,7 @@ const TrinidadTobegoPost2 = () => {
 
           <TwoColumnLayout
             leftContent={
-              <div className="image-placeholder">
+              <div className="image-container">
                 <img src={background} alt="Port of Spain" />
               </div>
             }
@@ -141,8 +145,8 @@ const TrinidadTobegoPost2 = () => {
 
           <TwoColumnLayout
             leftContent={
-              <div className="itinerary-section">
-                <h3>Itinerary</h3>
+              <div className="post-itinerary-section">
+                <div className="post-itinerary-title">Itinerary 📍</div>
                 <ul>
                   <li>📌 Ariapita Avenue</li>
                   <li>📌 Independence Square</li>
@@ -164,7 +168,7 @@ const TrinidadTobegoPost2 = () => {
 
           <TwoColumnLayout
             leftContent={
-              <div className="image-placeholder">
+              <div className="image-container">
                 <img src={background} alt="Port of Spain" />
               </div>
             }

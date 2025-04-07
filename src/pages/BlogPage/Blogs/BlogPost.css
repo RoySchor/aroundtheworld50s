@@ -17,3 +17,49 @@
 .post-link {
   @apply text-blue-500 underline cursor-pointer;
 }
+
+.post-tips-section-container {
+  @apply mx-auto bg-blue-100 p-6 w-2/3 rounded-lg my-8;
+}
+
+.post-itinerary-section {
+  @apply bg-white p-6 rounded-lg shadow-md;
+}
+
+.post-itinerary-title {
+  @apply text-2xl font-bold mb-4;
+}
+
+.post-itinerary-section ul {
+  @apply list-disc pl-6;
+}
+
+.post-itinerary-section li {
+  @apply mb-2;
+}
+
+
+.image-container {
+  @apply bg-gray-200 rounded-lg mx-auto;
+  min-height: 300px;
+}
+
+@media (max-width: 640px) {
+  .post-description {
+    @apply text-lg px-6;
+  }
+
+  .post-tips-section-container {
+    @apply w-11/12 rounded-lg my-8 text-lg;
+  }
+
+  .post-itinerary-section {
+    @apply mx-6;
+  }
+
+  .image-container {
+    @apply w-4/5;
+    min-height: 150px;
+    max-height: 200px;
+  }
+}
