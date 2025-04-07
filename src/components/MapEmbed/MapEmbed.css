@@ -1,0 +1,11 @@
+.map-embed {
+  @apply bg-white p-6 rounded-lg shadow-lg;
+}
+
+.map-title {
+  @apply text-xl font-bold mb-4;
+}
+
+.map-container {
+  @apply rounded-lg overflow-hidden;
+}
