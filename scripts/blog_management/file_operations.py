@@ -13,7 +13,6 @@ def setup_directories(base_dir, country_name, post_index):
 
     # Create directories
     assets_dir = base_dir / "src/assets/blog" / serialized_country / str(post_index)
-    data_dir = base_dir / "src/data" / serialized_country
     blog_component_dir = base_dir / "src/pages/BlogPage/Blogs" / serialized_country / str(post_index)
 
     for directory in [assets_dir, data_dir, blog_component_dir]:
