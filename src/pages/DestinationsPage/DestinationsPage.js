@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "../../styles/layout.css";
 import "./DestinationsPage.css";
 import background from "../../assets/destinations-page-bg.jpg";
@@ -7,6 +8,7 @@ import blogs from "../../data/blogs";
 import { serializeLocation } from "./DestinationPage.utils";
 
 const DestinationsPage = () => {
+  const navigate = useNavigate();
   const uniqueCountries = [...new Set(blogs.map((blog) => blog.country))];
 
   return (
@@ -31,7 +33,7 @@ const DestinationsPage = () => {
             onChange={(e) => {
               if (e.target.value) {
                 const serializedCountry = serializeLocation(e.target.value);
-                window.location.href = `/blog/${serializedCountry}`;
+                navigate(`/blog/${serializedCountry}`);
               }
             }}
           >
