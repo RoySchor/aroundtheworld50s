@@ -1,10 +1,16 @@
 .image-grid {
-  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8;
+  @apply grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 mb-8 justify-items-center;
 }
 
 .image-grid-item {
   @apply relative overflow-hidden rounded-lg transition-transform duration-300;
   aspect-ratio: 1;
+}
+
+@media (min-width: 640px) {
+  .image-grid-item {
+    max-width: none;
+  }
 }
 
 .image-grid-image {
@@ -13,4 +19,18 @@
 
 .image-grid-item:hover {
   @apply transform scale-125 z-10;
+}
+
+@media (max-width: 640px) {
+  .image-grid {
+    @apply grid-cols-3;
+  }
+
+  .image-grid-item {
+    max-width: 100px;
+  }
+
+  .image-grid-item:hover {
+    @apply transform scale-150;
+  }
 }
