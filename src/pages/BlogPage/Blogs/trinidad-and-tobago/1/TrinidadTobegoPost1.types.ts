@@ -22,6 +22,7 @@ interface TwoColumnLayout extends BaseLayout {
   rightType: "image" | "text";
   leftImage?: string;
   rightImage?: string;
+  imageAlt?: string;
 }
 
 export type LayoutType =
@@ -45,6 +46,8 @@ export interface ContentSection {
 }
 
 export interface BlogPostContent {
+  country: string;
+  path: string;
   header: string;
   title: string;
   subtitle: string;

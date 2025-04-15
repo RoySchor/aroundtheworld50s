@@ -6,6 +6,7 @@ import ImageGrid from "../../../../../components/ImageGrid/ImageGrid";
 import MapEmbed from "../../../../../components/MapEmbed/MapEmbed";
 import { TRINIDAD_TOBAGO_POST_1 } from "./TrinidadTobegoPost1.constants.ts";
 import { ContentSection } from "./TrinidadTobegoPost1.types";
+import { getImagePathFromBlogPost } from "../../BlogPost.utils.ts";
 
 const TrinidadTobegoPost1 = () => {
   const portOfSpainMap = (
@@ -58,11 +59,9 @@ const TrinidadTobegoPost1 = () => {
               type: section.layout.leftType,
               imageUrl:
                 section.layout.leftType === "image"
-                  ? require(
-                      `../../../../../assets/blog/trinidad-and-tobago/1/${section.leftImage}`,
-                    )
+                  ? getImagePathFromBlogPost(TRINIDAD_TOBAGO_POST_1, section.leftImage || "")
                   : undefined,
-              imageAlt: "Port of Spain",
+              imageAlt: section.layout.imageAlt,
               content:
                 section.layout.leftType === "text"
                   ? section.content
@@ -72,11 +71,9 @@ const TrinidadTobegoPost1 = () => {
               type: section.layout.rightType,
               imageUrl:
                 section.layout.rightType === "image"
-                  ? require(
-                      `../../../../../assets/blog/trinidad-and-tobago/1/${section.rightImage}`,
-                    )
+                  ? getImagePathFromBlogPost(TRINIDAD_TOBAGO_POST_1, section.rightImage || "")
                   : undefined,
-              imageAlt: "Port of Spain",
+              imageAlt: section.layout.imageAlt,
               content:
                 section.layout.rightType === "text"
                   ? section.content
@@ -94,9 +91,7 @@ const TrinidadTobegoPost1 = () => {
       <div
         className="fixed-background-container"
         style={{
-          backgroundImage: `url(${require(
-            `../../../../../assets/blog/trinidad-and-tobago/1/${TRINIDAD_TOBAGO_POST_1.backgroundImage}`,
-          )})`,
+          backgroundImage: `url(${getImagePathFromBlogPost(TRINIDAD_TOBAGO_POST_1, TRINIDAD_TOBAGO_POST_1.backgroundImage || "")})`,
         }}
       >
         <div className="fixed-background-text-container">
