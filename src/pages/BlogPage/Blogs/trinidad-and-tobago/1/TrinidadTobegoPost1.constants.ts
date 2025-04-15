@@ -1,12 +1,12 @@
 import { BlogPostContent } from './TrinidadTobegoPost1.types';
 
-// Generic blog post structure that can be reused
 export const createBlogPost = (content: BlogPostContent): BlogPostContent => ({
   header: content.header,
   title: content.title,
   subtitle: content.subtitle,
   description: content.description,
   tipsSection: content.tipsSection,
+  backgroundImage: content.backgroundImage,
   itineraries: content.itineraries || [],
   content: content.content || [],
 });
@@ -16,6 +16,7 @@ const trinidadTobagoContent: BlogPostContent = {
   header: "📍🇹🇹 Trinidad & Tobago: A Tale of Two Islands",
   title: "📌Port-of-Spain",
   subtitle: "⛱️10 days of Caribbean Charm: Uncovering the Soul and Beaches ✨",
+  backgroundImage: "trinidad-tobego-post-1-bg.jpg",
   description: `
     Our Trinidad & Tobago adventure was a spur-of-the-moment decision.
     When our cruise was unexpectedly rerouted (due to a hurricane), we embraced

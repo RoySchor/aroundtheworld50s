@@ -1,7 +1,6 @@
 import React from "react";
 import "../../../../../styles/layout.css";
 import "../../BlogPost.css";
-import background from "../../../../../assets/blog/trinidad-and-tobago/1/trinidad-tobego-post-1-bg.jpg";
 import TwoColumnLayout from "../../../../../components/TwoColumnLayout/TwoColumnLayout";
 import ImageGrid from "../../../../../components/ImageGrid/ImageGrid";
 import MapEmbed from "../../../../../components/MapEmbed/MapEmbed";
@@ -95,7 +94,9 @@ const TrinidadTobegoPost1 = () => {
       <div
         className="fixed-background-container"
         style={{
-          backgroundImage: `url(${background})`,
+          backgroundImage: `url(${require(
+            `../../../../../assets/blog/trinidad-and-tobago/1/${TRINIDAD_TOBAGO_POST_1.backgroundImage}`,
+          )})`,
         }}
       >
         <div className="fixed-background-text-container">
