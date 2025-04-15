@@ -1,6 +1,8 @@
 import { BlogPostContent } from './TrinidadTobegoPost1.types';
 
 export const createBlogPost = (content: BlogPostContent): BlogPostContent => ({
+  country: content.country,
+  path: content.path,
   header: content.header,
   title: content.title,
   subtitle: content.subtitle,
@@ -13,6 +15,8 @@ export const createBlogPost = (content: BlogPostContent): BlogPostContent => ({
 
 // Specific content for Trinidad and Tobago post
 const trinidadTobagoContent: BlogPostContent = {
+  country: "Trinidad and Tobago",
+  path: "blog/trinidad-and-tobago/1",
   header: "📍🇹🇹 Trinidad & Tobago: A Tale of Two Islands",
   title: "📌Port-of-Spain",
   subtitle: "⛱️10 days of Caribbean Charm: Uncovering the Soul and Beaches ✨",
@@ -76,7 +80,7 @@ const trinidadTobagoContent: BlogPostContent = {
     },
     {
       key: "arrivalDescription",
-      layout: { type: "two-column", leftType: "image", rightType: "text" },
+      layout: { type: "two-column", leftType: "image", rightType: "text", imageAlt: "Port of Spain" },
       content: `
         The 🛩️ touched down in 📌Port of Spain just before noon. We hailed a 🚕taxi
         to our hotel, The #BRIX, Autograph Collection. We selected this 🏨for its
@@ -118,7 +122,7 @@ const trinidadTobagoContent: BlogPostContent = {
     },
     {
       key: "memorialPark",
-      layout: { type: "two-column", leftType: "image", rightType: "text" },
+      layout: { type: "two-column", leftType: "image", rightType: "text", imageAlt: "Port of Spain" },
       content: `
         As we strolled leisurely through 📌Memorial Park and the iconic 📌Queen's
         Park Oval, we couldn't resist indulging in this cold, refreshing 🥥coconut
@@ -146,7 +150,7 @@ const trinidadTobagoContent: BlogPostContent = {
     },
     {
       key: "independenceSquare",
-      layout: { type: "two-column", leftType: "image", rightType: "text" },
+      layout: { type: "two-column", leftType: "image", rightType: "text", imageAlt: "Port of Spain" },
       content: `
         We asked the driver to drop us off few blocks from 📌Independence Square,
         so we could soak in the vibrant #atmosphere of downtown. Independence Square
@@ -188,7 +192,7 @@ const trinidadTobagoContent: BlogPostContent = {
     },
     {
       key: "trinityCathedral",
-      layout: { type: "two-column", leftType: "text", rightType: "image" },
+      layout: { type: "two-column", leftType: "text", rightType: "image", imageAlt: "Port of Spain" },
       content: `
         We continued our exploration, venturing towards 📌Trinity Cathedral⛪,
         architectural beauty, a breathtaking testament to the island's history.
