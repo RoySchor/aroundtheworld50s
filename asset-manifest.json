@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/aroundtheworld50s/static/css/main.685b6888.css",
-    "main.js": "/aroundtheworld50s/static/js/main.82baf5b7.js",
+    "main.js": "/aroundtheworld50s/static/js/main.e7f41a03.js",
     "static/js/453.fe2aba05.chunk.js": "/aroundtheworld50s/static/js/453.fe2aba05.chunk.js",
     "static/media/IMG_1628.jpeg": "/aroundtheworld50s/static/media/IMG_1628.e5987312a97fbcd61ec9.jpeg",
     "static/media/IMG_1650.jpeg": "/aroundtheworld50s/static/media/IMG_1650.c266d23292fe8c56881e.jpeg",
@@ -14,16 +14,18 @@
     "static/media/destinations-page-bg.jpg": "/aroundtheworld50s/static/media/destinations-page-bg.39c6198efe8cf2185193.jpg",
     "static/media/trinidad-tobego-post-1-bg.jpg": "/aroundtheworld50s/static/media/trinidad-tobego-post-1-bg.630aac59c170678ffb25.jpg",
     "static/media/home-page-bg.webp": "/aroundtheworld50s/static/media/home-page-bg.0088e8f406dddfb127e7.webp",
+    "static/media/error-page-gif-no-bg.gif": "/aroundtheworld50s/static/media/error-page-gif-no-bg.64065e07fdd8d54560f6.gif",
     "static/media/around_the_world_50s_logo.png": "/aroundtheworld50s/static/media/around_the_world_50s_logo.23d34d66928880786c68.png",
     "static/media/about-me-page-bg.webp": "/aroundtheworld50s/static/media/about-me-page-bg.dc31fa0927ea11efdc00.webp",
     "static/media/flat-world-map.webp": "/aroundtheworld50s/static/media/flat-world-map.93be244b96785ff75d03.webp",
+    "static/media/error-page-gif.gif": "/aroundtheworld50s/static/media/error-page-gif.23721d9c620153e4b676.gif",
     "index.html": "/aroundtheworld50s/index.html",
     "main.685b6888.css.map": "/aroundtheworld50s/static/css/main.685b6888.css.map",
-    "main.82baf5b7.js.map": "/aroundtheworld50s/static/js/main.82baf5b7.js.map",
+    "main.e7f41a03.js.map": "/aroundtheworld50s/static/js/main.e7f41a03.js.map",
     "453.fe2aba05.chunk.js.map": "/aroundtheworld50s/static/js/453.fe2aba05.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.685b6888.css",
-    "static/js/main.82baf5b7.js"
+    "static/js/main.e7f41a03.js"
   ]
 }
