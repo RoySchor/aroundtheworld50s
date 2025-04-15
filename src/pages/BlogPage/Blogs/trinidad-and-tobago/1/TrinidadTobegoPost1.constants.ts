@@ -1,32 +1,7 @@
-// Types (for documentation purposes)
-/*
-type LayoutType =
-  | { type: "text" }
-  | { type: "itinerary-with-map", mapIndex: number }
-  | { type: "image-grid", images: string[] }
-  | { type: "two-column", leftType: "image" | "text", rightType: "image" | "text", leftImage?: string, rightImage?: string };
-
-type BlogPostContent = {
-  header: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  tipsSection?: string;
-  itineraries: Array<{
-    title: string;
-    items: string[];
-  }>;
-  content: Array<{
-    key: string;
-    layout: LayoutType;
-    content: string;
-    images?: string[];
-  }>;
-};
-*/
+import { BlogPostContent } from './TrinidadTobegoPost1.types';
 
 // Generic blog post structure that can be reused
-export const createBlogPost = (content) => ({
+export const createBlogPost = (content: BlogPostContent): BlogPostContent => ({
   header: content.header,
   title: content.title,
   subtitle: content.subtitle,
@@ -37,7 +12,7 @@ export const createBlogPost = (content) => ({
 });
 
 // Specific content for Trinidad and Tobago post
-const trinidadTobagoContent = {
+const trinidadTobagoContent: BlogPostContent = {
   header: "📍🇹🇹 Trinidad & Tobago: A Tale of Two Islands",
   title: "📌Port-of-Spain",
   subtitle: "⛱️10 days of Caribbean Charm: Uncovering the Soul and Beaches ✨",
