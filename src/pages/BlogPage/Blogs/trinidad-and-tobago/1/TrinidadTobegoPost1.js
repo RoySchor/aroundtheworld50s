@@ -8,19 +8,6 @@ import MapEmbed from "../../../../../components/MapEmbed/MapEmbed";
 import { TRINIDAD_TOBAGO_POST_1 } from "./TrinidadTobegoPost1.constants";
 
 const TrinidadTobegoPost1 = () => {
-  const images = [
-    "trinidad-tobego-post-1-bg.jpg",
-    "trinidad-tobego-post-1-bg.jpg",
-    "trinidad-tobego-post-1-bg.jpg",
-    "trinidad-tobego-post-1-bg.jpg",
-    "trinidad-tobego-post-1-bg.jpg",
-    "trinidad-tobego-post-1-bg.jpg",
-    "trinidad-tobego-post-1-bg.jpg",
-    "trinidad-tobego-post-1-bg.jpg",
-    "trinidad-tobego-post-1-bg.jpg",
-    "trinidad-tobego-post-1-bg.jpg",
-  ];
-
   const portOfSpainMap = (
     <MapEmbed
       title="Port of Spain Map"
@@ -64,14 +51,19 @@ const TrinidadTobegoPost1 = () => {
           />
         );
       case "image-grid":
-        return <ImageGrid key={section.key} images={images} />;
+        return <ImageGrid key={section.key} images={section.images} />;
       case "two-column":
         return (
           <TwoColumnLayout
             key={section.key}
             leftPane={{
               type: section.layout.leftType,
-              imageUrl: background,
+              imageUrl:
+                section.layout.leftType === "image"
+                  ? require(
+                      `../../../../../assets/blog/trinidad-and-tobago/1/${section.leftImage}`,
+                    )
+                  : undefined,
               imageAlt: "Port of Spain",
               content:
                 section.layout.leftType === "text"
@@ -80,7 +72,12 @@ const TrinidadTobegoPost1 = () => {
             }}
             rightPane={{
               type: section.layout.rightType,
-              imageUrl: background,
+              imageUrl:
+                section.layout.rightType === "image"
+                  ? require(
+                      `../../../../../assets/blog/trinidad-and-tobago/1/${section.rightImage}`,
+                    )
+                  : undefined,
               imageAlt: "Port of Spain",
               content:
                 section.layout.rightType === "text"

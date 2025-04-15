@@ -3,8 +3,8 @@
 type LayoutType =
   | { type: "text" }
   | { type: "itinerary-with-map", mapIndex: number }
-  | { type: "image-grid" }
-  | { type: "two-column", leftType: "image" | "text", rightType: "image" | "text" };
+  | { type: "image-grid", images: string[] }
+  | { type: "two-column", leftType: "image" | "text", rightType: "image" | "text", leftImage?: string, rightImage?: string };
 
 type BlogPostContent = {
   header: string;
@@ -20,6 +20,7 @@ type BlogPostContent = {
     key: string;
     layout: LayoutType;
     content: string;
+    images?: string[];
   }>;
 };
 */
@@ -84,6 +85,18 @@ const trinidadTobagoContent = {
       key: "firstImageGrid",
       layout: { type: "image-grid" },
       content: null,
+      images: [
+        "trinidad-tobego-post-1-bg.jpg",
+        "trinidad-tobego-post-1-bg.jpg",
+        "trinidad-tobego-post-1-bg.jpg",
+        "trinidad-tobego-post-1-bg.jpg",
+        "trinidad-tobego-post-1-bg.jpg",
+        "trinidad-tobego-post-1-bg.jpg",
+        "trinidad-tobego-post-1-bg.jpg",
+        "trinidad-tobego-post-1-bg.jpg",
+        "trinidad-tobego-post-1-bg.jpg",
+        "trinidad-tobego-post-1-bg.jpg",
+      ],
     },
     {
       key: "arrivalDescription",
@@ -94,6 +107,7 @@ const trinidadTobagoContent = {
         upscale accommodations, great deal, and proximity to key attractions like
         📌Queen's Park.
       `,
+      leftImage: "trinidad-tobego-post-1-bg.jpg",
     },
     {
       key: "magnificentSeven",
@@ -113,6 +127,18 @@ const trinidadTobagoContent = {
       key: "secondImageGrid",
       layout: { type: "image-grid" },
       content: null,
+      images: [
+        "trinidad-tobego-post-1-bg.jpg",
+        "trinidad-tobego-post-1-bg.jpg",
+        "trinidad-tobego-post-1-bg.jpg",
+        "trinidad-tobego-post-1-bg.jpg",
+        "trinidad-tobego-post-1-bg.jpg",
+        "trinidad-tobego-post-1-bg.jpg",
+        "trinidad-tobego-post-1-bg.jpg",
+        "trinidad-tobego-post-1-bg.jpg",
+        "trinidad-tobego-post-1-bg.jpg",
+        "trinidad-tobego-post-1-bg.jpg",
+      ],
     },
     {
       key: "memorialPark",
@@ -122,6 +148,7 @@ const trinidadTobagoContent = {
         Park Oval, we couldn't resist indulging in this cold, refreshing 🥥coconut
         water from street vendors.
       `,
+      leftImage: "trinidad-tobego-post-1-bg.jpg",
     },
     {
       key: "downtownDescription",
@@ -156,6 +183,7 @@ const trinidadTobagoContent = {
         stood nearby, a reminder of the island's legal system. It was a fascinating
         walk, a journey through the heart of Trinidad and Tobago's governance.
       `,
+      leftImage: "trinidad-tobego-post-1-bg.jpg",
     },
     {
       key: "cathedral",
@@ -184,7 +212,7 @@ const trinidadTobagoContent = {
     },
     {
       key: "trinityCathedral",
-      layout: { type: "text" },
+      layout: { type: "two-column", leftType: "text", rightType: "image" },
       content: `
         We continued our exploration, venturing towards 📌Trinity Cathedral⛪,
         architectural beauty, a breathtaking testament to the island's history.
@@ -194,6 +222,7 @@ const trinidadTobagoContent = {
         came to an unexpected halt. A friendly 👮police officer advised us against
         proceeding further, citing safety concerns for tourists in that particular area.
       `,
+      rightImage: "trinidad-tobego-post-1-bg.jpg",
     },
     {
       key: "ariapitaAvenue",
