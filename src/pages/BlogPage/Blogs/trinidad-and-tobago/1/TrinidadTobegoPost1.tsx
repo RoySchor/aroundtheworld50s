@@ -5,7 +5,8 @@ import background from "../../../../../assets/blog/trinidad-and-tobago/1/trinida
 import TwoColumnLayout from "../../../../../components/TwoColumnLayout/TwoColumnLayout";
 import ImageGrid from "../../../../../components/ImageGrid/ImageGrid";
 import MapEmbed from "../../../../../components/MapEmbed/MapEmbed";
-import { TRINIDAD_TOBAGO_POST_1 } from "./TrinidadTobegoPost1.constants";
+import { TRINIDAD_TOBAGO_POST_1 } from "./TrinidadTobegoPost1.constants.ts";
+import { ContentSection } from "./TrinidadTobegoPost1.types";
 
 const TrinidadTobegoPost1 = () => {
   const portOfSpainMap = (
@@ -22,11 +23,11 @@ const TrinidadTobegoPost1 = () => {
     />
   );
 
-  let itinerary;
+  let itinerary: { title: string; items: string[] };
 
   const maps = [portOfSpainMap, downtownMap];
 
-  const renderContent = (section) => {
+  const renderContent = (section: ContentSection) => {
     switch (section.layout.type) {
       case "text":
         return (
@@ -38,7 +39,6 @@ const TrinidadTobegoPost1 = () => {
         itinerary = TRINIDAD_TOBAGO_POST_1.itineraries[section.layout.mapIndex];
         return (
           <TwoColumnLayout
-            key={section.key}
             leftPane={{
               type: "list",
               listTitle: itinerary.title,
@@ -51,11 +51,10 @@ const TrinidadTobegoPost1 = () => {
           />
         );
       case "image-grid":
-        return <ImageGrid key={section.key} images={section.images} />;
+        return <ImageGrid images={section.images || []} />;
       case "two-column":
         return (
           <TwoColumnLayout
-            key={section.key}
             leftPane={{
               type: section.layout.leftType,
               imageUrl:
@@ -122,7 +121,11 @@ const TrinidadTobegoPost1 = () => {
             </div>
           )}
 
-          {TRINIDAD_TOBAGO_POST_1.content.map(renderContent)}
+          {TRINIDAD_TOBAGO_POST_1.content.map((item, index) => (
+            <div key={item.key || index}>
+              {renderContent(item)}
+            </div>
+          ))}
         </div>
       </div>
     </div>
