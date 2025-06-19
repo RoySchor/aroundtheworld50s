@@ -18,6 +18,14 @@
   word-wrap: break-word;
 }
 
+.json-buttons-container {
+  @apply mt-4 flex flex-col sm:flex-row gap-3;
+}
+
 .json-download-btn {
-  @apply bg-gray-800 text-white border-none px-6 py-3 text-base font-bold font-inter border-4 border-transparent rounded-full hover:border-tan hover:text-tan transition duration-300 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:border-transparent disabled:hover:text-white mt-4 w-full;
+  @apply bg-gray-800 text-white border-none px-6 py-3 text-base font-bold font-inter border-4 border-transparent rounded-full hover:border-tan hover:text-tan transition duration-300 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:border-transparent disabled:hover:text-white flex-1;
+}
+
+.json-download-folder-btn {
+  @apply bg-indigo-600 hover:bg-indigo-700 hover:border-indigo-300;
 }

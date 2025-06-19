@@ -9,6 +9,7 @@ const AdminPage = () => {
     country_code: "",
     title: "",
     blog_description: "",
+    background_image: null,
   });
 
   const handleInputChange = (field, value) => {
@@ -69,6 +70,15 @@ const AdminPage = () => {
               placeholder="Enter a brief description of the blog post"
               rows={4}
               required
+            />
+
+            <FormField
+              id="background_image"
+              label="Background Image"
+              type="file"
+              value={formData.background_image}
+              onChange={(value) => handleInputChange("background_image", value)}
+              accept=".jpg,.jpeg,.png,.webp,.gif"
             />
           </div>
         </div>

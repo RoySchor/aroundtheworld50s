@@ -23,3 +23,11 @@
 .form-field-textarea {
   @apply resize-y min-h-[120px] leading-relaxed;
 }
+
+.form-field-file-preview {
+  @apply bg-gray-100 border border-gray-300 rounded-lg p-2 mb-2;
+}
+
+.form-field-file-name {
+  @apply text-sm text-gray-700 font-medium;
+}

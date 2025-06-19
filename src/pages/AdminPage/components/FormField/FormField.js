@@ -13,14 +13,18 @@ const FormField = ({
   rows,
   required = false,
   className = "",
+  accept,
 }) => {
   const handleChange = (e) => {
-    onChange(e.target.value);
+    if (type === "file") {
+      onChange(e.target.files[0]);
+    } else {
+      onChange(e.target.value);
+    }
   };
 
   const inputProps = {
     id,
-    value,
     onChange: handleChange,
     placeholder,
     maxLength,
@@ -28,12 +32,27 @@ const FormField = ({
     className: `form-field-input ${className}`,
   };
 
+  // For file inputs, don't include value prop
+  if (type !== "file") {
+    inputProps.value = value;
+  }
+
+  // For file inputs, add accept prop
+  if (type === "file" && accept) {
+    inputProps.accept = accept;
+  }
+
   return (
     <div className="form-field-group">
       <label htmlFor={id} className="form-field-label">
         {label}
         {required && <span className="form-field-required">*</span>}
       </label>
+      {type === "file" && value && (
+        <div className="form-field-file-preview">
+          <span className="form-field-file-name">{value.name}</span>
+        </div>
+      )}
       {type === "textarea" ? (
         <textarea
           {...inputProps}
@@ -50,14 +69,15 @@ const FormField = ({
 FormField.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(["text", "email", "tel", "url", "textarea"]),
-  value: PropTypes.string.isRequired,
+  type: PropTypes.oneOf(["text", "email", "tel", "url", "textarea", "file"]),
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   maxLength: PropTypes.number,
   rows: PropTypes.number,
   required: PropTypes.bool,
   className: PropTypes.string,
+  accept: PropTypes.string,
 };
 
 export default FormField;
