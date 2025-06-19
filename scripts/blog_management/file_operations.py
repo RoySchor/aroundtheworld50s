@@ -15,10 +15,10 @@ def setup_directories(base_dir, country_name, post_index):
     assets_dir = base_dir / "src/assets/blog" / serialized_country / str(post_index)
     blog_component_dir = base_dir / "src/pages/BlogPage/Blogs" / serialized_country / str(post_index)
 
-    for directory in [assets_dir, data_dir, blog_component_dir]:
+    for directory in [assets_dir, blog_component_dir]:
         directory.mkdir(parents=True, exist_ok=True)
 
-    return assets_dir, data_dir, blog_component_dir
+    return assets_dir, blog_component_dir
 
 def copy_images(source_dir, assets_dir, background_image):
     """Copy images from source directory to assets directory."""
@@ -132,7 +132,7 @@ def update_app_js(base_dir, blog_data, post_index):
         content = f.read()
 
     # Add import statement after the last import
-    import_line = f"import {component_name} from './pages/BlogPage/Blogs/{serialized_country}/{post_index}';\n"
+    import_line = f"import {component_name} from './pages/BlogPage/Blogs/{serialized_country}/{post_index}/{component_name}.js';\n"
     last_import_index = content.rindex('import')
     last_import_line_end = content.find('\n', last_import_index) + 1
     content = content[:last_import_line_end] + import_line + content[last_import_line_end:]

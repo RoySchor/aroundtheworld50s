@@ -66,7 +66,7 @@ class BlogManager:
 
         # Setup directories
         post_index = get_next_post_index(self.base_dir / "src/assets/blog" / blog_data['country'])
-        assets_dir, data_dir, blog_component_dir = setup_directories(self.base_dir, blog_data['country'], post_index)
+        assets_dir, blog_component_dir = setup_directories(self.base_dir, blog_data['country'], post_index)
 
         # Copy images
         copy_images(source_dir, assets_dir, blog_data['background_image'])
