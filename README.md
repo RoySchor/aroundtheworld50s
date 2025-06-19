@@ -34,6 +34,7 @@ python3 -m scripts.blog_management.blog_manager
   
    After reviewing the preview, the user is prompted to either:
    - Confirm the changes:
+       - `npm run lint:fix` is run on the generated code
        - Changes are committed
        - Pushed to GitHub
        - Deployed to production via GitHub Actions using:
