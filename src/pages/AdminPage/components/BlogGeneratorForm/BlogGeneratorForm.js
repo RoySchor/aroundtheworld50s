@@ -1,9 +1,22 @@
 import React from "react";
 import PropTypes from "prop-types";
 import FormField from "../FormField/FormField";
+import ItinerariesSection from "./FormSections/ItinerariesSection";
+import MapsSection from "./FormSections/MapsSection";
 import "./BlogGeneratorForm.css";
 
-const BlogGeneratorForm = ({ formData, onInputChange }) => {
+const BlogGeneratorForm = ({
+  formData,
+  onInputChange,
+  onItineraryChange,
+  onAddItinerary,
+  onRemoveItinerary,
+  onAddItineraryItem,
+  onRemoveItineraryItem,
+  onMapChange,
+  onAddMap,
+  onRemoveMap,
+}) => {
   return (
     <div className="blog-form-container">
       <h2 className="blog-form-title">Blog Configuration Form</h2>
@@ -97,6 +110,28 @@ const BlogGeneratorForm = ({ formData, onInputChange }) => {
         placeholder="Enter tips section text (e.g., 💥 Insider Tips: Your Key to an Unforgettable Trip (read more…))"
         required
       />
+
+      <div className="blog-form-section-divider">
+        <h3 className="blog-form-section-title">Optional Sections</h3>
+      </div>
+
+      <ItinerariesSection
+        formData={formData}
+        onInputChange={onInputChange}
+        onItineraryChange={onItineraryChange}
+        onAddItinerary={onAddItinerary}
+        onRemoveItinerary={onRemoveItinerary}
+        onAddItineraryItem={onAddItineraryItem}
+        onRemoveItineraryItem={onRemoveItineraryItem}
+      />
+
+      <MapsSection
+        formData={formData}
+        onInputChange={onInputChange}
+        onMapChange={onMapChange}
+        onAddMap={onAddMap}
+        onRemoveMap={onRemoveMap}
+      />
     </div>
   );
 };
@@ -112,8 +147,31 @@ BlogGeneratorForm.propTypes = {
     blog_subtitle: PropTypes.string.isRequired,
     blog_description_detailed: PropTypes.string.isRequired,
     blog_tips_section: PropTypes.string.isRequired,
+    include_itineraries: PropTypes.bool.isRequired,
+    itineraries: PropTypes.arrayOf(
+      PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        items: PropTypes.arrayOf(PropTypes.string).isRequired,
+      }),
+    ).isRequired,
+    include_maps: PropTypes.bool.isRequired,
+    maps: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        url: PropTypes.string.isRequired,
+      }),
+    ).isRequired,
   }).isRequired,
   onInputChange: PropTypes.func.isRequired,
+  onItineraryChange: PropTypes.func.isRequired,
+  onAddItinerary: PropTypes.func.isRequired,
+  onRemoveItinerary: PropTypes.func.isRequired,
+  onAddItineraryItem: PropTypes.func.isRequired,
+  onRemoveItineraryItem: PropTypes.func.isRequired,
+  onMapChange: PropTypes.func.isRequired,
+  onAddMap: PropTypes.func.isRequired,
+  onRemoveMap: PropTypes.func.isRequired,
 };
 
 export default BlogGeneratorForm;

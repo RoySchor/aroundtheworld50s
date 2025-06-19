@@ -48,11 +48,58 @@ const JsonPreview = ({ formData }) => {
         if (formData[key] && formData[key].trim() !== "") {
           blogData[mappedKey] = formData[key].trim();
         }
-      } else if (formData[key] && formData[key].trim() !== "") {
+      } else if (
+        key !== "include_itineraries" &&
+        key !== "itineraries" &&
+        key !== "include_maps" &&
+        key !== "maps" &&
+        formData[key] &&
+        formData[key].trim() !== ""
+      ) {
         // Handle all other fields including blog_description at top level
         filteredData[key] = formData[key].trim();
       }
     });
+
+    // Add itineraries to blog object if enabled and has content
+    if (formData.include_itineraries && formData.itineraries.length > 0) {
+      const validItineraries = formData.itineraries
+        .filter(
+          (itinerary) =>
+            itinerary.title.trim() !== "" &&
+            itinerary.items.some((item) => item.trim() !== ""),
+        )
+        .map((itinerary) => ({
+          title: itinerary.title.trim(),
+          items: itinerary.items
+            .filter((item) => item.trim() !== "")
+            .map((item) => item.trim()),
+        }));
+
+      if (validItineraries.length > 0) {
+        blogData.itineraries = validItineraries;
+      }
+    }
+
+    // Add maps to blog object if enabled and has content
+    if (formData.include_maps && formData.maps.length > 0) {
+      const validMaps = formData.maps
+        .filter(
+          (map) =>
+            map.name.trim() !== "" &&
+            map.title.trim() !== "" &&
+            map.url.trim() !== "",
+        )
+        .map((map) => ({
+          name: map.name.trim(),
+          title: map.title.trim(),
+          url: map.url.trim(),
+        }));
+
+      if (validMaps.length > 0) {
+        blogData.maps = validMaps;
+      }
+    }
 
     // Add blog object if it has content
     if (Object.keys(blogData).length > 0) {
@@ -182,6 +229,21 @@ JsonPreview.propTypes = {
     blog_subtitle: PropTypes.string.isRequired,
     blog_description_detailed: PropTypes.string.isRequired,
     blog_tips_section: PropTypes.string.isRequired,
+    include_itineraries: PropTypes.bool.isRequired,
+    itineraries: PropTypes.arrayOf(
+      PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        items: PropTypes.arrayOf(PropTypes.string).isRequired,
+      }),
+    ).isRequired,
+    include_maps: PropTypes.bool.isRequired,
+    maps: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        url: PropTypes.string.isRequired,
+      }),
+    ).isRequired,
   }).isRequired,
 };
 
