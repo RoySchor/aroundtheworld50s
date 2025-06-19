@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import JSZip from "jszip";
 import "./JsonPreview.css";
 
 const JsonPreview = ({ formData }) => {
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
   const isFormValid = () => {
     const requiredFields = [
       "country",
@@ -27,7 +30,7 @@ const JsonPreview = ({ formData }) => {
 
     Object.keys(formData).forEach((key) => {
       if (key === "background_image") {
-        if (formData[key]) {
+        if (formData[key] && formData[key].name) {
           filteredData[key] = formData[key].name;
         }
       } else if (
@@ -146,7 +149,11 @@ const JsonPreview = ({ formData }) => {
           }
 
           // Add image properties for two-column sections
-          if (section.layout.type === "two-column" && section.image) {
+          if (
+            section.layout.type === "two-column" &&
+            section.image &&
+            section.image.name
+          ) {
             if (section.layout.left_type === "image") {
               contentSection.left_image = section.image.name;
             } else if (section.layout.right_type === "image") {
@@ -157,7 +164,7 @@ const JsonPreview = ({ formData }) => {
           // Add images array for image-grid sections
           if (section.layout.type === "image-grid" && section.images) {
             const validImages = section.images.filter(
-              (image) => image !== null,
+              (image) => image !== null && image.name,
             );
             if (validImages.length > 0) {
               contentSection.images = validImages.map((image) => image.name);
@@ -228,7 +235,7 @@ const JsonPreview = ({ formData }) => {
     zip.file(jsonFilename, jsonString);
 
     // Add background image file to zip if it exists
-    if (formData.background_image) {
+    if (formData.background_image && formData.background_image.name) {
       zip.file(formData.background_image.name, formData.background_image);
     }
 
@@ -236,13 +243,17 @@ const JsonPreview = ({ formData }) => {
     if (formData.include_content && formData.content_sections.length > 0) {
       formData.content_sections.forEach((section) => {
         // Add two-column images
-        if (section.layout.type === "two-column" && section.image) {
+        if (
+          section.layout.type === "two-column" &&
+          section.image &&
+          section.image.name
+        ) {
           zip.file(section.image.name, section.image);
         }
         // Add image-grid images
         if (section.layout.type === "image-grid" && section.images) {
           section.images.forEach((image) => {
-            if (image !== null) {
+            if (image !== null && image.name) {
               zip.file(image.name, image);
             }
           });
@@ -281,6 +292,57 @@ const JsonPreview = ({ formData }) => {
     }
   };
 
+  const handleGenerateBlog = () => {
+    setShowConfirmation(true);
+  };
+
+  const handleConfirmGenerate = async () => {
+    setShowConfirmation(false);
+    setIsGenerating(true);
+
+    try {
+      // First download the folder
+      await downloadFolder();
+
+      // Wait a moment for the download to complete
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Get folder name for the script
+      const country = formData.country.trim();
+      const title = formData.title.trim();
+      let folderName = "blog-folder";
+
+      if (country && title) {
+        const sanitizedCountry = country
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "-");
+        const sanitizedTitle = title.toLowerCase().replace(/[^a-z0-9]/g, "-");
+        folderName = `${sanitizedCountry}-${sanitizedTitle}-folder`;
+      } else if (country) {
+        const sanitizedCountry = country
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "-");
+        folderName = `${sanitizedCountry}-folder`;
+      }
+
+      // Show instructions to user since we can't directly run the script from browser
+      alert(
+        `✅ Folder downloaded successfully!\n\n📁 Next steps:\n1. Extract the downloaded ZIP file to your Desktop\n2. Rename the extracted folder to: "${folderName}"\n3. Run the blog generation script:\n   bash scripts/blog_management/add_blog.sh\n\n🚀 The script will automatically find your folder and generate the blog!`,
+      );
+    } catch (error) {
+      console.error("Error generating blog:", error);
+      alert(
+        "❌ Error generating blog. Please try again or download the folder manually.",
+      );
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleCancelGenerate = () => {
+    setShowConfirmation(false);
+  };
+
   return (
     <div className="json-preview-container">
       <h2 className="json-preview-title">Generated JSON</h2>
@@ -302,7 +364,68 @@ const JsonPreview = ({ formData }) => {
         >
           Download Folder
         </button>
+        <button
+          onClick={handleGenerateBlog}
+          className="json-download-btn json-generate-blog-btn"
+          disabled={!isFormValid() || isGenerating}
+        >
+          {isGenerating ? (
+            <>
+              <span className="json-btn-spinner"></span>
+              Generating...
+            </>
+          ) : (
+            <>🚀 Generate Blog</>
+          )}
+        </button>
       </div>
+
+      {/* Confirmation Modal */}
+      {showConfirmation && (
+        <div className="json-confirmation-overlay">
+          <div className="json-confirmation-modal">
+            <div className="json-confirmation-header">
+              <h3 className="json-confirmation-title">
+                🚀 Ready to Generate Blog?
+              </h3>
+            </div>
+            <div className="json-confirmation-content">
+              <p className="json-confirmation-text">
+                Please double-check that you have added everything you want for
+                your blog post:
+              </p>
+              <ul className="json-confirmation-checklist">
+                <li>✅ Country and title information</li>
+                <li>✅ Blog content and descriptions</li>
+                <li>✅ Background image uploaded</li>
+                {formData.include_itineraries && (
+                  <li>✅ Itineraries configured</li>
+                )}
+                {formData.include_maps && <li>✅ Maps configured</li>}
+                {formData.include_content && <li>✅ Content sections added</li>}
+              </ul>
+              <p className="json-confirmation-warning">
+                ⚠️ This will download the blog folder and provide instructions
+                to run the generation script.
+              </p>
+            </div>
+            <div className="json-confirmation-buttons">
+              <button
+                onClick={handleCancelGenerate}
+                className="json-confirmation-btn json-confirmation-cancel"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmGenerate}
+                className="json-confirmation-btn json-confirmation-confirm"
+              >
+                Yes, Generate Blog!
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

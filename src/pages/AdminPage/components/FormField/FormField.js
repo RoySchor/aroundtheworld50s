@@ -48,7 +48,7 @@ const FormField = ({
         {label}
         {required && <span className="form-field-required">*</span>}
       </label>
-      {type === "file" && value && (
+      {type === "file" && value && value.name && (
         <div className="form-field-file-preview">
           <span className="form-field-file-name">{value.name}</span>
         </div>
