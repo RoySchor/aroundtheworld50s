@@ -134,8 +134,9 @@ const AdminPage = () => {
           image_alt: "",
         }),
       },
-      content: "",
+      content: type === "image-grid" ? null : "",
       ...(type === "two-column" && { image: null }),
+      ...(type === "image-grid" && { images: [null] }),
     };
 
     setFormData((prev) => ({

@@ -106,13 +106,37 @@ const JsonPreview = ({ formData }) => {
     // Add content sections to blog object if enabled and has content
     if (formData.include_content && formData.content_sections.length > 0) {
       const validContentSections = formData.content_sections
-        .filter((section) => section.content && section.content.trim() !== "")
+        .filter((section) => {
+          // For text and two-column sections, check content
+          if (
+            section.layout.type === "text" ||
+            section.layout.type === "two-column"
+          ) {
+            return section.content && section.content.trim() !== "";
+          }
+          // For image-grid sections, check if there are valid images
+          if (section.layout.type === "image-grid") {
+            return (
+              section.images && section.images.some((image) => image !== null)
+            );
+          }
+          return false;
+        })
         .map((section) => {
           const contentSection = {
             key: section.key,
             layout: { ...section.layout },
-            content: section.content.trim(),
           };
+
+          // Handle different section types
+          if (
+            section.layout.type === "text" ||
+            section.layout.type === "two-column"
+          ) {
+            contentSection.content = section.content.trim();
+          } else if (section.layout.type === "image-grid") {
+            contentSection.content = null;
+          }
 
           // Add image properties for two-column sections
           if (section.layout.type === "two-column" && section.image) {
@@ -120,6 +144,16 @@ const JsonPreview = ({ formData }) => {
               contentSection.left_image = section.image.name;
             } else if (section.layout.right_type === "image") {
               contentSection.right_image = section.image.name;
+            }
+          }
+
+          // Add images array for image-grid sections
+          if (section.layout.type === "image-grid" && section.images) {
+            const validImages = section.images.filter(
+              (image) => image !== null,
+            );
+            if (validImages.length > 0) {
+              contentSection.images = validImages.map((image) => image.name);
             }
           }
 
@@ -194,8 +228,17 @@ const JsonPreview = ({ formData }) => {
     // Add content section images to zip if they exist
     if (formData.include_content && formData.content_sections.length > 0) {
       formData.content_sections.forEach((section) => {
+        // Add two-column images
         if (section.layout.type === "two-column" && section.image) {
           zip.file(section.image.name, section.image);
+        }
+        // Add image-grid images
+        if (section.layout.type === "image-grid" && section.images) {
+          section.images.forEach((image) => {
+            if (image !== null) {
+              zip.file(image.name, image);
+            }
+          });
         }
       });
     }

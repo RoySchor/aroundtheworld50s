@@ -112,12 +112,17 @@
   @apply bg-indigo-600 hover:bg-indigo-700;
 }
 
+.blog-form-add-grid-btn {
+  @apply bg-emerald-600 hover:bg-emerald-700;
+}
+
 .blog-form-content-section {
   @apply bg-white p-4 rounded border mb-4 shadow-sm;
 }
 
 .blog-form-text-section,
-.blog-form-two-column-section {
+.blog-form-two-column-section,
+.blog-form-image-grid-section {
   @apply space-y-4;
 }
 
@@ -153,6 +158,23 @@
 
 .blog-form-help-text {
   @apply text-blue-700 text-xs;
+}
+
+/* Image grid specific styles */
+.blog-form-images-section {
+  @apply space-y-3;
+}
+
+.blog-form-images-header {
+  @apply flex justify-between items-center mb-3;
+}
+
+.blog-form-image-row {
+  @apply flex items-end gap-2;
+}
+
+.blog-form-image-row .blog-form-field {
+  @apply flex-1;
 }
 
 /* Responsive adjustments */

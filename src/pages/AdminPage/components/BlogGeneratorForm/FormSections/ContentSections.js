@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import TextContentSection from "./TextContentSection";
 import TwoColumnContentSection from "./TwoColumnContentSection";
+import ImageGridContentSection from "./ImageGridContentSection";
 
 const ContentSections = ({
   formData,
@@ -12,6 +13,19 @@ const ContentSections = ({
 }) => {
   const generateKey = (type, index) => {
     return `${type}Section${index + 1}`;
+  };
+
+  const getSectionTitle = (type) => {
+    switch (type) {
+      case "text":
+        return "Text Section";
+      case "two-column":
+        return "Two-Column Section";
+      case "image-grid":
+        return "Image Grid Section";
+      default:
+        return "Content Section";
+    }
   };
 
   return (
@@ -51,6 +65,13 @@ const ContentSections = ({
               >
                 + Add Two-Column Section
               </button>
+              <button
+                type="button"
+                onClick={() => onAddContentSection("image-grid")}
+                className="blog-form-add-btn blog-form-add-grid-btn"
+              >
+                + Add Image Grid
+              </button>
             </div>
           </div>
 
@@ -58,10 +79,7 @@ const ContentSections = ({
             <div key={sectionIndex} className="blog-form-content-section">
               <div className="blog-form-group-header">
                 <h5 className="blog-form-group-title">
-                  {section.layout.type === "text"
-                    ? "Text Section"
-                    : "Two-Column Section"}{" "}
-                  {sectionIndex + 1}
+                  {getSectionTitle(section.layout.type)} {sectionIndex + 1}
                 </h5>
                 <button
                   type="button"
@@ -83,6 +101,15 @@ const ContentSections = ({
 
               {section.layout.type === "two-column" && (
                 <TwoColumnContentSection
+                  section={section}
+                  sectionIndex={sectionIndex}
+                  onContentChange={onContentChange}
+                  generateKey={generateKey}
+                />
+              )}
+
+              {section.layout.type === "image-grid" && (
+                <ImageGridContentSection
                   section={section}
                   sectionIndex={sectionIndex}
                   onContentChange={onContentChange}
