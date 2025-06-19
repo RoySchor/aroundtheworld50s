@@ -1,6 +1,6 @@
 # Blog Management System
 
-This system allows you to easily create and deploy rich blog posts for the Around The World 50s website with multiple content sections, maps, image grids, and complex layouts.
+This system allows you to easily create and deploy blog posts for the Around The World 50s website with multiple content sections, maps, image grids, and complex layouts.
 
 ## Quick Start
 
@@ -11,7 +11,7 @@ This system allows you to easily create and deploy rich blog posts for the Aroun
 
 ## Blog Structure
 
-All blogs use a rich content structure with multiple layout types including:
+All blogs use a content structure with multiple layout types including:
 - **Text sections** - Regular paragraphs for storytelling
 - **Two-column layouts** - Side-by-side image and text combinations
 - **Image grids** - Collections of photos in a responsive grid
