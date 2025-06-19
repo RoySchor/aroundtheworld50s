@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://royschor.github.io/aroundtheworld50s",
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@fontsource-variable/caveat": "^5.1.1",
     "@fontsource-variable/dosis": "^5.1.0",
     "@fontsource-variable/grandstander": "^5.1.2",

@@ -1,6 +1,7 @@
 import React from "react";
 import "./aboutMePage.css";
 import aboutMeImage from "../../assets/about-me-page-bg.webp";
+import Contact from "../../components/Contact/Contact";
 
 const AboutMePage = () => {
   return (
@@ -56,6 +57,11 @@ const AboutMePage = () => {
             each journey through our lens.
           </p>
         </div>
+      </div>
+
+      {/* Contact Section */}
+      <div className="about-me-section-container">
+        <Contact />
       </div>
     </div>
   );
