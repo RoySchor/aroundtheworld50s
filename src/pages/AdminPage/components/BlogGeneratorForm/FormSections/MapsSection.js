@@ -55,10 +55,10 @@ const MapsSection = ({
 
               <FormField
                 id={`map_name_${mapIndex}`}
-                label="Map Name"
+                label="Map Name (no spaces)"
                 value={map.name}
                 onChange={(value) => onMapChange(mapIndex, "name", value)}
-                placeholder="Enter map name (e.g., cityMap)"
+                placeholder="Enter map name (e.g., cityMap) - spaces will be removed"
               />
 
               <FormField

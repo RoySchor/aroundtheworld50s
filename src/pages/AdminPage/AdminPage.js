@@ -120,7 +120,12 @@ const AdminPage = () => {
 
   const handleMapChange = (index, field, value) => {
     const updatedMaps = [...formData.maps];
-    updatedMaps[index][field] = value;
+    // Remove spaces from map name to ensure valid JSON structure
+    if (field === "name") {
+      updatedMaps[index][field] = value.replace(/\s+/g, "");
+    } else {
+      updatedMaps[index][field] = value;
+    }
     setFormData((prev) => ({
       ...prev,
       maps: updatedMaps,

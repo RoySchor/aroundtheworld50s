@@ -71,6 +71,7 @@ const BlogGeneratorForm = ({
         value={formData.background_image}
         onChange={(value) => onInputChange("background_image", value)}
         accept=".jpg,.jpeg,.png,.webp,.gif"
+        required
       />
 
       <div className="blog-form-section-divider">
@@ -112,7 +113,6 @@ const BlogGeneratorForm = ({
         value={formData.blog_tips_section}
         onChange={(value) => onInputChange("blog_tips_section", value)}
         placeholder="Enter tips section text (e.g., 💥 Insider Tips: Your Key to an Unforgettable Trip (read more…))"
-        required
       />
 
       <div className="blog-form-section-divider">

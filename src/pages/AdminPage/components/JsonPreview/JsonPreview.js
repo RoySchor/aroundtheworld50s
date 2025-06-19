@@ -16,12 +16,18 @@ const JsonPreview = ({ formData }) => {
       "blog_header",
       "blog_subtitle",
       "blog_description_detailed",
-      "blog_tips_section",
     ];
 
-    return requiredFields.every(
+    // Check required text fields
+    const textFieldsValid = requiredFields.every(
       (field) => formData[field] && formData[field].trim() !== "",
     );
+
+    // Check required background image
+    const backgroundImageValid =
+      formData.background_image && formData.background_image.name;
+
+    return textFieldsValid && backgroundImageValid;
   };
 
   const generateJSON = () => {
@@ -48,7 +54,10 @@ const JsonPreview = ({ formData }) => {
               ? "tips_section"
               : blogKey;
 
-        if (formData[key] && formData[key].trim() !== "") {
+        // Always include tips_section even if empty, but trim other fields
+        if (key === "blog_tips_section") {
+          blogData[mappedKey] = formData[key] ? formData[key].trim() : "";
+        } else if (formData[key] && formData[key].trim() !== "") {
           blogData[mappedKey] = formData[key].trim();
         }
       } else if (
