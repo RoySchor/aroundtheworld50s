@@ -11,7 +11,7 @@
 }
 
 .overlap-text-container-box {
-  @apply relative md:absolute bg-white p-4 md:p-12 rounded-lg shadow-lg max-w-2xl md:max-w-3xl mx-auto md:mx-0 md:bottom-0 md:right-24 md:transform md:translate-x-2/3 md:translate-y-1/4;
+  @apply relative md:absolute bg-white p-4 md:p-12 rounded-lg shadow-lg max-w-2xl md:max-w-3xl mx-auto md:mx-0 md:bottom-0 md:right-24 md:transform md:translate-x-1/2 md:translate-y-1/4;
 }
 
 .overlap-text-container-box-title {

@@ -11,7 +11,7 @@
 }
 
 .navbar {
-  @apply absolute top-0 left-0 w-full z-50 flex items-center justify-center;
+  @apply absolute top-0 left-0 min-w-full w-screen z-50 flex items-center justify-center;
 }
 
 .navbar-container {
