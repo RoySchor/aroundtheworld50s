@@ -1,6 +1,6 @@
 # Blog Management System
 
-This system allows you to easily create and deploy blog posts for the Around The World 50s website. It supports both **simple** and **enhanced** blog structures.
+This system allows you to easily create and deploy rich blog posts for the Around The World 50s website with multiple content sections, maps, image grids, and complex layouts.
 
 ## Quick Start
 
@@ -9,13 +9,13 @@ This system allows you to easily create and deploy blog posts for the Around The
 3. Run the blog generation script
 4. Review and deploy your blog post
 
-## Blog Types
+## Blog Structure
 
-### Simple Blogs
-Basic blog posts with minimal structure - just a title, background image, and description.
-
-### Enhanced Blogs
-Rich blog posts with multiple content sections, maps, image grids, and complex layouts.
+All blogs use a rich content structure with multiple layout types including:
+- **Text sections** - Regular paragraphs for storytelling
+- **Two-column layouts** - Side-by-side image and text combinations
+- **Image grids** - Collections of photos in a responsive grid
+- **Itinerary with maps** - Interactive itineraries with embedded Google Maps
 
 ## Setting Up Your Blog
 
@@ -31,21 +31,7 @@ Place all your blog images in this folder. Supported formats: `.jpg`, `.jpeg`, `
 
 ### Step 3: Create Your JSON Configuration
 
-#### For Simple Blogs
-Create a JSON file with the required fields:
-
-```json
-{
-  "country": "France",
-  "country_code": "FR",
-  "title": "🗼 Paris: City of Lights and Love",
-  "background_image": "paris-main.jpg",
-  "blog_description": "✨ Exploring the romantic streets and hidden gems of Paris 🥖"
-}
-```
-
-#### For Enhanced Blogs
-Create a JSON file with the `enhanced_blog` structure:
+Create a JSON file with the blog structure:
 
 ```json
 {
@@ -55,7 +41,7 @@ Create a JSON file with the `enhanced_blog` structure:
   "background_image": "paris-main.jpg",
   "blog_description": "✨ Exploring the romantic streets and hidden gems of Paris 🥖",
 
-  "enhanced_blog": {
+  "blog": {
     "header": "🗼 Paris: City of Lights and Love",
     "subtitle": "A magical journey through the most romantic city in the world",
     "description": "Your opening story paragraph that sets the scene...",
@@ -102,7 +88,7 @@ Create a JSON file with the `enhanced_blog` structure:
 }
 ```
 
-## Enhanced Blog Layout Types
+## Blog Layout Types
 
 ### 1. Text Layout
 Simple text paragraphs for storytelling.
@@ -140,7 +126,7 @@ Side-by-side image and text combinations.
 - `image_alt`: Alt text for accessibility
 
 ### 3. Image Grid Layout
-Grid display of multiple images.
+Display multiple images in a responsive grid.
 
 ```json
 {
@@ -159,11 +145,11 @@ Grid display of multiple images.
 ```
 
 ### 4. Itinerary with Map Layout
-Itinerary list paired with an interactive map.
+Interactive itinerary paired with an embedded map.
 
 ```json
 {
-  "key": "dayOne",
+  "key": "dayOneItinerary",
   "layout": {
     "type": "itinerary-with-map",
     "map_index": 0
@@ -172,124 +158,90 @@ Itinerary list paired with an interactive map.
 }
 ```
 
-**Note:** `map_index` refers to the index in your `maps` array.
+**Note:** The `map_index` corresponds to the position in your `maps` array.
 
-## Getting Google Maps Embed URLs
+## Maps Setup
 
-1. Go to [Google Maps](https://maps.google.com)
-2. Search for your location or create a custom map
-3. Click "Share"
-4. Click "Embed a map"
-5. Copy the URL from the `src` attribute
-6. Use this URL in your `maps` array
+1. Go to Google Maps
+2. Search for your locations and create a custom map
+3. Click "Share" → "Embed a map"
+4. Copy the URL from the `src` attribute
+5. Add to your `maps` array with a unique `name`
+
+## Required vs Optional Fields
+
+### Required Fields
+- `country`: Country name
+- `country_code`: Two-letter country code (e.g., "FR")
+- `title`: Blog post title with emojis
+- `background_image`: Main background image filename
+- `blog_description`: Short description with emojis
+- `blog`: Object containing the rich content structure
+
+### Blog Object Required Fields
+- `header`: Blog header text (displayed on background)
+- `subtitle`: Blog subtitle
+- `description`: Opening paragraph
+- `content`: Array of content sections
+
+### Optional Fields
+- `state`: State or region name (if applicable)
+- `tips_section`: Tips section text
+- `itineraries`: Array of itinerary objects
+- `maps`: Array of Google Maps embeds
 
 ## Running the Script
 
-### Prerequisites
-- Python 3.x installed
-- Node.js and npm installed
-- Git repository initialized
-
-### Command
+### From Terminal
 ```bash
-# From your project root directory
-./scripts/blog_management/add_blog.sh
-```
-
-Or run directly with Python:
-```bash
+cd /path/to/around-the-world-50s
 python3 -m scripts.blog_management.blog_manager
 ```
 
-### The Process
-1. **Enter folder name**: Type the name of your blog folder on Desktop
-2. **Validation**: The script validates your JSON structure
-3. **Generation**: Creates the appropriate blog files (simple .js or enhanced .tsx)
-4. **Development server**: Automatically starts the dev server for preview
-5. **Review**: Check your blog post in the browser
-6. **Deploy**: Confirm to deploy or revert changes
-
-## File Structure Generated
-
-### Simple Blogs
-```
-src/pages/BlogPage/Blogs/your-country/1/
-├── YourCountryPost1.js
+### From Script Directory
+```bash
+cd scripts/blog_management
+./add_blog.sh
 ```
 
-### Enhanced Blogs
-```
-src/pages/BlogPage/Blogs/your-country/1/
-├── YourCountryPost1.tsx
-├── YourCountryPost1.types.ts
-└── YourCountryPost1.constants.ts
-```
+## Templates Available
 
-## Templates
-
-Use these template files as starting points:
-
-- **Simple blog**: `scripts/blog_management/blog_template.json`
-- **Enhanced blog**: `scripts/blog_management/enhanced_blog_template.json`
+- **Complete example**: `scripts/blog_management/blog_template.json`
+- **Rich template**: `scripts/blog_management/enhanced_blog_template.json`
+- **Test example**: `scripts/blog_management/example_enhanced_blog.json`
 
 ## Troubleshooting
 
 ### Common Issues
+1. **JSON formatting errors**: Use a JSON validator to check your file
+2. **Missing images**: Ensure all referenced images are in your folder
+3. **Google Maps not working**: Double-check your embed URL
+4. **Build errors**: Run `npm run lint:fix` manually if needed
 
-**"JSON file not formatted correctly"**
-- Validate your JSON using an online JSON validator
-- Check for missing commas, quotes, or brackets
-
-**"Background image not found"**
-- Ensure the image filename in JSON matches the actual file
-- Check that the image is in your blog folder
-
-**"Missing required fields"**
-- Ensure all required fields are present: `country`, `country_code`, `title`, `background_image`, `blog_description`
-
-**"Google Maps not displaying"**
-- Verify your embed URL is complete and starts with `https://www.google.com/maps/embed`
-- Test the URL by pasting it into a browser
-
-### Getting Help
-
-If you encounter issues:
-1. Check the console output for specific error messages
-2. Verify your JSON structure against the templates
-3. Ensure all images are properly named and formatted
-4. Try running the script again with a fresh copy of the template
-
-## Advanced Features
-
-### State/Region Support
-Add a `state` field for locations with states or regions:
-
-```json
-{
-  "country": "United States",
-  "state": "California",
-  "country_code": "US",
-  ...
-}
+### File Structure
+Your desktop folder should look like:
+```
+my-blog-folder/
+├── blog_data.json
+├── main-background.jpg
+├── photo1.jpg
+├── photo2.jpg
+└── ...other images
 ```
 
-### Multiple Itineraries
-You can have multiple itineraries with corresponding maps:
+## Tips for Great Blogs
 
-```json
-"itineraries": [
-  {"title": "Day 1", "items": [...]},
-  {"title": "Day 2", "items": [...]}
-],
-"maps": [
-  {"name": "day1Map", "title": "Day 1 Map", "url": "..."},
-  {"name": "day2Map", "title": "Day 2 Map", "url": "..."}
-]
-```
+1. **Start with a compelling opening** - Hook your readers immediately
+2. **Mix content types** - Alternate between text, images, and maps
+3. **Use high-quality images** - Compress but maintain visual appeal
+4. **Tell a story** - Structure your content with a clear narrative
+5. **Include practical tips** - Help future travelers with actionable advice
+6. **Optimize for mobile** - Content automatically adapts to screen sizes
 
-### Content Ordering
-Content sections are rendered in the order they appear in your `content` array. Plan your blog flow accordingly.
+## Support
 
----
-
-Happy blogging! 🌍✈️📝
+For issues or questions:
+1. Check the templates for examples
+2. Validate your JSON structure
+3. Ensure all images are properly named and included
+4. Run the linter to check for code issues

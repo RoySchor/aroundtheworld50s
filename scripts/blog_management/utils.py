@@ -11,7 +11,7 @@ REQUIRED_FIELDS = {
     "blog_description": "Short blog description"
 }
 
-ENHANCED_BLOG_REQUIRED_FIELDS = {
+BLOG_REQUIRED_FIELDS = {
     "header": "Blog header text",
     "subtitle": "Blog subtitle",
     "description": "Blog description",
@@ -23,18 +23,6 @@ LAYOUT_TYPES = ["text", "two-column", "image-grid", "itinerary-with-map"]
 def get_desktop_path():
     """Get the path to the user's Desktop directory."""
     return Path.home() / "Desktop"
-
-def serialize_location(name):
-    """Convert a location name to URL-friendly format."""
-    return name.lower().replace(" ", "-").replace("&", "and")
-
-def get_next_post_index(country_path):
-    """Get the next available post index for a country."""
-    if not country_path.exists():
-        return 1
-
-    existing_indices = [int(p.name) for p in country_path.iterdir() if p.name.isdigit()]
-    return max(existing_indices, default=0) + 1
 
 def validate_json(json_data):
     """Validate that all required fields are present in the JSON."""
@@ -49,26 +37,41 @@ def validate_json(json_data):
             print(f"- {field}")
         sys.exit(1)
 
-def is_enhanced_blog(json_data):
-    """Check if the JSON contains enhanced blog structure."""
-    return "enhanced_blog" in json_data
+    # Validate blog structure
+    if "blog" not in json_data:
+        print("Error: Missing required 'blog' object")
+        print("All blogs must include a 'blog' object with rich content structure")
+        sys.exit(1)
 
-def validate_enhanced_blog(enhanced_blog_data):
-    """Validate enhanced blog structure."""
+    validate_blog(json_data['blog'])
+
+def get_next_post_index(assets_dir):
+    """Get the next available post index for a country."""
+    if not assets_dir.exists():
+        return 1
+
+    existing_dirs = [d for d in assets_dir.iterdir() if d.is_dir() and d.name.isdigit()]
+    if not existing_dirs:
+        return 1
+
+    return max(int(d.name) for d in existing_dirs) + 1
+
+def validate_blog(blog_data):
+    """Validate blog structure."""
     missing_fields = []
-    for field, description in ENHANCED_BLOG_REQUIRED_FIELDS.items():
-        if field not in enhanced_blog_data:
+    for field, description in BLOG_REQUIRED_FIELDS.items():
+        if field not in blog_data:
             missing_fields.append(f"{field} ({description})")
 
     if missing_fields:
-        print("Error: Missing required fields in enhanced_blog:")
+        print("Error: Missing required fields in blog:")
         for field in missing_fields:
             print(f"- {field}")
         sys.exit(1)
 
     # Validate content sections
-    if "content" in enhanced_blog_data:
-        for i, section in enumerate(enhanced_blog_data["content"]):
+    if "content" in blog_data:
+        for i, section in enumerate(blog_data["content"]):
             if "key" not in section:
                 print(f"Error: Content section {i} missing 'key' field")
                 sys.exit(1)
@@ -83,18 +86,18 @@ def validate_enhanced_blog(enhanced_blog_data):
                 print(f"Valid types: {', '.join(LAYOUT_TYPES)}")
                 sys.exit(1)
 
-def create_component_name(country_name, state_name=None):
-    """Create a component name from country and optional state."""
-    component_name = serialize_location(country_name).replace("-", "").title()
-    if state_name:
-        state_name = serialize_location(state_name).replace("-", "").title()
-        component_name = f"{component_name}{state_name}"
-    return component_name
+def serialize_location(location):
+    """Convert location name to URL-friendly format."""
+    return location.lower().replace(" ", "-").replace("&", "and")
 
-def create_constants_name(country_name, state_name=None):
+def create_component_name(country, state=None):
+    """Create a component name from country and optional state."""
+    if state:
+        return f"{country.replace(' ', '').replace('&', 'And')}{state.replace(' ', '')}"
+    return country.replace(' ', '').replace('&', 'And')
+
+def create_constants_name(country, state=None):
     """Create a constants name from country and optional state."""
-    constants_name = serialize_location(country_name).replace("-", "_").upper()
-    if state_name:
-        state_name = serialize_location(state_name).replace("-", "_").upper()
-        constants_name = f"{constants_name}_{state_name}"
-    return constants_name
+    if state:
+        return f"{country.upper().replace(' ', '_').replace('&', '_AND_')}_{state.upper().replace(' ', '_')}"
+    return country.upper().replace(' ', '_').replace('&', '_AND_')

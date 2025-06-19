@@ -5,7 +5,7 @@
   "background_image": "test-bg.jpg",
   "blog_description": "⛱️5 days of Testing Paradise: Uncovering the Script and Features ✨",
 
-  "enhanced_blog": {
+  "blog": {
     "header": "📍🏝️ Example Island: A Test of Two Coasts",
     "subtitle": "⛱️5 days of Testing Paradise: Uncovering the Script and Features ✨",
     "description": "Our Example Island adventure was a perfect test case. When we decided to validate our enhanced blog generation system, we embraced the opportunity and planned a comprehensive test of all features. The idea of exploring these vibrant content layouts, fueled by our desire for rich blog functionality, quickly took hold. And so, our testing journey began.",

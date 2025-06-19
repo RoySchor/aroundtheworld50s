@@ -1,105 +1,106 @@
 {
-  "simple_blog_example": {
-    "country": "Country Name",
-    "country_code": "Two letter country code (e.g., TT)",
-    "title": "Blog post title with emojis",
-    "background_image": "Name of the main background image file in your folder",
-    "blog_description": "Short description of the blog post with emojis"
+  "country": "Trinidad and Tobago",
+  "country_code": "TT",
+  "title": "📍🇹🇹 Trinidad & Tobago: A Tale of Two Islands",
+  "background_image": "trinidad-tobego-post-1-bg.jpg",
+  "blog_description": "⛱️10 days of Caribbean Charm: Uncovering the Soul and Beaches ✨",
+
+  "blog": {
+    "header": "📍🇹🇹 Trinidad & Tobago: A Tale of Two Islands",
+    "subtitle": "⛱️10 days of Caribbean Charm: Uncovering the Soul and Beaches ✨",
+    "description": "Our Trinidad & Tobago adventure was a spur-of-the-moment decision. When our cruise was unexpectedly rerouted (due to a hurricane), we embraced the unexpected and planned a last-minute island getaway.",
+    "tips_section": "💥 Insider Tips: Your Key to an Unforgettable Trip (read more…)",
+    "itineraries": [
+      {
+        "title": "Day 1 Itinerary 📍",
+        "items": [
+          "📌 Hotel Check-in",
+          "📌 Local Market Visit",
+          "📌 Historic Walking Tour"
+        ]
+      }
+    ],
+    "maps": [
+      {
+        "name": "cityMap",
+        "title": "City Center Map",
+        "url": "https://www.google.com/maps/embed?pb=GOOGLE_MAPS_EMBED_URL_HERE"
+      }
+    ],
+    "content": [
+      {
+        "key": "firstItinerary",
+        "layout": {
+          "type": "itinerary-with-map",
+          "map_index": 0
+        },
+        "content": null
+      },
+      {
+        "key": "textSection",
+        "layout": {
+          "type": "text"
+        },
+        "content": "This is a regular text section that will be displayed as a paragraph."
+      },
+      {
+        "key": "imageGrid",
+        "layout": {
+          "type": "image-grid"
+        },
+        "content": null,
+        "images": [
+          "image1.jpg",
+          "image2.jpg",
+          "image3.jpg"
+        ]
+      },
+      {
+        "key": "twoColumnSection",
+        "layout": {
+          "type": "two-column",
+          "left_type": "image",
+          "right_type": "text",
+          "image_alt": "Alt text for image"
+        },
+        "content": "This text will appear on the right side of the two-column layout.",
+        "left_image": "image-for-left-side.jpg"
+      }
+    ]
   },
-  "enhanced_blog_example": {
-    "country": "Trinidad and Tobago",
-    "country_code": "TT",
-    "title": "📍🇹🇹 Trinidad & Tobago: A Tale of Two Islands",
-    "background_image": "trinidad-tobego-post-1-bg.jpg",
-    "blog_description": "⛱️10 days of Caribbean Charm: Uncovering the Soul and Beaches ✨",
-    "enhanced_blog": {
-      "header": "📍🇹🇹 Trinidad & Tobago: A Tale of Two Islands",
-      "subtitle": "⛱️10 days of Caribbean Charm: Uncovering the Soul and Beaches ✨",
-      "description": "Our Trinidad & Tobago adventure was a spur-of-the-moment decision. When our cruise was unexpectedly rerouted (due to a hurricane), we embraced the unexpected and planned a last-minute island getaway.",
-      "tips_section": "💥 Insider Tips: Your Key to an Unforgettable Trip (read more…)",
-      "itineraries": [
-        {
-          "title": "Day 1 Itinerary 📍",
-          "items": [
-            "📌 Hotel Check-in",
-            "📌 Local Market Visit",
-            "📌 Historic Walking Tour"
-          ]
-        }
-      ],
-      "maps": [
-        {
-          "name": "cityMap",
-          "title": "City Center Map",
-          "url": "https://www.google.com/maps/embed?pb=GOOGLE_MAPS_EMBED_URL_HERE"
-        }
-      ],
-      "content": [
-        {
-          "key": "firstItinerary",
-          "layout": {
-            "type": "itinerary-with-map",
-            "map_index": 0
-          },
-          "content": null
-        },
-        {
-          "key": "textSection",
-          "layout": {
-            "type": "text"
-          },
-          "content": "This is a regular text section that will be displayed as a paragraph."
-        },
-        {
-          "key": "imageGrid",
-          "layout": {
-            "type": "image-grid"
-          },
-          "content": null,
-          "images": [
-            "image1.jpg",
-            "image2.jpg",
-            "image3.jpg"
-          ]
-        },
-        {
-          "key": "twoColumnSection",
-          "layout": {
-            "type": "two-column",
-            "left_type": "image",
-            "right_type": "text",
-            "image_alt": "Alt text for image"
-          },
-          "content": "This text will appear on the right side of the two-column layout.",
-          "left_image": "image-for-left-side.jpg"
-        }
-      ]
+
+  "_instructions": {
+    "required_fields": {
+      "country": "Country Name",
+      "country_code": "Two letter country code (e.g., TT)",
+      "title": "Blog post title with emojis",
+      "background_image": "Name of the main background image file in your folder",
+      "blog_description": "Short description of the blog post with emojis"
+    },
+    "optional_fields": {
+      "state": "State or region name (if applicable)"
+    },
+    "blog_structure": {
+      "header": "Blog header text (displayed on background image)",
+      "subtitle": "Blog subtitle",
+      "description": "Opening paragraph that sets the stage",
+      "tips_section": "Optional tips section text",
+      "itineraries": "Array of itinerary objects with title and items",
+      "maps": "Array of Google Maps embeds",
+      "content": "Array of content sections with different layouts"
+    },
+    "layout_types": {
+      "text": "Simple text paragraph",
+      "two-column": "Two column layout with image and text combinations",
+      "image-grid": "Grid of images",
+      "itinerary-with-map": "Itinerary list with corresponding map"
+    },
+    "setup_instructions": {
+      "images": "Place all blog images in the folder",
+      "background_image": "Must be a jpg, png, or webp file",
+      "naming": "Use lowercase letters, numbers, and hyphens only for image names",
+      "maps": "Get Google Maps embed URLs from Google Maps > Share > Embed a map",
+      "content_order": "Content sections will be rendered in the order they appear in the array"
     }
-  },
-  "required_fields": {
-    "country": "Country Name",
-    "country_code": "Two letter country code (e.g., TT)",
-    "title": "Blog post title with emojis",
-    "background_image": "Name of the main background image file in your folder",
-    "blog_description": "Short description of the blog post with emojis"
-  },
-  "optional_fields": {
-    "state": "State or region name (if applicable)",
-    "enhanced_blog": "Object containing enhanced blog structure (see enhanced_blog_example above)"
-  },
-  "enhanced_blog_layout_types": {
-    "text": "Simple text paragraph",
-    "two-column": "Two column layout with image and text combinations",
-    "image-grid": "Grid of images",
-    "itinerary-with-map": "Itinerary list with corresponding map"
-  },
-  "instructions": {
-    "simple_blog": "For simple blogs, just include the required fields",
-    "enhanced_blog": "For enhanced blogs, add the 'enhanced_blog' object with rich content structure",
-    "images": "Place all blog images in the folder",
-    "background_image": "Must be a jpg, png, or webp file",
-    "naming": "Use lowercase letters, numbers, and hyphens only for image names",
-    "maps": "Get Google Maps embed URLs from Google Maps > Share > Embed a map",
-    "content_order": "Content sections will be rendered in the order they appear in the array"
   }
 }
