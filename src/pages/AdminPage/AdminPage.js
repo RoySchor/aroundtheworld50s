@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import FormField from "./components/FormField/FormField";
+import BlogGeneratorForm from "./components/BlogGeneratorForm/BlogGeneratorForm";
 import JsonPreview from "./components/JsonPreview/JsonPreview";
 import "./AdminPage.css";
 
@@ -10,6 +10,10 @@ const AdminPage = () => {
     title: "",
     blog_description: "",
     background_image: null,
+    blog_header: "",
+    blog_subtitle: "",
+    blog_description_detailed: "",
+    blog_tips_section: "",
   });
 
   const handleInputChange = (field, value) => {
@@ -30,57 +34,10 @@ const AdminPage = () => {
 
       <div className="admin-two-column-layout">
         <div className="admin-column admin-left-column">
-          <div className="admin-form-container">
-            <h2 className="admin-form-title">Blog Configuration Form</h2>
-
-            <FormField
-              id="country"
-              label="Country"
-              value={formData.country}
-              onChange={(value) => handleInputChange("country", value)}
-              placeholder="Enter country name"
-              required
-            />
-
-            <FormField
-              id="country_code"
-              label="Country Code"
-              value={formData.country_code}
-              onChange={(value) => handleInputChange("country_code", value)}
-              placeholder="Enter country code (e.g., US, FR, JP)"
-              maxLength={3}
-              required
-            />
-
-            <FormField
-              id="title"
-              label="Blog Title"
-              value={formData.title}
-              onChange={(value) => handleInputChange("title", value)}
-              placeholder="Enter the blog post title"
-              required
-            />
-
-            <FormField
-              id="blog_description"
-              label="Blog Description"
-              type="textarea"
-              value={formData.blog_description}
-              onChange={(value) => handleInputChange("blog_description", value)}
-              placeholder="Enter a brief description of the blog post"
-              rows={4}
-              required
-            />
-
-            <FormField
-              id="background_image"
-              label="Background Image"
-              type="file"
-              value={formData.background_image}
-              onChange={(value) => handleInputChange("background_image", value)}
-              accept=".jpg,.jpeg,.png,.webp,.gif"
-            />
-          </div>
+          <BlogGeneratorForm
+            formData={formData}
+            onInputChange={handleInputChange}
+          />
         </div>
 
         <div className="admin-column admin-right-column">

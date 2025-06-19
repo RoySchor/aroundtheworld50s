@@ -4,17 +4,61 @@ import JSZip from "jszip";
 import "./JsonPreview.css";
 
 const JsonPreview = ({ formData }) => {
+  const isFormValid = () => {
+    const requiredFields = [
+      "country",
+      "country_code",
+      "title",
+      "blog_description",
+      "blog_header",
+      "blog_subtitle",
+      "blog_description_detailed",
+      "blog_tips_section",
+    ];
+
+    return requiredFields.every(
+      (field) => formData[field] && formData[field].trim() !== "",
+    );
+  };
+
   const generateJSON = () => {
     const filteredData = {};
+    const blogData = {};
+
     Object.keys(formData).forEach((key) => {
       if (key === "background_image") {
         if (formData[key]) {
           filteredData[key] = formData[key].name;
         }
+      } else if (
+        key === "blog_header" ||
+        key === "blog_subtitle" ||
+        key === "blog_description_detailed" ||
+        key === "blog_tips_section"
+      ) {
+        // Handle blog section fields that go into the blog hash
+        const blogKey = key.replace("blog_", "");
+        const mappedKey =
+          blogKey === "description_detailed"
+            ? "description"
+            : blogKey === "tips_section"
+              ? "tips_section"
+              : blogKey;
+
+        if (formData[key] && formData[key].trim() !== "") {
+          blogData[mappedKey] = formData[key].trim();
+        }
       } else if (formData[key] && formData[key].trim() !== "") {
+        // Handle all other fields including blog_description at top level
         filteredData[key] = formData[key].trim();
       }
     });
+
+    // Add blog object if it has content
+    if (Object.keys(blogData).length > 0) {
+      filteredData.blog = blogData;
+    }
+
     return JSON.stringify(filteredData, null, 2);
   };
 
@@ -111,14 +155,14 @@ const JsonPreview = ({ formData }) => {
         <button
           onClick={downloadJSON}
           className="json-download-btn"
-          disabled={!formData.country.trim()}
+          disabled={!isFormValid()}
         >
           Download JSON
         </button>
         <button
           onClick={downloadFolder}
           className="json-download-btn json-download-folder-btn"
-          disabled={!formData.country.trim()}
+          disabled={!isFormValid()}
         >
           Download Folder
         </button>
@@ -134,6 +178,10 @@ JsonPreview.propTypes = {
     title: PropTypes.string.isRequired,
     blog_description: PropTypes.string.isRequired,
     background_image: PropTypes.object,
+    blog_header: PropTypes.string.isRequired,
+    blog_subtitle: PropTypes.string.isRequired,
+    blog_description_detailed: PropTypes.string.isRequired,
+    blog_tips_section: PropTypes.string.isRequired,
   }).isRequired,
 };
 
