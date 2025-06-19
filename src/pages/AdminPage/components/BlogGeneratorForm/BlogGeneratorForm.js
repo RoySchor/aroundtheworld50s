@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import FormField from "../FormField/FormField";
 import ItinerariesSection from "./FormSections/ItinerariesSection";
 import MapsSection from "./FormSections/MapsSection";
+import ContentSections from "./FormSections/ContentSections";
 import "./BlogGeneratorForm.css";
 
 const BlogGeneratorForm = ({
@@ -16,6 +17,9 @@ const BlogGeneratorForm = ({
   onMapChange,
   onAddMap,
   onRemoveMap,
+  onContentChange,
+  onAddContentSection,
+  onRemoveContentSection,
 }) => {
   return (
     <div className="blog-form-container">
@@ -132,6 +136,14 @@ const BlogGeneratorForm = ({
         onAddMap={onAddMap}
         onRemoveMap={onRemoveMap}
       />
+
+      <ContentSections
+        formData={formData}
+        onInputChange={onInputChange}
+        onContentChange={onContentChange}
+        onAddContentSection={onAddContentSection}
+        onRemoveContentSection={onRemoveContentSection}
+      />
     </div>
   );
 };
@@ -162,6 +174,16 @@ BlogGeneratorForm.propTypes = {
         url: PropTypes.string.isRequired,
       }),
     ).isRequired,
+    include_content: PropTypes.bool.isRequired,
+    content_sections: PropTypes.arrayOf(
+      PropTypes.shape({
+        key: PropTypes.string.isRequired,
+        layout: PropTypes.shape({
+          type: PropTypes.string.isRequired,
+        }).isRequired,
+        content: PropTypes.string,
+      }),
+    ).isRequired,
   }).isRequired,
   onInputChange: PropTypes.func.isRequired,
   onItineraryChange: PropTypes.func.isRequired,
@@ -172,6 +194,9 @@ BlogGeneratorForm.propTypes = {
   onMapChange: PropTypes.func.isRequired,
   onAddMap: PropTypes.func.isRequired,
   onRemoveMap: PropTypes.func.isRequired,
+  onContentChange: PropTypes.func.isRequired,
+  onAddContentSection: PropTypes.func.isRequired,
+  onRemoveContentSection: PropTypes.func.isRequired,
 };
 
 export default BlogGeneratorForm;

@@ -53,6 +53,8 @@ const JsonPreview = ({ formData }) => {
         key !== "itineraries" &&
         key !== "include_maps" &&
         key !== "maps" &&
+        key !== "include_content" &&
+        key !== "content_sections" &&
         formData[key] &&
         formData[key].trim() !== ""
       ) {
@@ -98,6 +100,34 @@ const JsonPreview = ({ formData }) => {
 
       if (validMaps.length > 0) {
         blogData.maps = validMaps;
+      }
+    }
+
+    // Add content sections to blog object if enabled and has content
+    if (formData.include_content && formData.content_sections.length > 0) {
+      const validContentSections = formData.content_sections
+        .filter((section) => section.content && section.content.trim() !== "")
+        .map((section) => {
+          const contentSection = {
+            key: section.key,
+            layout: { ...section.layout },
+            content: section.content.trim(),
+          };
+
+          // Add image properties for two-column sections
+          if (section.layout.type === "two-column" && section.image) {
+            if (section.layout.left_type === "image") {
+              contentSection.left_image = section.image.name;
+            } else if (section.layout.right_type === "image") {
+              contentSection.right_image = section.image.name;
+            }
+          }
+
+          return contentSection;
+        });
+
+      if (validContentSections.length > 0) {
+        blogData.content = validContentSections;
       }
     }
 
@@ -156,9 +186,18 @@ const JsonPreview = ({ formData }) => {
 
     zip.file(jsonFilename, jsonString);
 
-    // Add image file to zip if it exists
+    // Add background image file to zip if it exists
     if (formData.background_image) {
       zip.file(formData.background_image.name, formData.background_image);
+    }
+
+    // Add content section images to zip if they exist
+    if (formData.include_content && formData.content_sections.length > 0) {
+      formData.content_sections.forEach((section) => {
+        if (section.layout.type === "two-column" && section.image) {
+          zip.file(section.image.name, section.image);
+        }
+      });
     }
 
     // Generate zip file and download
@@ -242,6 +281,16 @@ JsonPreview.propTypes = {
         name: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
         url: PropTypes.string.isRequired,
+      }),
+    ).isRequired,
+    include_content: PropTypes.bool.isRequired,
+    content_sections: PropTypes.arrayOf(
+      PropTypes.shape({
+        key: PropTypes.string.isRequired,
+        layout: PropTypes.shape({
+          type: PropTypes.string.isRequired,
+        }).isRequired,
+        content: PropTypes.string,
       }),
     ).isRequired,
   }).isRequired,

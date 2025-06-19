@@ -18,6 +18,8 @@ const AdminPage = () => {
     itineraries: [{ title: "", items: [""] }],
     include_maps: false,
     maps: [{ name: "", title: "", url: "" }],
+    include_content: false,
+    content_sections: [],
   });
 
   const handleInputChange = (field, value) => {
@@ -105,6 +107,53 @@ const AdminPage = () => {
     }
   };
 
+  const handleContentChange = (index, field, value) => {
+    const updatedContent = [...formData.content_sections];
+
+    if (field.includes(".")) {
+      const [parentField, childField] = field.split(".");
+      updatedContent[index][parentField][childField] = value;
+    } else {
+      updatedContent[index][field] = value;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      content_sections: updatedContent,
+    }));
+  };
+
+  const addContentSection = (type) => {
+    const newSection = {
+      key: `${type}Section${formData.content_sections.length + 1}`,
+      layout: {
+        type: type,
+        ...(type === "two-column" && {
+          left_type: "image",
+          right_type: "text",
+          image_alt: "",
+        }),
+      },
+      content: "",
+      ...(type === "two-column" && { image: null }),
+    };
+
+    setFormData((prev) => ({
+      ...prev,
+      content_sections: [...prev.content_sections, newSection],
+    }));
+  };
+
+  const removeContentSection = (index) => {
+    const updatedContent = formData.content_sections.filter(
+      (_, i) => i !== index,
+    );
+    setFormData((prev) => ({
+      ...prev,
+      content_sections: updatedContent,
+    }));
+  };
+
   return (
     <div className="page-container admin">
       <div className="admin-page-header">
@@ -127,6 +176,9 @@ const AdminPage = () => {
             onMapChange={handleMapChange}
             onAddMap={addMap}
             onRemoveMap={removeMap}
+            onContentChange={handleContentChange}
+            onAddContentSection={addContentSection}
+            onRemoveContentSection={removeContentSection}
           />
         </div>
 
