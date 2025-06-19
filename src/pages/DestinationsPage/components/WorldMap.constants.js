@@ -51,6 +51,10 @@ export const locationCoordinates = {
     left: "52%",
     top: "32.8%",
   },
+  Switzerland: {
+    left: "49.5%",
+    top: "41.8%",
+  },
   "Trinidad and Tobago": {
     left: "32.9%",
     top: "56.3%",
@@ -63,9 +67,17 @@ export const locationCoordinates = {
     left: "21.8%",
     top: "46%",
   },
+  "USA-Connecticut": {
+    left: "31.3%",
+    top: "42.6%",
+  },
   "USA-Delaware": {
     left: "31%",
     top: "44%",
+  },
+  "USA-Florida": {
+    left: "28.6%",
+    top: "49.5%",
   },
   "USA-New England": {
     left: "31.8%",
@@ -87,13 +99,13 @@ export const locationCoordinates = {
     left: "30%",
     top: "43.7%",
   },
-  "USA-Southern California": {
+  "USA-Rhode Island": {
+    left: "32.3%",
+    top: "43%",
+  },
+  "USA-California": {
     left: "19.6%",
     top: "45.4%",
-  },
-  "USA-Northern California": {
-    left: "19.1%",
-    top: "42.5%",
   },
   "USA-Texas": {
     left: "25%",
