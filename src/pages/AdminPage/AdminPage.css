@@ -1,4 +1,3 @@
-
 .admin-page-header {
   @apply text-center mb-8 px-4 mt-56;
 }
@@ -18,4 +17,45 @@
 
 .admin-column {
   @apply bg-white rounded-lg shadow-lg overflow-hidden;
+}
+
+/* Header with logout button */
+.admin-header-content {
+  @apply flex justify-center items-center gap-8;
+}
+
+.admin-logout-btn {
+  @apply bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center gap-2;
+}
+
+.admin-logout-btn:hover {
+  @apply transform scale-105;
+}
+
+.admin-logout-btn:focus {
+  @apply outline-none ring-2 ring-red-500 ring-offset-2;
+}
+
+/* Loading state */
+.admin-loading {
+  @apply flex flex-col items-center justify-center min-h-[60vh] text-center;
+}
+
+.admin-loading-spinner {
+  @apply w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4;
+}
+
+.admin-loading p {
+  @apply text-gray-600 text-lg;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .admin-header-content {
+    @apply flex-col gap-4 items-center;
+  }
+
+  .admin-logout-btn {
+    @apply self-center;
+  }
 }

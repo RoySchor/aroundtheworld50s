@@ -1,0 +1,87 @@
+.admin-login-container {
+  @apply min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4;
+}
+
+.admin-login-card {
+  @apply bg-white rounded-xl shadow-2xl p-8 w-full max-w-md border border-gray-200;
+}
+
+.admin-login-header {
+  @apply text-center mb-8;
+}
+
+.admin-login-title {
+  @apply text-2xl md:text-3xl font-bold text-gray-800 mb-2;
+}
+
+.admin-login-subtitle {
+  @apply text-gray-600 text-sm md:text-base;
+}
+
+.admin-login-form {
+  @apply space-y-6;
+}
+
+.admin-login-field {
+  @apply space-y-2;
+}
+
+.admin-login-label {
+  @apply block text-sm font-medium text-gray-700;
+}
+
+.admin-login-input {
+  @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200;
+}
+
+.admin-login-input:disabled {
+  @apply bg-gray-50 cursor-not-allowed;
+}
+
+.admin-login-error {
+  @apply flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm;
+}
+
+.admin-login-error-icon {
+  @apply flex-shrink-0;
+}
+
+.admin-login-button {
+  @apply w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2;
+}
+
+.admin-login-button-icon {
+  @apply flex-shrink-0;
+}
+
+.admin-login-spinner {
+  @apply w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin;
+}
+
+.admin-login-footer {
+  @apply mt-6 text-center;
+}
+
+.admin-login-help {
+  @apply text-gray-500 text-xs;
+}
+
+/* Focus styles for accessibility */
+.admin-login-input:focus {
+  @apply outline-none;
+}
+
+.admin-login-button:focus {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .admin-login-card {
+    @apply p-6;
+  }
+
+  .admin-login-title {
+    @apply text-xl;
+  }
+}

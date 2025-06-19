@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import BlogGeneratorForm from "./components/BlogGeneratorForm/BlogGeneratorForm";
 import JsonPreview from "./components/JsonPreview/JsonPreview";
+import AdminLogin from "../../components/AdminLogin/AdminLogin";
 import "./AdminPage.css";
 
 const AdminPage = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [formData, setFormData] = useState({
     country: "",
     country_code: "",
@@ -21,6 +24,40 @@ const AdminPage = () => {
     include_content: false,
     content_sections: [],
   });
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const isAuth = sessionStorage.getItem("adminAuthenticated");
+      const authTimestamp = sessionStorage.getItem("authTimestamp");
+
+      if (isAuth === "true" && authTimestamp) {
+        const sessionAge = Date.now() - parseInt(authTimestamp);
+        const maxSessionAge = 12 * 60 * 60 * 1000;
+
+        if (sessionAge < maxSessionAge) {
+          setIsAuthenticated(true);
+        } else {
+          sessionStorage.removeItem("adminAuthenticated");
+          sessionStorage.removeItem("authTimestamp");
+          setIsAuthenticated(false);
+        }
+      }
+
+      setIsCheckingAuth(false);
+    };
+
+    checkAuth();
+  }, []);
+
+  const handleLogin = (authenticated) => {
+    setIsAuthenticated(authenticated);
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("adminAuthenticated");
+    sessionStorage.removeItem("authTimestamp");
+    setIsAuthenticated(false);
+  };
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
@@ -159,13 +196,39 @@ const AdminPage = () => {
     }));
   };
 
+  if (isCheckingAuth) {
+    return (
+      <div className="page-container admin">
+        <div className="admin-loading">
+          <div className="admin-loading-spinner"></div>
+          <p>Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <AdminLogin onLogin={handleLogin} />;
+  }
+
   return (
     <div className="page-container admin">
       <div className="admin-page-header">
-        <h1 className="admin-page-title">Blog Generator</h1>
-        <p className="admin-page-subtitle">
-          Create the necessary configuration for a new blog post
-        </p>
+        <div className="admin-header-content">
+          <div>
+            <h1 className="admin-page-title">Blog Generator</h1>
+            <p className="admin-page-subtitle">
+              Create the necessary configuration for a new blog post
+            </p>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="admin-logout-btn"
+            title="Logout"
+          >
+            🚪 Logout
+          </button>
+        </div>
       </div>
 
       <div className="admin-two-column-layout">
