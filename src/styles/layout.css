@@ -59,3 +59,14 @@
 .fixed-background-no-margin {
   @apply mt-0;
 }
+
+.post-link {
+  color: #2563eb;
+  text-decoration: underline;
+  transition: color 0.2s ease-in-out;
+}
+
+.post-link:hover {
+  color: #1d4fd89a;
+  text-decoration: underline;
+}

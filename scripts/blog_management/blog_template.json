@@ -8,7 +8,7 @@
   "blog": {
     "header": "📍🇹🇹 Trinidad & Tobago: A Tale of Two Islands",
     "subtitle": "⛱️10 days of Caribbean Charm: Uncovering the Soul and Beaches ✨",
-    "description": "Our <a href=\"https://en.wikipedia.org/wiki/Trinidad_and_Tobago\" target=\"_blank\" rel=\"noopener noreferrer\">Trinidad & Tobago</a> adventure was a spur-of-the-moment decision. When our cruise was unexpectedly rerouted (due to a hurricane), we embraced the unexpected and planned a last-minute island getaway.",
+    "description": "Our <a href=\"https://en.wikipedia.org/wiki/Trinidad_and_Tobago\" className=\"post-link\" target=\"_blank\" rel=\"noopener noreferrer\">Trinidad & Tobago</a> adventure was a spur-of-the-moment decision. When our cruise was unexpectedly rerouted (due to a hurricane), we embraced the unexpected and planned a last-minute island getaway.",
     "tips_section": "💥 Insider Tips: Your Key to an Unforgettable Trip (read more…)",
     "itineraries": [
       {
@@ -41,7 +41,7 @@
         "layout": {
           "type": "text"
         },
-        "content": "This is the beginning of my blog on <a href=\"https://en.wikipedia.org/wiki/Russia\" target=\"_blank\" rel=\"noopener noreferrer\">Russia</a>. You can also link to <a href=\"https://en.wikipedia.org/wiki/Moscow\" target=\"_blank\" rel=\"noopener noreferrer\">Moscow</a> or any other <a href=\"https://www.visitrussia.org.uk/\" target=\"_blank\" rel=\"noopener noreferrer\">tourism website</a>."
+        "content": "This is the beginning of my blog on <a href=\"https://en.wikipedia.org/wiki/Russia\" className=\"post-link\" target=\"_blank\" rel=\"noopener noreferrer\">Russia</a>. You can also link to <a href=\"https://en.wikipedia.org/wiki/Moscow\" target=\"_blank\" rel=\"noopener noreferrer\">Moscow</a> or any other <a href=\"https://www.visitrussia.org.uk/\" target=\"_blank\" rel=\"noopener noreferrer\">tourism website</a>."
       },
       {
         "key": "imageGrid",
@@ -63,7 +63,7 @@
           "right_type": "text",
           "image_alt": "Alt text for image"
         },
-        "content": "This text will appear on the right side and can also contain <a href=\"https://en.wikipedia.org/wiki/Caribbean\" target=\"_blank\" rel=\"noopener noreferrer\">embedded links</a> to external websites.",
+        "content": "This text will appear on the right side and can also contain <a href=\"https://en.wikipedia.org/wiki/Caribbean\" className=\"post-link\" target=\"_blank\" rel=\"noopener noreferrer\">embedded links</a> to external websites.",
         "left_image": "image-for-left-side.jpg"
       }
     ]
