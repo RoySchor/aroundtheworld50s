@@ -342,8 +342,6 @@ def update_app_js(base_dir, blog_data, post_index):
     serialized_country = serialize_location(blog_data['country'])
     component_name = create_component_name(blog_data['country'], blog_data.get('state'))
     component_name = f"{component_name}Post{post_index}"
-
-    # All blogs use TypeScript now
     file_extension = ".tsx"
 
     with open(app_file, 'r') as f:
@@ -355,14 +353,12 @@ def update_app_js(base_dir, blog_data, post_index):
     last_import_line_end = content.find('\n', last_import_index) + 1
     content = content[:last_import_line_end] + import_line + content[last_import_line_end:]
 
-    # Add case to switch statement in BlogPost function
     switch_case = f'''    case "{serialized_country}":
       if (index === "{post_index}") {{
         return <{component_name} />;
       }}
       break;\n'''
 
-    # Find the switch statement
     switch_index = content.find('switch (postName) {')
     default_case_index = content.find('default:', switch_index)
 
