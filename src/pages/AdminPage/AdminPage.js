@@ -133,8 +133,12 @@ const AdminPage = () => {
           right_type: "text",
           image_alt: "",
         }),
+        ...(type === "itinerary-with-map" && {
+          map_index: 0,
+        }),
       },
-      content: type === "image-grid" ? null : "",
+      content:
+        type === "image-grid" || type === "itinerary-with-map" ? null : "",
       ...(type === "two-column" && { image: null }),
       ...(type === "image-grid" && { images: [null] }),
     };

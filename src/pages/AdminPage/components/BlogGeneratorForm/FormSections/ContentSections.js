@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import TextContentSection from "./TextContentSection";
 import TwoColumnContentSection from "./TwoColumnContentSection";
 import ImageGridContentSection from "./ImageGridContentSection";
+import ItineraryWithMapContentSection from "./ItineraryWithMapContentSection";
 
 const ContentSections = ({
   formData,
@@ -23,9 +24,44 @@ const ContentSections = ({
         return "Two-Column Section";
       case "image-grid":
         return "Image Grid Section";
+      case "itinerary-with-map":
+        return "Itinerary with Map Section";
       default:
         return "Content Section";
     }
+  };
+
+  // Check if itinerary-with-map sections can be added
+  const canAddItineraryWithMap = () => {
+    if (!formData.include_itineraries || !formData.include_maps) {
+      return false;
+    }
+
+    const mapCount = formData.maps?.length || 0;
+
+    const currentItineraryWithMapCount = formData.content_sections.filter(
+      (section) => section.layout.type === "itinerary-with-map",
+    ).length;
+
+    return currentItineraryWithMapCount < mapCount;
+  };
+
+  const getItineraryWithMapButtonText = () => {
+    if (!formData.include_itineraries || !formData.include_maps) {
+      return "+ Add Itinerary with Map (Requires both itineraries and maps)";
+    }
+
+    const mapCount = formData.maps?.length || 0;
+
+    const currentCount = formData.content_sections.filter(
+      (section) => section.layout.type === "itinerary-with-map",
+    ).length;
+
+    if (currentCount >= mapCount) {
+      return `+ Add Itinerary with Map (${currentCount}/${mapCount} used)`;
+    }
+
+    return `+ Add Itinerary with Map (${currentCount}/${mapCount} available)`;
   };
 
   return (
@@ -72,6 +108,21 @@ const ContentSections = ({
               >
                 + Add Image Grid
               </button>
+              <button
+                type="button"
+                onClick={() => onAddContentSection("itinerary-with-map")}
+                className={`blog-form-add-btn blog-form-add-itinerary-map-btn ${
+                  !canAddItineraryWithMap() ? "blog-form-btn-disabled" : ""
+                }`}
+                disabled={!canAddItineraryWithMap()}
+                title={
+                  !canAddItineraryWithMap()
+                    ? "Requires both itineraries and maps to be enabled, or maximum limit reached"
+                    : "Add an itinerary combined with a map"
+                }
+              >
+                {getItineraryWithMapButtonText()}
+              </button>
             </div>
           </div>
 
@@ -116,6 +167,16 @@ const ContentSections = ({
                   generateKey={generateKey}
                 />
               )}
+
+              {section.layout.type === "itinerary-with-map" && (
+                <ItineraryWithMapContentSection
+                  section={section}
+                  sectionIndex={sectionIndex}
+                  onContentChange={onContentChange}
+                  generateKey={generateKey}
+                  formData={formData}
+                />
+              )}
             </div>
           ))}
         </div>
@@ -127,6 +188,21 @@ const ContentSections = ({
 ContentSections.propTypes = {
   formData: PropTypes.shape({
     include_content: PropTypes.bool.isRequired,
+    include_itineraries: PropTypes.bool.isRequired,
+    include_maps: PropTypes.bool.isRequired,
+    itineraries: PropTypes.arrayOf(
+      PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        items: PropTypes.arrayOf(PropTypes.string).isRequired,
+      }),
+    ),
+    maps: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        url: PropTypes.string.isRequired,
+      }),
+    ),
     content_sections: PropTypes.arrayOf(
       PropTypes.shape({
         key: PropTypes.string.isRequired,

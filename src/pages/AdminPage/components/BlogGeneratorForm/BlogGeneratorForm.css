@@ -116,13 +116,26 @@
   @apply bg-emerald-600 hover:bg-emerald-700;
 }
 
+.blog-form-add-itinerary-map-btn {
+  @apply bg-amber-600 hover:bg-amber-700;
+}
+
+.blog-form-btn-disabled {
+  @apply bg-gray-400 hover:bg-gray-400 cursor-not-allowed opacity-60;
+}
+
+.blog-form-btn-disabled:hover {
+  @apply transform-none;
+}
+
 .blog-form-content-section {
   @apply bg-white p-4 rounded border mb-4 shadow-sm;
 }
 
 .blog-form-text-section,
 .blog-form-two-column-section,
-.blog-form-image-grid-section {
+.blog-form-image-grid-section,
+.blog-form-itinerary-map-section {
   @apply space-y-4;
 }
 
@@ -175,6 +188,15 @@
 
 .blog-form-image-row .blog-form-field {
   @apply flex-1;
+}
+
+/* Itinerary with map specific styles */
+.blog-form-selection-group {
+  @apply mb-4;
+}
+
+.blog-form-select {
+  @apply mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm;
 }
 
 /* Responsive adjustments */

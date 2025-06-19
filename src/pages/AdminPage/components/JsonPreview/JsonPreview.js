@@ -120,6 +120,10 @@ const JsonPreview = ({ formData }) => {
               section.images && section.images.some((image) => image !== null)
             );
           }
+          // For itinerary-with-map sections, always include (they reference existing data)
+          if (section.layout.type === "itinerary-with-map") {
+            return true;
+          }
           return false;
         })
         .map((section) => {
@@ -134,7 +138,10 @@ const JsonPreview = ({ formData }) => {
             section.layout.type === "two-column"
           ) {
             contentSection.content = section.content.trim();
-          } else if (section.layout.type === "image-grid") {
+          } else if (
+            section.layout.type === "image-grid" ||
+            section.layout.type === "itinerary-with-map"
+          ) {
             contentSection.content = null;
           }
 
