@@ -1,0 +1,23 @@
+.json-preview-container {
+  @apply p-4 md:p-8 h-full flex flex-col;
+}
+
+.json-preview-title {
+  @apply text-lg md:text-2xl font-serif font-semibold text-gray-800 mb-6;
+}
+
+.json-preview {
+  @apply flex-1 bg-gray-50 border-2 border-gray-300 rounded-lg p-4 min-h-[200px] transition-all duration-300;
+}
+
+.json-content {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  @apply text-sm md:text-base text-gray-700 leading-relaxed;
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.json-download-btn {
+  @apply bg-gray-800 text-white border-none px-6 py-3 text-base font-bold font-inter border-4 border-transparent rounded-full hover:border-tan hover:text-tan transition duration-300 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:border-transparent disabled:hover:text-white mt-4 w-full;
+}

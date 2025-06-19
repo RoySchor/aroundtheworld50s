@@ -1,0 +1,30 @@
+
+.admin-page-header {
+  @apply text-center mb-8 px-4 mt-56;
+}
+
+.admin-page-title {
+  @apply text-2xl md:text-4xl font-inter font-black text-gray-800 mb-2;
+}
+
+.admin-page-subtitle {
+  @apply text-sm md:text-lg text-gray-600 leading-relaxed;
+}
+
+.admin-two-column-layout {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8;
+  @apply grid grid-cols-1 lg:grid-cols-2 gap-8;
+}
+
+.admin-column {
+  @apply bg-white rounded-lg shadow-lg overflow-hidden;
+}
+
+.admin-form-container {
+  @apply p-4 md:p-8;
+}
+
+.admin-form-title {
+  @apply text-lg md:text-2xl font-serif font-semibold text-gray-800 mb-6;
+}
+

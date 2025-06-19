@@ -59,6 +59,9 @@ const Navbar = () => {
             <Link to="/destinations" className="nav-link">
               DESTINATIONS
             </Link>
+            <Link to="/blog" className="nav-link">
+              BLOG
+            </Link>
           </div>
 
           <div className="navbar-logo">
@@ -68,14 +71,14 @@ const Navbar = () => {
           </div>
 
           <div className="nav-links-right">
-            <Link to="/blog" className="nav-link">
-              BLOG
-            </Link>
             <Link to="/special-pop-ups" className="nav-link">
               SPECIALS / POP-UPS
             </Link>
             <Link to="/tips" className="nav-link">
               TIPS
+            </Link>
+            <Link to="/admin" className="nav-link">
+              ADMIN
             </Link>
             <div className="social-links">
               <a
@@ -123,6 +126,9 @@ const Navbar = () => {
             </Link>
             <Link to="/tips" className="mobile-nav-link" onClick={toggleMenu}>
               TIPS
+            </Link>
+            <Link to="/admin" className="mobile-nav-link" onClick={toggleMenu}>
+              ADMIN
             </Link>
           </div>
         )}
