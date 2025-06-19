@@ -9,6 +9,7 @@ This website is being developed for my mother, who has limited experience with c
 ```
 python3 -m scripts.blog_management.blog_manager
 ```
+- More details regarding the script can be found at the associated [ReadMe](https://github.com/RoySchor/aroundtheworld50s/tree/main/scripts/blog_management#readme)
 #### How It Works
 1. **Prompt for Blog Folder Name**
 
