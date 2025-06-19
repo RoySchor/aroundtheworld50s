@@ -67,40 +67,5 @@
         "left_image": "image-for-left-side.jpg"
       }
     ]
-  },
-
-  "_instructions": {
-    "required_fields": {
-      "country": "Country Name",
-      "country_code": "Two letter country code (e.g., TT)",
-      "title": "Blog post title with emojis",
-      "background_image": "Name of the main background image file in your folder",
-      "blog_description": "Short description of the blog post with emojis"
-    },
-    "optional_fields": {
-      "state": "State or region name (if applicable)"
-    },
-    "blog_structure": {
-      "header": "Blog header text (displayed on background image)",
-      "subtitle": "Blog subtitle",
-      "description": "Opening paragraph that sets the stage",
-      "tips_section": "Optional tips section text",
-      "itineraries": "Array of itinerary objects with title and items",
-      "maps": "Array of Google Maps embeds",
-      "content": "Array of content sections with different layouts"
-    },
-    "layout_types": {
-      "text": "Simple text paragraph",
-      "two-column": "Two column layout with image and text combinations",
-      "image-grid": "Grid of images",
-      "itinerary-with-map": "Itinerary list with corresponding map"
-    },
-    "setup_instructions": {
-      "images": "Place all blog images in the folder",
-      "background_image": "Must be a jpg, png, or webp file",
-      "naming": "Use lowercase letters, numbers, and hyphens only for image names",
-      "maps": "Get Google Maps embed URLs from Google Maps > Share > Embed a map",
-      "content_order": "Content sections will be rendered in the order they appear in the array"
-    }
   }
 }
