@@ -1,5 +1,5 @@
-import { BlogPostContent } from "./trinidad-and-tobago/1/TrinidadTobegoPost1.types";
+import { BlogPostContent } from "./BlogPost.types";
 
 export const getImagePathFromBlogPost = (blogPost: BlogPostContent, imageName: string) => {
-  return require(`../../../assets/${blogPost.path}/${imageName}`);
+  return require(`../../../assets/blog/${blogPost.path}/${imageName}`);
 };

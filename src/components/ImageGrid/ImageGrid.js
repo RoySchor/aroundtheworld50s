@@ -2,13 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./ImageGrid.css";
 
-const ImageGrid = ({ images }) => {
+const ImageGrid = ({ images, blogPath }) => {
   return (
     <div className="image-grid">
       {images.map((image, index) => (
         <div key={index} className="image-grid-item">
           <img
-            src={require(`../../assets/blog/trinidad-and-tobago/1/${image}`)}
+            src={require(`../../assets/blog/${blogPath}/${image}`)}
             alt={`Gallery ${index + 1}`}
             className="image-grid-image"
           />
@@ -20,6 +20,7 @@ const ImageGrid = ({ images }) => {
 
 ImageGrid.propTypes = {
   images: PropTypes.arrayOf(PropTypes.string).isRequired,
+  blogPath: PropTypes.string.isRequired,
 };
 
 export default ImageGrid;

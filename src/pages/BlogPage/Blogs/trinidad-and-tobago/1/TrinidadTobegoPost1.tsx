@@ -51,7 +51,7 @@ const TrinidadTobegoPost1 = () => {
           />
         );
       case "image-grid":
-        return <ImageGrid images={section.images || []} />;
+        return <ImageGrid images={section.images || []} blogPath="trinidad-and-tobago/1" />;
       case "two-column":
         return (
           <TwoColumnLayout

@@ -5,7 +5,7 @@ import json
 import re
 import sys
 from datetime import datetime
-from .utils import serialize_location
+from .utils import serialize_location, create_component_name, create_constants_name
 
 def setup_directories(base_dir, country_name, post_index):
     """Create necessary directories for assets and data."""
@@ -59,35 +59,33 @@ def update_blogs_js(base_dir, blog_data, post_index):
     if 'state' in blog_data:
         new_blog['state'] = blog_data['state']
 
-    # Convert to string and remove quotes only from keys
     blog_entry = json.dumps(new_blog, indent=2, ensure_ascii=False)
-    # Remove quotes from keys but keep them for values
     blog_entry = re.sub(r'(\s+)"([^"]+)":', r'\1\2:', blog_entry)
 
-    # Insert new blog entry
     blogs_array_end = content.rindex('];')
-    new_content = content[:blogs_array_end] + blog_entry + content[blogs_array_end:]
 
-    # Write updated content
+    # Extract the part before the closing of the array
+    content_before_end = content[:blogs_array_end].rstrip()
+
+    # Check whether to add a comma before the new entry
+    needs_comma = content_before_end[-1] != '[' and not content_before_end.endswith(',')
+    insertion = (',\n  ' if needs_comma else '  ') + blog_entry + ',\n'
+    new_content = content[:blogs_array_end] + insertion + content[blogs_array_end:]
+
     with open(blogs_file, 'w') as f:
         f.write(new_content)
 
 def create_blog_component(blog_component_dir, blog_data, post_index):
-    """Create a new blog component file."""
+    """Create a new simple blog component file."""
     serialized_country = serialize_location(blog_data['country'])
 
     # Create component name with state if provided
-    component_name = serialized_country.replace("-", "").title()
-    if 'state' in blog_data:
-        state_name = serialize_location(blog_data['state']).replace("-", "").title()
-        component_name = f"{component_name}{state_name}"
+    component_name = create_component_name(blog_data['country'], blog_data.get('state'))
     component_name = f"{component_name}Post{post_index}"
 
-    # Create filename
     filename = f"{component_name}.js"
 
-    component_content = f'''
-      import React from "react";
+    component_content = f'''import React from "react";
       import "../../../../../styles/layout.css";
       import "../../BlogPost.css";
       import background from "../../../../../assets/blog/{serialized_country}/{post_index}/{blog_data['background_image']}";
@@ -122,17 +120,279 @@ def create_blog_component(blog_component_dir, blog_data, post_index):
     with open(blog_component_dir / filename, 'w') as f:
         f.write(component_content)
 
-def update_app_js(base_dir, blog_data, post_index):
+def create_enhanced_blog_types(blog_component_dir, blog_data, post_index):
+    """Create TypeScript types file for enhanced blog."""
+    component_name = create_component_name(blog_data['country'], blog_data.get('state'))
+    component_name = f"{component_name}Post{post_index}"
+    filename = f"{component_name}.types.ts"
+
+    types_content = '''// Re-export shared types for this blog post
+export {
+  BlogPostContent,
+  ContentSection,
+  Itinerary,
+  LayoutType
+} from "../BlogPost.types";
+'''
+
+    with open(blog_component_dir / filename, 'w') as f:
+        f.write(types_content)
+
+def create_enhanced_blog_constants(blog_component_dir, blog_data, post_index):
+    """Create constants file for enhanced blog."""
+    serialized_country = serialize_location(blog_data['country'])
+    component_name = create_component_name(blog_data['country'], blog_data.get('state'))
+    component_name = f"{component_name}Post{post_index}"
+    constants_name = create_constants_name(blog_data['country'], blog_data.get('state'))
+    constants_name = f"{constants_name}_POST_{post_index}"
+
+    filename = f"{component_name}.constants.ts"
+    enhanced_data = blog_data['enhanced_blog']
+
+    # Convert content sections
+    content_sections = []
+    for section in enhanced_data.get('content', []):
+        section_obj = {
+            'key': section['key'],
+            'layout': convert_layout_structure(section['layout']),
+            'content': section.get('content'),
+        }
+
+        # Add optional fields
+        if 'images' in section:
+            section_obj['images'] = section['images']
+        if 'left_image' in section:
+            section_obj['leftImage'] = section['left_image']
+        if 'right_image' in section:
+            section_obj['rightImage'] = section['right_image']
+
+        content_sections.append(section_obj)
+
+    # Convert itineraries
+    itineraries = enhanced_data.get('itineraries', [])
+
+    # Create the variable name for the content object
+    content_var_name = f"{serialize_location(blog_data['country']).replace('-', '')}Content"
+
+    # Properly format the description and other text fields
+    description = enhanced_data['description'].replace('`', '\\`').replace('${', '\\${')
+    tips_section = enhanced_data.get('tips_section', '').replace('`', '\\`').replace('${', '\\${')
+
+    # Serialize the data properly
+    itineraries_json = json.dumps(itineraries, indent=2).replace('\n', '\n    ')
+    content_sections_json = json.dumps(content_sections, indent=2).replace('\n', '\n    ')
+
+    constants_content = f'''import {{ BlogPostContent }} from './{component_name}.types';
+
+export const createBlogPost = (content: BlogPostContent): BlogPostContent => ({{
+  country: content.country,
+  path: content.path,
+  header: content.header,
+  title: content.title,
+  subtitle: content.subtitle,
+  description: content.description,
+  tipsSection: content.tipsSection,
+  backgroundImage: content.backgroundImage,
+  itineraries: content.itineraries || [],
+  content: content.content || [],
+}});
+
+// Specific content for {blog_data['country']} post
+const {content_var_name}: BlogPostContent = {{
+  country: "{blog_data['country']}",
+  path: "{serialized_country}/{post_index}",
+  header: "{enhanced_data['header']}",
+  title: "{blog_data['title']}",
+  subtitle: "{enhanced_data['subtitle']}",
+  backgroundImage: "{blog_data['background_image']}",
+  description: `{description}`,
+  tipsSection: "{tips_section}",
+  itineraries: {itineraries_json},
+  content: {content_sections_json},
+}};
+
+// Create the blog post using the generic structure
+export const {constants_name} = createBlogPost({content_var_name});
+'''
+
+    with open(blog_component_dir / filename, 'w') as f:
+        f.write(constants_content)
+
+def convert_layout_structure(layout):
+    """Convert JSON layout structure to TypeScript format."""
+    converted = {"type": layout["type"]}
+
+    if layout["type"] == "itinerary-with-map":
+        converted["mapIndex"] = layout.get("map_index", 0)
+    elif layout["type"] == "two-column":
+        converted["leftType"] = layout.get("left_type", "text")
+        converted["rightType"] = layout.get("right_type", "text")
+        if "image_alt" in layout:
+            converted["imageAlt"] = layout["image_alt"]
+
+    return converted
+
+def create_enhanced_blog_component(blog_component_dir, blog_data, post_index):
+    """Create enhanced blog component with full functionality."""
+    serialized_country = serialize_location(blog_data['country'])
+    component_name = create_component_name(blog_data['country'], blog_data.get('state'))
+    component_name = f"{component_name}Post{post_index}"
+    constants_name = create_constants_name(blog_data['country'], blog_data.get('state'))
+    constants_name = f"{constants_name}_POST_{post_index}"
+
+    filename = f"{component_name}.tsx"
+    enhanced_data = blog_data['enhanced_blog']
+
+    # Generate map components
+    maps_code = ""
+    if 'maps' in enhanced_data:
+        for i, map_data in enumerate(enhanced_data['maps']):
+            maps_code += f'''  const {map_data['name']} = (
+    <MapEmbed
+      title="{map_data['title']}"
+      url="{map_data['url']}"
+    />
+  );
+
+'''
+
+    component_content = f'''import React from "react";
+import "../../../../../styles/layout.css";
+import "../../BlogPost.css";
+import TwoColumnLayout from "../../../../../components/TwoColumnLayout/TwoColumnLayout";
+import ImageGrid from "../../../../../components/ImageGrid/ImageGrid";
+import MapEmbed from "../../../../../components/MapEmbed/MapEmbed";
+import {{ {constants_name} }} from "./{component_name}.constants.ts";
+import {{ ContentSection }} from "./{component_name}.types";
+import {{ getImagePathFromBlogPost }} from "../../BlogPost.utils.ts";
+
+const {component_name} = () => {{
+{maps_code}  let itinerary: {{ title: string; items: string[] }};
+
+  const maps = [{', '.join([f'{map_data["name"]}' for map_data in enhanced_data.get('maps', [])])}];
+
+  const renderContent = (section: ContentSection) => {{
+    switch (section.layout.type) {{
+      case "text":
+        return (
+          <div key={{section.key}} className="post-description">
+            {{section.content}}
+          </div>
+        );
+      case "itinerary-with-map":
+        itinerary = {constants_name}.itineraries[section.layout.mapIndex];
+        return (
+          <TwoColumnLayout
+            leftPane={{{{
+              type: "list",
+              listTitle: itinerary.title,
+              listItems: itinerary.items,
+            }}}}
+            rightPane={{{{
+              type: "map",
+              mapComponent: maps[section.layout.mapIndex],
+            }}}}
+          />
+        );
+      case "image-grid":
+        return <ImageGrid images={{section.images || []}} blogPath="{serialized_country}/{post_index}" />;
+      case "two-column":
+        return (
+          <TwoColumnLayout
+            leftPane={{{{
+              type: section.layout.leftType,
+              imageUrl:
+                section.layout.leftType === "image"
+                  ? getImagePathFromBlogPost({constants_name}, section.leftImage || "")
+                  : undefined,
+              imageAlt: section.layout.imageAlt,
+              content:
+                section.layout.leftType === "text"
+                  ? section.content
+                  : undefined,
+            }}}}
+            rightPane={{{{
+              type: section.layout.rightType,
+              imageUrl:
+                section.layout.rightType === "image"
+                  ? getImagePathFromBlogPost({constants_name}, section.rightImage || "")
+                  : undefined,
+              imageAlt: section.layout.imageAlt,
+              content:
+                section.layout.rightType === "text"
+                  ? section.content
+                  : undefined,
+            }}}}
+          />
+        );
+      default:
+        return null;
+    }}
+  }};
+
+  return (
+    <div className="page-container">
+      <div
+        className="fixed-background-container"
+        style={{{{
+          backgroundImage: `url(${{getImagePathFromBlogPost({constants_name}, {constants_name}.backgroundImage || "")}})`,
+        }}}}
+      >
+        <div className="fixed-background-text-container">
+          <div className="fixed-background-title fixed-background-no-margin">
+            {{{constants_name}.header}}
+          </div>
+        </div>
+      </div>
+
+      <div className="container">
+        <div className="page-content">
+          <div className="post-title">{{{constants_name}.title}}</div>
+
+          <div className="post-subtitle">{{{constants_name}.subtitle}}</div>
+
+          <div className="post-description">
+            {{{constants_name}.description}}
+          </div>
+
+          {{{constants_name}.tipsSection && (
+            <div className="post-bolded-text post-tips-section-container">
+              {{{constants_name}.tipsSection}}
+            </div>
+          )}}
+
+          {{{constants_name}.content.map((item, index) => (
+            <div key={{item.key || index}}>
+              {{renderContent(item)}}
+            </div>
+          ))}}
+        </div>
+      </div>
+    </div>
+  );
+}};
+
+export default {component_name};
+'''
+
+    with open(blog_component_dir / filename, 'w') as f:
+        f.write(component_content)
+
+def update_app_js(base_dir, blog_data, post_index, is_enhanced=False):
     """Update App.js with the new blog route."""
     app_file = base_dir / "src/App.js"
     serialized_country = serialize_location(blog_data['country'])
-    component_name = f"{serialized_country.replace('-', '').title()}Post{post_index}"
+    component_name = create_component_name(blog_data['country'], blog_data.get('state'))
+    component_name = f"{component_name}Post{post_index}"
+
+    # Determine file extension based on blog type
+    file_extension = ".tsx" if is_enhanced else ".js"
 
     with open(app_file, 'r') as f:
         content = f.read()
 
     # Add import statement after the last import
-    import_line = f"import {component_name} from './pages/BlogPage/Blogs/{serialized_country}/{post_index}/{component_name}.js';\n"
+    import_line = f"import {component_name} from './pages/BlogPage/Blogs/{serialized_country}/{post_index}/{component_name}{file_extension}';\n"
     last_import_index = content.rindex('import')
     last_import_line_end = content.find('\n', last_import_index) + 1
     content = content[:last_import_line_end] + import_line + content[last_import_line_end:]

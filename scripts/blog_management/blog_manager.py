@@ -2,12 +2,15 @@
 import json
 import sys
 from pathlib import Path
-from .utils import get_desktop_path, validate_json, get_next_post_index
+from .utils import get_desktop_path, validate_json, get_next_post_index, is_enhanced_blog, validate_enhanced_blog
 from .file_operations import (
     setup_directories,
     copy_images,
     update_blogs_js,
     create_blog_component,
+    create_enhanced_blog_types,
+    create_enhanced_blog_constants,
+    create_enhanced_blog_component,
     update_app_js
 )
 from .process_management import (
@@ -61,6 +64,14 @@ class BlogManager:
         # Validate JSON data
         validate_json(blog_data)
 
+        # Check if this is an enhanced blog
+        enhanced_blog = is_enhanced_blog(blog_data)
+        if enhanced_blog:
+            print("✨ Detected enhanced blog structure - generating rich blog post...")
+            validate_enhanced_blog(blog_data['enhanced_blog'])
+        else:
+            print("📝 Detected simple blog structure - generating basic blog post...")
+
         # Kill any existing npm processes first
         kill_npm_process()
 
@@ -74,11 +85,18 @@ class BlogManager:
         # Update blogs.js
         update_blogs_js(self.base_dir, blog_data, post_index)
 
-        # Create blog component
-        create_blog_component(blog_component_dir, blog_data, post_index)
+        # Create blog components based on type
+        if enhanced_blog:
+            # Create enhanced blog files
+            create_enhanced_blog_types(blog_component_dir, blog_data, post_index)
+            create_enhanced_blog_constants(blog_component_dir, blog_data, post_index)
+            create_enhanced_blog_component(blog_component_dir, blog_data, post_index)
+        else:
+            # Create simple blog component
+            create_blog_component(blog_component_dir, blog_data, post_index)
 
         # Update App.js with new route
-        update_app_js(self.base_dir, blog_data, post_index)
+        update_app_js(self.base_dir, blog_data, post_index, enhanced_blog)
 
         # Run lint:fix
         run_lint_fix(self.base_dir)
@@ -104,7 +122,10 @@ class BlogManager:
         else:
             # Deploy changes
             deploy_changes(self.base_dir)
-            print("\n✨ Blog post has been successfully added and deployed! ✨")
+            if enhanced_blog:
+                print("\n✨ Enhanced blog post has been successfully added and deployed! ✨")
+            else:
+                print("\n✨ Blog post has been successfully added and deployed! ✨")
             print("\nYou can now remove the folder from your Desktop if you want!")
 
         # Kill npm process at the end
