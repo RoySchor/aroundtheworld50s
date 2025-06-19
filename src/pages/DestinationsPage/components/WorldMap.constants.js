@@ -7,6 +7,10 @@ export const locationCoordinates = {
     left: "34%",
     top: "47.4%",
   },
+  "Costa Rica": {
+    left: "28.2%",
+    top: "56.9%",
+  },
   Denmark: {
     left: "50.8%",
     top: "36.5%",
@@ -18,6 +22,10 @@ export const locationCoordinates = {
   France: {
     left: "48.6%",
     top: "40.9%",
+  },
+  Iceland: {
+    left: "45%",
+    top: "31.2%",
   },
   Israel: {
     left: "57.5%",
@@ -31,9 +39,17 @@ export const locationCoordinates = {
     left: "29.5%",
     top: "53.3%",
   },
+  Mexico: {
+    left: "23.3%",
+    top: "50.5%",
+  },
   Norway: {
     left: "50.4%",
     top: "34%",
+  },
+  Panama: {
+    left: "28.9%",
+    top: "56.9%",
   },
   "Puerto Rico": {
     left: "32.3%",
@@ -54,6 +70,10 @@ export const locationCoordinates = {
   Switzerland: {
     left: "49.5%",
     top: "41.8%",
+  },
+  Thailand: {
+    left: "74.5%",
+    top: "55%",
   },
   "Trinidad and Tobago": {
     left: "32.9%",
