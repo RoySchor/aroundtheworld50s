@@ -14,7 +14,12 @@ const ContentPane = ({
   const renderContent = () => {
     switch (type) {
       case "text":
-        return <div className="post-description">{content}</div>;
+        return (
+          <div
+            className="post-description"
+            dangerouslySetInnerHTML={{ __html: content }}
+          />
+        );
       case "image":
         return (
           <div className="image-container">

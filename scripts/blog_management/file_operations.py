@@ -121,9 +121,11 @@ const {component_name} = () => {{
     switch (section.layout.type) {{
       case "text":
         return (
-          <div key={{section.key}} className="post-description">
-            {{section.content}}
-          </div>
+          <div
+            key={{section.key}}
+            className="post-description"
+            dangerouslySetInnerHTML={{{{ __html: section.content || "" }}}}
+          />
         );
       case "itinerary-with-map":
         itinerary = {constants_name}.itineraries[section.layout.mapIndex];
@@ -197,14 +199,16 @@ const {component_name} = () => {{
 
           <div className="post-subtitle">{{{constants_name}.subtitle}}</div>
 
-          <div className="post-description">
-            {{{constants_name}.description}}
-          </div>
+          <div
+            className="post-description"
+            dangerouslySetInnerHTML={{{{ __html: {constants_name}.description }}}}
+          />
 
           {{{constants_name}.tipsSection && (
-            <div className="post-bolded-text post-tips-section-container">
-              {{{constants_name}.tipsSection}}
-            </div>
+            <div
+              className="post-bolded-text post-tips-section-container"
+              dangerouslySetInnerHTML={{{{ __html: {constants_name}.tipsSection }}}}
+            />
           )}}
 
           {{{constants_name}.content.map((item, index) => (

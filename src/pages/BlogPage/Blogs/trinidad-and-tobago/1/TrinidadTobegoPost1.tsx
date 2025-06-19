@@ -31,9 +31,11 @@ const TrinidadTobegoPost1 = () => {
     switch (section.layout.type) {
       case "text":
         return (
-          <div key={section.key} className="post-description">
-            {section.content}
-          </div>
+          <div
+            key={section.key}
+            className="post-description"
+            dangerouslySetInnerHTML={{ __html: section.content || "" }}
+          />
         );
       case "itinerary-with-map":
         itinerary = TRINIDAD_TOBAGO_POST_1.itineraries[section.layout.mapIndex];
@@ -107,14 +109,16 @@ const TrinidadTobegoPost1 = () => {
 
           <div className="post-subtitle">{TRINIDAD_TOBAGO_POST_1.subtitle}</div>
 
-          <div className="post-description">
-            {TRINIDAD_TOBAGO_POST_1.description}
-          </div>
+          <div
+            className="post-description"
+            dangerouslySetInnerHTML={{ __html: TRINIDAD_TOBAGO_POST_1.description }}
+          />
 
           {TRINIDAD_TOBAGO_POST_1.tipsSection && (
-            <div className="post-bolded-text post-tips-section-container">
-              {TRINIDAD_TOBAGO_POST_1.tipsSection}
-            </div>
+            <div
+              className="post-bolded-text post-tips-section-container"
+              dangerouslySetInnerHTML={{ __html: TRINIDAD_TOBAGO_POST_1.tipsSection }}
+            />
           )}
 
           {TRINIDAD_TOBAGO_POST_1.content.map((item, index) => (

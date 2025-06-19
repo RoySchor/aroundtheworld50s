@@ -99,7 +99,7 @@ Simple text paragraphs for storytelling.
   "layout": {
     "type": "text"
   },
-  "content": "Your paragraph content here..."
+  "content": "Your paragraph content here with <a href=\"https://en.wikipedia.org/wiki/Russia\" target=\"_blank\" rel=\"noopener noreferrer\">embedded links</a>..."
 }
 ```
 
@@ -159,6 +159,68 @@ Interactive itinerary paired with an embedded map.
 ```
 
 **Note:** The `map_index` corresponds to the position in your `maps` array.
+
+## Adding Embedded Links
+
+You can add clickable links to any text content in your blog posts. This works in:
+- Main blog description
+- Tips section
+- Text layout sections
+- Two-column layout text content
+
+### Link Format
+```json
+{
+  "content": "Visit <a href=\"https://en.wikipedia.org/wiki/Russia\" target=\"_blank\" rel=\"noopener noreferrer\">Russia</a> for an amazing experience."
+}
+```
+
+### Link Attributes Explained
+- `href`: The URL to link to
+- `target="_blank"`: Opens link in a new tab
+- `rel="noopener noreferrer"`: Security best practice for external links
+
+### Examples
+
+**Wikipedia Links:**
+```json
+{
+  "content": "Our journey to <a href=\"https://en.wikipedia.org/wiki/Moscow\" target=\"_blank\" rel=\"noopener noreferrer\">Moscow</a>, the capital of <a href=\"https://en.wikipedia.org/wiki/Russia\" target=\"_blank\" rel=\"noopener noreferrer\">Russia</a>, was unforgettable."
+}
+```
+
+**Tourism Websites:**
+```json
+{
+  "content": "Check out the official <a href=\"https://www.visitrussia.org.uk/\" target=\"_blank\" rel=\"noopener noreferrer\">Visit Russia</a> website for more information."
+}
+```
+
+**Google Maps Links:**
+```json
+{
+  "content": "We visited <a href=\"https://maps.google.com/?q=Red+Square+Moscow\" target=\"_blank\" rel=\"noopener noreferrer\">Red Square</a> in the heart of the city."
+}
+```
+
+**Multiple Links in One Section:**
+```json
+{
+  "content": "From <a href=\"https://en.wikipedia.org/wiki/Moscow\" target=\"_blank\" rel=\"noopener noreferrer\">Moscow</a> to <a href=\"https://en.wikipedia.org/wiki/Saint_Petersburg\" target=\"_blank\" rel=\"noopener noreferrer\">St. Petersburg</a>, every city in <a href=\"https://en.wikipedia.org/wiki/Russia\" target=\"_blank\" rel=\"noopener noreferrer\">Russia</a> has its own unique charm."
+}
+```
+
+### Where Links Work
+✅ **Supported in:**
+- Blog description (main intro paragraph)
+- Tips section
+- Text layout sections
+- Two-column layout text content
+
+❌ **Not supported in:**
+- Itinerary items (these are plain text lists)
+- Image alt text
+- Blog titles and subtitles
 
 ## Maps Setup
 
