@@ -16,7 +16,7 @@ export const createBlogPost = (content: BlogPostContent): BlogPostContent => ({
 // Specific content for Trinidad and Tobago post
 const trinidadTobagoContent: BlogPostContent = {
   country: "Trinidad and Tobago",
-  path: "blog/trinidad-and-tobago/1",
+  path: "trinidad-and-tobago/1",
   header: "📍🇹🇹 Trinidad & Tobago: A Tale of Two Islands",
   title: "📌Port-of-Spain",
   subtitle: "⛱️10 days of Caribbean Charm: Uncovering the Soul and Beaches ✨",
