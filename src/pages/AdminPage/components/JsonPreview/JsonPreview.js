@@ -6,6 +6,8 @@ import "./JsonPreview.css";
 const JsonPreview = ({ formData }) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [instructionsData, setInstructionsData] = useState({});
 
   const isFormValid = () => {
     const requiredFields = [
@@ -196,33 +198,6 @@ const JsonPreview = ({ formData }) => {
     return JSON.stringify(filteredData, null, 2);
   };
 
-  const downloadJSON = () => {
-    const jsonString = generateJSON();
-    const blob = new Blob([jsonString], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const country = formData.country.trim();
-    const title = formData.title.trim();
-    let filename = "blog-config.json";
-
-    if (country && title) {
-      const sanitizedCountry = country.toLowerCase().replace(/[^a-z0-9]/g, "-");
-      const sanitizedTitle = title.toLowerCase().replace(/[^a-z0-9]/g, "-");
-      filename = `${sanitizedCountry}-${sanitizedTitle}-config.json`;
-    } else if (country) {
-      const sanitizedCountry = country.toLowerCase().replace(/[^a-z0-9]/g, "-");
-      filename = `${sanitizedCountry}-config.json`;
-    }
-
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
-
   const downloadFolder = async () => {
     const zip = new JSZip();
     const jsonString = generateJSON();
@@ -304,7 +279,7 @@ const JsonPreview = ({ formData }) => {
     setIsGenerating(true);
 
     try {
-      // First download the folder
+      // Download the folder
       await downloadFolder();
 
       // Wait a moment for the download to complete
@@ -321,15 +296,21 @@ const JsonPreview = ({ formData }) => {
         folderName = `${sanitizedCountry}-blog`;
       }
 
-      // Show instructions to user since we can't directly run the script from browser
-      alert(
-        `✅ Folder downloaded successfully!\n\n📁 Next steps:\n1. Extract the downloaded ZIP file to your Desktop\n2. Rename the extracted folder to: "${folderName}"\n3. Run the blog generation script:\n   bash scripts/blog_management/add_blog.sh\n\n🚀 The script will automatically find your folder and generate the blog!`,
-      );
+      // Show custom instructions modal
+      setInstructionsData({
+        folderName,
+        command:
+          "~/Desktop/my-projects/around-the-world-50s/scripts/blog_management/generate",
+      });
+      setShowInstructions(true);
     } catch (error) {
       console.error("Error generating blog:", error);
-      alert(
-        "❌ Error generating blog. Please try again or download the folder manually.",
-      );
+      setInstructionsData({
+        error: true,
+        message:
+          "Error generating blog. Please try again or download the folder manually.",
+      });
+      setShowInstructions(true);
     } finally {
       setIsGenerating(false);
     }
@@ -346,20 +327,6 @@ const JsonPreview = ({ formData }) => {
         <pre className="json-content">{generateJSON()}</pre>
       </div>
       <div className="json-buttons-container">
-        <button
-          onClick={downloadJSON}
-          className="json-download-btn"
-          disabled={!isFormValid()}
-        >
-          Download JSON
-        </button>
-        <button
-          onClick={downloadFolder}
-          className="json-download-btn json-download-folder-btn"
-          disabled={!isFormValid()}
-        >
-          Download Folder
-        </button>
         <button
           onClick={handleGenerateBlog}
           className="json-download-btn json-generate-blog-btn"
@@ -417,6 +384,82 @@ const JsonPreview = ({ formData }) => {
                 className="json-confirmation-btn json-confirmation-confirm"
               >
                 Yes, Generate Blog!
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Instructions Modal */}
+      {showInstructions && (
+        <div className="json-confirmation-overlay">
+          <div className="json-instructions-modal">
+            <div className="json-instructions-header">
+              <h3 className="json-instructions-title">
+                {instructionsData.error ? "❌ Error" : "✅ Blog Package Ready!"}
+              </h3>
+            </div>
+            <div className="json-instructions-content">
+              {instructionsData.error ? (
+                <div className="json-error-content">
+                  <p className="json-error-text">{instructionsData.message}</p>
+                </div>
+              ) : (
+                <div className="json-success-content">
+                  <p className="json-instructions-text">
+                    Your <strong>{instructionsData.folderName}.zip</strong> has
+                    been downloaded to Desktop!
+                  </p>
+
+                  <div className="json-command-section">
+                    <h4 className="json-command-title">
+                      🚀 Final Step - Run This Command:
+                    </h4>
+                    <div className="json-command-box">
+                      <code className="json-command-text">
+                        {instructionsData.command}
+                      </code>
+                      <button
+                        onClick={() =>
+                          navigator.clipboard.writeText(
+                            instructionsData.command,
+                          )
+                        }
+                        className="json-copy-btn"
+                        title="Copy to clipboard"
+                      >
+                        📋 Copy
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="json-automation-info">
+                    <h4 className="json-automation-title">
+                      ✨ This will automatically:
+                    </h4>
+                    <ul className="json-automation-list">
+                      <li>Find your {instructionsData.folderName}.zip file</li>
+                      <li>Unzip it to Desktop</li>
+                      <li>Run the blog generation script</li>
+                      <li>Clean up the zip file</li>
+                    </ul>
+                  </div>
+
+                  <div className="json-instructions-tip">
+                    <p>
+                      💡 <strong>Tip:</strong> Open Terminal and paste the
+                      command above!
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="json-instructions-buttons">
+              <button
+                onClick={() => setShowInstructions(false)}
+                className="json-instructions-btn json-instructions-close"
+              >
+                {instructionsData.error ? "Close" : "Got it!"}
               </button>
             </div>
           </div>

@@ -5,7 +5,7 @@ import json
 import re
 import sys
 from datetime import datetime
-from .utils import serialize_location, create_component_name, create_constants_name, convert_markdown_links
+from utils import serialize_location, create_component_name, create_constants_name, convert_markdown_links
 
 def setup_directories(base_dir, country_name, post_index):
     """Create necessary directories for assets and data."""

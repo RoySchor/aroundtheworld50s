@@ -20,6 +20,8 @@ import AdminPage from "./pages/AdminPage/AdminPage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
 import TrinidadTobegoPost1 from "./pages/BlogPage/Blogs/trinidad-and-tobago/1/TrinidadTobegoPost1.tsx";
+import FrancePost1 from "./pages/BlogPage/Blogs/france/1/FrancePost1.tsx";
+import FrancePost2 from "./pages/BlogPage/Blogs/france/2/FrancePost2.tsx";
 
 function App() {
   return (
@@ -62,6 +64,14 @@ function BlogPost() {
     case "trinidad-and-tobago":
       if (index === "1") {
         return <TrinidadTobegoPost1 />;
+      }
+      break;
+    case "france":
+      if (index === "1") {
+        return <FrancePost1 />;
+      }
+      if (index === "2") {
+        return <FrancePost2 />;
       }
       break;
     default:

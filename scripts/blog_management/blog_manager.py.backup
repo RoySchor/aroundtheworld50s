@@ -2,8 +2,8 @@
 import json
 import sys
 from pathlib import Path
-from utils import get_desktop_path, validate_json, get_next_post_index
-from file_operations import (
+from .utils import get_desktop_path, validate_json, get_next_post_index
+from .file_operations import (
     setup_directories,
     copy_images,
     update_blogs_js,
@@ -12,7 +12,7 @@ from file_operations import (
     create_blog_component,
     update_app_js
 )
-from process_management import (
+from .process_management import (
     run_lint_fix,
     run_npm_start,
     kill_npm_process,
@@ -69,7 +69,7 @@ class BlogManager:
         else:
             # No auto-detected folders, fall back to manual input
             folder_name = input("\nPlease enter the name of your blog folder (it should be on your Desktop): ").strip()
-        source_dir = self.desktop_path / folder_name
+            source_dir = self.desktop_path / folder_name
 
         if not source_dir.exists():
             print(f"\nError: Folder '{folder_name}' not found on your Desktop")
