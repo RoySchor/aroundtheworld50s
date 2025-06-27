@@ -276,17 +276,11 @@ const JsonPreview = ({ formData }) => {
       const url = URL.createObjectURL(zipBlob);
 
       let folderName = "blog-folder.zip";
-      if (country && title) {
+      if (country) {
         const sanitizedCountry = country
           .toLowerCase()
           .replace(/[^a-z0-9]/g, "-");
-        const sanitizedTitle = title.toLowerCase().replace(/[^a-z0-9]/g, "-");
-        folderName = `${sanitizedCountry}-${sanitizedTitle}-folder.zip`;
-      } else if (country) {
-        const sanitizedCountry = country
-          .toLowerCase()
-          .replace(/[^a-z0-9]/g, "-");
-        folderName = `${sanitizedCountry}-folder.zip`;
+        folderName = `${sanitizedCountry}-blog.zip`;
       }
 
       const link = document.createElement("a");
@@ -318,20 +312,13 @@ const JsonPreview = ({ formData }) => {
 
       // Get folder name for the script
       const country = formData.country.trim();
-      const title = formData.title.trim();
       let folderName = "blog-folder";
 
-      if (country && title) {
+      if (country) {
         const sanitizedCountry = country
           .toLowerCase()
           .replace(/[^a-z0-9]/g, "-");
-        const sanitizedTitle = title.toLowerCase().replace(/[^a-z0-9]/g, "-");
-        folderName = `${sanitizedCountry}-${sanitizedTitle}-folder`;
-      } else if (country) {
-        const sanitizedCountry = country
-          .toLowerCase()
-          .replace(/[^a-z0-9]/g, "-");
-        folderName = `${sanitizedCountry}-folder`;
+        folderName = `${sanitizedCountry}-blog`;
       }
 
       // Show instructions to user since we can't directly run the script from browser
