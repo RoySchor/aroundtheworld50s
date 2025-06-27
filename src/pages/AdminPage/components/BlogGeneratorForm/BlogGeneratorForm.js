@@ -102,7 +102,7 @@ const BlogGeneratorForm = ({
         type="textarea"
         value={formData.blog_description_detailed}
         onChange={(value) => onInputChange("blog_description_detailed", value)}
-        placeholder="Enter the detailed blog description with HTML links (e.g., Our <a href='...' className='post-link'>Trinidad & Tobago</a> adventure...)"
+        placeholder="Enter the detailed blog description with HTML links (e.g., Our [Trinidad & Tobago](https://en.wikipedia.org/wiki/Trinidad_and_Tobago) adventure...)"
         rows={6}
         required
       />

@@ -2,6 +2,9 @@
 from pathlib import Path
 import json
 import sys
+import os
+import subprocess
+import re
 
 REQUIRED_FIELDS = {
     "country": "Country name",
@@ -101,3 +104,21 @@ def create_constants_name(country, state=None):
     if state:
         return f"{country.upper().replace(' ', '_').replace('&', '_AND_')}_{state.upper().replace(' ', '_')}"
     return country.upper().replace(' ', '_').replace('&', '_AND_')
+
+def convert_markdown_links(text):
+    """Convert markdown-style links [text](url) to HTML links with proper attributes."""
+    if not text:
+        return text
+
+    # Regular expression to match markdown links: [text](url)
+    markdown_link_pattern = r'\[([^\]]+)\]\(([^)]+)\)'
+
+    def replace_link(match):
+        link_text = match.group(1)
+        url = match.group(2)
+
+        html_link = f'<a href="{url}" className="post-link" target="_blank" rel="noopener noreferrer">{link_text}</a>'
+        return html_link
+
+    converted_text = re.sub(markdown_link_pattern, replace_link, text)
+    return converted_text

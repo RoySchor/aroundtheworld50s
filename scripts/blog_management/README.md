@@ -99,9 +99,16 @@ Simple text paragraphs for storytelling.
   "layout": {
     "type": "text"
   },
-  "content": "Your paragraph content here with <a href=\"https://en.wikipedia.org/wiki/Russia\" target=\"_blank\" rel=\"noopener noreferrer\">embedded links</a>..."
+  "content": "Your paragraph content here with [embedded links](https://en.wikipedia.org/wiki/Russia)..."
 }
 ```
+
+**✨ Easy Link Formatting**: Use markdown syntax `[link text](url)` in any text content. The system automatically converts them to properly formatted HTML links with the correct styling and attributes (`className="post-link"`, `target="_blank"`, `rel="noopener noreferrer"`).
+
+**Examples:**
+- `[Wikipedia](https://en.wikipedia.org/wiki/Paris)` → becomes a styled external link
+- `[Tourism Site](https://www.visitparis.com)` → becomes a styled external link
+- Works in all text fields: descriptions, content sections, tips sections, etc.
 
 ### 2. Two-Column Layout
 Side-by-side image and text combinations.

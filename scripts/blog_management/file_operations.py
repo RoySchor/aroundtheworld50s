@@ -5,7 +5,7 @@ import json
 import re
 import sys
 from datetime import datetime
-from .utils import serialize_location, create_component_name, create_constants_name
+from .utils import serialize_location, create_component_name, create_constants_name, convert_markdown_links
 
 def setup_directories(base_dir, country_name, post_index):
     """Create necessary directories for assets and data."""
@@ -263,7 +263,7 @@ def create_blog_constants(blog_component_dir, blog_data, post_index):
         section_obj = {
             'key': section['key'],
             'layout': convert_layout_structure(section['layout']),
-            'content': section.get('content'),
+            'content': convert_markdown_links(section.get('content')) if section.get('content') else None,
         }
 
         # Add optional fields
@@ -282,9 +282,9 @@ def create_blog_constants(blog_component_dir, blog_data, post_index):
     # Create the variable name for the content object
     content_var_name = f"{serialize_location(blog_data['country']).replace('-', '')}Content"
 
-    # Properly format the description and other text fields
-    description = blog_content['description'].replace('`', '\\`').replace('${', '\\${')
-    tips_section = blog_content.get('tips_section', '').replace('`', '\\`').replace('${', '\\${')
+    # Convert markdown links and properly format the description and other text fields
+    description = convert_markdown_links(blog_content['description']).replace('`', '\\`').replace('${', '\\${')
+    tips_section = convert_markdown_links(blog_content.get('tips_section', '')).replace('`', '\\`').replace('${', '\\${')
 
     # Serialize the data properly
     itineraries_json = json.dumps(itineraries, indent=2).replace('\n', '\n    ')

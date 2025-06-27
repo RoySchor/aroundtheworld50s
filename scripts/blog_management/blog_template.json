@@ -41,7 +41,7 @@
         "layout": {
           "type": "text"
         },
-        "content": "This is the beginning of my blog on <a href=\"https://en.wikipedia.org/wiki/Russia\" className=\"post-link\" target=\"_blank\" rel=\"noopener noreferrer\">Russia</a>. You can also link to <a href=\"https://en.wikipedia.org/wiki/Moscow\" target=\"_blank\" rel=\"noopener noreferrer\">Moscow</a> or any other <a href=\"https://www.visitrussia.org.uk/\" target=\"_blank\" rel=\"noopener noreferrer\">tourism website</a>."
+        "content": "This is the beginning of my blog on [Russia](https://en.wikipedia.org/wiki/Russia). You can also link to [Moscow](https://en.wikipedia.org/wiki/Moscow) or any other [tourism website](https://www.visitrussia.org.uk/)."
       },
       {
         "key": "imageGrid",
@@ -63,7 +63,7 @@
           "right_type": "text",
           "image_alt": "Alt text for image"
         },
-        "content": "This text will appear on the right side and can also contain <a href=\"https://en.wikipedia.org/wiki/Caribbean\" className=\"post-link\" target=\"_blank\" rel=\"noopener noreferrer\">embedded links</a> to external websites.",
+        "content": "This text will appear on the right side and can also contain [embedded links](https://en.wikipedia.org/wiki/Caribbean) to external websites.",
         "left_image": "image-for-left-side.jpg"
       }
     ]

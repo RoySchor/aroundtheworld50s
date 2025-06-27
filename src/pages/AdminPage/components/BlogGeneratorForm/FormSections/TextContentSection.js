@@ -16,14 +16,16 @@ const TextContentSection = ({
         type="textarea"
         value={section.content || ""}
         onChange={(value) => onContentChange(sectionIndex, "content", value)}
-        placeholder="Enter your text content here. You can include HTML links like <a href='https://example.com' className='post-link' target='_blank' rel='noopener noreferrer'>link text</a>"
+        placeholder="Enter your text content here. You can include links using markdown syntax: [link text](https://example.com) - they will be automatically converted to proper HTML links!"
         rows={8}
       />
 
       <div className="blog-form-section-info">
         <small className="blog-form-help-text">
-          💡 <strong>Tip:</strong> You can include HTML links in your text using
-          the format shown in the placeholder
+          💡 <strong>Tip:</strong> You can include links using markdown syntax:
+          <code>[link text](https://example.com)</code> - they will be
+          automatically converted to properly formatted HTML links with the
+          correct styling!
         </small>
       </div>
     </div>
