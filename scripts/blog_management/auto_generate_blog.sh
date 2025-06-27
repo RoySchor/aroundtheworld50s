@@ -62,12 +62,8 @@ if [ ${#blog_zips[@]} -gt 0 ]; then
 
             # Run the blog generation script
             echo "🚀 Running blog generation script..."
-            echo -e "$folder_name\nyes" | python3 -c "
-import sys
-sys.path.append('scripts/blog_management')
-from blog_manager import main
-main()
-"
+            cd "$PROJECT_PATH"
+            PYTHONPATH="$PROJECT_PATH/scripts/blog_management" python3 scripts/blog_management/blog_manager.py
 
             # Clean up the zip file
             echo "🗑️  Cleaning up zip file..."
