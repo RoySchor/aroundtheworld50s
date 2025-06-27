@@ -59,7 +59,7 @@ const BlogGeneratorForm = ({
         type="textarea"
         value={formData.blog_description}
         onChange={(value) => onInputChange("blog_description", value)}
-        placeholder="Enter a brief description of the blog post"
+        placeholder="This is the text displayed when hovering over the blog post thumbnail on the Home page."
         rows={4}
         required
       />
