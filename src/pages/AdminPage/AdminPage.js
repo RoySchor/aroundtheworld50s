@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import BlogGeneratorForm from "./components/BlogGeneratorForm/BlogGeneratorForm";
 import JsonPreview from "./components/JsonPreview/JsonPreview";
 import BlogPreview from "./components/BlogPreview/BlogPreview";
+import GalleryManager from "./components/GalleryManager/GalleryManager";
 import AdminLogin from "../../components/AdminLogin/AdminLogin";
 import { useSmartDebounce } from "./hooks/useDebounce";
 import "./AdminPage.css";
@@ -9,7 +10,8 @@ import "./AdminPage.css";
 const AdminPage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
-  const [activeTab, setActiveTab] = useState("preview"); // "preview" or "json"
+  const [mainTab, setMainTab] = useState("blog");
+  const [activeTab, setActiveTab] = useState("preview");
   const [formData, setFormData] = useState({
     country: "",
     country_code: "",
@@ -229,9 +231,9 @@ const AdminPage = () => {
       <div className="admin-page-header">
         <div className="admin-header-content">
           <div>
-            <h1 className="admin-page-title">Blog Generator</h1>
+            <h1 className="admin-page-title">Content Management</h1>
             <p className="admin-page-subtitle">
-              Create the necessary configuration for a new blog post
+              Manage blog posts and gallery images
             </p>
           </div>
           <button
@@ -244,52 +246,73 @@ const AdminPage = () => {
         </div>
       </div>
 
-      <div className="admin-two-column-layout">
-        <div className="admin-column admin-left-column">
-          <BlogGeneratorForm
-            formData={formData}
-            onInputChange={handleInputChange}
-            onItineraryChange={handleItineraryChange}
-            onAddItinerary={addItinerary}
-            onRemoveItinerary={removeItinerary}
-            onAddItineraryItem={addItineraryItem}
-            onRemoveItineraryItem={removeItineraryItem}
-            onMapChange={handleMapChange}
-            onAddMap={addMap}
-            onRemoveMap={removeMap}
-            onContentChange={handleContentChange}
-            onAddContentSection={addContentSection}
-            onRemoveContentSection={removeContentSection}
-          />
-        </div>
-
-        <div className="admin-column admin-right-column">
-          {/* Tab Navigation */}
-          <div className="admin-tab-navigation">
-            <button
-              className={`admin-tab ${activeTab === "preview" ? "active" : ""}`}
-              onClick={() => setActiveTab("preview")}
-            >
-              🎨 Preview
-            </button>
-            <button
-              className={`admin-tab ${activeTab === "json" ? "active" : ""}`}
-              onClick={() => setActiveTab("json")}
-            >
-              📄 JSON
-            </button>
-          </div>
-
-          {/* Tab Content */}
-          <div className="admin-tab-content">
-            {activeTab === "preview" ? (
-              <BlogPreview formData={debouncedFormData} />
-            ) : (
-              <JsonPreview formData={formData} />
-            )}
-          </div>
-        </div>
+      {/* Main Tab Navigation */}
+      <div className="admin-main-tab-navigation">
+        <button
+          className={`admin-main-tab ${mainTab === "blog" ? "active" : ""}`}
+          onClick={() => setMainTab("blog")}
+        >
+          📝 Blog Generator
+        </button>
+        <button
+          className={`admin-main-tab ${mainTab === "gallery" ? "active" : ""}`}
+          onClick={() => setMainTab("gallery")}
+        >
+          🖼️ Gallery Manager
+        </button>
       </div>
+
+      {/* Tab Content */}
+      {mainTab === "blog" ? (
+        <div className="admin-two-column-layout">
+          <div className="admin-column admin-left-column">
+            <BlogGeneratorForm
+              formData={formData}
+              onInputChange={handleInputChange}
+              onItineraryChange={handleItineraryChange}
+              onAddItinerary={addItinerary}
+              onRemoveItinerary={removeItinerary}
+              onAddItineraryItem={addItineraryItem}
+              onRemoveItineraryItem={removeItineraryItem}
+              onMapChange={handleMapChange}
+              onAddMap={addMap}
+              onRemoveMap={removeMap}
+              onContentChange={handleContentChange}
+              onAddContentSection={addContentSection}
+              onRemoveContentSection={removeContentSection}
+            />
+          </div>
+
+          <div className="admin-column admin-right-column">
+            {/* Blog Tab Navigation */}
+            <div className="admin-tab-navigation">
+              <button
+                className={`admin-tab ${activeTab === "preview" ? "active" : ""}`}
+                onClick={() => setActiveTab("preview")}
+              >
+                🎨 Preview
+              </button>
+              <button
+                className={`admin-tab ${activeTab === "json" ? "active" : ""}`}
+                onClick={() => setActiveTab("json")}
+              >
+                📄 JSON
+              </button>
+            </div>
+
+            {/* Blog Tab Content */}
+            <div className="admin-tab-content">
+              {activeTab === "preview" ? (
+                <BlogPreview formData={debouncedFormData} />
+              ) : (
+                <JsonPreview formData={formData} />
+              )}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <GalleryManager />
+      )}
     </div>
   );
 };

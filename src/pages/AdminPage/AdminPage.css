@@ -49,7 +49,21 @@
   @apply text-gray-600 text-lg;
 }
 
-/* Tab navigation styling */
+/* Main tab navigation styling */
+.admin-main-tab-navigation {
+  @apply flex justify-center mb-8 px-4;
+}
+
+.admin-main-tab {
+  @apply px-6 py-3 mx-2 text-lg font-semibold text-gray-600 bg-white border-2 border-gray-200 rounded-lg cursor-pointer transition-all duration-200;
+  @apply hover:text-gray-800 hover:border-gray-300 hover:shadow-md;
+}
+
+.admin-main-tab.active {
+  @apply text-blue-600 bg-blue-50 border-blue-300 shadow-lg;
+}
+
+/* Secondary tab navigation styling */
 .admin-tab-navigation {
   @apply flex border-b border-gray-200 bg-gray-50 rounded-t-lg;
 }
@@ -78,7 +92,15 @@
     @apply self-center;
   }
 
+  .admin-main-tab-navigation {
+    @apply flex-col gap-2;
+  }
+
+  .admin-main-tab {
+    @apply mx-0 text-center;
+  }
+
   .admin-tab-content {
-    height: calc(100vh - 250px);
+    height: calc(100vh - 300px);
   }
 }
