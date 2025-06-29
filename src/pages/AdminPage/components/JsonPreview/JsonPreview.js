@@ -274,16 +274,25 @@ const JsonPreview = ({ formData }) => {
 
     // Add JSON file to zip
     const country = formData.country.trim();
-    const title = formData.title.trim();
     let jsonFilename = "blog-config.json";
 
-    if (country && title) {
-      const sanitizedCountry = country.toLowerCase().replace(/[^a-z0-9]/g, "-");
-      const sanitizedTitle = title.toLowerCase().replace(/[^a-z0-9]/g, "-");
-      jsonFilename = `${sanitizedCountry}-${sanitizedTitle}-config.json`;
-    } else if (country) {
-      const sanitizedCountry = country.toLowerCase().replace(/[^a-z0-9]/g, "-");
-      jsonFilename = `${sanitizedCountry}-config.json`;
+    if (country) {
+      // For US state blogs, use usa-state format
+      if (
+        isUSCountry(formData.country, formData.country_code) &&
+        formData.state
+      ) {
+        const sanitizedState = formData.state
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "-");
+        jsonFilename = `usa-${sanitizedState}.json`;
+      } else {
+        // For country blogs, use country name
+        const sanitizedCountry = country
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "-");
+        jsonFilename = `${sanitizedCountry}.json`;
+      }
     }
 
     zip.file(jsonFilename, jsonString);
@@ -325,7 +334,19 @@ const JsonPreview = ({ formData }) => {
         const sanitizedCountry = country
           .toLowerCase()
           .replace(/[^a-z0-9]/g, "-");
-        folderName = `${sanitizedCountry}-blog.zip`;
+
+        // For US state blogs, include state in the name
+        if (
+          isUSCountry(formData.country, formData.country_code) &&
+          formData.state
+        ) {
+          const sanitizedState = formData.state
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, "-");
+          folderName = `usa-${sanitizedState}-blog.zip`;
+        } else {
+          folderName = `${sanitizedCountry}-blog.zip`;
+        }
       }
 
       const link = document.createElement("a");
@@ -363,7 +384,18 @@ const JsonPreview = ({ formData }) => {
         const sanitizedCountry = country
           .toLowerCase()
           .replace(/[^a-z0-9]/g, "-");
-        folderName = `${sanitizedCountry}-blog`;
+
+        if (
+          isUSCountry(formData.country, formData.country_code) &&
+          formData.state
+        ) {
+          const sanitizedState = formData.state
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, "-");
+          folderName = `usa-${sanitizedState}-blog`;
+        } else {
+          folderName = `${sanitizedCountry}-blog`;
+        }
       }
 
       // Show custom instructions modal
