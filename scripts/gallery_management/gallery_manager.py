@@ -168,23 +168,75 @@ class GalleryManager:
             print(f"❌ Failed to revert changes: {e}")
             return False
 
+    def find_image_files(self, image_names):
+        """Find image files in common locations."""
+        search_paths = [
+            Path.home() / "Desktop",
+            Path.home() / "Downloads",
+            Path.home() / "Documents",
+            Path.cwd()
+        ]
+
+        found_files = []
+        missing_files = []
+
+        for image_name in image_names:
+            found = False
+            for search_path in search_paths:
+                potential_file = search_path / image_name
+                if potential_file.exists():
+                    found_files.append(str(potential_file))
+                    found = True
+                    break
+
+            if not found:
+                missing_files.append(image_name)
+
+        return found_files, missing_files
+
     def update_gallery(self, changes_data):
         """Main method to update the gallery with given changes."""
         print("🖼️ Starting gallery update process...")
+
+        # Show summary of changes
+        add_images = changes_data.get('add_images', [])
+        remove_images = changes_data.get('remove_images', [])
+
+        print(f"📋 Changes to apply:")
+        if add_images:
+            print(f"  ➕ Add {len(add_images)} images: {', '.join(add_images)}")
+        if remove_images:
+            print(f"  ➖ Remove {len(remove_images)} images: {', '.join(remove_images)}")
 
         # Kill any existing npm processes
         self.kill_npm_process()
 
         try:
-            # Process additions
-            if 'add_images' in changes_data and changes_data['add_images']:
-                print(f"\n➕ Adding {len(changes_data['add_images'])} new images...")
-                self.add_images(changes_data['add_images'])
+            # Process additions - try to find files automatically
+            if add_images:
+                print(f"\n🔍 Looking for new image files...")
+                found_files, missing_files = self.find_image_files(add_images)
+
+                if missing_files:
+                    print(f"⚠️ Could not find these files automatically: {', '.join(missing_files)}")
+                    print("Please provide full paths for missing files:")
+
+                    for missing_file in missing_files:
+                        while True:
+                            file_path = input(f"  Path for {missing_file}: ").strip()
+                            if Path(file_path).exists():
+                                found_files.append(file_path)
+                                break
+                            else:
+                                print("  File not found. Please try again.")
+
+                print(f"\n➕ Adding {len(found_files)} new images...")
+                self.add_images(found_files)
 
             # Process removals
-            if 'remove_images' in changes_data and changes_data['remove_images']:
-                print(f"\n➖ Removing {len(changes_data['remove_images'])} images...")
-                self.remove_images(changes_data['remove_images'])
+            if remove_images:
+                print(f"\n➖ Removing {len(remove_images)} images...")
+                self.remove_images(remove_images)
 
             # Run linting
             self.run_lint_fix()
@@ -194,7 +246,9 @@ class GalleryManager:
 
             print("\n✨ Gallery update completed!")
             print("🌐 Please check http://localhost:3000 to review changes")
-            print("📋 Use approve_changes() or revert_changes() based on your review")
+
+            # Interactive approval process
+            self.interactive_approval()
 
             return True
 
@@ -202,6 +256,34 @@ class GalleryManager:
             print(f"❌ Gallery update failed: {e}")
             self.revert_changes()
             return False
+
+    def interactive_approval(self):
+        """Interactive approval process for changes."""
+        print("\n" + "="*50)
+        print("🔍 REVIEW YOUR CHANGES")
+        print("="*50)
+        print("Please review the gallery at: http://localhost:3000")
+        print("Navigate to the home page and check the rotating gallery.")
+        print("="*50)
+
+        while True:
+            choice = input("\nDo you want to approve these changes? (y/n/r): ").lower().strip()
+
+            if choice in ['y', 'yes']:
+                print("\n✅ Changes approved! Deploying...")
+                if self.commit_and_deploy():
+                    print("🎉 Gallery successfully updated and deployed!")
+                else:
+                    print("⚠️ Deployment failed, but changes are saved locally.")
+                break
+
+            elif choice in ['n', 'no', 'r', 'revert']:
+                print("\n❌ Changes rejected. Reverting...")
+                self.revert_changes()
+                break
+
+            else:
+                print("Please enter 'y' for yes, 'n' for no, or 'r' for revert.")
 
 def main():
     """Command line interface for gallery management."""

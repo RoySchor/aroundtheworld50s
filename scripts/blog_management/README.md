@@ -65,7 +65,7 @@ src/pages/BlogPage/Blogs/france/1/
     "header": "Main blog header",
     "subtitle": "Blog subtitle",
     "description": "Opening paragraph",
-    "content": [/* content sections array */]
+    "content": [ "content sections array" ]
   }
 }
 ```
