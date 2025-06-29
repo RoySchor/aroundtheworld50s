@@ -12,6 +12,29 @@ const TwoColumnContentSection = ({
     onContentChange(sectionIndex, `layout.${field}`, value);
   };
 
+  const generateAltText = (filename) => {
+    if (!filename) return "";
+
+    const nameWithoutExt = filename.replace(/\.[^/.]+$/, "");
+
+    // Convert to lowercase, replace spaces with dashes, remove special characters
+    return nameWithoutExt
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "");
+  };
+
+  const handleImageChange = (file) => {
+    onContentChange(sectionIndex, "image", file);
+
+    if (file && file.name) {
+      const altText = generateAltText(file.name);
+      handleLayoutChange("image_alt", altText);
+    }
+  };
+
   return (
     <div className="blog-form-two-column-section">
       <div className="blog-form-layout-selection">
@@ -75,17 +98,8 @@ const TwoColumnContentSection = ({
         label="Image"
         type="file"
         value={section.image || null}
-        onChange={(value) => onContentChange(sectionIndex, "image", value)}
+        onChange={handleImageChange}
         accept=".jpg,.jpeg,.png,.webp,.gif"
-      />
-
-      {/* Image Alt Text */}
-      <FormField
-        id={`two_column_image_alt_${sectionIndex}`}
-        label="Image Alt Text"
-        value={section.layout.image_alt || ""}
-        onChange={(value) => handleLayoutChange("image_alt", value)}
-        placeholder="Enter descriptive alt text for the image (for accessibility)"
       />
 
       <div className="blog-form-section-info">
