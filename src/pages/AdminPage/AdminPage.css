@@ -49,6 +49,25 @@
   @apply text-gray-600 text-lg;
 }
 
+/* Tab navigation styling */
+.admin-tab-navigation {
+  @apply flex border-b border-gray-200 bg-gray-50 rounded-t-lg;
+}
+
+.admin-tab {
+  @apply flex-1 px-4 py-3 text-sm font-medium text-gray-600 bg-transparent border-none cursor-pointer transition-all duration-200;
+  @apply hover:text-gray-800 hover:bg-gray-100;
+}
+
+.admin-tab.active {
+  @apply text-blue-600 bg-white border-b-2 border-blue-600 -mb-px;
+}
+
+.admin-tab-content {
+  @apply flex-1 overflow-hidden bg-white rounded-b-lg;
+  height: calc(100vh - 200px); /* Adjust based on header height */
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .admin-header-content {
@@ -57,5 +76,9 @@
 
   .admin-logout-btn {
     @apply self-center;
+  }
+
+  .admin-tab-content {
+    height: calc(100vh - 250px);
   }
 }

@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import BlogGeneratorForm from "./components/BlogGeneratorForm/BlogGeneratorForm";
 import JsonPreview from "./components/JsonPreview/JsonPreview";
+import BlogPreview from "./components/BlogPreview/BlogPreview";
 import AdminLogin from "../../components/AdminLogin/AdminLogin";
+import { useSmartDebounce } from "./hooks/useDebounce";
 import "./AdminPage.css";
 
 const AdminPage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [activeTab, setActiveTab] = useState("preview"); // "preview" or "json"
   const [formData, setFormData] = useState({
     country: "",
     country_code: "",
@@ -202,6 +205,9 @@ const AdminPage = () => {
     }));
   };
 
+  // Get debounced form data for preview
+  const debouncedFormData = useSmartDebounce(formData);
+
   if (isCheckingAuth) {
     return (
       <div className="page-container admin">
@@ -257,7 +263,30 @@ const AdminPage = () => {
         </div>
 
         <div className="admin-column admin-right-column">
-          <JsonPreview formData={formData} />
+          {/* Tab Navigation */}
+          <div className="admin-tab-navigation">
+            <button
+              className={`admin-tab ${activeTab === "preview" ? "active" : ""}`}
+              onClick={() => setActiveTab("preview")}
+            >
+              🎨 Preview
+            </button>
+            <button
+              className={`admin-tab ${activeTab === "json" ? "active" : ""}`}
+              onClick={() => setActiveTab("json")}
+            >
+              📄 JSON
+            </button>
+          </div>
+
+          {/* Tab Content */}
+          <div className="admin-tab-content">
+            {activeTab === "preview" ? (
+              <BlogPreview formData={debouncedFormData} />
+            ) : (
+              <JsonPreview formData={formData} />
+            )}
+          </div>
         </div>
       </div>
     </div>
