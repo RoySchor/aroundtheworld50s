@@ -248,3 +248,20 @@
 .blog-form-empty-text {
   @apply text-gray-600 text-base m-0;
 }
+
+/* Country validation styles */
+.form-field-container {
+  @apply mb-4;
+}
+
+.country-validation-message {
+  @apply text-sm mt-1 font-medium;
+}
+
+.country-validation-message.valid {
+  @apply text-green-600;
+}
+
+.country-validation-message.invalid {
+  @apply text-red-600;
+}

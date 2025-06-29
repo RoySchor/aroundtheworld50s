@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import FormField from "../FormField/FormField";
 import ItinerariesSection from "./FormSections/ItinerariesSection";
 import MapsSection from "./FormSections/MapsSection";
 import ContentSections from "./FormSections/ContentSections";
 import "./BlogGeneratorForm.css";
+
+// Import i18n-iso-countries
+const countries = require("i18n-iso-countries");
+// Register English language for country names
+countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 
 const BlogGeneratorForm = ({
   formData,
@@ -21,51 +26,106 @@ const BlogGeneratorForm = ({
   onAddContentSection,
   onRemoveContentSection,
 }) => {
-  // Helper function to check if country is US
-  const isUSCountry = (country, countryCode) => {
-    const normalizedCountry = country.toLowerCase().trim();
-    const normalizedCode = countryCode.toUpperCase().trim();
+  // State for country validation
+  const [countryValidation, setCountryValidation] = useState({
+    isValid: true,
+    message: "",
+    countryCode: "",
+  });
 
-    const usVariants = [
-      "us",
-      "usa",
-      "united states",
-      "united states of america",
-      "america",
-      "u.s.",
-      "u.s.a.",
-      "u.s.a",
-      "united states of america",
+  // Helper function to validate country and get country code
+  const validateCountry = (countryName) => {
+    if (!countryName || countryName.trim() === "") {
+      return {
+        isValid: true,
+        message: "",
+        countryCode: "",
+      };
+    }
+
+    const trimmedCountry = countryName.trim();
+
+    // Try to get country code from the entered name
+    let countryCode = countries.getAlpha2Code(trimmedCountry, "en");
+
+    if (countryCode) {
+      return {
+        isValid: true,
+        message: `✓ Valid country (${countryCode})`,
+        countryCode: countryCode,
+      };
+    }
+
+    // If direct lookup fails, try some common variations
+    const variations = [
+      trimmedCountry.toLowerCase(),
+      trimmedCountry.toUpperCase(),
+      trimmedCountry.charAt(0).toUpperCase() +
+        trimmedCountry.slice(1).toLowerCase(),
     ];
 
-    return normalizedCode === "US" || usVariants.includes(normalizedCountry);
+    for (const variation of variations) {
+      countryCode = countries.getAlpha2Code(variation, "en");
+      if (countryCode) {
+        return {
+          isValid: true,
+          message: `✓ Valid country (${countryCode})`,
+          countryCode: countryCode,
+        };
+      }
+    }
+
+    return {
+      isValid: false,
+      message: "⚠️ Country not recognized. Please check spelling.",
+      countryCode: "",
+    };
   };
+
+  // Helper function to check if country is US
+  const isUSCountry = (countryCode) => {
+    return countryCode === "US";
+  };
+
+  // Update country validation when country changes
+  useEffect(() => {
+    const validation = validateCountry(formData.country);
+    setCountryValidation(validation);
+
+    // Auto-update country code if valid
+    if (
+      validation.isValid &&
+      validation.countryCode &&
+      validation.countryCode !== formData.country_code
+    ) {
+      onInputChange("country_code", validation.countryCode);
+    }
+  }, [formData.country, formData.country_code, onInputChange]);
 
   return (
     <div className="blog-form-container">
       <h2 className="blog-form-title">Blog Configuration Form</h2>
 
-      <FormField
-        id="country"
-        label="Country"
-        value={formData.country}
-        onChange={(value) => onInputChange("country", value)}
-        placeholder="Enter country name"
-        required
-      />
-
-      <FormField
-        id="country_code"
-        label="Country Code"
-        value={formData.country_code}
-        onChange={(value) => onInputChange("country_code", value)}
-        placeholder="Enter country code (e.g., US, FR, JP)"
-        maxLength={3}
-        required
-      />
+      <div className="form-field-container">
+        <FormField
+          id="country"
+          label="Country"
+          value={formData.country}
+          onChange={(value) => onInputChange("country", value)}
+          placeholder="Enter country name (e.g., United States, France, Japan)"
+          required
+        />
+        {countryValidation.message && (
+          <div
+            className={`country-validation-message ${countryValidation.isValid ? "valid" : "invalid"}`}
+          >
+            {countryValidation.message}
+          </div>
+        )}
+      </div>
 
       {/* State field - only show for United States */}
-      {isUSCountry(formData.country, formData.country_code) && (
+      {isUSCountry(countryValidation.countryCode) && (
         <FormField
           id="state"
           label="State"
@@ -183,7 +243,7 @@ const BlogGeneratorForm = ({
 BlogGeneratorForm.propTypes = {
   formData: PropTypes.shape({
     country: PropTypes.string.isRequired,
-    country_code: PropTypes.string.isRequired,
+    country_code: PropTypes.string,
     state: PropTypes.string,
     title: PropTypes.string.isRequired,
     blog_description: PropTypes.string.isRequired,

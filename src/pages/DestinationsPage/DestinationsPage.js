@@ -11,19 +11,8 @@ const DestinationsPage = () => {
   const navigate = useNavigate();
 
   // Helper function to check if country is US
-  const isUSCountry = (country) => {
-    const normalizedCountry = country.toLowerCase().trim();
-    const usVariants = [
-      "us",
-      "usa",
-      "united states",
-      "united states of america",
-      "america",
-      "u.s.",
-      "u.s.a.",
-      "u.s.a",
-    ];
-    return usVariants.includes(normalizedCountry);
+  const isUSCountry = (countryCode) => {
+    return countryCode === "US";
   };
 
   // Create unique locations (countries and US states)
@@ -31,7 +20,7 @@ const DestinationsPage = () => {
     blogs.reduce((accumulator, blog) => {
       let locationKey, displayName, path;
 
-      if (blog.state && isUSCountry(blog.country)) {
+      if (blog.state && isUSCountry(blog.country_code)) {
         locationKey = `USA-${blog.state}`;
         displayName = `${blog.state}, USA`;
         path = blog.path.replace(/\/\d+$/, ""); // Remove post number

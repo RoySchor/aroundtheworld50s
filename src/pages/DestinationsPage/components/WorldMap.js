@@ -10,26 +10,15 @@ const WorldMap = () => {
   const [hoveredLocation, setHoveredLocation] = useState(null);
 
   // Helper function to check if country is US
-  const isUSCountry = (country) => {
-    const normalizedCountry = country.toLowerCase().trim();
-    const usVariants = [
-      "us",
-      "usa",
-      "united states",
-      "united states of america",
-      "america",
-      "u.s.",
-      "u.s.a.",
-      "u.s.a",
-    ];
-    return usVariants.includes(normalizedCountry);
+  const isUSCountry = (countryCode) => {
+    return countryCode === "US";
   };
 
   const uniqueCountryBlogs = Object.values(
     blogs.reduce((accumulator, blog) => {
       // Create location key for coordinate lookup
       let locationKey;
-      if (blog.state && isUSCountry(blog.country)) {
+      if (blog.state && isUSCountry(blog.country_code)) {
         locationKey = `USA-${blog.state}`;
       } else {
         locationKey = blog.country;
@@ -49,7 +38,7 @@ const WorldMap = () => {
       {uniqueCountryBlogs.map((blog) => {
         // Create location key for coordinate lookup
         let locationKey;
-        if (blog.state && isUSCountry(blog.country)) {
+        if (blog.state && isUSCountry(blog.country_code)) {
           locationKey = `USA-${blog.state}`;
         } else {
           locationKey = blog.country;

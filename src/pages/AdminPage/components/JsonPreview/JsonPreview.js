@@ -9,23 +9,8 @@ const JsonPreview = ({ formData }) => {
   const [showInstructions, setShowInstructions] = useState(false);
   const [instructionsData, setInstructionsData] = useState({});
 
-  const isUSCountry = (country, countryCode) => {
-    const normalizedCountry = country.toLowerCase().trim();
-    const normalizedCode = countryCode.toUpperCase().trim();
-
-    const usVariants = [
-      "us",
-      "usa",
-      "united states",
-      "united states of america",
-      "america",
-      "u.s.",
-      "u.s.a.",
-      "u.s.a",
-      "united states of america",
-    ];
-
-    return normalizedCode === "US" || usVariants.includes(normalizedCountry);
+  const isUSCountry = (countryCode) => {
+    return countryCode === "US";
   };
 
   const isFormValid = () => {
@@ -47,7 +32,7 @@ const JsonPreview = ({ formData }) => {
       formData.background_image && formData.background_image.name;
 
     const stateValid = () => {
-      const isUS = isUSCountry(formData.country, formData.country_code);
+      const isUS = isUSCountry(formData.country_code);
 
       if (isUS) {
         return formData.state && formData.state.trim() !== "";
@@ -102,14 +87,14 @@ const JsonPreview = ({ formData }) => {
         }
       } else if (key === "country") {
         // Normalize US country variants to "United States"
-        if (isUSCountry(formData[key], formData.country_code)) {
+        if (isUSCountry(formData.country_code)) {
           filteredData[key] = "United States";
         } else {
           filteredData[key] = formData[key].trim();
         }
       } else if (key === "country_code") {
         // Normalize US country code to "US"
-        if (isUSCountry(formData.country, formData[key])) {
+        if (isUSCountry(formData[key])) {
           filteredData[key] = "US";
         } else {
           filteredData[key] = formData[key].trim();
@@ -278,10 +263,7 @@ const JsonPreview = ({ formData }) => {
 
     if (country) {
       // For US state blogs, use usa-state format
-      if (
-        isUSCountry(formData.country, formData.country_code) &&
-        formData.state
-      ) {
+      if (isUSCountry(formData.country_code) && formData.state) {
         const sanitizedState = formData.state
           .toLowerCase()
           .replace(/[^a-z0-9]/g, "-");
@@ -336,10 +318,7 @@ const JsonPreview = ({ formData }) => {
           .replace(/[^a-z0-9]/g, "-");
 
         // For US state blogs, include state in the name
-        if (
-          isUSCountry(formData.country, formData.country_code) &&
-          formData.state
-        ) {
+        if (isUSCountry(formData.country_code) && formData.state) {
           const sanitizedState = formData.state
             .toLowerCase()
             .replace(/[^a-z0-9]/g, "-");
@@ -385,10 +364,7 @@ const JsonPreview = ({ formData }) => {
           .toLowerCase()
           .replace(/[^a-z0-9]/g, "-");
 
-        if (
-          isUSCountry(formData.country, formData.country_code) &&
-          formData.state
-        ) {
+        if (isUSCountry(formData.country_code) && formData.state) {
           const sanitizedState = formData.state
             .toLowerCase()
             .replace(/[^a-z0-9]/g, "-");
@@ -435,7 +411,7 @@ const JsonPreview = ({ formData }) => {
           <h3 className="json-validation-title">⚠️ Form Validation</h3>
           <p className="json-validation-message">
             Please complete all required fields
-            {isUSCountry(formData.country, formData.country_code)
+            {isUSCountry(formData.country_code)
               ? " (including state for US blogs)"
               : ""}{" "}
             and add at least one content section before generating your blog.
