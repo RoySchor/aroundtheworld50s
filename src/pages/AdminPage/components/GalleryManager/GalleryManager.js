@@ -28,7 +28,7 @@ const GalleryManager = () => {
       const imageData = requireContext.keys().map((path, index) => {
         // Extract the real filename from the webpack path
         // path looks like "./filename.jpg"
-        const realFileName = path.replace('./', '');
+        const realFileName = path.replace("./", "");
         const imageModule = requireContext(path);
 
         return {
