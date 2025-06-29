@@ -9,12 +9,14 @@ const BlogPreview = ({ formData }) => {
   const imageUrlCache = useRef(new Map());
 
   useEffect(() => {
+    const cache = imageUrlCache.current;
     return () => {
-      imageUrlCache.current.forEach((url) => {
+      cache.forEach((url) => {
         if (url.startsWith("blob:")) {
           URL.revokeObjectURL(url);
         }
       });
+      cache.clear();
     };
   }, []);
 
@@ -64,134 +66,135 @@ const BlogPreview = ({ formData }) => {
     return "https://via.placeholder.com/400x300/e5e7eb/6b7280?text=Upload+Image";
   };
 
-  // Create maps for preview (simplified)
-  const createPreviewMaps = () => {
-    return formData.maps.map((map, index) => (
-      <div key={index} className="preview-map-placeholder">
-        <div className="preview-map-title">
-          {map.title || `Map ${index + 1}`}
-        </div>
-        <div className="preview-map-content">
-          🗺️ Interactive Map Preview
-          <br />
-          <small>{map.name || "Map Name"}</small>
-        </div>
-      </div>
-    ));
-  };
-
-  const renderContentSection = (section, index) => {
-    switch (section.layout.type) {
-      case "text":
-        return (
-          <div
-            key={section.key || index}
-            className="post-description"
-            dangerouslySetInnerHTML={{
-              __html:
-                section.content ||
-                "<p>Your text content will appear here...</p>",
-            }}
-          />
-        );
-
-      case "image-grid": {
-        const gridImages = section.images || [];
-        const previewImages = gridImages.map((image) =>
-          image
-            ? getContentImageUrl(image)
-            : "https://via.placeholder.com/300x200/e5e7eb/6b7280?text=Image",
-        );
-
-        return (
-          <div key={section.key || index} className="preview-image-grid">
-            <div className="image-grid">
-              {previewImages.map((imageUrl, imgIndex) => (
-                <div key={imgIndex} className="image-grid-item">
-                  <img
-                    src={imageUrl}
-                    alt={`Gallery ${imgIndex + 1}`}
-                    className="image-grid-image"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      }
-
-      case "two-column":
-        return (
-          <TwoColumnLayout
-            key={section.key || index}
-            leftPane={{
-              type: section.layout.left_type,
-              imageUrl:
-                section.layout.left_type === "image"
-                  ? getContentImageUrl(section.image)
-                  : undefined,
-              imageAlt: section.layout.image_alt || "Preview Image",
-              content:
-                section.layout.left_type === "text"
-                  ? section.content || "Your text content will appear here..."
-                  : undefined,
-            }}
-            rightPane={{
-              type: section.layout.right_type,
-              imageUrl:
-                section.layout.right_type === "image"
-                  ? getContentImageUrl(section.image)
-                  : undefined,
-              imageAlt: section.layout.image_alt || "Preview Image",
-              content:
-                section.layout.right_type === "text"
-                  ? section.content || "Your text content will appear here..."
-                  : undefined,
-            }}
-          />
-        );
-
-      case "itinerary-with-map": {
-        const mapIndex = section.layout.mapIndex || 0;
-        const itinerary = formData.itineraries[mapIndex] || {
-          title: "",
-          items: [],
-        };
-        const previewMaps = createPreviewMaps();
-
-        return (
-          <TwoColumnLayout
-            key={section.key || index}
-            leftPane={{
-              type: "list",
-              listTitle: itinerary.title || "Itinerary",
-              listItems:
-                itinerary.items.length > 0
-                  ? itinerary.items.filter((item) => item.trim() !== "")
-                  : ["📌 Add your itinerary items", "📌 They will appear here"],
-            }}
-            rightPane={{
-              type: "map",
-              mapComponent: previewMaps[mapIndex] || previewMaps[0] || (
-                <div className="preview-map-placeholder">
-                  <div className="preview-map-title">Map Preview</div>
-                  <div className="preview-map-content">
-                    🗺️ Your map will appear here
-                  </div>
-                </div>
-              ),
-            }}
-          />
-        );
-      }
-
-      default:
-        return null;
-    }
-  };
-
   // Memoize the preview to avoid unnecessary re-renders
   const previewContent = useMemo(() => {
+    // Create maps for preview (simplified)
+    const createPreviewMaps = () => {
+      return formData.maps.map((map, index) => (
+        <div key={index} className="preview-map-placeholder">
+          <div className="preview-map-title">
+            {map.title || `Map ${index + 1}`}
+          </div>
+          <div className="preview-map-content">
+            🗺️ Interactive Map Preview
+            <br />
+            <small>{map.name || "Map Name"}</small>
+          </div>
+        </div>
+      ));
+    };
+    const renderContentSection = (section, index) => {
+      switch (section.layout.type) {
+        case "text":
+          return (
+            <div
+              key={section.key || index}
+              className="post-description"
+              dangerouslySetInnerHTML={{
+                __html:
+                  section.content ||
+                  "<p>Your text content will appear here...</p>",
+              }}
+            />
+          );
+
+        case "image-grid": {
+          const gridImages = section.images || [];
+          const previewImages = gridImages.map((image) =>
+            image
+              ? getContentImageUrl(image)
+              : "https://via.placeholder.com/300x200/e5e7eb/6b7280?text=Image",
+          );
+
+          return (
+            <div key={section.key || index} className="preview-image-grid">
+              <div className="image-grid">
+                {previewImages.map((imageUrl, imgIndex) => (
+                  <div key={imgIndex} className="image-grid-item">
+                    <img
+                      src={imageUrl}
+                      alt={`Gallery ${imgIndex + 1}`}
+                      className="image-grid-image"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
+        case "two-column":
+          return (
+            <TwoColumnLayout
+              key={section.key || index}
+              leftPane={{
+                type: section.layout.left_type,
+                imageUrl:
+                  section.layout.left_type === "image"
+                    ? getContentImageUrl(section.image)
+                    : undefined,
+                imageAlt: section.layout.image_alt || "Preview Image",
+                content:
+                  section.layout.left_type === "text"
+                    ? section.content || "Your text content will appear here..."
+                    : undefined,
+              }}
+              rightPane={{
+                type: section.layout.right_type,
+                imageUrl:
+                  section.layout.right_type === "image"
+                    ? getContentImageUrl(section.image)
+                    : undefined,
+                imageAlt: section.layout.image_alt || "Preview Image",
+                content:
+                  section.layout.right_type === "text"
+                    ? section.content || "Your text content will appear here..."
+                    : undefined,
+              }}
+            />
+          );
+
+        case "itinerary-with-map": {
+          const mapIndex = section.layout.mapIndex || 0;
+          const itinerary = formData.itineraries[mapIndex] || {
+            title: "",
+            items: [],
+          };
+          const previewMaps = createPreviewMaps();
+
+          return (
+            <TwoColumnLayout
+              key={section.key || index}
+              leftPane={{
+                type: "list",
+                listTitle: itinerary.title || "Itinerary",
+                listItems:
+                  itinerary.items.length > 0
+                    ? itinerary.items.filter((item) => item.trim() !== "")
+                    : [
+                        "📌 Add your itinerary items",
+                        "📌 They will appear here",
+                      ],
+              }}
+              rightPane={{
+                type: "map",
+                mapComponent: previewMaps[mapIndex] || previewMaps[0] || (
+                  <div className="preview-map-placeholder">
+                    <div className="preview-map-title">Map Preview</div>
+                    <div className="preview-map-content">
+                      🗺️ Your map will appear here
+                    </div>
+                  </div>
+                ),
+              }}
+            />
+          );
+        }
+
+        default:
+          return null;
+      }
+    };
     const backgroundImageUrl = getPreviewImageUrl(formData.background_image);
     const headerText = getPlaceholderContent(
       "blog_header",
