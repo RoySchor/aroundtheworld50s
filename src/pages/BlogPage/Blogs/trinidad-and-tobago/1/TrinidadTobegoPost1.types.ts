@@ -53,6 +53,7 @@ export interface BlogPostContent {
   subtitle: string;
   description: string;
   tipsSection?: string;
+  tipsLink?: string;
   backgroundImage?: string;
   itineraries: Itinerary[];
   content: ContentSection[];

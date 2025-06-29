@@ -226,10 +226,19 @@ const {component_name} = () => {{
           />
 
           {{{constants_name}.tipsSection && (
-            <div
-              className="post-bolded-text post-tips-section-container"
-              dangerouslySetInnerHTML={{{{ __html: {constants_name}.tipsSection }}}}
-            />
+            <div className="post-bolded-text post-tips-section-container">
+              {{{constants_name}.tipsLink ? (
+                <a
+                  href={{{constants_name}.tipsLink}}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="post-tips-link"
+                  dangerouslySetInnerHTML={{{{ __html: {constants_name}.tipsSection }}}}
+                />
+              ) : (
+                <div dangerouslySetInnerHTML={{{{ __html: {constants_name}.tipsSection }}}} />
+              )}}
+            </div>
           )}}
 
           {{{constants_name}.content.map((item, index) => (
@@ -311,6 +320,7 @@ def create_blog_constants(blog_component_dir, blog_data, post_index):
     # Convert markdown links and properly format the description and other text fields
     description = convert_markdown_links(blog_content['description']).replace('`', '\\`').replace('${', '\\${')
     tips_section = convert_markdown_links(blog_content.get('tips_section', '')).replace('`', '\\`').replace('${', '\\${')
+    tips_link = blog_content.get('tips_link', '')
 
     # Serialize the data properly
     itineraries_json = json.dumps(itineraries, indent=2).replace('\n', '\n    ')
@@ -326,6 +336,7 @@ export const createBlogPost = (content: BlogPostContent): BlogPostContent => ({{
   subtitle: content.subtitle,
   description: content.description,
   tipsSection: content.tipsSection,
+  tipsLink: content.tipsLink,
   backgroundImage: content.backgroundImage,
   itineraries: content.itineraries || [],
   content: content.content || [],
@@ -341,6 +352,7 @@ const {content_var_name}: BlogPostContent = {{
   backgroundImage: "{blog_data['background_image']}",
   description: `{description}`,
   tipsSection: "{tips_section}",
+  tipsLink: "{tips_link}",
   itineraries: {itineraries_json},
   content: {content_sections_json},
 }};

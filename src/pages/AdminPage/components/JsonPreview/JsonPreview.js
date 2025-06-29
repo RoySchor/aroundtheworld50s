@@ -68,11 +68,23 @@ const JsonPreview = ({ formData }) => {
       });
     };
 
+    const tipsLinkValid = () => {
+      // If tips section is filled, tips link must also be filled
+      if (
+        formData.blog_tips_section &&
+        formData.blog_tips_section.trim() !== ""
+      ) {
+        return formData.blog_tips_link && formData.blog_tips_link.trim() !== "";
+      }
+      return true;
+    };
+
     return (
       textFieldsValid &&
       backgroundImageValid &&
       stateValid() &&
-      contentSectionsValid()
+      contentSectionsValid() &&
+      tipsLinkValid()
     );
   };
 
@@ -103,7 +115,8 @@ const JsonPreview = ({ formData }) => {
         key === "blog_header" ||
         key === "blog_subtitle" ||
         key === "blog_description_detailed" ||
-        key === "blog_tips_section"
+        key === "blog_tips_section" ||
+        key === "blog_tips_link"
       ) {
         // Handle blog section fields that go into the blog hash
         const blogKey = key.replace("blog_", "");
@@ -112,11 +125,22 @@ const JsonPreview = ({ formData }) => {
             ? "description"
             : blogKey === "tips_section"
               ? "tips_section"
-              : blogKey;
+              : blogKey === "tips_link"
+                ? "tips_link"
+                : blogKey;
 
         // Always include tips_section even if empty, but trim other fields
         if (key === "blog_tips_section") {
           blogData[mappedKey] = formData[key] ? formData[key].trim() : "";
+        } else if (key === "blog_tips_link") {
+          if (
+            formData.blog_tips_section &&
+            formData.blog_tips_section.trim() !== "" &&
+            formData[key] &&
+            formData[key].trim() !== ""
+          ) {
+            blogData[mappedKey] = formData[key].trim();
+          }
         } else if (formData[key] && formData[key].trim() !== "") {
           blogData[mappedKey] = formData[key].trim();
         }
@@ -574,6 +598,7 @@ JsonPreview.propTypes = {
     blog_subtitle: PropTypes.string.isRequired,
     blog_description_detailed: PropTypes.string.isRequired,
     blog_tips_section: PropTypes.string.isRequired,
+    blog_tips_link: PropTypes.string.isRequired,
     include_itineraries: PropTypes.bool.isRequired,
     itineraries: PropTypes.arrayOf(
       PropTypes.shape({

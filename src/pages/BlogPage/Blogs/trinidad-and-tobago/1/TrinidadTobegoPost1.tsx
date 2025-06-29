@@ -115,10 +115,19 @@ const TrinidadTobegoPost1 = () => {
           />
 
           {TRINIDAD_TOBAGO_POST_1.tipsSection && (
-            <div
-              className="post-bolded-text post-tips-section-container"
-              dangerouslySetInnerHTML={{ __html: TRINIDAD_TOBAGO_POST_1.tipsSection }}
-            />
+            <div className="post-bolded-text post-tips-section-container">
+              {TRINIDAD_TOBAGO_POST_1.tipsLink ? (
+                <a
+                  href={TRINIDAD_TOBAGO_POST_1.tipsLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="post-tips-link"
+                  dangerouslySetInnerHTML={{ __html: TRINIDAD_TOBAGO_POST_1.tipsSection }}
+                />
+              ) : (
+                <div dangerouslySetInnerHTML={{ __html: TRINIDAD_TOBAGO_POST_1.tipsSection }} />
+              )}
+            </div>
           )}
 
           {TRINIDAD_TOBAGO_POST_1.content.map((item, index) => (

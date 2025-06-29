@@ -21,6 +21,7 @@ const AdminPage = () => {
     blog_subtitle: "",
     blog_description_detailed: "",
     blog_tips_section: "",
+    blog_tips_link: "",
     include_itineraries: false,
     itineraries: [{ title: "", items: [""] }],
     include_maps: false,

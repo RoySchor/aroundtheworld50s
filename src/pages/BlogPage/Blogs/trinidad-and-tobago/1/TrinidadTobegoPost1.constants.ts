@@ -8,6 +8,7 @@ export const createBlogPost = (content: BlogPostContent): BlogPostContent => ({
   subtitle: content.subtitle,
   description: content.description,
   tipsSection: content.tipsSection,
+  tipsLink: content.tipsLink,
   backgroundImage: content.backgroundImage,
   itineraries: content.itineraries || [],
   content: content.content || [],
@@ -31,6 +32,7 @@ const trinidadTobagoContent: BlogPostContent = {
   `,
   tipsSection:
     "💥 Insider Tips: Your Key to an Unforgettable Trip (read more…)",
+  tipsLink: "https://example.com/trinidad-tobago-tips",
   itineraries: [
     {
       title: "Itinerary 📍",

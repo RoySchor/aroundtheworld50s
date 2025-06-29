@@ -29,6 +29,7 @@ const BlogPreview = ({ formData }) => {
       blog_description_detailed:
         "Your detailed blog description will appear here. Share your amazing travel experiences and adventures with your readers.",
       blog_tips_section: "💥 Insider Tips: Your Key to an Unforgettable Trip",
+      blog_tips_link: "https://example.com/tips",
       country: "Your Destination",
       title: "Your Blog Post Title",
     };
@@ -245,10 +246,20 @@ const BlogPreview = ({ formData }) => {
 
               {formData.blog_tips_section &&
                 formData.blog_tips_section.trim() !== "" && (
-                  <div
-                    className="post-bolded-text post-tips-section-container"
-                    dangerouslySetInnerHTML={{ __html: tipsText }}
-                  />
+                  <div className="post-bolded-text post-tips-section-container">
+                    {formData.blog_tips_link &&
+                    formData.blog_tips_link.trim() !== "" ? (
+                      <a
+                        href={formData.blog_tips_link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="post-tips-link"
+                        dangerouslySetInnerHTML={{ __html: tipsText }}
+                      />
+                    ) : (
+                      <div dangerouslySetInnerHTML={{ __html: tipsText }} />
+                    )}
+                  </div>
                 )}
 
               {/* Content Sections */}
@@ -296,6 +307,7 @@ BlogPreview.propTypes = {
     blog_subtitle: PropTypes.string,
     blog_description_detailed: PropTypes.string,
     blog_tips_section: PropTypes.string,
+    blog_tips_link: PropTypes.string,
     background_image: PropTypes.object,
     include_content: PropTypes.bool,
     content_sections: PropTypes.array,
