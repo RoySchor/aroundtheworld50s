@@ -6,7 +6,16 @@ import { Link } from "react-router-dom";
 import blogs from "../../../data/blogs";
 
 const BlogSection = ({ country }) => {
-  const filteredBlogs = blogs.filter((blog) => blog.country === country);
+  let filteredBlogs;
+
+  if (country.includes(", ")) {
+    const [state, countryName] = country.split(", ");
+    filteredBlogs = blogs.filter(
+      (blog) => blog.country === countryName && blog.state === state,
+    );
+  } else {
+    filteredBlogs = blogs.filter((blog) => blog.country === country);
+  }
 
   const background =
     filteredBlogs.length > 0
