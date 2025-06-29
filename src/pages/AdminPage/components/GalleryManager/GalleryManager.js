@@ -19,28 +19,27 @@ const GalleryManager = () => {
     try {
       setIsLoading(true);
       // Get the current images from the rotating gallery directory
-      const importAll = (r) => r.keys().map(r);
-      const images = importAll(
-        require.context(
-          "../../../../assets/homePageGallery",
-          false,
-          /\.(png|jpe?g|svg)$/,
-        ),
+      const requireContext = require.context(
+        "../../../../assets/homePageGallery",
+        false,
+        /\.(png|jpe?g|webp|gif)$/i,
       );
 
-      const imageNames = images.map((img, index) => {
-        const imageName = img.default
-          ? img.default.split("/").pop().split("?")[0]
-          : `image-${index}.jpg`;
+      const imageData = requireContext.keys().map((path, index) => {
+        // Extract the real filename from the webpack path
+        // path looks like "./filename.jpg"
+        const realFileName = path.replace('./', '');
+        const imageModule = requireContext(path);
+
         return {
           id: index,
-          name: imageName,
-          src: img.default || img,
+          name: realFileName, // Use the actual filename
+          src: imageModule.default || imageModule,
           isNew: false,
         };
       });
 
-      setCurrentImages(imageNames);
+      setCurrentImages(imageData);
     } catch (error) {
       console.error("Error loading current images:", error);
       setCurrentImages([]);
