@@ -2,7 +2,7 @@
 import json
 import sys
 from pathlib import Path
-from utils import get_desktop_path, validate_json, get_next_post_index
+from utils import get_desktop_path, validate_json, get_next_post_index, is_us_country
 from file_operations import (
     setup_directories,
     copy_images,
@@ -102,8 +102,21 @@ class BlogManager:
         kill_npm_process()
 
         # Setup directories
-        post_index = get_next_post_index(self.base_dir / "src/assets/blog" / blog_data['country'])
-        assets_dir, blog_component_dir = setup_directories(self.base_dir, blog_data['country'], post_index)
+        # Determine the correct path for post index calculation
+        if blog_data.get('state') and is_us_country(blog_data['country'], blog_data['country_code']):
+            # For US states, use state-specific path
+            from utils import serialize_location
+            location_path = f"united-states-{serialize_location(blog_data['state'])}"
+        else:
+            location_path = blog_data['country']
+
+        post_index = get_next_post_index(self.base_dir / "src/assets/blog" / location_path)
+        assets_dir, blog_component_dir = setup_directories(
+            self.base_dir,
+            blog_data['country'],
+            post_index,
+            blog_data.get('state')  # Pass state if present
+        )
 
         # Copy images
         copy_images(source_dir, assets_dir, blog_data['background_image'])

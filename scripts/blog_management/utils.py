@@ -106,19 +106,45 @@ def create_constants_name(country, state=None):
     return country.upper().replace(' ', '_').replace('&', '_AND_')
 
 def convert_markdown_links(text):
-    """Convert markdown-style links [text](url) to HTML links with proper attributes."""
+    """Convert markdown-style links [text](url) to HTML anchor tags."""
     if not text:
         return text
 
-    # Regular expression to match markdown links: [text](url)
-    markdown_link_pattern = r'\[([^\]]+)\]\(([^)]+)\)'
+    # Pattern to match [text](url)
+    pattern = r'\[([^\]]+)\]\(([^)]+)\)'
 
     def replace_link(match):
         link_text = match.group(1)
         url = match.group(2)
+        return f'<a href="{url}" class="post-link" target="_blank" rel="noopener noreferrer">{link_text}</a>'
 
-        html_link = f'<a href="{url}" className="post-link" target="_blank" rel="noopener noreferrer">{link_text}</a>'
-        return html_link
+    return re.sub(pattern, replace_link, text)
 
-    converted_text = re.sub(markdown_link_pattern, replace_link, text)
-    return converted_text
+def normalize_us_country(country, country_code):
+    """Normalize US country variants to standard format."""
+    if not country and not country_code:
+        return country, country_code
+
+    normalized_country = country.lower().strip() if country else ""
+    normalized_code = country_code.upper().strip() if country_code else ""
+
+    us_variants = [
+        'us',
+        'usa',
+        'united states',
+        'united states of america',
+        'america',
+        'u.s.',
+        'u.s.a.',
+        'u.s.a',
+    ]
+
+    if normalized_code == 'US' or normalized_country in us_variants:
+        return "United States", "US"
+
+    return country, country_code
+
+def is_us_country(country, country_code):
+    """Check if country is a US variant."""
+    normalized_country, normalized_code = normalize_us_country(country, country_code)
+    return normalized_country == "United States" and normalized_code == "US"

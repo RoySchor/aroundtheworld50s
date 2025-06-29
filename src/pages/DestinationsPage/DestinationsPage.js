@@ -9,7 +9,44 @@ import { serializeLocation } from "./DestinationPage.utils";
 
 const DestinationsPage = () => {
   const navigate = useNavigate();
-  const uniqueCountries = [...new Set(blogs.map((blog) => blog.country))];
+
+  // Helper function to check if country is US
+  const isUSCountry = (country) => {
+    const normalizedCountry = country.toLowerCase().trim();
+    const usVariants = [
+      "us",
+      "usa",
+      "united states",
+      "united states of america",
+      "america",
+      "u.s.",
+      "u.s.a.",
+      "u.s.a",
+    ];
+    return usVariants.includes(normalizedCountry);
+  };
+
+  // Create unique locations (countries and US states)
+  const uniqueLocations = Object.values(
+    blogs.reduce((accumulator, blog) => {
+      let locationKey, displayName, path;
+
+      if (blog.state && isUSCountry(blog.country)) {
+        locationKey = `USA-${blog.state}`;
+        displayName = `${blog.state}, USA`;
+        path = blog.path.replace(/\/\d+$/, ""); // Remove post number
+      } else {
+        locationKey = blog.country;
+        displayName = blog.country;
+        path = `/blog/${serializeLocation(blog.country)}`;
+      }
+
+      if (!accumulator[locationKey]) {
+        accumulator[locationKey] = { displayName, path };
+      }
+      return accumulator;
+    }, {}),
+  );
 
   return (
     <div className="page-container">
@@ -32,15 +69,14 @@ const DestinationsPage = () => {
             className="destination-dropdown"
             onChange={(e) => {
               if (e.target.value) {
-                const serializedCountry = serializeLocation(e.target.value);
-                navigate(`/blog/${serializedCountry}`);
+                navigate(e.target.value);
               }
             }}
           >
             <option value="">Destinations</option>
-            {uniqueCountries.map((country) => (
-              <option key={country} value={country}>
-                {country}
+            {uniqueLocations.map((location, index) => (
+              <option key={index} value={location.path}>
+                {location.displayName}
               </option>
             ))}
           </select>

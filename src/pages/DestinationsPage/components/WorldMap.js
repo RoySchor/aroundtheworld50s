@@ -4,15 +4,36 @@ import "./WorldMap.css";
 import worldMap from "../../../assets/flat-world-map.webp";
 import blogs from "../../../data/blogs";
 import { locationCoordinates } from "./WorldMap.constants";
-import { serializeLocation } from "../DestinationPage.utils";
 import Flag from "react-world-flags";
 
 const WorldMap = () => {
   const [hoveredLocation, setHoveredLocation] = useState(null);
 
+  // Helper function to check if country is US
+  const isUSCountry = (country) => {
+    const normalizedCountry = country.toLowerCase().trim();
+    const usVariants = [
+      "us",
+      "usa",
+      "united states",
+      "united states of america",
+      "america",
+      "u.s.",
+      "u.s.a.",
+      "u.s.a",
+    ];
+    return usVariants.includes(normalizedCountry);
+  };
+
   const uniqueCountryBlogs = Object.values(
     blogs.reduce((accumulator, blog) => {
-      const locationKey = `${blog.country}${blog.state ? `-${blog.state}` : ""}`;
+      // Create location key for coordinate lookup
+      let locationKey;
+      if (blog.state && isUSCountry(blog.country)) {
+        locationKey = `USA-${blog.state}`;
+      } else {
+        locationKey = blog.country;
+      }
 
       if (!accumulator[locationKey]) {
         accumulator[locationKey] = blog;
@@ -26,13 +47,19 @@ const WorldMap = () => {
       <img src={worldMap} alt="World Map" className="world-map" />
 
       {uniqueCountryBlogs.map((blog) => {
-        const locationKey = `${blog.country}${blog.state ? `-${blog.state}` : ""}`;
+        // Create location key for coordinate lookup
+        let locationKey;
+        if (blog.state && isUSCountry(blog.country)) {
+          locationKey = `USA-${blog.state}`;
+        } else {
+          locationKey = blog.country;
+        }
+
         const coordinates = locationCoordinates[locationKey];
         if (!coordinates) return null;
 
-        // Create URL using the serialized country name
-        const serializedCountry = serializeLocation(blog.country);
-        const to = `/blog/${serializedCountry}`;
+        // Create URL using the serialized location from the blog path
+        const to = blog.path.replace(/\/\d+$/, ""); // Remove the post number to get the base path
 
         return (
           <Link to={to} key={blog.id}>

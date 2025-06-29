@@ -6,7 +6,6 @@ import {
   useParams,
 } from "react-router-dom";
 import blogs from "./data/blogs";
-import { serializeLocation } from "./pages/DestinationsPage/DestinationPage.utils";
 
 import Navbar from "./components/Navbar/Navbar";
 import HomePage from "./pages/HomePage/HomePage";
@@ -46,18 +45,13 @@ function App() {
 function BlogPost() {
   const { postName, index } = useParams();
 
-  // Find the blog post by country name and index
-  const blog = blogs.find(
-    (blog) =>
-      serializeLocation(blog.country) === postName &&
-      blog.path.endsWith(`/${index}`),
-  );
+  const targetPath = `/blog/${postName}/${index}`;
+  const blog = blogs.find((blog) => blog.path === targetPath);
 
   if (!blog) {
     return <ErrorPage />;
   }
 
-  // Render the appropriate blog post component
   switch (postName) {
     case "trinidad-and-tobago":
       if (index === "1") {
@@ -72,16 +66,22 @@ function BlogPost() {
 function BlogSectionPage() {
   const { country } = useParams();
 
-  // Find all blogs for this country
-  const countryBlogs = blogs.filter(
-    (blog) => serializeLocation(blog.country) === country,
-  );
+  // Find all blogs for this location (country or US state)
+  const locationBlogs = blogs.filter((blog) => {
+    // Extract the location part from the blog path (remove /blog/ and /index)
+    const blogLocation = blog.path.split("/")[2]; // /blog/location/index -> location
+    return blogLocation === country;
+  });
 
-  if (countryBlogs.length === 0) {
+  if (locationBlogs.length === 0) {
     return <ErrorPage />;
   }
 
-  return <BlogSection country={countryBlogs[0].country} />;
+  const displayName = locationBlogs[0].state
+    ? `${locationBlogs[0].state}, ${locationBlogs[0].country}`
+    : locationBlogs[0].country;
+
+  return <BlogSection country={displayName} />;
 }
 
 export default App;

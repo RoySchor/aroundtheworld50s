@@ -9,6 +9,25 @@ const JsonPreview = ({ formData }) => {
   const [showInstructions, setShowInstructions] = useState(false);
   const [instructionsData, setInstructionsData] = useState({});
 
+  const isUSCountry = (country, countryCode) => {
+    const normalizedCountry = country.toLowerCase().trim();
+    const normalizedCode = countryCode.toUpperCase().trim();
+
+    const usVariants = [
+      "us",
+      "usa",
+      "united states",
+      "united states of america",
+      "america",
+      "u.s.",
+      "u.s.a.",
+      "u.s.a",
+      "united states of america",
+    ];
+
+    return normalizedCode === "US" || usVariants.includes(normalizedCountry);
+  };
+
   const isFormValid = () => {
     const requiredFields = [
       "country",
@@ -26,6 +45,15 @@ const JsonPreview = ({ formData }) => {
 
     const backgroundImageValid =
       formData.background_image && formData.background_image.name;
+
+    const stateValid = () => {
+      const isUS = isUSCountry(formData.country, formData.country_code);
+
+      if (isUS) {
+        return formData.state && formData.state.trim() !== "";
+      }
+      return true;
+    };
 
     const contentSectionsValid = () => {
       if (
@@ -55,7 +83,12 @@ const JsonPreview = ({ formData }) => {
       });
     };
 
-    return textFieldsValid && backgroundImageValid && contentSectionsValid();
+    return (
+      textFieldsValid &&
+      backgroundImageValid &&
+      stateValid() &&
+      contentSectionsValid()
+    );
   };
 
   const generateJSON = () => {
@@ -66,6 +99,20 @@ const JsonPreview = ({ formData }) => {
       if (key === "background_image") {
         if (formData[key] && formData[key].name) {
           filteredData[key] = formData[key].name;
+        }
+      } else if (key === "country") {
+        // Normalize US country variants to "United States"
+        if (isUSCountry(formData[key], formData.country_code)) {
+          filteredData[key] = "United States";
+        } else {
+          filteredData[key] = formData[key].trim();
+        }
+      } else if (key === "country_code") {
+        // Normalize US country code to "US"
+        if (isUSCountry(formData.country, formData[key])) {
+          filteredData[key] = "US";
+        } else {
+          filteredData[key] = formData[key].trim();
         }
       } else if (
         key === "blog_header" ||
@@ -95,15 +142,18 @@ const JsonPreview = ({ formData }) => {
         key !== "maps" &&
         key !== "include_content" &&
         key !== "content_sections" &&
+        key !== "state" &&
         formData[key] &&
         formData[key].trim() !== ""
       ) {
-        // Handle all other fields including blog_description at top level
         filteredData[key] = formData[key].trim();
       }
     });
 
-    // Add itineraries to blog object if enabled and has content
+    if (formData.state && formData.state.trim() !== "") {
+      filteredData.state = formData.state.trim();
+    }
+
     if (formData.include_itineraries && formData.itineraries.length > 0) {
       const validItineraries = formData.itineraries
         .filter(
@@ -123,7 +173,6 @@ const JsonPreview = ({ formData }) => {
       }
     }
 
-    // Add maps to blog object if enabled and has content
     if (formData.include_maps && formData.maps.length > 0) {
       const validMaps = formData.maps
         .filter(
@@ -160,7 +209,6 @@ const JsonPreview = ({ formData }) => {
               section.images && section.images.some((image) => image !== null)
             );
           }
-          // For itinerary-with-map sections, always include (they reference existing data)
           if (section.layout.type === "itinerary-with-map") {
             return true;
           }
@@ -172,7 +220,6 @@ const JsonPreview = ({ formData }) => {
             layout: { ...section.layout },
           };
 
-          // Handle different section types
           if (
             section.layout.type === "text" ||
             section.layout.type === "two-column"
@@ -185,7 +232,6 @@ const JsonPreview = ({ formData }) => {
             contentSection.content = null;
           }
 
-          // Add image properties for two-column sections
           if (
             section.layout.type === "two-column" &&
             section.image &&
@@ -198,7 +244,6 @@ const JsonPreview = ({ formData }) => {
             }
           }
 
-          // Add images array for image-grid sections
           if (section.layout.type === "image-grid" && section.images) {
             const validImages = section.images.filter(
               (image) => image !== null && image.name,
@@ -216,7 +261,6 @@ const JsonPreview = ({ formData }) => {
       }
     }
 
-    // Add blog object if it has content
     if (Object.keys(blogData).length > 0) {
       filteredData.blog = blogData;
     }
@@ -358,8 +402,11 @@ const JsonPreview = ({ formData }) => {
         <div className="json-validation-status">
           <h3 className="json-validation-title">⚠️ Form Validation</h3>
           <p className="json-validation-message">
-            Please complete all required fields and add at least one content
-            section before generating your blog.
+            Please complete all required fields
+            {isUSCountry(formData.country, formData.country_code)
+              ? " (including state for US blogs)"
+              : ""}{" "}
+            and add at least one content section before generating your blog.
           </p>
         </div>
       )}
@@ -511,6 +558,7 @@ JsonPreview.propTypes = {
   formData: PropTypes.shape({
     country: PropTypes.string.isRequired,
     country_code: PropTypes.string.isRequired,
+    state: PropTypes.string,
     title: PropTypes.string.isRequired,
     blog_description: PropTypes.string.isRequired,
     background_image: PropTypes.object,

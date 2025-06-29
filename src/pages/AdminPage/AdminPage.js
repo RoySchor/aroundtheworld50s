@@ -10,6 +10,7 @@ const AdminPage = () => {
   const [formData, setFormData] = useState({
     country: "",
     country_code: "",
+    state: "",
     title: "",
     blog_description: "",
     background_image: null,

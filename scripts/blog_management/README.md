@@ -1,6 +1,111 @@
 # Blog Management System
 
-This system allows you to easily create and deploy blog posts for the Around The World 50s website with multiple content sections, maps, image grids, and complex layouts.
+This system helps you create and manage blog posts for your travel website. It supports both country-level blogs and US state-specific blogs.
+
+### Features
+
+- **Country Blogs**: Create blogs for any country (e.g., France, Japan, Trinidad and Tobago)
+- **US State Blogs**: Create state-specific blogs for the United States (e.g., California, New York, Texas)
+- **Automatic file generation**: Creates all necessary React components, constants, and routing
+- **Content sections**: Support for text, two-column layouts, image grids, and itinerary-with-map sections
+- **Markdown link conversion**: Automatically converts `[text](url)` to proper HTML links
+- **Asset management**: Handles image copying and organization
+- **Development server integration**: Automatically starts/stops the dev server for testing
+
+### Quick Start
+
+1. **Create your blog folder** on Desktop (e.g., `california-blog`, `france-blog`)
+2. **Add your JSON configuration file** (copy from `blog_template.json`)
+3. **Add your images** to the same folder
+4. **Run the generation script**: `./generate` (from this directory)
+
+### US State Support
+
+For US state blogs, use this structure in your JSON:
+
+```json
+{
+  "country": "United States",
+  "country_code": "US",
+  "state": "California",
+  "title": "🌴 California: Golden State Adventures",
+  // ... rest of your blog data
+}
+```
+
+**Important**: The state field is **required** when the country is "United States", "USA", or country_code is "US".
+
+### Blog Structure
+
+Your blog folder should contain:
+- **One JSON file** with your blog configuration
+- **Background image** (referenced in the JSON)
+- **Additional images** for content sections
+
+### Content Sections
+
+The system supports four types of content sections:
+
+1. **Text Section**: Pure text content with markdown link support
+2. **Two-Column Layout**: Image + text in left/right configuration
+3. **Image Grid**: Multiple images in a responsive grid
+4. **Itinerary with Map**: Combines itinerary lists with embedded maps
+
+### Examples
+
+#### Country Blog (France)
+```json
+{
+  "country": "France",
+  "country_code": "FR",
+  "title": "🗼 Paris: City of Lights",
+  "background_image": "paris-bg.jpg",
+  "blog_description": "Exploring romantic Paris",
+  "blog": {
+    // ... blog content
+  }
+}
+```
+
+#### US State Blog (California)
+```json
+{
+  "country": "United States",
+  "country_code": "US",
+  "state": "California",
+  "title": "🌴 California Adventures",
+  "background_image": "california-bg.jpg",
+  "blog_description": "Golden State exploration",
+  "blog": {
+    // ... blog content
+  }
+}
+```
+
+### File Paths
+
+The system automatically creates appropriate file paths:
+
+- **Country blogs**: `/blog/france/1`, `/blog/trinidad-and-tobago/1`
+- **US state blogs**: `/blog/united-states-california/1`, `/blog/united-states-texas/1`
+
+### Scripts
+
+- **`generate`**: Main script to generate blog from folder
+- **`add_blog.sh`**: Alternative blog addition script
+- **`auto_generate_blog.sh`**: Automated blog generation
+
+### Troubleshooting
+
+If you encounter issues:
+1. Check that your JSON file is valid
+2. Ensure all required fields are present
+3. Verify image files exist in your folder
+4. For US blogs, make sure the state field is included
+
+### Admin Interface
+
+You can also use the web admin interface at `/admin` to create blogs through a user-friendly form. The admin interface automatically shows the state field when you select "United States" as the country.
 
 ## Quick Start
 

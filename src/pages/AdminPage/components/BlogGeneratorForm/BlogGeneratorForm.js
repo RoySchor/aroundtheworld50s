@@ -21,6 +21,26 @@ const BlogGeneratorForm = ({
   onAddContentSection,
   onRemoveContentSection,
 }) => {
+  // Helper function to check if country is US
+  const isUSCountry = (country, countryCode) => {
+    const normalizedCountry = country.toLowerCase().trim();
+    const normalizedCode = countryCode.toUpperCase().trim();
+
+    const usVariants = [
+      "us",
+      "usa",
+      "united states",
+      "united states of america",
+      "america",
+      "u.s.",
+      "u.s.a.",
+      "u.s.a",
+      "united states of america",
+    ];
+
+    return normalizedCode === "US" || usVariants.includes(normalizedCountry);
+  };
+
   return (
     <div className="blog-form-container">
       <h2 className="blog-form-title">Blog Configuration Form</h2>
@@ -43,6 +63,18 @@ const BlogGeneratorForm = ({
         maxLength={3}
         required
       />
+
+      {/* State field - only show for United States */}
+      {isUSCountry(formData.country, formData.country_code) && (
+        <FormField
+          id="state"
+          label="State"
+          value={formData.state}
+          onChange={(value) => onInputChange("state", value)}
+          placeholder="Enter state name (e.g., California, New York, Texas)"
+          required
+        />
+      )}
 
       <FormField
         id="title"
@@ -152,6 +184,7 @@ BlogGeneratorForm.propTypes = {
   formData: PropTypes.shape({
     country: PropTypes.string.isRequired,
     country_code: PropTypes.string.isRequired,
+    state: PropTypes.string,
     title: PropTypes.string.isRequired,
     blog_description: PropTypes.string.isRequired,
     background_image: PropTypes.object,
