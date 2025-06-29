@@ -21,7 +21,7 @@ const AdminPage = () => {
     itineraries: [{ title: "", items: [""] }],
     include_maps: false,
     maps: [{ name: "", title: "", url: "" }],
-    include_content: false,
+    include_content: true,
     content_sections: [],
   });
 

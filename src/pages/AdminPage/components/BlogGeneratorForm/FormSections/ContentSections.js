@@ -64,69 +64,99 @@ const ContentSections = ({
     return `+ Add Itinerary with Map (${currentCount}/${mapCount} available)`;
   };
 
+  const hasValidContentSections = () => {
+    if (!formData.content_sections || formData.content_sections.length === 0) {
+      return false;
+    }
+
+    return formData.content_sections.some((section) => {
+      if (
+        section.layout.type === "text" ||
+        section.layout.type === "two-column"
+      ) {
+        return section.content && section.content.trim() !== "";
+      }
+      if (section.layout.type === "image-grid") {
+        return section.images && section.images.some((image) => image !== null);
+      }
+      if (section.layout.type === "itinerary-with-map") {
+        return true;
+      }
+      return false;
+    });
+  };
+
   return (
     <>
-      {/* Content Sections Checkbox */}
-      <div className="blog-form-checkbox-section">
-        <label className="blog-form-checkbox-label">
-          <input
-            type="checkbox"
-            checked={formData.include_content}
-            onChange={(e) => onInputChange("include_content", e.target.checked)}
-            className="blog-form-checkbox"
-          />
-          <span className="blog-form-checkbox-text">
-            Include Content Sections
-          </span>
-        </label>
+      <div className="blog-form-required-section">
+        <div className="blog-form-required-header">
+          <h4 className="blog-form-required-title">Content Sections *</h4>
+          <span className="blog-form-required-badge">Required</span>
+        </div>
+        <p className="blog-form-required-description">
+          At least one content section is required for your blog post.
+        </p>
+
+        {!hasValidContentSections() && (
+          <div className="blog-form-validation-error">
+            ⚠️ Please add at least one content section with valid content to
+            continue.
+          </div>
+        )}
       </div>
 
-      {/* Content Sections Dynamic Section */}
-      {formData.include_content && (
-        <div className="blog-form-dynamic-section">
-          <div className="blog-form-dynamic-header">
-            <h4 className="blog-form-dynamic-title">Content Sections</h4>
-            <div className="blog-form-content-buttons">
-              <button
-                type="button"
-                onClick={() => onAddContentSection("text")}
-                className="blog-form-add-btn blog-form-add-text-btn"
-              >
-                + Add Text Section
-              </button>
-              <button
-                type="button"
-                onClick={() => onAddContentSection("two-column")}
-                className="blog-form-add-btn blog-form-add-column-btn"
-              >
-                + Add Two-Column Section
-              </button>
-              <button
-                type="button"
-                onClick={() => onAddContentSection("image-grid")}
-                className="blog-form-add-btn blog-form-add-grid-btn"
-              >
-                + Add Image Grid
-              </button>
-              <button
-                type="button"
-                onClick={() => onAddContentSection("itinerary-with-map")}
-                className={`blog-form-add-btn blog-form-add-itinerary-map-btn ${
-                  !canAddItineraryWithMap() ? "blog-form-btn-disabled" : ""
-                }`}
-                disabled={!canAddItineraryWithMap()}
-                title={
-                  !canAddItineraryWithMap()
-                    ? "Requires both itineraries and maps to be enabled, or maximum limit reached"
-                    : "Add an itinerary combined with a map"
-                }
-              >
-                {getItineraryWithMapButtonText()}
-              </button>
-            </div>
+      <div className="blog-form-dynamic-section">
+        <div className="blog-form-dynamic-header">
+          <div className="blog-form-content-buttons">
+            <button
+              type="button"
+              onClick={() => onAddContentSection("text")}
+              className="blog-form-add-btn blog-form-add-text-btn"
+            >
+              + Add Text Section
+            </button>
+            <button
+              type="button"
+              onClick={() => onAddContentSection("two-column")}
+              className="blog-form-add-btn blog-form-add-column-btn"
+            >
+              + Add Two-Column Section
+            </button>
+            <button
+              type="button"
+              onClick={() => onAddContentSection("image-grid")}
+              className="blog-form-add-btn blog-form-add-grid-btn"
+            >
+              + Add Image Grid
+            </button>
+            <button
+              type="button"
+              onClick={() => onAddContentSection("itinerary-with-map")}
+              className={`blog-form-add-btn blog-form-add-itinerary-map-btn ${
+                !canAddItineraryWithMap() ? "blog-form-btn-disabled" : ""
+              }`}
+              disabled={!canAddItineraryWithMap()}
+              title={
+                !canAddItineraryWithMap()
+                  ? "Requires both itineraries and maps to be enabled, or maximum limit reached"
+                  : "Add an itinerary combined with a map"
+              }
+            >
+              {getItineraryWithMapButtonText()}
+            </button>
           </div>
+        </div>
 
-          {formData.content_sections.map((section, sectionIndex) => (
+        {formData.content_sections.length === 0 ? (
+          <div className="blog-form-empty-content">
+            <div className="blog-form-empty-icon">📝</div>
+            <p className="blog-form-empty-text">
+              No content sections added yet. Click one of the buttons above to
+              get started!
+            </p>
+          </div>
+        ) : (
+          formData.content_sections.map((section, sectionIndex) => (
             <div key={sectionIndex} className="blog-form-content-section">
               <div className="blog-form-group-header">
                 <h5 className="blog-form-group-title">
@@ -178,9 +208,9 @@ const ContentSections = ({
                 />
               )}
             </div>
-          ))}
-        </div>
-      )}
+          ))
+        )}
+      </div>
     </>
   );
 };

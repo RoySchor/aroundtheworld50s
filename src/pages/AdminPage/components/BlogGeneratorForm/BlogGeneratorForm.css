@@ -209,3 +209,42 @@
     @apply flex-row gap-4;
   }
 }
+
+/* Required Section Styles */
+.blog-form-required-section {
+  @apply mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg;
+}
+
+.blog-form-required-header {
+  @apply flex items-center gap-3 mb-2;
+}
+
+.blog-form-required-title {
+  @apply text-lg font-semibold text-gray-800 m-0;
+}
+
+.blog-form-required-badge {
+  @apply px-2 py-1 bg-red-500 text-white text-xs font-medium rounded-full;
+}
+
+.blog-form-required-description {
+  @apply text-sm text-gray-600 m-0;
+}
+
+/* Validation Error Styles */
+.blog-form-validation-error {
+  @apply mt-3 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm font-medium;
+}
+
+/* Empty Content State Styles */
+.blog-form-empty-content {
+  @apply text-center py-8 px-4 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg;
+}
+
+.blog-form-empty-icon {
+  @apply text-4xl mb-3;
+}
+
+.blog-form-empty-text {
+  @apply text-gray-600 text-base m-0;
+}

@@ -20,16 +20,42 @@ const JsonPreview = ({ formData }) => {
       "blog_description_detailed",
     ];
 
-    // Check required text fields
     const textFieldsValid = requiredFields.every(
       (field) => formData[field] && formData[field].trim() !== "",
     );
 
-    // Check required background image
     const backgroundImageValid =
       formData.background_image && formData.background_image.name;
 
-    return textFieldsValid && backgroundImageValid;
+    const contentSectionsValid = () => {
+      if (
+        !formData.include_content ||
+        !formData.content_sections ||
+        formData.content_sections.length === 0
+      ) {
+        return false;
+      }
+
+      return formData.content_sections.some((section) => {
+        if (
+          section.layout.type === "text" ||
+          section.layout.type === "two-column"
+        ) {
+          return section.content && section.content.trim() !== "";
+        }
+        if (section.layout.type === "image-grid") {
+          return (
+            section.images && section.images.some((image) => image !== null)
+          );
+        }
+        if (section.layout.type === "itinerary-with-map") {
+          return true;
+        }
+        return false;
+      });
+    };
+
+    return textFieldsValid && backgroundImageValid && contentSectionsValid();
   };
 
   const generateJSON = () => {
@@ -326,6 +352,18 @@ const JsonPreview = ({ formData }) => {
       <div className="json-preview">
         <pre className="json-content">{generateJSON()}</pre>
       </div>
+
+      {/* Form Validation Status */}
+      {!isFormValid() && (
+        <div className="json-validation-status">
+          <h3 className="json-validation-title">⚠️ Form Validation</h3>
+          <p className="json-validation-message">
+            Please complete all required fields and add at least one content
+            section before generating your blog.
+          </p>
+        </div>
+      )}
+
       <div className="json-buttons-container">
         <button
           onClick={handleGenerateBlog}
@@ -361,11 +399,11 @@ const JsonPreview = ({ formData }) => {
                 <li>✅ Country and title information</li>
                 <li>✅ Blog content and descriptions</li>
                 <li>✅ Background image uploaded</li>
+                <li>✅ Content sections added (required)</li>
                 {formData.include_itineraries && (
                   <li>✅ Itineraries configured</li>
                 )}
                 {formData.include_maps && <li>✅ Maps configured</li>}
-                {formData.include_content && <li>✅ Content sections added</li>}
               </ul>
               <p className="json-confirmation-warning">
                 ⚠️ This will download the blog folder and provide instructions
