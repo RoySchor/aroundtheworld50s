@@ -37,7 +37,6 @@ export const useSmartDebounce = (formData) => {
       blog_subtitle: formData.blog_subtitle,
       blog_description_detailed: formData.blog_description_detailed,
       blog_tips_section: formData.blog_tips_section,
-      blog_tips_link: formData.blog_tips_link,
       title: formData.title,
       country: formData.country,
     },

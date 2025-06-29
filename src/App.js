@@ -14,6 +14,7 @@ import DestinationsPage from "./pages/DestinationsPage/DestinationsPage";
 import BlogPage from "./pages/BlogPage/BlogPage";
 import BlogSection from "./pages/BlogPage/BlogSections/BlogSection";
 import TipsPage from "./pages/TipsPage/TipsPage";
+import TipDetailPage from "./pages/TipsPage/TipDetailPage";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
@@ -28,6 +29,7 @@ function App() {
         <Route path="/about" element={<AboutMePage />} />
         <Route path="/destinations" element={<DestinationsPage />} />
         <Route path="/tips" element={<TipsPage />} />
+        <Route path="/tips/:location" element={<TipDetailPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:postName/:index" element={<BlogPost />} />

@@ -1,0 +1,93 @@
+/* Tip Detail Page Styling - Tailwind Classes */
+.tip-detail-header {
+  @apply mb-12;
+}
+
+.tip-detail-title-section {
+  @apply text-center;
+}
+
+.tip-detail-title {
+  @apply text-2xl md:text-4xl font-bold text-gray-800 mb-2;
+}
+
+.tip-detail-location {
+  @apply text-lg text-gray-500 font-medium;
+}
+
+.tip-detail-content {
+  @apply max-w-4xl mx-auto;
+}
+
+.tip-section {
+  @apply bg-white border border-gray-200 rounded-xl p-6 md:p-8 mb-8 shadow-sm;
+}
+
+.tip-section h2 {
+  @apply text-gray-800 text-xl md:text-2xl font-semibold mb-4 flex items-center justify-center gap-3 text-center;
+}
+
+.tip-placeholder {
+  @apply text-gray-500 italic leading-relaxed text-left;
+}
+
+.tip-placeholder p {
+  @apply mb-3;
+}
+
+.tip-placeholder p:last-child {
+  @apply mb-0;
+}
+
+.tip-content {
+  @apply text-gray-700 leading-relaxed text-left;
+}
+
+.tip-content p {
+  @apply mb-4;
+}
+
+.tip-content ul,
+.tip-content ol {
+  @apply mb-4 pl-6;
+}
+
+.tip-content li {
+  @apply mb-2 leading-6;
+}
+
+.tip-content ul li {
+  @apply list-disc;
+}
+
+.tip-content ol li {
+  @apply list-decimal;
+}
+
+.tip-content strong {
+  @apply font-semibold text-gray-800;
+}
+
+.tip-content em {
+  @apply italic text-gray-600;
+}
+
+.tip-content h3 {
+  @apply text-lg font-semibold text-gray-800 mt-6 mb-3;
+}
+
+.tip-content h4 {
+  @apply text-base font-semibold text-gray-700 mt-4 mb-2;
+}
+
+.tip-not-found {
+  @apply text-center py-12 px-4 md:py-16 md:px-8;
+}
+
+.tip-not-found h1 {
+  @apply text-xl md:text-2xl text-gray-800 mb-4;
+}
+
+.tip-not-found p {
+  @apply text-lg text-gray-500 mb-8;
+}

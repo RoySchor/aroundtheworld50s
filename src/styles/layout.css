@@ -9,6 +9,7 @@
 .about-me,
 .blog,
 .tips,
+.tips-detail,
 .admin {
   @apply mt-44;
 }

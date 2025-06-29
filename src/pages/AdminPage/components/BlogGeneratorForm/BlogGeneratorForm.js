@@ -209,22 +209,15 @@ const BlogGeneratorForm = ({
 
       {formData.blog_tips_section &&
         formData.blog_tips_section.trim() !== "" && (
-          <div>
-            <FormField
-              id="blog_tips_link"
-              label="Tips Section Link *"
-              value={formData.blog_tips_link}
-              onChange={(value) => onInputChange("blog_tips_link", value)}
-              placeholder="Enter the URL for the tips section (e.g., https://example.com/full-tips)"
-              required
-            />
-            <div className="blog-form-section-info">
-              <small className="blog-form-help-text">
-                💡 <strong>Required:</strong> Since you've added a tips section,
-                you must provide a link. The entire tips section will be
-                clickable and redirect to this URL.
-              </small>
-            </div>
+          <div className="blog-form-section-info">
+            <small className="blog-form-help-text">
+              💡 <strong>Auto-Generated:</strong> Tips link will automatically
+              point to /tips/
+              {formData.state
+                ? `united-states-${formData.state.toLowerCase().replace(/[^a-z0-9]/g, "-")}`
+                : formData.country.toLowerCase().replace(/[^a-z0-9]/g, "-")}
+              . A tips page will be created if it doesn't exist.
+            </small>
           </div>
         )}
 
@@ -273,7 +266,6 @@ BlogGeneratorForm.propTypes = {
     blog_subtitle: PropTypes.string.isRequired,
     blog_description_detailed: PropTypes.string.isRequired,
     blog_tips_section: PropTypes.string.isRequired,
-    blog_tips_link: PropTypes.string.isRequired,
     include_itineraries: PropTypes.bool.isRequired,
     itineraries: PropTypes.arrayOf(
       PropTypes.shape({

@@ -154,6 +154,10 @@ class BlogManager:
             revert_changes(self.base_dir, assets_dir, blog_component_dir, blog_data, post_index)
             print("\nAll changes have been reverted. You can try again with different content.")
         else:
+            # Handle tips page creation if blog has tips section
+            if blog_data.get('blog', {}).get('tips_section'):
+                self.handle_tips_page(blog_data)
+
             # Deploy changes
             deploy_changes(self.base_dir, blog_data)
             print("\n✨ Blog post has been successfully added and deployed! ✨")
@@ -161,6 +165,95 @@ class BlogManager:
 
         # Kill npm process at the end
         kill_npm_process()
+
+    def handle_tips_page(self, blog_data):
+        """Create or update tips page for the blog's location."""
+        print("\n🎯 Processing tips page...")
+
+        country = blog_data['country']
+        state = blog_data.get('state')
+        country_code = blog_data.get('country_code')
+
+        # Generate tips path based on location
+        if state and country_code == 'US':
+            # For US states: united-states-california
+            from utils import serialize_location
+            tips_path = f"united-states-{serialize_location(state)}"
+            location_display = f"{country}, {state}"
+        else:
+            # For countries: trinidad-and-tobago
+            from utils import serialize_location
+            tips_path = serialize_location(country)
+            location_display = country
+
+        # Read current tips.js file
+        tips_file = self.base_dir / "src/data/tips.js"
+
+        try:
+            with open(tips_file, 'r', encoding='utf-8') as f:
+                tips_content = f.read()
+
+            # Check if this tips entry already exists
+            if f'path: "{tips_path}"' in tips_content:
+                print(f"✅ Tips page for {location_display} already exists")
+                return
+
+            # Extract existing tips array
+            start_marker = "const tips = ["
+            end_marker = "];"
+
+            start_idx = tips_content.find(start_marker)
+            end_idx = tips_content.find(end_marker, start_idx)
+
+            if start_idx == -1 or end_idx == -1:
+                print("⚠️  Could not parse tips.js file")
+                return
+
+            # Get existing tips entries
+            existing_tips = tips_content[start_idx + len(start_marker):end_idx].strip()
+
+            # Generate new tip entry
+            new_tip_entry = f"""  {{
+    id: {self.get_next_tip_id(tips_content)},
+    country: "{country}",
+    country_code: "{country_code}",
+    state: {f'"{state}"' if state else 'null'},
+    path: "{tips_path}",
+    title: "{location_display} Travel Tips",
+    description: "Essential tips for traveling in {location_display}",
+    created_at: new Date("{datetime.now().strftime('%Y-%m-%d')}"),
+  }}"""
+
+            # Add comma if there are existing tips
+            if existing_tips and not existing_tips.endswith(','):
+                existing_tips += ','
+
+            # Build new tips content
+            new_tips_content = f"""{tips_content[:start_idx]}{start_marker}
+{existing_tips}
+{new_tip_entry},
+{tips_content[end_idx:]}"""
+
+            # Write updated tips.js
+            with open(tips_file, 'w', encoding='utf-8') as f:
+                f.write(new_tips_content)
+
+            print(f"✅ Created tips page entry for {location_display}")
+
+        except Exception as e:
+            print(f"⚠️  Error updating tips page: {str(e)}")
+
+    def get_next_tip_id(self, tips_content):
+        """Get the next available tip ID."""
+        import re
+
+        # Find all existing IDs
+        id_matches = re.findall(r'id:\s*(\d+)', tips_content)
+        if not id_matches:
+            return 1
+
+        # Return the highest ID + 1
+        return max(int(id_str) for id_str in id_matches) + 1
 
 def main():
     """Entry point for the script."""

@@ -1,0 +1,247 @@
+#!/usr/bin/env python3
+"""
+Tips Management System
+Handles the complete workflow for saving and deploying tips content
+Following the established patterns from blog_manager.py
+"""
+
+import json
+import os
+import sys
+import subprocess
+import tempfile
+import shutil
+from pathlib import Path
+from datetime import datetime
+
+# Add the parent directory to sys.path to import common modules
+parent_dir = Path(__file__).parent.parent / "blog_management"
+sys.path.append(str(parent_dir))
+
+from process_management import ProcessManager
+from file_operations import FileOperations
+
+class TipsManager:
+    def __init__(self):
+        self.project_root = Path(__file__).parent.parent.parent
+        self.tips_content_dir = self.project_root / "src" / "data" / "tipsContent"
+        self.process_manager = ProcessManager(str(self.project_root))
+        self.file_ops = FileOperations()
+
+        # Ensure tips content directory exists
+        self.tips_content_dir.mkdir(parents=True, exist_ok=True)
+
+    def save_tips_content(self, tips_data):
+        """
+        Complete workflow for saving tips content
+        """
+        try:
+            print("🚀 Starting Tips Content Save Process...")
+            print("=" * 50)
+
+            # Validate tips data
+            if not self.validate_tips_data(tips_data):
+                return False
+
+            # Create backup commit point
+            backup_commit = self.process_manager.create_backup_commit("tips content update")
+            if not backup_commit:
+                print("❌ Failed to create backup commit")
+                return False
+
+            # Save tips content file
+            file_path = self.save_tips_file(tips_data)
+            if not file_path:
+                print("❌ Failed to save tips file")
+                self.process_manager.restore_backup(backup_commit)
+                return False
+
+            # Run linting
+            print("\n🔍 Running ESLint fix...")
+            if not self.process_manager.run_lint_fix():
+                print("❌ Linting failed")
+                self.process_manager.restore_backup(backup_commit)
+                return False
+
+            # Show preview and get user approval
+            self.show_tips_preview(tips_data)
+            if not self.get_user_approval():
+                print("❌ Changes rejected by user")
+                self.process_manager.restore_backup(backup_commit)
+                return False
+
+            # Commit and push changes
+            commit_message = self.generate_commit_message(tips_data)
+            if not self.process_manager.deploy_changes(commit_message, tips_data):
+                print("❌ Failed to deploy changes")
+                self.process_manager.restore_backup(backup_commit)
+                return False
+
+            print("\n✅ Tips content saved and deployed successfully!")
+            print(f"📍 Tips for {tips_data['tip']['title']} are now live!")
+            return True
+
+        except Exception as e:
+            print(f"❌ Error in tips save process: {e}")
+            return False
+
+    def validate_tips_data(self, tips_data):
+        """Validate the structure and content of tips data"""
+        try:
+            # Check required structure
+            if 'tip' not in tips_data or 'content' not in tips_data:
+                print("❌ Invalid tips data structure")
+                return False
+
+            tip_info = tips_data['tip']
+            required_fields = ['title', 'country', 'path']
+
+            for field in required_fields:
+                if field not in tip_info or not tip_info[field]:
+                    print(f"❌ Missing required field: {field}")
+                    return False
+
+            # Validate content sections
+            content = tips_data['content']
+            expected_sections = [
+                'essentialTips', 'budgetPlanning', 'foodDining',
+                'transportation', 'accommodation', 'safetyHealth'
+            ]
+
+            # Check if at least one section has content
+            has_content = any(content.get(section, '').strip() for section in expected_sections)
+            if not has_content:
+                print("❌ No content found in any section")
+                return False
+
+            print("✅ Tips data validation passed")
+            return True
+
+        except Exception as e:
+            print(f"❌ Validation error: {e}")
+            return False
+
+    def save_tips_file(self, tips_data):
+        """Save the tips content to JSON file"""
+        try:
+            tip_path = tips_data['tip']['path']
+            file_name = f"{tip_path}.json"
+            file_path = self.tips_content_dir / file_name
+
+            # Add timestamp
+            tips_data['lastModified'] = datetime.now().isoformat()
+            tips_data['tip']['updated_at'] = datetime.now().isoformat()
+
+            # Write file with proper formatting
+            with open(file_path, 'w', encoding='utf-8') as f:
+                json.dump(tips_data, f, indent=2, ensure_ascii=False)
+
+            print(f"✅ Tips content saved: {file_path}")
+            return file_path
+
+        except Exception as e:
+            print(f"❌ Error saving tips file: {e}")
+            return None
+
+    def show_tips_preview(self, tips_data):
+        """Show a preview of the tips content"""
+        tip_info = tips_data['tip']
+        content = tips_data['content']
+
+        print("\n" + "=" * 60)
+        print("📋 TIPS CONTENT PREVIEW")
+        print("=" * 60)
+        print(f"🌍 Location: {tip_info['title']}")
+        print(f"🗂️  Path: /tips/{tip_info['path']}")
+        print(f"📅 Updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        print("-" * 60)
+
+        sections = [
+            ('🎯 Essential Tips', 'essentialTips'),
+            ('💰 Budget Planning', 'budgetPlanning'),
+            ('🍽️ Food & Dining', 'foodDining'),
+            ('🚗 Transportation', 'transportation'),
+            ('🏨 Accommodation', 'accommodation'),
+            ('⚠️ Safety & Health', 'safetyHealth'),
+        ]
+
+        for title, key in sections:
+            section_content = content.get(key, '').strip()
+            if section_content:
+                print(f"\n{title}:")
+                # Show first 100 characters of content
+                preview = section_content.replace('<p>', '').replace('</p>', '')
+                preview = preview.replace('<ul>', '').replace('</ul>', '')
+                preview = preview.replace('<li>', '• ').replace('</li>', '')
+                preview = preview.replace('<strong>', '').replace('</strong>', '')
+                if len(preview) > 100:
+                    preview = preview[:100] + "..."
+                print(f"  {preview}")
+            else:
+                print(f"\n{title}: (empty)")
+
+        print("\n" + "=" * 60)
+
+    def get_user_approval(self):
+        """Get user approval for the changes"""
+        print("\n🤔 Review the tips content above.")
+        print("👀 The content will be immediately available on your website.")
+
+        while True:
+            response = input("\n✅ Approve and deploy these changes? (y/n): ").lower().strip()
+            if response in ['y', 'yes']:
+                return True
+            elif response in ['n', 'no']:
+                return False
+            else:
+                print("Please enter 'y' for yes or 'n' for no.")
+
+    def generate_commit_message(self, tips_data):
+        """Generate a descriptive commit message"""
+        tip_info = tips_data['tip']
+
+        if tip_info.get('state'):
+            location = f"{tip_info['country']}, {tip_info['state']}"
+        else:
+            location = tip_info['country']
+
+        return f"Update tips content: {location}"
+
+def main():
+    """Main function to handle command line execution"""
+    if len(sys.argv) != 2:
+        print("Usage: python tips_manager.py <tips_json_file>")
+        print("Example: python tips_manager.py /path/to/trinidad-and-tobago-tips.json")
+        sys.exit(1)
+
+    tips_file_path = sys.argv[1]
+
+    if not os.path.exists(tips_file_path):
+        print(f"❌ Tips file not found: {tips_file_path}")
+        sys.exit(1)
+
+    try:
+        # Load tips data from file
+        with open(tips_file_path, 'r', encoding='utf-8') as f:
+            tips_data = json.load(f)
+
+        # Initialize tips manager and save content
+        manager = TipsManager()
+        success = manager.save_tips_content(tips_data)
+
+        if success:
+            print("\n🎉 Tips content deployment completed successfully!")
+            sys.exit(0)
+        else:
+            print("\n💥 Tips content deployment failed!")
+            sys.exit(1)
+
+    except json.JSONDecodeError as e:
+        print(f"❌ Invalid JSON file: {e}")
+        sys.exit(1)
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()

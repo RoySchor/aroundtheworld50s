@@ -32,7 +32,7 @@ const trinidadTobagoContent: BlogPostContent = {
   `,
   tipsSection:
     "💥 Insider Tips: Your Key to an Unforgettable Trip (read more…)",
-  tipsLink: "https://example.com/trinidad-tobago-tips",
+  tipsLink: "/tips/trinidad-and-tobago",
   itineraries: [
     {
       title: "Itinerary 📍",

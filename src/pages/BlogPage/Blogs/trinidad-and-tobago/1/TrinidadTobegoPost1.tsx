@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../../../../../styles/layout.css";
 import "../../BlogPost.css";
 import TwoColumnLayout from "../../../../../components/TwoColumnLayout/TwoColumnLayout";
@@ -117,10 +118,8 @@ const TrinidadTobegoPost1 = () => {
           {TRINIDAD_TOBAGO_POST_1.tipsSection && (
             <div className="post-bolded-text post-tips-section-container">
               {TRINIDAD_TOBAGO_POST_1.tipsLink ? (
-                <a
-                  href={TRINIDAD_TOBAGO_POST_1.tipsLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  to={TRINIDAD_TOBAGO_POST_1.tipsLink}
                   className="post-tips-link"
                   dangerouslySetInnerHTML={{ __html: TRINIDAD_TOBAGO_POST_1.tipsSection }}
                 />

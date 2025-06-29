@@ -3,6 +3,7 @@ import BlogGeneratorForm from "./components/BlogGeneratorForm/BlogGeneratorForm"
 import JsonPreview from "./components/JsonPreview/JsonPreview";
 import BlogPreview from "./components/BlogPreview/BlogPreview";
 import GalleryManager from "./components/GalleryManager/GalleryManager";
+import TipsEditor from "./components/TipsEditor/TipsEditor";
 import AdminLogin from "../../components/AdminLogin/AdminLogin";
 import { useSmartDebounce } from "./hooks/useDebounce";
 import "./AdminPage.css";
@@ -23,7 +24,6 @@ const AdminPage = () => {
     blog_subtitle: "",
     blog_description_detailed: "",
     blog_tips_section: "",
-    blog_tips_link: "",
     include_itineraries: false,
     itineraries: [{ title: "", items: [""] }],
     include_maps: false,
@@ -233,7 +233,7 @@ const AdminPage = () => {
           <div>
             <h1 className="admin-page-title">Content Management</h1>
             <p className="admin-page-subtitle">
-              Manage blog posts and gallery images
+              Manage blog posts, gallery images, and travel tips
             </p>
           </div>
           <button
@@ -259,6 +259,12 @@ const AdminPage = () => {
           onClick={() => setMainTab("gallery")}
         >
           🖼️ Gallery Manager
+        </button>
+        <button
+          className={`admin-main-tab ${mainTab === "tips" ? "active" : ""}`}
+          onClick={() => setMainTab("tips")}
+        >
+          💡 Tips Editor
         </button>
       </div>
 
@@ -310,8 +316,10 @@ const AdminPage = () => {
             </div>
           </div>
         </div>
-      ) : (
+      ) : mainTab === "gallery" ? (
         <GalleryManager />
+      ) : (
+        <TipsEditor />
       )}
     </div>
   );
