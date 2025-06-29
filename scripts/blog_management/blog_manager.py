@@ -155,7 +155,7 @@ class BlogManager:
             print("\nAll changes have been reverted. You can try again with different content.")
         else:
             # Deploy changes
-            deploy_changes(self.base_dir)
+            deploy_changes(self.base_dir, blog_data)
             print("\n✨ Blog post has been successfully added and deployed! ✨")
             print("\nYou can now remove the folder from your Desktop if you want!")
 

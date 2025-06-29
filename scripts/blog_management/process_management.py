@@ -82,13 +82,26 @@ def revert_changes(base_dir, assets_dir, blog_component_dir, blog_data, post_ind
         print("1. git reset --hard HEAD")
         print("2. git clean -fd")
 
-def deploy_changes(base_dir):
+def deploy_changes(base_dir, blog_data=None):
     """Commit, push, and deploy the changes."""
     print("\nDeploying changes...")
     try:
+        # Create a descriptive commit message
+        if blog_data:
+            country = blog_data.get('country', 'Unknown')
+            state = blog_data.get('state')
+            if state:
+                commit_message = f"Add new blog post: {country}, {state}"
+            else:
+                commit_message = f"Add new blog post: {country}"
+        else:
+            commit_message = "Add new blog post"
+
+        print(f"📝 Commit message: {commit_message}")
+
         # Commit changes
         subprocess.run(['git', 'add', '.'], cwd=base_dir, check=True)
-        subprocess.run(['git', 'commit', '-m', 'Add new blog post'], cwd=base_dir, check=True)
+        subprocess.run(['git', 'commit', '-m', commit_message], cwd=base_dir, check=True)
         # Push changes
         subprocess.run(['git', 'push'], cwd=base_dir, check=True)
         # Deploy
