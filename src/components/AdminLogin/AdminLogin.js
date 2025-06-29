@@ -59,6 +59,12 @@ const AdminLogin = ({ onLogin }) => {
           <p className="admin-login-subtitle">
             Enter the password to access the blog generator
           </p>
+          <p className="admin-login-subtitle">
+            <strong>
+              This page is optimized for desktop or laptop screens. Using this
+              tool on smaller devices may lead to display issues.
+            </strong>
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="admin-login-form">
