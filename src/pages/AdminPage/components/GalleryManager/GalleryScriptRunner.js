@@ -23,8 +23,6 @@ const GalleryScriptRunner = ({ newImages, removedImages, onComplete }) => {
     return `python3 -m scripts.gallery_management.gallery_manager update '${dataString}'`;
   };
 
-
-
   const copyCommand = async () => {
     try {
       await navigator.clipboard.writeText(getTerminalCommand());
@@ -71,28 +69,29 @@ const GalleryScriptRunner = ({ newImages, removedImages, onComplete }) => {
           </div>
 
           <div className="bg-blue-50 border border-blue-200 rounded p-3 mb-4">
-                        <p className="text-sm text-blue-800">
-              <strong>💡 How it works:</strong> You'll run a simple terminal script
-              to apply the gallery changes - just like the blog management system.
+            <p className="text-sm text-blue-800">
+              <strong>💡 How it works:</strong> You'll run a simple terminal
+              script to apply the gallery changes - just like the blog
+              management system.
             </p>
           </div>
 
-                      {newImages.length > 0 && (
-              <div className="bg-yellow-50 border border-yellow-200 rounded p-3 mb-4">
-                <p className="text-sm text-yellow-800">
-                  <strong>⚠️ Important:</strong> Make sure you have your new image
-                  files saved locally before running the script.
-                </p>
-              </div>
-            )}
+          {newImages.length > 0 && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded p-3 mb-4">
+              <p className="text-sm text-yellow-800">
+                <strong>⚠️ Important:</strong> Make sure you have your new image
+                files saved locally before running the script.
+              </p>
+            </div>
+          )}
 
           <div className="gallery-script-actions">
-                          <button
-                onClick={handleStartProcess}
-                className="gallery-script-btn primary"
-              >
-                🚀 Get Gallery Script
-              </button>
+            <button
+              onClick={handleStartProcess}
+              className="gallery-script-btn primary"
+            >
+              🚀 Get Gallery Script
+            </button>
           </div>
         </div>
       </div>
@@ -106,30 +105,30 @@ const GalleryScriptRunner = ({ newImages, removedImages, onComplete }) => {
           📋 Gallery Update Instructions
         </h3>
 
-                 {/* Images to Remove */}
-         {removedImages.length > 0 && (
-           <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-             <h4 className="font-semibold text-gray-800 mb-2">
-               🗑️ Images to Remove
-             </h4>
-             <p className="text-sm text-gray-700 mb-2">
-               The following images will be removed from your gallery:
-             </p>
-             <ul className="text-xs bg-white p-2 rounded border space-y-1">
-               {removedImages.map((img, index) => (
-                 <li key={index} className="font-mono text-red-600">
-                   🗑️ {img.name}
-                 </li>
-               ))}
-             </ul>
-           </div>
-         )}
+        {/* Images to Remove */}
+        {removedImages.length > 0 && (
+          <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+            <h4 className="font-semibold text-gray-800 mb-2">
+              🗑️ Images to Remove
+            </h4>
+            <p className="text-sm text-gray-700 mb-2">
+              The following images will be removed from your gallery:
+            </p>
+            <ul className="text-xs bg-white p-2 rounded border space-y-1">
+              {removedImages.map((img, index) => (
+                <li key={index} className="font-mono text-red-600">
+                  🗑️ {img.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
-                 {/* Run Terminal Command */}
-         <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-           <h4 className="font-semibold text-gray-800 mb-2">
-             💻 Run the Gallery Script
-           </h4>
+        {/* Run Terminal Command */}
+        <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+          <h4 className="font-semibold text-gray-800 mb-2">
+            💻 Run the Gallery Script
+          </h4>
           <p className="text-sm text-gray-700 mb-3">
             Copy and run this command in your terminal from your project root:
           </p>
@@ -162,8 +161,6 @@ const GalleryScriptRunner = ({ newImages, removedImages, onComplete }) => {
             </p>
           </div>
         </div>
-
-
 
         {/* Actions */}
         <div className="gallery-script-actions">
