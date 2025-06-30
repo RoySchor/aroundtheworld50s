@@ -8,11 +8,19 @@ def run_lint_fix(base_dir):
     """Run npm run lint:fix to fix any linting issues."""
     print("\nRunning npm run lint:fix to fix any formatting issues...")
     try:
-        subprocess.run(['npm', 'run', 'lint:fix'], cwd=base_dir, check=True)
+        result = subprocess.run(['npm', 'run', 'lint:fix'], cwd=base_dir, capture_output=True, text=True, check=True)
         print("✅ Linting completed successfully!")
+        return True
     except subprocess.CalledProcessError as e:
         print(f"⚠️ Warning: Linting failed with error: {e}")
         print("You may want to run 'npm run lint:fix' manually to fix any issues")
+        if e.stdout:
+            print("\nLinting output:")
+            print(e.stdout)
+        if e.stderr:
+            print("\nLinting errors:")
+            print(e.stderr)
+        return False
 
 def run_npm_start(base_dir):
     """Run npm start in a new terminal window."""
