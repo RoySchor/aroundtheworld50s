@@ -361,14 +361,28 @@ class TipsManager:
 
             # Convert HTML content back to markdown in each section
             if 'content' in tips_data:
+                transformed_content = {}
                 for section_key, html_content in tips_data['content'].items():
-                    if html_content:  # Only convert non-empty content
-                        markdown_content = self.convert_html_to_markdown(html_content)
-                        # Update the structure to match the edit form
-                        tips_data['content'][section_key] = {
-                            'content': markdown_content,
-                            'enabled': bool(html_content.strip())  # Enable if content exists
-                        }
+                    # Handle both string content and object with content/enabled properties
+                    if isinstance(html_content, dict):
+                        content = html_content.get('content', '')
+                        enabled = html_content.get('enabled', True)
+                    else:
+                        content = html_content
+                        enabled = bool(html_content.strip())
+
+                    if content:  # Only convert non-empty content
+                        markdown_content = self.convert_html_to_markdown(content)
+                    else:
+                        markdown_content = ''
+
+                    # Update the structure to match the edit form
+                    transformed_content[section_key] = {
+                        'content': markdown_content,
+                        'enabled': enabled
+                    }
+
+                tips_data['content'] = transformed_content
 
             return tips_data
 
@@ -435,12 +449,16 @@ def main():
         sys.exit(1)
 
     try:
-        # Load tips data from file
-        with open(tips_file_path, 'r', encoding='utf-8') as f:
-            tips_data = json.load(f)
-
-        # Initialize tips manager and save content
+        # Initialize tips manager
         manager = TipsManager()
+
+        # Load and convert tips data from file
+        tips_data = manager.load_tips_file(tips_file_path)
+        if not tips_data:
+            print("\n❌ Failed to load tips data!")
+            sys.exit(1)
+
+        # Save content
         success = manager.save_tips_content(tips_data)
 
         if success:
@@ -450,9 +468,6 @@ def main():
             print("\n💥 Tips content deployment failed!")
             sys.exit(1)
 
-    except json.JSONDecodeError as e:
-        print(f"❌ Invalid JSON file: {e}")
-        sys.exit(1)
     except Exception as e:
         print(f"❌ Error: {e}")
         sys.exit(1)
