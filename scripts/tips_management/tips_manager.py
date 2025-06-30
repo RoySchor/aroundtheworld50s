@@ -19,14 +19,13 @@ parent_dir = Path(__file__).parent.parent / "blog_management"
 sys.path.append(str(parent_dir))
 
 from process_management import ProcessManager
-from file_operations import FileOperations
+import file_operations
 
 class TipsManager:
     def __init__(self):
         self.project_root = Path(__file__).parent.parent.parent
         self.tips_content_dir = self.project_root / "src" / "data" / "tipsContent"
         self.process_manager = ProcessManager(str(self.project_root))
-        self.file_ops = FileOperations()
 
         # Ensure tips content directory exists
         self.tips_content_dir.mkdir(parents=True, exist_ok=True)
@@ -109,9 +108,22 @@ class TipsManager:
             ]
 
             # Check if at least one section has content
-            has_content = any(content.get(section, '').strip() for section in expected_sections)
+            has_content = False
+            for section in expected_sections:
+                section_data = content.get(section)
+                if (
+                    section_data
+                    and isinstance(section_data, dict)
+                    and section_data.get('content')
+                    and isinstance(section_data['content'], str)
+                    and section_data['content'].strip()
+                    and section_data.get('enabled', True)  # Check if section is enabled, default to True
+                ):
+                    has_content = True
+                    break
+
             if not has_content:
-                print("❌ No content found in any section")
+                print("❌ No content found in any enabled section")
                 return False
 
             print("✅ Tips data validation passed")
@@ -166,19 +178,24 @@ class TipsManager:
         ]
 
         for title, key in sections:
-            section_content = content.get(key, '').strip()
-            if section_content:
-                print(f"\n{title}:")
-                # Show first 100 characters of content
-                preview = section_content.replace('<p>', '').replace('</p>', '')
-                preview = preview.replace('<ul>', '').replace('</ul>', '')
-                preview = preview.replace('<li>', '• ').replace('</li>', '')
-                preview = preview.replace('<strong>', '').replace('</strong>', '')
-                if len(preview) > 100:
-                    preview = preview[:100] + "..."
-                print(f"  {preview}")
+            section_data = content.get(key, {})
+            section_content = section_data.get('content', '').strip() if isinstance(section_data, dict) else ''
+            section_enabled = section_data.get('enabled', True) if isinstance(section_data, dict) else True
+
+            print(f"\n{title}:")
+            if section_enabled:
+                if section_content:
+                    preview = section_content.replace('<p>', '').replace('</p>', '')
+                    preview = preview.replace('<ul>', '').replace('</ul>', '')
+                    preview = preview.replace('<li>', '• ').replace('</li>', '')
+                    preview = preview.replace('<strong>', '').replace('</strong>', '')
+                    if len(preview) > 100:
+                        preview = preview[:100] + "..."
+                    print(f"  {preview}")
+                else:
+                    print("  (empty)")
             else:
-                print(f"\n{title}: (empty)")
+                print("  (disabled)")
 
         print("\n" + "=" * 60)
 
