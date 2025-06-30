@@ -61,8 +61,9 @@ def revert_changes(base_dir, assets_dir, blog_component_dir, blog_data, post_ind
     """Revert all changes made by the script."""
     print("\nReverting all changes...")
 
-    # Kill npm start process
     kill_npm_process()
+
+    clear_webpack_cache(base_dir)
 
     try:
         # Get the current commit hash
