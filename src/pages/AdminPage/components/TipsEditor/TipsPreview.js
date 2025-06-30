@@ -2,27 +2,59 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const TipsPreview = ({ tip, tipsData }) => {
-  const formatListText = (text) => {
+  const formatMarkdownText = (text) => {
     if (!text) return "";
 
-    return text
-      .split("\n")
-      .map((line) => {
-        const trimmed = line.trim();
-        if (
-          trimmed.startsWith("•") ||
-          trimmed.startsWith("-") ||
-          trimmed.startsWith("*")
-        ) {
-          return `<li>${trimmed.substring(1).trim()}</li>`;
-        } else if (/^\d+\./.test(trimmed)) {
-          return `<li>${trimmed.replace(/^\d+\.\s*/, "")}</li>`;
-        } else if (trimmed) {
-          return `<p>${trimmed}</p>`;
+    // Split text into lines
+    const lines = text.split("\n");
+    const result = [];
+    let currentList = [];
+    let inList = false;
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+
+      // Check if line is a bullet point (starts and ends with •)
+      if (line.startsWith("•") && line.endsWith("•")) {
+        const listItem = line.slice(1, -1).trim();
+
+        // Apply text formatting (bold and italic) to list item
+        const formattedItem = applyTextFormatting(listItem);
+        currentList.push(`<li>${formattedItem}</li>`);
+        inList = true;
+      } else {
+        if (inList && currentList.length > 0) {
+          result.push(`<ul>${currentList.join("")}</ul>`);
+          currentList = [];
+          inList = false;
         }
-        return "";
-      })
-      .join("");
+
+        if (line === "") {
+          result.push("<br>");
+        } else if (line.length > 0) {
+          const formattedLine = applyTextFormatting(line);
+          result.push(`<p>${formattedLine}</p>`);
+        }
+      }
+    }
+
+    if (inList && currentList.length > 0) {
+      result.push(`<ul>${currentList.join("")}</ul>`);
+    }
+
+    return result.join("");
+  };
+
+  const applyTextFormatting = (text) => {
+    if (!text) return "";
+
+    // Apply bold formatting (**text**)
+    let formatted = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+
+    // Apply italic formatting (*text*) - but not if it's part of **text**
+    formatted = formatted.replace(/(?<!\*)\*([^*]+?)\*(?!\*)/g, "<em>$1</em>");
+
+    return formatted;
   };
 
   const sections = [
@@ -75,7 +107,7 @@ const TipsPreview = ({ tip, tipsData }) => {
               <div
                 className="tips-preview-section-content"
                 dangerouslySetInnerHTML={{
-                  __html: formatListText(section.content),
+                  __html: formatMarkdownText(section.content),
                 }}
               />
             ) : (

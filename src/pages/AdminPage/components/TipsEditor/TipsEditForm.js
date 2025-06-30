@@ -45,42 +45,67 @@ const TipsEditForm = ({ tipsData, onDataChange }) => {
     onDataChange(sectionKey, value);
   };
 
-  const formatListText = (text) => {
-    // Convert bullet points and numbered lists to HTML
-    if (!text) return "";
-
-    return text
-      .split("\n")
-      .map((line) => {
-        const trimmed = line.trim();
-        if (
-          trimmed.startsWith("•") ||
-          trimmed.startsWith("-") ||
-          trimmed.startsWith("*")
-        ) {
-          return `<li>${trimmed.substring(1).trim()}</li>`;
-        } else if (/^\d+\./.test(trimmed)) {
-          return `<li>${trimmed.replace(/^\d+\.\s*/, "")}</li>`;
-        } else if (trimmed) {
-          return `<p>${trimmed}</p>`;
-        }
-        return "";
-      })
-      .join("");
-  };
-
   return (
     <div className="tips-edit-form">
       <div className="tips-edit-instructions">
-        <h4>💡 Editing Tips:</h4>
-        <ul>
-          <li>
-            Use bullet points (•, -, *) or numbered lists (1., 2., 3.) for
-            organized content
-          </li>
-          <li>Separate different topics with blank lines</li>
-          <li>Content will be automatically formatted when saved</li>
-        </ul>
+        <h4>📝 Formatting Guide:</h4>
+        <div className="tips-formatting-guide">
+          <div className="tips-formatting-section">
+            <h5>✨ Text Formatting:</h5>
+            <ul>
+              <li>
+                <code>**bold text**</code> → <strong>bold text</strong>
+              </li>
+              <li>
+                <code>*italic text*</code> → <em>italic text</em>
+              </li>
+            </ul>
+          </div>
+
+          <div className="tips-formatting-section">
+            <h5>📋 Lists:</h5>
+            <ul>
+              <li>
+                <code>• list item •</code> → Bullet point
+              </li>
+              <li>Multiple bullet points create a list automatically</li>
+              <li>Example:</li>
+            </ul>
+            <div className="tips-formatting-example">
+              <div className="tips-example-input">
+                <strong>You type:</strong>
+                <br />
+                <code>
+                  Here are some budget tips:
+                  <br />
+                  • Save money on food •<br />
+                  • Use public transport •<br />• Book early for discounts •
+                </code>
+              </div>
+              <div className="tips-example-output">
+                <strong>You get:</strong>
+                <br />
+                Here are some budget tips:
+                <br />
+                <ul>
+                  <li>Save money on food</li>
+                  <li>Use public transport</li>
+                  <li>Book early for discounts</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="tips-formatting-section">
+            <h5>💡 Pro Tips:</h5>
+            <ul>
+              <li>Empty lines create line breaks</li>
+              <li>
+                You can use **bold** and *italic* inside • bullet points •
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
 
       {sections.map((section) => (
@@ -93,19 +118,6 @@ const TipsEditForm = ({ tipsData, onDataChange }) => {
             placeholder={section.placeholder}
             rows={8}
           />
-
-          {/* Preview of formatted content */}
-          {tipsData[section.key] && (
-            <div className="tips-edit-preview">
-              <strong>Preview:</strong>
-              <div
-                className="tips-formatted-content"
-                dangerouslySetInnerHTML={{
-                  __html: formatListText(tipsData[section.key]),
-                }}
-              />
-            </div>
-          )}
         </div>
       ))}
     </div>

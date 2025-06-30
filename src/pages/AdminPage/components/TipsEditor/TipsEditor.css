@@ -116,19 +116,76 @@
 }
 
 .tips-edit-instructions {
-  @apply bg-blue-50 border border-blue-200 rounded-lg p-4;
+  @apply bg-blue-50 border border-blue-200 rounded-lg p-6;
 }
 
 .tips-edit-instructions h4 {
-  @apply text-blue-800 font-semibold mb-2 flex items-center gap-2;
+  @apply text-blue-800 font-semibold mb-4 flex items-center gap-2;
 }
 
-.tips-edit-instructions ul {
-  @apply space-y-1 text-blue-700 text-sm;
+.tips-formatting-guide {
+  @apply space-y-4;
 }
 
-.tips-edit-instructions li {
-  @apply leading-relaxed;
+.tips-formatting-section {
+  @apply bg-white rounded-lg p-4 border border-blue-100;
+}
+
+.tips-formatting-section h5 {
+  @apply text-blue-700 font-medium mb-2 text-sm;
+}
+
+.tips-formatting-section ul {
+  @apply text-blue-600 text-sm space-y-1 mb-0;
+}
+
+.tips-formatting-section li {
+  @apply flex items-start leading-relaxed;
+}
+
+.tips-formatting-section li::before {
+  content: "•";
+  @apply text-blue-400 font-bold mr-2 flex-shrink-0;
+}
+
+.tips-formatting-section code {
+  @apply bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs font-mono;
+}
+
+/* Formatting Example Styles */
+.tips-formatting-example {
+  @apply mt-3 grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg border;
+}
+
+.tips-example-input,
+.tips-example-output {
+  @apply text-xs;
+}
+
+.tips-example-input strong,
+.tips-example-output strong {
+  @apply text-gray-800 font-semibold;
+}
+
+.tips-example-input code {
+  @apply block mt-1 bg-white p-2 rounded border text-gray-600 font-mono leading-relaxed;
+}
+
+.tips-example-output {
+  @apply mt-1;
+}
+
+.tips-example-output ul {
+  @apply mt-1 ml-4 space-y-0;
+}
+
+.tips-example-output li {
+  @apply text-gray-600 text-xs;
+}
+
+.tips-example-output li::before {
+  content: "•";
+  @apply text-gray-400 mr-2;
 }
 
 .tips-edit-section {
