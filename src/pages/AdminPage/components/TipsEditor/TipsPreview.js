@@ -61,34 +61,40 @@ const TipsPreview = ({ tip, tipsData }) => {
     {
       key: "essentialTips",
       title: "🎯 Essential Tips",
-      content: tipsData.essentialTips,
+      content: tipsData.essentialTips?.content,
+      enabled: tipsData.essentialTips?.enabled,
     },
     {
       key: "budgetPlanning",
       title: "💰 Budget Planning",
-      content: tipsData.budgetPlanning,
+      content: tipsData.budgetPlanning?.content,
+      enabled: tipsData.budgetPlanning?.enabled,
     },
     {
       key: "foodDining",
       title: "🍽️ Food & Dining",
-      content: tipsData.foodDining,
+      content: tipsData.foodDining?.content,
+      enabled: tipsData.foodDining?.enabled,
     },
     {
       key: "transportation",
       title: "🚗 Transportation",
-      content: tipsData.transportation,
+      content: tipsData.transportation?.content,
+      enabled: tipsData.transportation?.enabled,
     },
     {
       key: "accommodation",
       title: "🏨 Accommodation",
-      content: tipsData.accommodation,
+      content: tipsData.accommodation?.content,
+      enabled: tipsData.accommodation?.enabled,
     },
     {
       key: "safetyHealth",
       title: "⚠️ Safety & Health",
-      content: tipsData.safetyHealth,
+      content: tipsData.safetyHealth?.content,
+      enabled: tipsData.safetyHealth?.enabled,
     },
-  ];
+  ].filter((section) => section.enabled); // Only show enabled sections
 
   return (
     <div className="tips-preview">
@@ -100,25 +106,40 @@ const TipsPreview = ({ tip, tipsData }) => {
       </div>
 
       <div className="tips-preview-content">
-        {sections.map((section) => (
-          <div key={section.key} className="tips-preview-section">
-            <h3>{section.title}</h3>
-            {section.content ? (
-              <div
-                className="tips-preview-section-content"
-                dangerouslySetInnerHTML={{
-                  __html: formatMarkdownText(section.content),
-                }}
-              />
-            ) : (
-              <div className="tips-preview-placeholder">
-                <p>
-                  <em>No content added yet for this section.</em>
-                </p>
-              </div>
-            )}
+        {sections.length > 0 ? (
+          sections.map((section) => (
+            <div key={section.key} className="tips-preview-section">
+              <h3>{section.title}</h3>
+              {section.content ? (
+                <div
+                  className="tips-preview-section-content"
+                  dangerouslySetInnerHTML={{
+                    __html: formatMarkdownText(section.content),
+                  }}
+                />
+              ) : (
+                <div className="tips-preview-placeholder">
+                  <p>
+                    <em>No content added yet for this section.</em>
+                  </p>
+                </div>
+              )}
+            </div>
+          ))
+        ) : (
+          <div className="tips-preview-no-sections">
+            <div className="tips-preview-placeholder">
+              <h3>📝 No Sections Enabled</h3>
+              <p>
+                <em>
+                  You haven't enabled any sections yet. Go back to the Edit Tips
+                  tab and check the boxes next to the sections you want to
+                  include in your tips page.
+                </em>
+              </p>
+            </div>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
@@ -132,12 +153,30 @@ TipsPreview.propTypes = {
     state: PropTypes.string,
   }).isRequired,
   tipsData: PropTypes.shape({
-    essentialTips: PropTypes.string,
-    budgetPlanning: PropTypes.string,
-    foodDining: PropTypes.string,
-    transportation: PropTypes.string,
-    accommodation: PropTypes.string,
-    safetyHealth: PropTypes.string,
+    essentialTips: PropTypes.shape({
+      content: PropTypes.string,
+      enabled: PropTypes.bool,
+    }),
+    budgetPlanning: PropTypes.shape({
+      content: PropTypes.string,
+      enabled: PropTypes.bool,
+    }),
+    foodDining: PropTypes.shape({
+      content: PropTypes.string,
+      enabled: PropTypes.bool,
+    }),
+    transportation: PropTypes.shape({
+      content: PropTypes.string,
+      enabled: PropTypes.bool,
+    }),
+    accommodation: PropTypes.shape({
+      content: PropTypes.string,
+      enabled: PropTypes.bool,
+    }),
+    safetyHealth: PropTypes.shape({
+      content: PropTypes.string,
+      enabled: PropTypes.bool,
+    }),
   }).isRequired,
 };
 

@@ -24,37 +24,73 @@ const TipsEditor = () => {
       if (existingContent && existingContent.content) {
         // Load existing content for editing
         setTipsData({
-          essentialTips: existingContent.content.essentialTips || "",
-          budgetPlanning: existingContent.content.budgetPlanning || "",
-          foodDining: existingContent.content.foodDining || "",
-          transportation: existingContent.content.transportation || "",
-          accommodation: existingContent.content.accommodation || "",
-          safetyHealth: existingContent.content.safetyHealth || "",
+          essentialTips: {
+            content: existingContent.content.essentialTips || "",
+            enabled: !!(
+              existingContent.content.essentialTips ||
+              existingContent.sectionConfig?.essentialTips
+            ),
+          },
+          budgetPlanning: {
+            content: existingContent.content.budgetPlanning || "",
+            enabled: !!(
+              existingContent.content.budgetPlanning ||
+              existingContent.sectionConfig?.budgetPlanning
+            ),
+          },
+          foodDining: {
+            content: existingContent.content.foodDining || "",
+            enabled: !!(
+              existingContent.content.foodDining ||
+              existingContent.sectionConfig?.foodDining
+            ),
+          },
+          transportation: {
+            content: existingContent.content.transportation || "",
+            enabled: !!(
+              existingContent.content.transportation ||
+              existingContent.sectionConfig?.transportation
+            ),
+          },
+          accommodation: {
+            content: existingContent.content.accommodation || "",
+            enabled: !!(
+              existingContent.content.accommodation ||
+              existingContent.sectionConfig?.accommodation
+            ),
+          },
+          safetyHealth: {
+            content: existingContent.content.safetyHealth || "",
+            enabled: !!(
+              existingContent.content.safetyHealth ||
+              existingContent.sectionConfig?.safetyHealth
+            ),
+          },
         });
         setIsExistingContent(true);
         console.log(`✅ Loaded existing content for ${tip.title}`);
       } else {
-        // Initialize with empty content for new tips page
+        // Initialize with default enabled sections for new tips page
         setTipsData({
-          essentialTips: "",
-          budgetPlanning: "",
-          foodDining: "",
-          transportation: "",
-          accommodation: "",
-          safetyHealth: "",
+          essentialTips: { content: "", enabled: true },
+          budgetPlanning: { content: "", enabled: true },
+          foodDining: { content: "", enabled: true },
+          transportation: { content: "", enabled: true },
+          accommodation: { content: "", enabled: false },
+          safetyHealth: { content: "", enabled: false },
         });
         setIsExistingContent(false);
         console.log(`📝 Creating new tips page for ${tip.title}`);
       }
     } catch (error) {
-      // Fallback to empty content if loading fails
+      // Fallback to default enabled sections if loading fails
       setTipsData({
-        essentialTips: "",
-        budgetPlanning: "",
-        foodDining: "",
-        transportation: "",
-        accommodation: "",
-        safetyHealth: "",
+        essentialTips: { content: "", enabled: true },
+        budgetPlanning: { content: "", enabled: true },
+        foodDining: { content: "", enabled: true },
+        transportation: { content: "", enabled: true },
+        accommodation: { content: "", enabled: false },
+        safetyHealth: { content: "", enabled: false },
       });
       setIsExistingContent(false);
       console.log(
@@ -65,10 +101,13 @@ const TipsEditor = () => {
     }
   };
 
-  const handleTipsDataChange = (section, value) => {
+  const handleTipsDataChange = (section, field, value) => {
     setTipsData((prev) => ({
       ...prev,
-      [section]: value,
+      [section]: {
+        ...prev[section],
+        [field]: value,
+      },
     }));
   };
 

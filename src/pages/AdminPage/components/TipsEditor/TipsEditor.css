@@ -189,11 +189,45 @@
 }
 
 .tips-edit-section {
-  @apply space-y-3;
+  @apply space-y-3 bg-gray-50 rounded-lg p-4 border border-gray-200;
+}
+
+/* Section Header with Toggle */
+.tips-section-header {
+  @apply flex items-center justify-between mb-3;
+}
+
+.tips-section-toggle {
+  @apply flex items-center gap-3;
+}
+
+.tips-toggle-checkbox {
+  @apply w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2;
 }
 
 .tips-edit-label {
-  @apply text-lg font-semibold text-gray-800 flex items-center gap-2;
+  @apply text-lg font-semibold text-gray-800 flex items-center gap-2 mb-0 cursor-pointer;
+}
+
+.tips-section-status {
+  @apply text-sm font-medium px-3 py-1 rounded-full;
+}
+
+.tips-section-status.enabled {
+  @apply bg-green-100 text-green-700;
+}
+
+.tips-section-status.disabled {
+  @apply bg-gray-100 text-gray-600;
+}
+
+/* Disabled Section Note */
+.tips-section-disabled-note {
+  @apply bg-blue-50 border border-blue-200 rounded-lg p-4 text-center;
+}
+
+.tips-section-disabled-note p {
+  @apply text-blue-700 text-sm mb-0;
 }
 
 .tips-edit-textarea {
@@ -265,6 +299,22 @@
 
 .tips-preview-placeholder {
   @apply text-gray-500 italic;
+}
+
+.tips-preview-no-sections {
+  @apply text-center py-12;
+}
+
+.tips-preview-no-sections .tips-preview-placeholder {
+  @apply bg-blue-50 border border-blue-200 rounded-lg p-8;
+}
+
+.tips-preview-no-sections h3 {
+  @apply text-blue-800 font-semibold mb-4;
+}
+
+.tips-preview-no-sections p {
+  @apply text-blue-700 text-base leading-relaxed;
 }
 
 /* Tab Content Scrolling Fix */

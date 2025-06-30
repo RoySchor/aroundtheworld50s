@@ -42,7 +42,11 @@ const TipsEditForm = ({ tipsData, onDataChange }) => {
   ];
 
   const handleTextChange = (sectionKey, value) => {
-    onDataChange(sectionKey, value);
+    onDataChange(sectionKey, "content", value);
+  };
+
+  const handleToggleSection = (sectionKey, enabled) => {
+    onDataChange(sectionKey, "enabled", enabled);
   };
 
   return (
@@ -103,35 +107,97 @@ const TipsEditForm = ({ tipsData, onDataChange }) => {
               <li>
                 You can use **bold** and *italic* inside • bullet points •
               </li>
+              <li>✅ Enable/disable sections using the checkboxes above</li>
+              <li>❌ Disabled sections won't appear on your tips page</li>
             </ul>
           </div>
         </div>
       </div>
 
-      {sections.map((section) => (
-        <div key={section.key} className="tips-edit-section">
-          <label className="tips-edit-label">{section.title}</label>
-          <textarea
-            className="tips-edit-textarea"
-            value={tipsData[section.key] || ""}
-            onChange={(e) => handleTextChange(section.key, e.target.value)}
-            placeholder={section.placeholder}
-            rows={8}
-          />
-        </div>
-      ))}
+      {sections.map((section) => {
+        const sectionData = tipsData[section.key] || {
+          content: "",
+          enabled: false,
+        };
+
+        return (
+          <div key={section.key} className="tips-edit-section">
+            <div className="tips-section-header">
+              <div className="tips-section-toggle">
+                <input
+                  type="checkbox"
+                  id={`toggle-${section.key}`}
+                  checked={sectionData.enabled}
+                  onChange={(e) =>
+                    handleToggleSection(section.key, e.target.checked)
+                  }
+                  className="tips-toggle-checkbox"
+                />
+                <label
+                  htmlFor={`toggle-${section.key}`}
+                  className="tips-edit-label"
+                >
+                  {section.title}
+                </label>
+              </div>
+              <span
+                className={`tips-section-status ${sectionData.enabled ? "enabled" : "disabled"}`}
+              >
+                {sectionData.enabled ? "✅ Enabled" : "❌ Disabled"}
+              </span>
+            </div>
+
+            {sectionData.enabled && (
+              <textarea
+                className="tips-edit-textarea"
+                value={sectionData.content || ""}
+                onChange={(e) => handleTextChange(section.key, e.target.value)}
+                placeholder={section.placeholder}
+                rows={8}
+              />
+            )}
+
+            {!sectionData.enabled && (
+              <div className="tips-section-disabled-note">
+                <p>
+                  💡 This section is disabled and won't appear on your tips
+                  page. Check the box above to enable it.
+                </p>
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };
 
 TipsEditForm.propTypes = {
   tipsData: PropTypes.shape({
-    essentialTips: PropTypes.string,
-    budgetPlanning: PropTypes.string,
-    foodDining: PropTypes.string,
-    transportation: PropTypes.string,
-    accommodation: PropTypes.string,
-    safetyHealth: PropTypes.string,
+    essentialTips: PropTypes.shape({
+      content: PropTypes.string,
+      enabled: PropTypes.bool,
+    }),
+    budgetPlanning: PropTypes.shape({
+      content: PropTypes.string,
+      enabled: PropTypes.bool,
+    }),
+    foodDining: PropTypes.shape({
+      content: PropTypes.string,
+      enabled: PropTypes.bool,
+    }),
+    transportation: PropTypes.shape({
+      content: PropTypes.string,
+      enabled: PropTypes.bool,
+    }),
+    accommodation: PropTypes.shape({
+      content: PropTypes.string,
+      enabled: PropTypes.bool,
+    }),
+    safetyHealth: PropTypes.shape({
+      content: PropTypes.string,
+      enabled: PropTypes.bool,
+    }),
   }).isRequired,
   onDataChange: PropTypes.func.isRequired,
 };
