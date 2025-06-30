@@ -153,6 +153,59 @@ class TipsManager:
             print(f"❌ Validation error: {e}")
             return False
 
+    def format_markdown_text(self, text):
+        """Format markdown text to HTML"""
+        if not text:
+            return ""
+
+        # Split text into lines
+        lines = text.split("\n")
+        result = []
+        current_list = []
+        in_list = False
+
+        for line in lines:
+            line = line.strip()
+
+            # Check if line is a bullet point (starts and ends with •)
+            if line.startswith("•") and line.endswith("•"):
+                list_item = line[1:-1].strip()
+                # Apply text formatting (bold and italic) to list item
+                formatted_item = self.apply_text_formatting(list_item)
+                current_list.append(f"<li>{formatted_item}</li>")
+                in_list = True
+            else:
+                if in_list and current_list:
+                    result.append(f"<ul>{' '.join(current_list)}</ul>")
+                    current_list = []
+                    in_list = False
+
+                if line == "":
+                    result.append("<br>")
+                elif line:
+                    formatted_line = self.apply_text_formatting(line)
+                    result.append(f"<p>{formatted_line}</p>")
+
+        if in_list and current_list:
+            result.append(f"<ul>{' '.join(current_list)}</ul>")
+
+        return " ".join(result)
+
+    def apply_text_formatting(self, text):
+        """Apply bold and italic formatting to text"""
+        if not text:
+            return ""
+
+        import re
+
+        # Apply bold formatting (**text**)
+        formatted = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', text)
+
+        # Apply italic formatting (*text*) - but not if it's part of **text**
+        formatted = re.sub(r'(?<!\*)\*([^*]+?)\*(?!\*)', r'<em>\1</em>', formatted)
+
+        return formatted
+
     def save_tips_file(self, tips_data):
         """Save the tips content to JSON file"""
         try:
@@ -169,7 +222,9 @@ class TipsManager:
             # Transform each content section
             for section_key, section_data in tips_data['content'].items():
                 if isinstance(section_data, dict) and section_data.get('enabled', True):
-                    transformed_data['content'][section_key] = section_data['content']
+                    # Format markdown content to HTML
+                    content = self.format_markdown_text(section_data['content'])
+                    transformed_data['content'][section_key] = content
                 else:
                     transformed_data['content'][section_key] = ''
 
