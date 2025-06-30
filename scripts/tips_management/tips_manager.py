@@ -375,16 +375,12 @@ def main():
         sys.exit(1)
 
     try:
-        # Initialize tips manager
+        # Load tips data from file
+        with open(tips_file_path, 'r', encoding='utf-8') as f:
+            tips_data = json.load(f)
+
+        # Initialize tips manager and save content
         manager = TipsManager()
-
-        # Load and convert tips data from file
-        tips_data = manager.load_tips_file(tips_file_path)
-        if not tips_data:
-            print("\n❌ Failed to load tips data!")
-            sys.exit(1)
-
-        # Save content
         success = manager.save_tips_content(tips_data)
 
         if success:
@@ -394,6 +390,9 @@ def main():
             print("\n💥 Tips content deployment failed!")
             sys.exit(1)
 
+    except json.JSONDecodeError as e:
+        print(f"❌ Invalid JSON file: {e}")
+        sys.exit(1)
     except Exception as e:
         print(f"❌ Error: {e}")
         sys.exit(1)
