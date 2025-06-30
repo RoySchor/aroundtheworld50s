@@ -95,7 +95,6 @@ const TipsEditor = () => {
           },
         });
         setIsExistingContent(true);
-        console.log(`✅ Loaded existing content for ${tip.title}`);
       } else {
         // Initialize with default enabled sections for new tips page
         setTipsData({
@@ -107,7 +106,6 @@ const TipsEditor = () => {
           safetyHealth: { content: "", enabled: false },
         });
         setIsExistingContent(false);
-        console.log(`📝 Creating new tips page for ${tip.title}`);
       }
     } catch (error) {
       // Fallback to default enabled sections if loading fails
@@ -120,9 +118,6 @@ const TipsEditor = () => {
         safetyHealth: { content: "", enabled: false },
       });
       setIsExistingContent(false);
-      console.log(
-        `📝 Creating new tips page for ${tip.title} (file not found)`,
-      );
     } finally {
       setLoading(false);
     }

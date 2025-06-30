@@ -43,7 +43,6 @@ export const loadTipsContent = async (tipPath) => {
     return content;
   } catch (error) {
     // File doesn't exist yet, return null
-    console.log(`Tips content not found for ${tipPath}, using placeholders`);
     return null;
   }
 };
