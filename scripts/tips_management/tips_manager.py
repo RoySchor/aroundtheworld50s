@@ -225,9 +225,6 @@ class TipsManager:
             file_name = f"{tip_path}.json"
             file_path = self.tips_content_dir / file_name
 
-            print("\n🔍 DEBUG: Input tips_data structure:")
-            print(json.dumps(tips_data, indent=2))
-
             # Transform the data into the expected format
             transformed_data = {
                 'tip': tips_data['tip'],  # Keep the tip metadata as is
@@ -236,9 +233,6 @@ class TipsManager:
 
             # Transform each content section
             for section_key, section_data in tips_data['content'].items():
-                print(f"\n🔍 DEBUG: Processing section {section_key}:")
-                print(f"Section data: {json.dumps(section_data, indent=2)}")
-
                 if isinstance(section_data, dict):
                     content = section_data.get('content', '')
                     enabled = section_data.get('enabled', True)
@@ -264,9 +258,6 @@ class TipsManager:
             # Add timestamp
             transformed_data['lastModified'] = datetime.now().isoformat()
             transformed_data['tip']['updated_at'] = datetime.now().isoformat()
-
-            print("\n🔍 DEBUG: Final transformed data:")
-            print(json.dumps(transformed_data, indent=2))
 
             # Write file with proper formatting
             with open(file_path, 'w', encoding='utf-8') as f:
