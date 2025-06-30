@@ -225,6 +225,9 @@ class TipsManager:
             file_name = f"{tip_path}.json"
             file_path = self.tips_content_dir / file_name
 
+            print("\n🔍 DEBUG: Input tips_data structure:")
+            print(json.dumps(tips_data, indent=2))
+
             # Transform the data into the expected format
             transformed_data = {
                 'tip': tips_data['tip'],  # Keep the tip metadata as is
@@ -233,22 +236,43 @@ class TipsManager:
 
             # Transform each content section
             for section_key, section_data in tips_data['content'].items():
-                if isinstance(section_data, dict) and section_data.get('enabled', True):
-                    # Format markdown content to HTML
-                    content = self.format_markdown_text(section_data['content'])
-                    transformed_data['content'][section_key] = content
+                print(f"\n🔍 DEBUG: Processing section {section_key}:")
+                print(f"Section data: {json.dumps(section_data, indent=2)}")
+
+                if isinstance(section_data, dict):
+                    content = section_data.get('content', '')
+                    enabled = section_data.get('enabled', True)
+                    print(f"Content: {content}")
+                    print(f"Enabled: {enabled}")
+
+                    if enabled and content:
+                        # Format markdown content to HTML
+                        html_content = self.format_markdown_text(content)
+                        print(f"Converted to HTML: {html_content}")
+                        transformed_data['content'][section_key] = html_content
+                    else:
+                        transformed_data['content'][section_key] = ''
                 else:
-                    transformed_data['content'][section_key] = ''
+                    # Handle string content directly
+                    if section_data:
+                        html_content = self.format_markdown_text(section_data)
+                        print(f"Direct content converted to HTML: {html_content}")
+                        transformed_data['content'][section_key] = html_content
+                    else:
+                        transformed_data['content'][section_key] = ''
 
             # Add timestamp
             transformed_data['lastModified'] = datetime.now().isoformat()
             transformed_data['tip']['updated_at'] = datetime.now().isoformat()
 
+            print("\n🔍 DEBUG: Final transformed data:")
+            print(json.dumps(transformed_data, indent=2))
+
             # Write file with proper formatting
             with open(file_path, 'w', encoding='utf-8') as f:
                 json.dump(transformed_data, f, indent=2, ensure_ascii=False)
 
-            print(f"✅ Tips content saved: {file_path}")
+            print(f"\n✅ Tips content saved: {file_path}")
             return file_path
 
         except Exception as e:
@@ -277,29 +301,39 @@ class TipsManager:
             ('⚠️ Safety & Health', 'safetyHealth'),
         ]
 
-        for title, key in sections:
+        # First convert all sections to HTML
+        preview_content = {}
+        for _, key in sections:
             section_data = content.get(key, {})
-            if not isinstance(section_data, dict):
-                continue
-
-            section_content = section_data.get('content', '')
-            section_enabled = section_data.get('enabled', True)
-
-            print(f"\n{title}:")
-            if section_enabled:
-                if section_content:
-                    # Show first 100 characters of content
-                    preview = section_content.replace('<p>', '').replace('</p>', '')
-                    preview = preview.replace('<ul>', '').replace('</ul>', '')
-                    preview = preview.replace('<li>', '• ').replace('</li>', '')
-                    preview = preview.replace('<strong>', '**').replace('</strong>', '**')
-                    if len(preview) > 100:
-                        preview = preview[:100] + "..."
-                    print(f"  {preview}")
+            if isinstance(section_data, dict):
+                section_content = section_data.get('content', '')
+                section_enabled = section_data.get('enabled', True)
+                if section_enabled and section_content:
+                    preview_content[key] = self.format_markdown_text(section_content)
                 else:
-                    print("  (empty)")
+                    preview_content[key] = ''
             else:
-                print("  (disabled)")
+                preview_content[key] = ''
+
+        # Then show the preview
+        for title, key in sections:
+            html_content = preview_content.get(key, '')
+            print(f"\n{title}:")
+            if html_content:
+                # Show first 200 characters of content with HTML tags stripped
+                preview = html_content
+                # Remove HTML tags for preview
+                preview = preview.replace('<p>', '').replace('</p>', '\n')
+                preview = preview.replace('<ul>', '').replace('</ul>', '')
+                preview = preview.replace('<li>', '• ').replace('</li>', '\n')
+                preview = preview.replace('<strong>', '').replace('</strong>', '')
+                preview = preview.replace('<em>', '').replace('</em>', '')
+                preview = preview.replace('\n\n', '\n').strip()
+                if len(preview) > 200:
+                    preview = preview[:200] + "..."
+                print(f"  {preview}")
+            else:
+                print("  (empty)")
 
         print("\n" + "=" * 60)
 

@@ -6,6 +6,39 @@ import TipsScriptRunner from "./TipsScriptRunner";
 import { loadTipsContent } from "../../../../utils/tipsFileManager";
 import "./TipsEditor.css";
 
+// Helper function to convert HTML to markdown
+const convertHtmlToMarkdown = (html) => {
+  if (!html) return "";
+
+  let markdown = html;
+
+  // Convert paragraph tags
+  markdown = markdown.replace(/<p>(.*?)<\/p>/g, "$1\n\n");
+
+  // Convert unordered lists
+  markdown = markdown.replace(/<ul>(.*?)<\/ul>/g, (match, content) => {
+    // Split content by list items and process each
+    const items = content.split("</li>").filter((item) => item.trim());
+    return items
+      .map((item) => {
+        // Remove <li> tag and convert to bullet point
+        return "•" + item.replace(/<li>/g, "") + "•\n";
+      })
+      .join("");
+  });
+
+  // Convert strong tags
+  markdown = markdown.replace(/<strong>(.*?)<\/strong>/g, "**$1**");
+
+  // Convert em tags
+  markdown = markdown.replace(/<em>(.*?)<\/em>/g, "*$1*");
+
+  // Clean up extra newlines
+  markdown = markdown.replace(/\n{3,}/g, "\n\n").trim();
+
+  return markdown;
+};
+
 const TipsEditor = () => {
   const [activeTab, setActiveTab] = useState("manage");
   const [selectedTip, setSelectedTip] = useState(null);
@@ -22,49 +55,43 @@ const TipsEditor = () => {
       const existingContent = await loadTipsContent(tip.path);
 
       if (existingContent && existingContent.content) {
-        // Load existing content for editing
+        // Convert HTML content to markdown for editing
+        const convertedContent = {};
+        Object.keys(existingContent.content).forEach((section) => {
+          const htmlContent = existingContent.content[section];
+          convertedContent[section] = {
+            content: convertHtmlToMarkdown(htmlContent),
+            enabled: !!(
+              htmlContent || existingContent.sectionConfig?.[section]
+            ),
+          };
+        });
+
+        // Load converted content for editing
         setTipsData({
-          essentialTips: {
-            content: existingContent.content.essentialTips || "",
-            enabled: !!(
-              existingContent.content.essentialTips ||
-              existingContent.sectionConfig?.essentialTips
-            ),
+          essentialTips: convertedContent.essentialTips || {
+            content: "",
+            enabled: true,
           },
-          budgetPlanning: {
-            content: existingContent.content.budgetPlanning || "",
-            enabled: !!(
-              existingContent.content.budgetPlanning ||
-              existingContent.sectionConfig?.budgetPlanning
-            ),
+          budgetPlanning: convertedContent.budgetPlanning || {
+            content: "",
+            enabled: true,
           },
-          foodDining: {
-            content: existingContent.content.foodDining || "",
-            enabled: !!(
-              existingContent.content.foodDining ||
-              existingContent.sectionConfig?.foodDining
-            ),
+          foodDining: convertedContent.foodDining || {
+            content: "",
+            enabled: true,
           },
-          transportation: {
-            content: existingContent.content.transportation || "",
-            enabled: !!(
-              existingContent.content.transportation ||
-              existingContent.sectionConfig?.transportation
-            ),
+          transportation: convertedContent.transportation || {
+            content: "",
+            enabled: true,
           },
-          accommodation: {
-            content: existingContent.content.accommodation || "",
-            enabled: !!(
-              existingContent.content.accommodation ||
-              existingContent.sectionConfig?.accommodation
-            ),
+          accommodation: convertedContent.accommodation || {
+            content: "",
+            enabled: false,
           },
-          safetyHealth: {
-            content: existingContent.content.safetyHealth || "",
-            enabled: !!(
-              existingContent.content.safetyHealth ||
-              existingContent.sectionConfig?.safetyHealth
-            ),
+          safetyHealth: convertedContent.safetyHealth || {
+            content: "",
+            enabled: false,
           },
         });
         setIsExistingContent(true);
