@@ -91,20 +91,31 @@ def revert_changes(base_dir, assets_dir, blog_component_dir, blog_data, post_ind
         print("1. git reset --hard HEAD")
         print("2. git clean -fd")
 
-def deploy_changes(base_dir, blog_data=None):
+def deploy_changes(base_dir, data=None):
     """Commit, push, and deploy the changes."""
     print("\nDeploying changes...")
     try:
         # Create a descriptive commit message
-        if blog_data:
-            country = blog_data.get('country', 'Unknown')
-            state = blog_data.get('state')
-            if state:
-                commit_message = f"Add new blog post: {country}, {state}"
+        if data:
+            # Check if this is tips data (has 'tip' key) or blog data
+            if 'tip' in data:
+                tip_info = data['tip']
+                country = tip_info.get('country', 'Unknown')
+                state = tip_info.get('state')
+                if state:
+                    commit_message = f"Update tips content: {country}, {state}"
+                else:
+                    commit_message = f"Update tips content: {country}"
             else:
-                commit_message = f"Add new blog post: {country}"
+                # Handle blog data
+                country = data.get('country', 'Unknown')
+                state = data.get('state')
+                if state:
+                    commit_message = f"Add new blog post: {country}, {state}"
+                else:
+                    commit_message = f"Add new blog post: {country}"
         else:
-            commit_message = "Add new blog post"
+            commit_message = "Update content"
 
         print(f"📝 Commit message: {commit_message}")
 
@@ -116,9 +127,17 @@ def deploy_changes(base_dir, blog_data=None):
         # Deploy
         subprocess.run(['npm', 'run', 'deploy'], cwd=base_dir, check=True)
         print("✅ Changes have been deployed successfully!")
+        return True
     except subprocess.CalledProcessError as e:
-        print(f"⚠️ Error during deployment: {e}")
+        print(f"❌ Error during deployment: {e}")
         print("You may need to deploy manually")
+        if e.stdout:
+            print("\nDeployment output:")
+            print(e.stdout)
+        if e.stderr:
+            print("\nDeployment errors:")
+            print(e.stderr)
+        return False
 
 def force_webpack_rebuild(base_dir):
     """Force webpack to rebuild by touching the webpack config."""
