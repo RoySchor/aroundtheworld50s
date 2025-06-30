@@ -33,6 +33,7 @@ class TipsManager:
         """
         Complete workflow for saving tips content
         """
+        self.tips_data = tips_data  # Store tips_data for use in show_tips_preview
         try:
             print("🚀 Starting Tips Content Save Process...")
             print("=" * 50)
@@ -69,7 +70,6 @@ class TipsManager:
                 return False
 
             # Show preview and get user approval
-            self.show_tips_preview(tips_data)
             if not self.get_user_approval():
                 print("❌ Changes rejected by user")
                 self.restore_backup(backup_commit)
@@ -267,9 +267,9 @@ class TipsManager:
             return None
 
     def show_tips_preview(self, tips_data):
-        """Show a preview of the tips content"""
+        """Show a preview of the tips content and start a development server"""
         tip_info = tips_data['tip']
-        content = tips_data['content']
+        server_process = None
 
         print("\n" + "=" * 60)
         print("📋 TIPS CONTENT PREVIEW")
@@ -279,6 +279,7 @@ class TipsManager:
         print(f"📅 Updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print("-" * 60)
 
+        # Show text preview
         sections = [
             ('🎯 Essential Tips', 'essentialTips'),
             ('💰 Budget Planning', 'budgetPlanning'),
@@ -288,55 +289,78 @@ class TipsManager:
             ('⚠️ Safety & Health', 'safetyHealth'),
         ]
 
-        # First convert all sections to HTML
-        preview_content = {}
-        for _, key in sections:
-            section_data = content.get(key, {})
-            if isinstance(section_data, dict):
-                section_content = section_data.get('content', '')
-                section_enabled = section_data.get('enabled', True)
-                if section_enabled and section_content:
-                    preview_content[key] = self.format_markdown_text(section_content)
-                else:
-                    preview_content[key] = ''
-            else:
-                preview_content[key] = ''
-
-        # Then show the preview
         for title, key in sections:
-            html_content = preview_content.get(key, '')
-            print(f"\n{title}:")
-            if html_content:
-                # Show first 200 characters of content with HTML tags stripped
-                preview = html_content
-                # Remove HTML tags for preview
-                preview = preview.replace('<p>', '').replace('</p>', '\n')
-                preview = preview.replace('<ul>', '').replace('</ul>', '')
-                preview = preview.replace('<li>', '• ').replace('</li>', '\n')
-                preview = preview.replace('<strong>', '').replace('</strong>', '')
-                preview = preview.replace('<em>', '').replace('</em>', '')
-                preview = preview.replace('\n\n', '\n').strip()
-                if len(preview) > 200:
-                    preview = preview[:200] + "..."
-                print(f"  {preview}")
+            section_data = tips_data['content'].get(key, {})
+            if isinstance(section_data, dict):
+                content = section_data.get('content', '')
+                enabled = section_data.get('enabled', True)
+                if enabled and content:
+                    print(f"\n{title}:")
+                    preview = content
+                    if len(preview) > 200:
+                        preview = preview[:200] + "..."
+                    print(f"  {preview}")
+                else:
+                    print(f"\n{title}:")
+                    print("  (empty)")
             else:
+                print(f"\n{title}:")
                 print("  (empty)")
 
         print("\n" + "=" * 60)
 
+        # Start development server for live preview
+        print("\n🚀 Starting development server for preview...")
+        print("Please wait while the server starts...")
+
+        try:
+            # Start the development server in the background
+            server_process = subprocess.Popen(
+                ['npm', 'start'],
+                cwd=self.project_root,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True
+            )
+
+            # Wait a bit for the server to start
+            import time
+            time.sleep(5)
+
+            # Open the browser to the tips page
+            import webbrowser
+            webbrowser.open(f"http://localhost:3000/tips/{tip_info['path']}")
+
+            print("\n✨ Development server started!")
+            print(f"📱 Preview available at: http://localhost:3000/tips/{tip_info['path']}")
+            print("\n🤔 Review the tips content in your browser.")
+            print("👀 The content will be immediately available on your website.")
+
+            # Get user approval
+            response = input("\n✅ Approve and deploy these changes? (y/n): ").lower().strip()
+            return response in ['y', 'yes']
+
+        except Exception as e:
+            print(f"\n❌ Failed to start development server: {e}")
+            print("Continuing with text-based preview only...")
+            response = input("\n✅ Approve and deploy these changes? (y/n): ").lower().strip()
+            return response in ['y', 'yes']
+        finally:
+            # Clean up the server process if it exists
+            if server_process:
+                print("\n🛑 Stopping development server...")
+                server_process.terminate()
+                try:
+                    server_process.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    print("⚠️ Server taking too long to stop, forcing shutdown...")
+                    server_process.kill()
+                    server_process.wait()
+                print("✅ Development server stopped")
+
     def get_user_approval(self):
         """Get user approval for the changes"""
-        print("\n🤔 Review the tips content above.")
-        print("👀 The content will be immediately available on your website.")
-
-        while True:
-            response = input("\n✅ Approve and deploy these changes? (y/n): ").lower().strip()
-            if response in ['y', 'yes']:
-                return True
-            elif response in ['n', 'no']:
-                return False
-            else:
-                print("Please enter 'y' for yes or 'n' for no.")
+        return self.show_tips_preview(self.tips_data)
 
     def generate_commit_message(self, tips_data):
         """Generate a descriptive commit message"""
