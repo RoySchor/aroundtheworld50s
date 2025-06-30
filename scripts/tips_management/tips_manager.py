@@ -18,14 +18,13 @@ from datetime import datetime
 parent_dir = Path(__file__).parent.parent / "blog_management"
 sys.path.append(str(parent_dir))
 
-from process_management import ProcessManager
+from process_management import run_lint_fix, deploy_changes
 import file_operations
 
 class TipsManager:
     def __init__(self):
         self.project_root = Path(__file__).parent.parent.parent
         self.tips_content_dir = self.project_root / "src" / "data" / "tipsContent"
-        self.process_manager = ProcessManager(str(self.project_root))
 
         # Ensure tips content directory exists
         self.tips_content_dir.mkdir(parents=True, exist_ok=True)
@@ -43,8 +42,15 @@ class TipsManager:
                 return False
 
             # Create backup commit point
-            backup_commit = self.process_manager.create_backup_commit("tips content update")
-            if not backup_commit:
+            try:
+                # Get the current commit hash for backup
+                result = subprocess.run(['git', 'rev-parse', 'HEAD'],
+                                     cwd=self.project_root,
+                                     capture_output=True,
+                                     text=True,
+                                     check=True)
+                backup_commit = result.stdout.strip()
+            except subprocess.CalledProcessError as e:
                 print("❌ Failed to create backup commit")
                 return False
 
@@ -52,28 +58,28 @@ class TipsManager:
             file_path = self.save_tips_file(tips_data)
             if not file_path:
                 print("❌ Failed to save tips file")
-                self.process_manager.restore_backup(backup_commit)
+                self.restore_backup(backup_commit)
                 return False
 
             # Run linting
             print("\n🔍 Running ESLint fix...")
-            if not self.process_manager.run_lint_fix():
+            if not run_lint_fix(self.project_root):
                 print("❌ Linting failed")
-                self.process_manager.restore_backup(backup_commit)
+                self.restore_backup(backup_commit)
                 return False
 
             # Show preview and get user approval
             self.show_tips_preview(tips_data)
             if not self.get_user_approval():
                 print("❌ Changes rejected by user")
-                self.process_manager.restore_backup(backup_commit)
+                self.restore_backup(backup_commit)
                 return False
 
             # Commit and push changes
             commit_message = self.generate_commit_message(tips_data)
-            if not self.process_manager.deploy_changes(commit_message, tips_data):
+            if not deploy_changes(self.project_root, tips_data):
                 print("❌ Failed to deploy changes")
-                self.process_manager.restore_backup(backup_commit)
+                self.restore_backup(backup_commit)
                 return False
 
             print("\n✅ Tips content saved and deployed successfully!")
@@ -83,6 +89,20 @@ class TipsManager:
         except Exception as e:
             print(f"❌ Error in tips save process: {e}")
             return False
+
+    def restore_backup(self, commit_hash):
+        """Restore to a previous commit"""
+        try:
+            subprocess.run(['git', 'reset', '--hard', commit_hash],
+                         cwd=self.project_root,
+                         check=True)
+            subprocess.run(['git', 'clean', '-fd'],
+                         cwd=self.project_root,
+                         check=True)
+            print("✅ Changes reverted successfully")
+        except subprocess.CalledProcessError as e:
+            print(f"⚠️ Warning: Failed to revert changes: {e}")
+            print("You may need to revert changes manually")
 
     def validate_tips_data(self, tips_data):
         """Validate the structure and content of tips data"""
