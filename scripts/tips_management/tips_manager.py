@@ -207,17 +207,62 @@ class TipsManager:
 
         return f"Update tips content: {location}"
 
+def find_tips_file(filename):
+    """Smart search for tips JSON file in common locations"""
+    common_locations = [
+        Path.home() / "Downloads",
+        Path.home() / "Desktop",
+        Path.home() / "Documents",
+        Path.cwd(),  # Current directory
+    ]
+
+    # If filename is already a full path, try it first
+    if Path(filename).exists():
+        return Path(filename)
+
+    # Extract just the filename if a path was provided
+    filename = Path(filename).name
+
+    print(f"🔍 Searching for '{filename}' in common locations...")
+
+    for location in common_locations:
+        if location.exists():
+            file_path = location / filename
+            if file_path.exists():
+                print(f"✅ Found file at: {file_path}")
+                return file_path
+            else:
+                print(f"❌ Not found in: {location}")
+
+    return None
+
 def main():
     """Main function to handle command line execution"""
     if len(sys.argv) != 2:
-        print("Usage: python tips_manager.py <tips_json_file>")
-        print("Example: python tips_manager.py /path/to/trinidad-and-tobago-tips.json")
+        print("Usage: python tips_manager.py <tips_json_filename>")
+        print("Example: python tips_manager.py trinidad-and-tobago-tips.json")
+        print("         python tips_manager.py ~/Downloads/trinidad-and-tobago-tips.json")
+        print()
+        print("The script will automatically search for the file in:")
+        print("  • Downloads folder")
+        print("  • Desktop")
+        print("  • Documents")
+        print("  • Current directory")
         sys.exit(1)
 
-    tips_file_path = sys.argv[1]
+    filename = sys.argv[1]
 
-    if not os.path.exists(tips_file_path):
-        print(f"❌ Tips file not found: {tips_file_path}")
+    # Smart file search
+    tips_file_path = find_tips_file(filename)
+
+    if not tips_file_path:
+        print(f"\n❌ Tips file '{filename}' not found in any common locations!")
+        print("\nSearched in:")
+        print("  • ~/Downloads/")
+        print("  • ~/Desktop/")
+        print("  • ~/Documents/")
+        print("  • Current directory")
+        print("\nPlease ensure the file exists in one of these locations.")
         sys.exit(1)
 
     try:
