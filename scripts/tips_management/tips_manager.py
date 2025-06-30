@@ -236,13 +236,10 @@ class TipsManager:
                 if isinstance(section_data, dict):
                     content = section_data.get('content', '')
                     enabled = section_data.get('enabled', True)
-                    print(f"Content: {content}")
-                    print(f"Enabled: {enabled}")
 
                     if enabled and content:
                         # Format markdown content to HTML
                         html_content = self.format_markdown_text(content)
-                        print(f"Converted to HTML: {html_content}")
                         transformed_data['content'][section_key] = html_content
                     else:
                         transformed_data['content'][section_key] = ''
@@ -250,7 +247,6 @@ class TipsManager:
                     # Handle string content directly
                     if section_data:
                         html_content = self.format_markdown_text(section_data)
-                        print(f"Direct content converted to HTML: {html_content}")
                         transformed_data['content'][section_key] = html_content
                     else:
                         transformed_data['content'][section_key] = ''
