@@ -160,13 +160,26 @@ class TipsManager:
             file_name = f"{tip_path}.json"
             file_path = self.tips_content_dir / file_name
 
+            # Transform the data into the expected format
+            transformed_data = {
+                'tip': tips_data['tip'],  # Keep the tip metadata as is
+                'content': {}  # Transform the content sections
+            }
+
+            # Transform each content section
+            for section_key, section_data in tips_data['content'].items():
+                if isinstance(section_data, dict) and section_data.get('enabled', True):
+                    transformed_data['content'][section_key] = section_data['content']
+                else:
+                    transformed_data['content'][section_key] = ''
+
             # Add timestamp
-            tips_data['lastModified'] = datetime.now().isoformat()
-            tips_data['tip']['updated_at'] = datetime.now().isoformat()
+            transformed_data['lastModified'] = datetime.now().isoformat()
+            transformed_data['tip']['updated_at'] = datetime.now().isoformat()
 
             # Write file with proper formatting
             with open(file_path, 'w', encoding='utf-8') as f:
-                json.dump(tips_data, f, indent=2, ensure_ascii=False)
+                json.dump(transformed_data, f, indent=2, ensure_ascii=False)
 
             print(f"✅ Tips content saved: {file_path}")
             return file_path
@@ -199,16 +212,20 @@ class TipsManager:
 
         for title, key in sections:
             section_data = content.get(key, {})
-            section_content = section_data.get('content', '').strip() if isinstance(section_data, dict) else ''
-            section_enabled = section_data.get('enabled', True) if isinstance(section_data, dict) else True
+            if not isinstance(section_data, dict):
+                continue
+
+            section_content = section_data.get('content', '')
+            section_enabled = section_data.get('enabled', True)
 
             print(f"\n{title}:")
             if section_enabled:
                 if section_content:
+                    # Show first 100 characters of content
                     preview = section_content.replace('<p>', '').replace('</p>', '')
                     preview = preview.replace('<ul>', '').replace('</ul>', '')
                     preview = preview.replace('<li>', '• ').replace('</li>', '')
-                    preview = preview.replace('<strong>', '').replace('</strong>', '')
+                    preview = preview.replace('<strong>', '**').replace('</strong>', '**')
                     if len(preview) > 100:
                         preview = preview[:100] + "..."
                     print(f"  {preview}")
