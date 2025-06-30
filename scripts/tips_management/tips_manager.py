@@ -158,7 +158,7 @@ class TipsManager:
         if not text:
             return ""
 
-        # Split text into lines
+        # Split text into lines and apply initial formatting
         lines = text.split("\n")
         result = []
         current_list = []
@@ -166,26 +166,38 @@ class TipsManager:
 
         for line in lines:
             line = line.strip()
-
-            # Check if line is a bullet point (starts and ends with •)
-            if line.startswith("•") and line.endswith("•"):
-                list_item = line[1:-1].strip()
-                # Apply text formatting (bold and italic) to list item
-                formatted_item = self.apply_text_formatting(list_item)
-                current_list.append(f"<li>{formatted_item}</li>")
-                in_list = True
-            else:
+            if not line:
                 if in_list and current_list:
                     result.append(f"<ul>{' '.join(current_list)}</ul>")
                     current_list = []
                     in_list = False
+                result.append("<br>")
+                continue
 
-                if line == "":
-                    result.append("<br>")
-                elif line:
-                    formatted_line = self.apply_text_formatting(line)
-                    result.append(f"<p>{formatted_line}</p>")
+            # Split line into text and bullet points
+            parts = line.split("•")
+            formatted_parts = []
 
+            for i, part in enumerate(parts):
+                if not part.strip():
+                    continue
+
+                # Format the part
+                formatted_part = self.apply_text_formatting(part.strip())
+
+                # If this is a bullet point (has text on both sides)
+                if i > 0 and i < len(parts) - 1:
+                    current_list.append(f"<li>{formatted_part}</li>")
+                    in_list = True
+                else:
+                    if in_list and current_list:
+                        result.append(f"<ul>{' '.join(current_list)}</ul>")
+                        current_list = []
+                        in_list = False
+                    if formatted_part:
+                        result.append(f"<p>{formatted_part}</p>")
+
+        # Add any remaining list items
         if in_list and current_list:
             result.append(f"<ul>{' '.join(current_list)}</ul>")
 
