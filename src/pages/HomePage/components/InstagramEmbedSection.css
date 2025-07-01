@@ -1,0 +1,29 @@
+.instagram-embed-section {
+  @apply w-full max-w-4xl mx-auto;
+}
+
+.instagram-embed-container {
+  @apply border-8 p-5 bg-white;
+}
+
+.instagram-embed-title {
+  @apply text-2xl text-center mb-5 leading-tight;
+}
+
+.instagram-embed-wrapper {
+  @apply flex justify-center w-full;
+}
+
+@media (max-width: 640px) {
+  .instagram-embed-section {
+    @apply p-2.5;
+  }
+
+  .instagram-embed-container {
+    @apply p-4;
+  }
+
+  .instagram-embed-title {
+    @apply text-lg;
+  }
+}

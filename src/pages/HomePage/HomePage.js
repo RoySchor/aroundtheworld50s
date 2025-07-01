@@ -5,6 +5,7 @@ import background from "../../assets/home-page-bg.webp";
 import { Link } from "react-router-dom";
 import MostRecentPosts from "./components/MostRecentPosts/MostRecentPosts";
 import RotatingGallery from "./components/RotatingGallery/RotatingGallery";
+import InstagramEmbedSection from "./components/InstagramEmbedSection";
 
 const HomePage = () => {
   return (
@@ -53,6 +54,8 @@ const HomePage = () => {
       <MostRecentPosts />
 
       <RotatingGallery />
+
+      <InstagramEmbedSection />
     </div>
   );
 };
