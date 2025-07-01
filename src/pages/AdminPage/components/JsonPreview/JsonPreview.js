@@ -399,7 +399,7 @@ const JsonPreview = ({ formData }) => {
       // Show custom instructions modal
       setInstructionsData({
         folderName,
-        command: `# First, make sure you're in the project root directory:\ncd .\n\n# Then run:\nscripts/blog_management/generate`,
+        command: `scripts/blog_management/generate`,
       });
       setShowInstructions(true);
     } catch (error) {
