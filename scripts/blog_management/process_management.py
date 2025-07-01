@@ -27,13 +27,9 @@ def run_npm_start(base_dir):
     print("\nStarting the development server in a new window...")
     try:
         if sys.platform == "darwin":  # macOS
-            # Create a shell script to run npm start
+            # Use the existing start_dev_server.sh script
             script_path = base_dir / "start_dev_server.sh"
-            with open(script_path, 'w') as f:
-                f.write('#!/bin/bash\n')
-                f.write(f'cd "{base_dir}"\n')
-                f.write('npm start\n')
-            # Make the script executable
+            # Make sure the script is executable
             subprocess.run(['chmod', '+x', str(script_path)], check=True)
             # Open in new Terminal window
             subprocess.run(['open', '-a', 'Terminal', str(script_path)], check=True)

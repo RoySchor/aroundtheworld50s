@@ -1,3 +1,3 @@
 #!/bin/bash
-# The script will run from wherever it is located
+# The script will run from its current location
 npm start

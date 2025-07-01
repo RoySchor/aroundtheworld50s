@@ -92,10 +92,7 @@ class GalleryManager:
         try:
             if sys.platform == "darwin":  # macOS
                 script_path = self.base_dir / "start_dev_server.sh"
-                with open(script_path, 'w') as f:
-                    f.write('#!/bin/bash\n')
-                    f.write(f'cd "{self.base_dir}"\n')
-                    f.write('npm start\n')
+                # Make sure the script is executable
                 subprocess.run(['chmod', '+x', str(script_path)], check=True)
                 subprocess.run(['open', '-a', 'Terminal', str(script_path)], check=True)
             elif sys.platform == "win32":  # Windows
