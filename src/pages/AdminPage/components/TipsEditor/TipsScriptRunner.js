@@ -14,8 +14,9 @@ const TipsScriptRunner = ({ tip, tipsData }) => {
 
     const filename = `${tip.path}-tips.json`;
 
-    // Use current directory
-    const command = `python3 scripts/tips_management/tips_manager.py "${filename}"`;
+    // Include cd command to ensure correct directory
+    const projectPath = process.env.PUBLIC_URL || ".";
+    const command = `# First, make sure you're in the project root directory:\ncd ${projectPath}\n\n# Then run:\npython3 scripts/tips_management/tips_manager.py "${filename}"`;
 
     setTerminalCommand(command);
   };
@@ -50,10 +51,11 @@ const TipsScriptRunner = ({ tip, tipsData }) => {
         {terminalCommand && (
           <div className="blog-script-section">
             <h3>⌨️ Step 2: Run Deployment Command</h3>
-            <p>
-              Copy and run this command in your terminal. The script will
-              automatically search for your JSON file in common locations:
+            <p className="text-sm text-red-600 mb-4">
+              ⚠️ Important: These commands must be run from the project root
+              directory
             </p>
+            <p>Copy and run these commands in your terminal:</p>
 
             <div className="blog-terminal-command">
               <pre>{terminalCommand}</pre>

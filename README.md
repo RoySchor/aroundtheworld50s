@@ -20,6 +20,13 @@ This is not just another travel blog - it's a love letter to technology making c
 
 The heart of this platform is its powerful automation script that handles everything from file processing to deployment:
 
+### ⚠️ Important Note
+All commands must be run from the project root directory. Before running any command, make sure you're in the correct directory:
+```bash
+cd path/to/around-the-world-50s
+```
+
+### Features
 1. **Content Processing**
    - Downloads and organizes necessary files
    - Parses content and metadata

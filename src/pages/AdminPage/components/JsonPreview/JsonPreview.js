@@ -397,7 +397,7 @@ const JsonPreview = ({ formData }) => {
       // Show custom instructions modal
       setInstructionsData({
         folderName,
-        command: "scripts/blog_management/generate",
+        command: `# First, make sure you're in the project root directory:\ncd .\n\n# Then run:\nscripts/blog_management/generate`,
       });
       setShowInstructions(true);
     } catch (error) {
@@ -525,8 +525,12 @@ const JsonPreview = ({ formData }) => {
 
                   <div className="json-command-section">
                     <h4 className="json-command-title">
-                      🚀 Final Step - Run This Command:
+                      🚀 Final Step - Run These Commands:
                     </h4>
+                    <p className="text-sm text-red-600 mb-4">
+                      ⚠️ Important: These commands must be run from the project
+                      root directory
+                    </p>
                     <div className="json-command-box">
                       <code className="json-command-text">
                         {instructionsData.command}
