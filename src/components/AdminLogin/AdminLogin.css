@@ -1,5 +1,5 @@
 .admin-login-container {
-  @apply min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4 pt-24 md:pt-28;
+  @apply min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4 pt-28 md:pt-32;
 }
 
 .admin-login-card {
