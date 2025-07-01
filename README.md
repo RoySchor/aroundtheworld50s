@@ -95,7 +95,7 @@ Update the home page gallery with live preview:
 #### Gallery Preview
 See exactly how your gallery changes will look:
 
-<img width="498" alt="Gallery Preview" src="https://github.com/user-attachments/assets/a0282450-fb82-4cad-8327-ea1a2ef8ede2" />
+<img width="628" alt="image" src="https://github.com/user-attachments/assets/70a77b67-363e-4ddd-89de-c70cf2b5fb52" />
 </td>
 </tr>
 </table>
