@@ -5,8 +5,13 @@
 
 set -e  # Exit on any error
 
+# Get the directory of the script
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Get the project root directory (two levels up from the script directory)
+PROJECT_PATH="$( cd "$SCRIPT_DIR/../.." && pwd )"
+
 DESKTOP_PATH="$HOME/Desktop"
-PROJECT_PATH="$HOME/Desktop/my-projects/around-the-world-50s"
 
 echo "🚀 Auto Blog Generator"
 echo "====================="

@@ -14,8 +14,8 @@ const TipsScriptRunner = ({ tip, tipsData }) => {
 
     const filename = `${tip.path}-tips.json`;
 
-    // Use just the filename - the script will search for it automatically
-    const command = `cd /Users/rschor/Desktop/my-projects/around-the-world-50s && python3 scripts/tips_management/tips_manager.py "${filename}"`;
+    // Use current directory
+    const command = `python3 scripts/tips_management/tips_manager.py "${filename}"`;
 
     setTerminalCommand(command);
   };

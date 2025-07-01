@@ -1,3 +1,3 @@
 #!/bin/bash
-cd "/Users/rschor/Desktop/my-projects/around-the-world-50s"
+# The script will run from wherever it is located
 npm start

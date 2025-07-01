@@ -397,8 +397,7 @@ const JsonPreview = ({ formData }) => {
       // Show custom instructions modal
       setInstructionsData({
         folderName,
-        command:
-          "~/Desktop/my-projects/around-the-world-50s/scripts/blog_management/generate",
+        command: "scripts/blog_management/generate",
       });
       setShowInstructions(true);
     } catch (error) {

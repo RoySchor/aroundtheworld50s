@@ -44,7 +44,7 @@ python3 scripts/tips_management/tips_manager.py <tips_json_file>
 
 ### Example
 ```bash
-cd /Users/rschor/Desktop/my-projects/around-the-world-50s
+# From the project root directory:
 python3 scripts/tips_management/tips_manager.py ~/Downloads/trinidad-and-tobago-tips.json
 ```
 
