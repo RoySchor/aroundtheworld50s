@@ -1,5 +1,5 @@
 .gallery-container {
-  @apply py-10 sm:py-16 lg:py-20 px-4 sm:px-8;
+  @apply py-6 sm:py-8 lg:py-10 px-4 sm:px-8;
 }
 
 .sliding-gallery-text-container {
@@ -11,7 +11,7 @@
 }
 
 .rotating-gallery-container {
-  @apply relative py-6 sm:py-8 lg:py-10 max-w-5xl mx-auto px-4;
+  @apply relative py-4 sm:py-6 lg:py-8 max-w-5xl mx-auto px-4;
 }
 
 .rotating-gallery-image-container {

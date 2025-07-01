@@ -1,9 +1,9 @@
 .instagram-embed-section {
-  @apply w-full max-w-4xl mx-auto;
+  @apply w-full max-w-[850px] mx-auto p-5;
 }
 
 .instagram-embed-container {
-  @apply border-8 p-5 bg-white;
+  @apply p-5;
 }
 
 .instagram-embed-title {

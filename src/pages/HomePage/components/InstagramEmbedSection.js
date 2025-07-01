@@ -10,14 +10,12 @@ const InstagramEmbedSection = ({
   borderColor = "#6CC9B9",
 }) => {
   useEffect(() => {
-    // Load Instagram embed script
     const script = document.createElement("script");
     script.src = "//www.instagram.com/embed.js";
     script.async = true;
     document.body.appendChild(script);
 
     return () => {
-      // Cleanup script when component unmounts
       if (document.body.contains(script)) {
         document.body.removeChild(script);
       }
@@ -37,15 +35,17 @@ const InstagramEmbedSection = ({
             data-instgrm-permalink={`https://www.instagram.com/${username}/?utm_source=ig_embed&amp;utm_campaign=loading`}
             data-instgrm-version="14"
             style={{
-              background: "#FFF",
+              background: "#6CC9B9",
               border: "0",
               margin: "1px",
-              maxWidth: "540px",
+              maxWidth: "850px",
               minWidth: "326px",
               padding: "0",
+              /* eslint-disable no-dupe-keys */
               width: "99.375%",
               width: "-webkit-calc(100% - 2px)",
               width: "calc(100% - 2px)",
+              /* eslint-enable no-dupe-keys */
             }}
           >
             <div style={{ padding: "16px" }}>

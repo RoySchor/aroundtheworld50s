@@ -110,10 +110,10 @@ def deploy_changes(base_dir, data=None):
                 # Handle blog data
                 country = data.get('country', 'Unknown')
                 state = data.get('state')
-                if state:
-                    commit_message = f"Add new blog post: {country}, {state}"
-                else:
-                    commit_message = f"Add new blog post: {country}"
+            if state:
+                commit_message = f"Add new blog post: {country}, {state}"
+            else:
+                commit_message = f"Add new blog post: {country}"
         else:
             commit_message = "Update content"
 
