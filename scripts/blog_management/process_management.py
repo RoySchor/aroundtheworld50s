@@ -31,8 +31,8 @@ def run_npm_start(base_dir):
             script_path = base_dir / "start_dev_server.sh"
             # Make sure the script is executable
             subprocess.run(['chmod', '+x', str(script_path)], check=True)
-            # Open in new Terminal window
-            subprocess.run(['open', '-a', 'Terminal', str(script_path)], check=True)
+            # Open in new Terminal window with relative path
+            subprocess.run(['open', '-a', 'Terminal', './start_dev_server.sh'], cwd=base_dir, check=True)
         elif sys.platform == "win32":  # Windows
             subprocess.run(['start', 'cmd', '/k', 'npm', 'start'], cwd=base_dir, check=True)
         else:  # Linux

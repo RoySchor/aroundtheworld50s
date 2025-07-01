@@ -94,7 +94,8 @@ class GalleryManager:
                 script_path = self.base_dir / "start_dev_server.sh"
                 # Make sure the script is executable
                 subprocess.run(['chmod', '+x', str(script_path)], check=True)
-                subprocess.run(['open', '-a', 'Terminal', str(script_path)], check=True)
+                # Open in new Terminal window with relative path
+                subprocess.run(['open', '-a', 'Terminal', './start_dev_server.sh'], cwd=self.base_dir, check=True)
             elif sys.platform == "win32":  # Windows
                 subprocess.run(['start', 'cmd', '/k', 'npm', 'start'], cwd=self.base_dir, check=True)
             else:  # Linux
