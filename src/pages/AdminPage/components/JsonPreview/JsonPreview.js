@@ -351,6 +351,8 @@ const JsonPreview = ({ formData }) => {
       const link = document.createElement("a");
       link.href = url;
       link.download = folderName;
+      // Set download attribute to save to Desktop
+      link.setAttribute("download", `${folderName}`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -520,7 +522,8 @@ const JsonPreview = ({ formData }) => {
                 <div className="json-success-content">
                   <p className="json-instructions-text">
                     Your <strong>{instructionsData.folderName}.zip</strong> has
-                    been downloaded to Desktop!
+                    been downloaded! Please move it to your Desktop if it's not
+                    there already.
                   </p>
 
                   <div className="json-command-section">

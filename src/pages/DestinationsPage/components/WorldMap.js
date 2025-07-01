@@ -19,7 +19,15 @@ const WorldMap = () => {
       // Create location key for coordinate lookup
       let locationKey;
       if (blog.state && isUSCountry(blog.country_code)) {
-        locationKey = `USA-${blog.state}`;
+        // Properly format state name to match WorldMap.constants.js format
+        const formattedState = blog.state
+          .split(" ")
+          .map(
+            (word) =>
+              word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+          )
+          .join(" ");
+        locationKey = `USA-${formattedState}`;
       } else {
         locationKey = blog.country;
       }
@@ -39,7 +47,15 @@ const WorldMap = () => {
         // Create location key for coordinate lookup
         let locationKey;
         if (blog.state && isUSCountry(blog.country_code)) {
-          locationKey = `USA-${blog.state}`;
+          // Properly format state name to match WorldMap.constants.js format
+          const formattedState = blog.state
+            .split(" ")
+            .map(
+              (word) =>
+                word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+            )
+            .join(" ");
+          locationKey = `USA-${formattedState}`;
         } else {
           locationKey = blog.country;
         }
