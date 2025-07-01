@@ -5,7 +5,6 @@ const TipsPreview = ({ tip, tipsData }) => {
   const formatMarkdownText = (text) => {
     if (!text) return "";
 
-    // Split text into lines
     const lines = text.split("\n");
     const result = [];
     let currentList = [];
