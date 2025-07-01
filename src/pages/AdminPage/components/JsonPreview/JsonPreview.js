@@ -86,14 +86,12 @@ const JsonPreview = ({ formData }) => {
           filteredData[key] = formData[key].name;
         }
       } else if (key === "country") {
-        // Normalize US country variants to "United States"
         if (isUSCountry(formData.country_code)) {
           filteredData[key] = "United States";
         } else {
           filteredData[key] = formData[key].trim();
         }
       } else if (key === "country_code") {
-        // Normalize US country code to "US"
         if (isUSCountry(formData[key])) {
           filteredData[key] = "US";
         } else {
