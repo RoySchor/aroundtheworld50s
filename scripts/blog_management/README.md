@@ -92,10 +92,6 @@ src/pages/BlogPage/Blogs/france/1/
 ```bash
 # From project root
 python3 -m scripts.blog_management.blog_manager
-
-# Or from scripts directory
-cd scripts/blog_management
-./generate
 ```
 
 ### 2. Web Admin Interface
