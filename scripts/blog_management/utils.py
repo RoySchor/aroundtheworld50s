@@ -21,7 +21,7 @@ BLOG_REQUIRED_FIELDS = {
     "content": "Array of content sections"
 }
 
-LAYOUT_TYPES = ["text", "two-column", "image-grid", "itinerary-with-map"]
+LAYOUT_TYPES = ["text", "two-column", "image-grid", "itinerary-with-map", "instagram"]
 
 def get_desktop_path():
     """Get the path to the user's Desktop directory."""

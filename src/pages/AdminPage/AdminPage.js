@@ -187,7 +187,11 @@ const AdminPage = () => {
         }),
       },
       content:
-        type === "image-grid" || type === "itinerary-with-map" ? null : "",
+        type === "image-grid" ||
+        type === "itinerary-with-map" ||
+        type === "instagram"
+          ? null
+          : "",
       ...(type === "two-column" && { image: null }),
       ...(type === "image-grid" && { images: [null] }),
     };

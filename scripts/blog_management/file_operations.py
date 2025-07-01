@@ -129,6 +129,7 @@ import "../../BlogPost.css";
 import TwoColumnLayout from "../../../../../components/TwoColumnLayout/TwoColumnLayout";
 import ImageGrid from "../../../../../components/ImageGrid/ImageGrid";
 import MapEmbed from "../../../../../components/MapEmbed/MapEmbed";
+import InstagramEmbedSection from "../../../../../pages/HomePage/components/InstagramEmbedSection";
 import {{ {constants_name} }} from "./{component_name}.constants.ts";
 import {{ ContentSection }} from "./{component_name}.types";
 import {{ getImagePathFromBlogPost }} from "../../BlogPost.utils.ts";
@@ -194,6 +195,8 @@ const {component_name} = () => {{
             }}}}
           />
         );
+      case "instagram":
+        return <InstagramEmbedSection />;
       default:
         return null;
     }}

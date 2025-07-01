@@ -65,6 +65,13 @@
         },
         "content": "This text will appear on the right side and can also contain [embedded links](https://en.wikipedia.org/wiki/Caribbean) to external websites.",
         "left_image": "image-for-left-side.jpg"
+      },
+      {
+        "key": "instagramSection",
+        "layout": {
+          "type": "instagram"
+        },
+        "content": null
       }
     ]
   }

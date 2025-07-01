@@ -4,6 +4,8 @@ import "../../../../styles/layout.css";
 import "../../../BlogPage/Blogs/BlogPost.css";
 import "./BlogPreview.css";
 import TwoColumnLayout from "../../../../components/TwoColumnLayout/TwoColumnLayout";
+import MapEmbed from "../../../../components/MapEmbed/MapEmbed";
+import InstagramEmbedSection from "../../../../pages/HomePage/components/InstagramEmbedSection";
 
 const BlogPreview = ({ formData }) => {
   const imageUrlCache = useRef(new Map());
@@ -69,21 +71,6 @@ const BlogPreview = ({ formData }) => {
 
   // Memoize the preview to avoid unnecessary re-renders
   const previewContent = useMemo(() => {
-    // Create maps for preview (simplified)
-    const createPreviewMaps = () => {
-      return formData.maps.map((map, index) => (
-        <div key={index} className="preview-map-placeholder">
-          <div className="preview-map-title">
-            {map.title || `Map ${index + 1}`}
-          </div>
-          <div className="preview-map-content">
-            🗺️ Interactive Map Preview
-            <br />
-            <small>{map.name || "Map Name"}</small>
-          </div>
-        </div>
-      ));
-    };
     const renderContentSection = (section, index) => {
       switch (section.layout.type) {
         case "text":
@@ -124,73 +111,59 @@ const BlogPreview = ({ formData }) => {
           );
         }
 
-        case "two-column":
+        case "two-column": {
+          const leftContent =
+            section.layout.left_type === "text" ? section.content : null;
+          const rightContent =
+            section.layout.right_type === "text" ? section.content : null;
+          const leftImage =
+            section.layout.left_type === "image" ? section.image : null;
+          const rightImage =
+            section.layout.right_type === "image" ? section.image : null;
+
           return (
             <TwoColumnLayout
-              key={section.key || index}
               leftPane={{
                 type: section.layout.left_type,
-                imageUrl:
-                  section.layout.left_type === "image"
-                    ? getContentImageUrl(section.image)
-                    : undefined,
-                imageAlt: section.layout.image_alt || "Preview Image",
-                content:
-                  section.layout.left_type === "text"
-                    ? section.content || "Your text content will appear here..."
-                    : undefined,
+                imageUrl: leftImage
+                  ? URL.createObjectURL(leftImage)
+                  : undefined,
+                imageAlt: section.layout.image_alt,
+                content: leftContent,
               }}
               rightPane={{
                 type: section.layout.right_type,
-                imageUrl:
-                  section.layout.right_type === "image"
-                    ? getContentImageUrl(section.image)
-                    : undefined,
-                imageAlt: section.layout.image_alt || "Preview Image",
-                content:
-                  section.layout.right_type === "text"
-                    ? section.content || "Your text content will appear here..."
-                    : undefined,
-              }}
-            />
-          );
-
-        case "itinerary-with-map": {
-          const mapIndex = section.layout.mapIndex || 0;
-          const itinerary = formData.itineraries[mapIndex] || {
-            title: "",
-            items: [],
-          };
-          const previewMaps = createPreviewMaps();
-
-          return (
-            <TwoColumnLayout
-              key={section.key || index}
-              leftPane={{
-                type: "list",
-                listTitle: itinerary.title || "Itinerary",
-                listItems:
-                  itinerary.items.length > 0
-                    ? itinerary.items.filter((item) => item.trim() !== "")
-                    : [
-                        "📌 Add your itinerary items",
-                        "📌 They will appear here",
-                      ],
-              }}
-              rightPane={{
-                type: "map",
-                mapComponent: previewMaps[mapIndex] || previewMaps[0] || (
-                  <div className="preview-map-placeholder">
-                    <div className="preview-map-title">Map Preview</div>
-                    <div className="preview-map-content">
-                      🗺️ Your map will appear here
-                    </div>
-                  </div>
-                ),
+                imageUrl: rightImage
+                  ? URL.createObjectURL(rightImage)
+                  : undefined,
+                imageAlt: section.layout.image_alt,
+                content: rightContent,
               }}
             />
           );
         }
+
+        case "itinerary-with-map": {
+          const itinerary = formData.itineraries[section.layout.map_index];
+          const map = formData.maps[section.layout.map_index];
+
+          return (
+            <TwoColumnLayout
+              leftPane={{
+                type: "list",
+                listTitle: itinerary.title,
+                listItems: itinerary.items,
+              }}
+              rightPane={{
+                type: "map",
+                mapComponent: <MapEmbed title={map.title} url={map.url} />,
+              }}
+            />
+          );
+        }
+
+        case "instagram":
+          return <InstagramEmbedSection />;
 
         default:
           return null;

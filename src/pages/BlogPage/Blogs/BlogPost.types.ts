@@ -25,11 +25,13 @@ interface TwoColumnLayout extends BaseLayout {
   imageAlt?: string;
 }
 
-export type LayoutType =
-  | TextLayout
-  | ItineraryWithMapLayout
-  | ImageGridLayout
-  | TwoColumnLayout;
+export type LayoutType = {
+  type: "text" | "two-column" | "image-grid" | "itinerary-with-map" | "instagram";
+  leftType?: "text" | "image";
+  rightType?: "text" | "image";
+  imageAlt?: string;
+  mapIndex?: number;
+};
 
 export interface Itinerary {
   title: string;

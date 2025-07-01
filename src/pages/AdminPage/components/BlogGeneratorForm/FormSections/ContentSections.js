@@ -4,6 +4,7 @@ import TextContentSection from "./TextContentSection";
 import TwoColumnContentSection from "./TwoColumnContentSection";
 import ImageGridContentSection from "./ImageGridContentSection";
 import ItineraryWithMapContentSection from "./ItineraryWithMapContentSection";
+import InstagramContentSection from "./InstagramContentSection";
 
 const ContentSections = ({
   formData,
@@ -26,6 +27,8 @@ const ContentSections = ({
         return "Image Grid Section";
       case "itinerary-with-map":
         return "Itinerary with Map Section";
+      case "instagram":
+        return "Instagram Feed Section";
       default:
         return "Content Section";
     }
@@ -44,6 +47,15 @@ const ContentSections = ({
     ).length;
 
     return currentItineraryWithMapCount < mapCount;
+  };
+
+  // Check if Instagram section can be added
+  const canAddInstagram = () => {
+    const instagramCount = formData.content_sections.filter(
+      (section) => section.layout.type === "instagram",
+    ).length;
+
+    return instagramCount === 0;
   };
 
   const getItineraryWithMapButtonText = () => {
@@ -79,7 +91,10 @@ const ContentSections = ({
       if (section.layout.type === "image-grid") {
         return section.images && section.images.some((image) => image !== null);
       }
-      if (section.layout.type === "itinerary-with-map") {
+      if (
+        section.layout.type === "itinerary-with-map" ||
+        section.layout.type === "instagram"
+      ) {
         return true;
       }
       return false;
@@ -144,6 +159,21 @@ const ContentSections = ({
             >
               {getItineraryWithMapButtonText()}
             </button>
+            <button
+              type="button"
+              onClick={() => onAddContentSection("instagram")}
+              className={`blog-form-add-btn blog-form-add-instagram-btn ${
+                !canAddInstagram() ? "blog-form-btn-disabled" : ""
+              }`}
+              disabled={!canAddInstagram()}
+              title={
+                !canAddInstagram()
+                  ? "Only one Instagram feed section is allowed per blog post"
+                  : "Add your Instagram feed"
+              }
+            >
+              + Add Instagram Feed
+            </button>
           </div>
         </div>
 
@@ -205,6 +235,15 @@ const ContentSections = ({
                   onContentChange={onContentChange}
                   generateKey={generateKey}
                   formData={formData}
+                />
+              )}
+
+              {section.layout.type === "instagram" && (
+                <InstagramContentSection
+                  section={section}
+                  sectionIndex={sectionIndex}
+                  onContentChange={onContentChange}
+                  generateKey={generateKey}
                 />
               )}
             </div>

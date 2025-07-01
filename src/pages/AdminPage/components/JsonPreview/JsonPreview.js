@@ -211,7 +211,11 @@ const JsonPreview = ({ formData }) => {
               section.images && section.images.some((image) => image !== null)
             );
           }
-          if (section.layout.type === "itinerary-with-map") {
+          // For instagram and itinerary-with-map sections, always include them
+          if (
+            section.layout.type === "itinerary-with-map" ||
+            section.layout.type === "instagram"
+          ) {
             return true;
           }
           return false;
@@ -229,7 +233,8 @@ const JsonPreview = ({ formData }) => {
             contentSection.content = section.content.trim();
           } else if (
             section.layout.type === "image-grid" ||
-            section.layout.type === "itinerary-with-map"
+            section.layout.type === "itinerary-with-map" ||
+            section.layout.type === "instagram"
           ) {
             contentSection.content = null;
           }
