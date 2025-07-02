@@ -1,5 +1,5 @@
 .blog-form-container {
-  @apply p-4 md:p-8;
+  @apply p-4 md:p-8 h-[calc(100vh-200px)] overflow-y-auto;
 }
 
 .blog-form-title {
@@ -33,7 +33,7 @@
 
 /* Dynamic sections */
 .blog-form-dynamic-section {
-  @apply bg-gray-50 p-4 rounded-lg mb-6 border-l-4 border-blue-500;
+  @apply relative;
 }
 
 .blog-form-dynamic-header {
@@ -100,6 +100,10 @@
 }
 
 /* Content sections */
+.blog-form-content-buttons-container {
+  @apply sticky top-0 z-10 bg-gray-50 p-4 rounded-lg mb-4 border-l-4 border-blue-500;
+}
+
 .blog-form-content-buttons {
   @apply flex gap-2 flex-wrap;
 }

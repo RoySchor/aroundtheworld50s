@@ -121,7 +121,7 @@ const ContentSections = ({
       </div>
 
       <div className="blog-form-dynamic-section">
-        <div className="blog-form-dynamic-header">
+        <div className="blog-form-content-buttons-container">
           <div className="blog-form-content-buttons">
             <button
               type="button"
