@@ -8,30 +8,34 @@ import AdminLogin from "../../components/AdminLogin/AdminLogin";
 import { useSmartDebounce } from "./hooks/useDebounce";
 import "./AdminPage.css";
 
+// Initial blog form state
+const initialFormState = {
+  country: "",
+  country_code: "",
+  state: "",
+  title: "",
+  blog_description: "",
+  background_image: null,
+  blog_header: "",
+  blog_subtitle: "",
+  blog_description_detailed: "",
+  blog_tips_section: "",
+  include_itineraries: false,
+  itineraries: [{ title: "", items: [""] }],
+  include_maps: false,
+  maps: [{ name: "", title: "", url: "" }],
+  include_content: true,
+  content_sections: [],
+};
+
 const AdminPage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [mainTab, setMainTab] = useState("blog");
   const [activeTab, setActiveTab] = useState("preview");
-  const [formData, setFormData] = useState({
-    country: "",
-    country_code: "",
-    state: "",
-    title: "",
-    blog_description: "",
-    background_image: null,
-    blog_header: "",
-    blog_subtitle: "",
-    blog_description_detailed: "",
-    blog_tips_section: "",
-    include_itineraries: false,
-    itineraries: [{ title: "", items: [""] }],
-    include_maps: false,
-    maps: [{ name: "", title: "", url: "" }],
-    include_content: true,
-    content_sections: [],
-  });
+  const [formData, setFormData] = useState(initialFormState);
 
+  // Check authentication first
   useEffect(() => {
     const checkAuth = () => {
       const isAuth = sessionStorage.getItem("adminAuthenticated");
@@ -56,13 +60,72 @@ const AdminPage = () => {
     checkAuth();
   }, []);
 
+  // Load saved form data after auth check is complete and user is authenticated
+  useEffect(() => {
+    if (!isCheckingAuth && isAuthenticated) {
+      const savedFormData = sessionStorage.getItem("blogFormData");
+      if (savedFormData) {
+        try {
+          const parsedData = JSON.parse(savedFormData);
+          // Reset file input since we can't store File objects
+          parsedData.background_image = null;
+          if (parsedData.content_sections) {
+            parsedData.content_sections = parsedData.content_sections.map(
+              (section) => {
+                if (section.image) section.image = null;
+                if (section.images)
+                  section.images = section.images.map(() => null);
+                return section;
+              },
+            );
+          }
+          setFormData(parsedData);
+        } catch (error) {
+          console.error("Error loading saved form data:", error);
+        }
+      }
+    }
+  }, [isCheckingAuth, isAuthenticated]);
+
+  // Save form data when it changes and user is authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      try {
+        // Create a copy of form data without file objects
+        const formDataToSave = { ...formData };
+        formDataToSave.background_image = null;
+        if (formDataToSave.content_sections) {
+          formDataToSave.content_sections = formDataToSave.content_sections.map(
+            (section) => {
+              const sectionCopy = { ...section };
+              if (sectionCopy.image) sectionCopy.image = null;
+              if (sectionCopy.images)
+                sectionCopy.images = sectionCopy.images.map(() => null);
+              return sectionCopy;
+            },
+          );
+        }
+        console.log("Saving form data to sessionStorage:", formDataToSave);
+        sessionStorage.setItem("blogFormData", JSON.stringify(formDataToSave));
+      } catch (error) {
+        console.error("Error saving form data:", error);
+      }
+    }
+  }, [formData, isAuthenticated]);
+
   const handleLogin = (authenticated) => {
     setIsAuthenticated(authenticated);
+    if (authenticated) {
+      sessionStorage.setItem("adminAuthenticated", "true");
+      sessionStorage.setItem("authTimestamp", Date.now().toString());
+    }
   };
 
   const handleLogout = () => {
     sessionStorage.removeItem("adminAuthenticated");
     sessionStorage.removeItem("authTimestamp");
+    sessionStorage.removeItem("blogFormData");
+    setFormData(initialFormState);
     setIsAuthenticated(false);
   };
 
