@@ -299,31 +299,53 @@ const JsonPreview = ({ formData }) => {
 
     zip.file(jsonFilename, jsonString);
 
+    // Function to safely read a file and add it to the zip
+    const addFileToZip = async (file, filename) => {
+      if (!file || !filename) return;
+
+      try {
+        // Read the file as an ArrayBuffer
+        const arrayBuffer = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = () => reject(new Error("Failed to read file"));
+          reader.readAsArrayBuffer(file);
+        });
+
+        zip.file(filename, arrayBuffer);
+      } catch (error) {
+        console.warn(`Warning: Could not add file ${filename} to zip:`, error);
+      }
+    };
+
     // Add background image file to zip if it exists
     if (formData.background_image && formData.background_image.name) {
-      zip.file(formData.background_image.name, formData.background_image);
+      await addFileToZip(
+        formData.background_image,
+        formData.background_image.name,
+      );
     }
 
     // Add content section images to zip if they exist
     if (formData.include_content && formData.content_sections.length > 0) {
-      formData.content_sections.forEach((section) => {
+      for (const section of formData.content_sections) {
         // Add two-column images
         if (
           section.layout.type === "two-column" &&
           section.image &&
           section.image.name
         ) {
-          zip.file(section.image.name, section.image);
+          await addFileToZip(section.image, section.image.name);
         }
         // Add image-grid images
         if (section.layout.type === "image-grid" && section.images) {
-          section.images.forEach((image) => {
+          for (const image of section.images) {
             if (image !== null && image.name) {
-              zip.file(image.name, image);
+              await addFileToZip(image, image.name);
             }
-          });
+          }
         }
-      });
+      }
     }
 
     // Generate zip file and download
@@ -351,14 +373,13 @@ const JsonPreview = ({ formData }) => {
       const link = document.createElement("a");
       link.href = url;
       link.download = folderName;
-      // Set download attribute to save to Desktop
-      link.setAttribute("download", `${folderName}`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error creating zip file:", error);
+      throw error; // Re-throw to be caught by the caller
     }
   };
 
