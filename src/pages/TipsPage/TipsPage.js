@@ -1,16 +1,11 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import tips from "../../data/tips";
-import "../../styles/layout.css";
+import Flag from "react-world-flags";
+import { getFlagCode } from "../../pages/AdminPage/components/TipsEditor/countryFlags";
 import "./TipsPage.css";
 
 const TipsPage = () => {
-  const navigate = useNavigate();
-
-  const handleTipClick = (tipPath) => {
-    navigate(`/tips/${tipPath}`);
-  };
-
   return (
     <div className="page-container tips">
       <div className="container">
@@ -20,43 +15,27 @@ const TipsPage = () => {
             Discover insider tips and essential information for your next
             adventure
           </p>
-
           <div className="tips-grid">
             {tips.map((tip) => (
-              <div
-                key={tip.id}
-                className="tip-card"
-                onClick={() => handleTipClick(tip.path)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    handleTipClick(tip.path);
-                  }
-                }}
-              >
-                <div className="tip-card-flag">
-                  {tip.country_code === "TT" && "🇹🇹"}
-                  {tip.country_code === "US" && "🇺🇸"}
-                  {/* Add more flag emojis as needed */}
+              <Link key={tip.id} to={`/tips/${tip.path}`} className="tip-card">
+                <div className="tip-card-header">
+                  <div className="tip-card-flag">
+                    <Flag
+                      code={getFlagCode(tip.country_code)}
+                      alt={tip.country}
+                      height="24"
+                    />
+                  </div>
+                  <div className="tip-card-title">
+                    <h2>{tip.title}</h2>
+                    <p className="tip-card-location">
+                      {tip.state ? `${tip.state}, ${tip.country}` : tip.country}
+                    </p>
+                  </div>
                 </div>
-                <h3 className="tip-card-title">{tip.title}</h3>
                 <p className="tip-card-description">{tip.description}</p>
-                <div className="tip-card-location">
-                  {tip.state ? `${tip.country}, ${tip.state}` : tip.country}
-                </div>
-              </div>
+              </Link>
             ))}
-
-            {tips.length === 0 && (
-              <div className="tips-empty-state">
-                <h3>No tips available yet</h3>
-                <p>
-                  Tips will automatically appear here when you create blog posts
-                  with tips sections.
-                </p>
-              </div>
-            )}
           </div>
         </div>
       </div>

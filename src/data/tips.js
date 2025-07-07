@@ -1,3 +1,5 @@
+import { COUNTRY_FLAGS } from "../pages/AdminPage/components/TipsEditor/countryFlags";
+
 const tips = [
   {
     id: 1,
@@ -31,14 +33,38 @@ export const generateTipsPath = (country, state = null) => {
   }
 };
 
-// Helper function to get country code (simplified for now)
+// Helper function to get country code using our comprehensive mapping
 const getCountryCode = (country) => {
-  const countryMappings = {
+  // Common variations of country names mapped to their standard form
+  const countryVariations = {
     "United States": "US",
+    "United States of America": "US",
+    USA: "US",
+    "U.S.A.": "US",
+    America: "US",
     "Trinidad and Tobago": "TT",
-    // Add more as needed
+    "Trinidad & Tobago": "TT",
+    "United Kingdom": "GB",
+    UK: "GB",
+    "Great Britain": "GB",
   };
-  return countryMappings[country] || "";
+
+  // First try direct mapping
+  const code = countryVariations[country];
+  if (code) return code;
+
+  // If no direct match, try to find the code by matching the country name
+  const entry = Object.entries(COUNTRY_FLAGS).find(([_, flagCode]) => {
+    const countryName = country.toLowerCase();
+    const flagCountry = flagCode.toLowerCase();
+    return (
+      countryName === flagCountry ||
+      countryName.includes(flagCountry) ||
+      flagCountry.includes(countryName)
+    );
+  });
+
+  return entry ? entry[0] : "";
 };
 
 // Helper function to add new tips page
