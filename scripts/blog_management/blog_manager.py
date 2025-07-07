@@ -156,7 +156,7 @@ class BlogManager:
             print("\nAll changes have been reverted. You can try again with different content.")
         else:
             # Handle tips page creation if blog has tips section
-            if blog_data.get('blog', {}).get('tips_section'):
+            if blog_data.get('blog', {}).get('tips_section') or blog_data.get('tipsSection'):
                 self.handle_tips_page(blog_data)
 
             # Deploy changes
@@ -240,6 +240,35 @@ class BlogManager:
                 f.write(new_tips_content)
 
             print(f"✅ Created tips page entry for {location_display}")
+
+            # Create initial tips content file
+            tips_content_dir = self.base_dir / "src/data/tipsContent"
+            tips_content_dir.mkdir(parents=True, exist_ok=True)
+
+            tips_content_file = tips_content_dir / f"{tips_path}.json"
+            initial_content = {
+                "tip": {
+                    "country": country,
+                    "country_code": country_code,
+                    "state": state,
+                    "path": tips_path,
+                    "title": f"{location_display} Travel Tips",
+                    "description": f"Essential tips for traveling in {location_display}"
+                },
+                "content": {
+                    "essentialTips": "default content",
+                    "budgetPlanning": "default content",
+                    "foodDining": "default content",
+                    "transportation": "default content",
+                    "accommodation": "default content",
+                    "safetyHealth": "default content"
+                }
+            }
+
+            with open(tips_content_file, 'w', encoding='utf-8') as f:
+                json.dump(initial_content, f, indent=2)
+
+            print(f"✅ Created initial tips content file at {tips_content_file}")
 
         except Exception as e:
             print(f"⚠️  Error updating tips page: {str(e)}")
