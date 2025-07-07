@@ -132,15 +132,17 @@ Write content in user-friendly Markdown with live HTML preview:
 
 ```mermaid
 graph TD
-    A[Desktop Blog Folder] -->|Single Command| B[Blog Manager Script]
-    B --> C[Generate Code]
-    B --> D[Create Directories]
-    B --> E[Process Images]
-    C --> F[Preview Server]
-    D --> F
-    E --> F
-    F -->|Approve| G[Deploy to Production]
-    F -->|Reject| H[Revert Changes]
+    A[Admin Blog Generator Page] -->|Create Blog via Form Inputs| B[Generate Blog Button]
+    B[Generate Blog Button] -->|Single Command| C[Blog Manager Script]
+    C --> D[Generate Code]
+    C --> E[Create Directories]
+    C --> F[Process Images]
+    D --> G[Run ESlint Code Formatting]
+    G --> H[Preview Server]
+    E --> G
+    F --> G
+    H -->|Approve| I[Commit & Push then Deploy to Production]
+    H -->|Reject| J[Revert Changes to Previous Commit]
 ```
 
 ## 📚 For Developers
