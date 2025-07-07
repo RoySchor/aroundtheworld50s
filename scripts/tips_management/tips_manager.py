@@ -11,6 +11,7 @@ import sys
 import subprocess
 import tempfile
 import shutil
+import re
 from pathlib import Path
 from datetime import datetime
 
@@ -207,8 +208,6 @@ class TipsManager:
         """Apply bold and italic formatting to text"""
         if not text:
             return ""
-
-        import re
 
         # Apply bold formatting (**text**)
         formatted = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', text)
