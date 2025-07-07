@@ -233,8 +233,6 @@ const {component_name} = () => {{
               {{{constants_name}.tipsLink ? (
                 <a
                   href={{{constants_name}.tipsLink}}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="post-tips-link"
                   dangerouslySetInnerHTML={{{{ __html: {constants_name}.tipsSection }}}}
                 />
@@ -323,7 +321,7 @@ def create_blog_constants(blog_component_dir, blog_data, post_index):
     # Convert markdown links and properly format the description and other text fields
     description = convert_markdown_links(blog_content['description']).replace('`', '\\`').replace('${', '\\${')
     tips_section = convert_markdown_links(blog_content.get('tips_section', '')).replace('`', '\\`').replace('${', '\\${')
-    tips_link = blog_content.get('tips_link', '')
+    tips_link = f"/aroundtheworld50s#{blog_content.get('tips_link', '')}"
 
     # Serialize the data properly
     itineraries_json = json.dumps(itineraries, indent=2).replace('\n', '\n    ')

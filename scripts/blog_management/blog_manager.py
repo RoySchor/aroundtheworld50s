@@ -133,6 +133,16 @@ class BlogManager:
         # Update App.js with new route
         update_app_js(self.base_dir, blog_data, post_index)
 
+        # Handle tips page creation if blog has tips section
+        print("\n🔍 Checking for tips section...")
+        print(f"Tips in blog object: {blog_data.get('blog', {}).get('tips_section')}")
+        print(f"Tips at root level: {blog_data.get('tipsSection')}")
+        if blog_data.get('blog', {}).get('tips_section') or blog_data.get('tipsSection'):
+            print("✅ Found tips section, creating tips page...")
+            self.handle_tips_page(blog_data)
+        else:
+            print("❌ No tips section found in blog data")
+
         # Run lint:fix
         run_lint_fix(self.base_dir)
 
@@ -155,10 +165,6 @@ class BlogManager:
             revert_changes(self.base_dir, assets_dir, blog_component_dir, blog_data, post_index)
             print("\nAll changes have been reverted. You can try again with different content.")
         else:
-            # Handle tips page creation if blog has tips section
-            if blog_data.get('blog', {}).get('tips_section') or blog_data.get('tipsSection'):
-                self.handle_tips_page(blog_data)
-
             # Deploy changes
             deploy_changes(self.base_dir, blog_data)
             print("\n✨ Blog post has been successfully added and deployed! ✨")
