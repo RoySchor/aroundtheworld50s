@@ -1,11 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import tips from "../../../../data/tips";
+import Flag from "react-world-flags";
+import { getFlagCode } from "./countryFlags";
 
 const TipsSelector = ({ selectedTip, onTipSelect }) => {
   return (
     <div className="tips-selector">
-      <h3>Select Tips Page to Edit</h3>
+      <h3>Select a Tips Page to Edit</h3>
 
       {tips.length === 0 ? (
         <div className="tips-selector-empty">
@@ -24,14 +26,16 @@ const TipsSelector = ({ selectedTip, onTipSelect }) => {
             >
               <div className="tips-selector-item-header">
                 <div className="tips-selector-flag">
-                  {tip.country_code === "TT" && "🇹🇹"}
-                  {tip.country_code === "US" && "🇺🇸"}
-                  {/* Add more flag emojis as needed */}
+                  <Flag
+                    code={getFlagCode(tip.country_code)}
+                    alt={tip.country}
+                    height="16"
+                  />
                 </div>
                 <div className="tips-selector-info">
                   <h4>{tip.title}</h4>
                   <p className="tips-selector-location">
-                    {tip.state ? `${tip.country}, ${tip.state}` : tip.country}
+                    {tip.state ? `${tip.state}, ${tip.country}` : tip.country}
                   </p>
                 </div>
               </div>
