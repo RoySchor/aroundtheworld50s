@@ -18,8 +18,6 @@ import TipDetailPage from "./pages/TipsPage/TipDetailPage";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
-import TrinidadTobegoPost1 from "./pages/BlogPage/Blogs/trinidad-and-tobago/1/TrinidadTobegoPost1.tsx";
-
 function App() {
   return (
     <Router>
@@ -53,11 +51,6 @@ function BlogPost() {
   }
 
   switch (postName) {
-    case "trinidad-and-tobago":
-      if (index === "1") {
-        return <TrinidadTobegoPost1 />;
-      }
-      break;
     default:
       return <ErrorPage />;
   }
