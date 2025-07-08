@@ -17,6 +17,7 @@ import TipsPage from "./pages/TipsPage/TipsPage";
 import TipDetailPage from "./pages/TipsPage/TipDetailPage";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
+import TrinidadandTobagoPost1 from "./pages/BlogPage/Blogs/trinidad-and-tobago/1/TrinidadandTobagoPost1.tsx";
 
 function App() {
   return (
@@ -51,6 +52,11 @@ function BlogPost() {
   }
 
   switch (postName) {
+    case "trinidad-and-tobago":
+      if (index === "1") {
+        return <TrinidadandTobagoPost1 />;
+      }
+      break;
     default:
       return <ErrorPage />;
   }

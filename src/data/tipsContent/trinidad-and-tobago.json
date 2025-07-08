@@ -1,0 +1,18 @@
+{
+  "tip": {
+    "country": "Trinidad and Tobago",
+    "country_code": "TT",
+    "state": null,
+    "path": "trinidad-and-tobago",
+    "title": "Trinidad and Tobago Travel Tips",
+    "description": "Essential tips for traveling in Trinidad and Tobago"
+  },
+  "content": {
+    "essentialTips": "default content",
+    "budgetPlanning": "default content",
+    "foodDining": "default content",
+    "transportation": "default content",
+    "accommodation": "default content",
+    "safetyHealth": "default content"
+  }
+}
