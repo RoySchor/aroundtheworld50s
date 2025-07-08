@@ -277,24 +277,31 @@ class GalleryManager:
         print("Navigate to the home page and check the rotating gallery.")
         print("="*50)
 
-        while True:
-            choice = input("\nDo you want to approve these changes? (y/n/r): ").lower().strip()
+        try:
+            while True:
+                choice = input("\nDo you want to approve these changes? (y/n/r): ").lower().strip()
 
-            if choice in ['y', 'yes']:
-                print("\n✅ Changes approved! Deploying...")
-                if self.commit_and_deploy():
-                    print("🎉 Gallery successfully updated and deployed!")
+                if choice in ['y', 'yes']:
+                    print("\n✅ Changes approved! Deploying...")
+                    if self.commit_and_deploy():
+                        print("🎉 Gallery successfully updated and deployed!")
+                    else:
+                        print("⚠️ Deployment failed, but changes are saved locally.")
+                    break
+
+                elif choice in ['n', 'no', 'r', 'revert']:
+                    print("\n❌ Changes rejected. Reverting...")
+                    self.revert_changes()
+                    break
+
                 else:
-                    print("⚠️ Deployment failed, but changes are saved locally.")
-                break
+                    print("Please enter 'y' for yes, 'n' for no, or 'r' for revert.")
 
-            elif choice in ['n', 'no', 'r', 'revert']:
-                print("\n❌ Changes rejected. Reverting...")
-                self.revert_changes()
-                break
-
-            else:
-                print("Please enter 'y' for yes, 'n' for no, or 'r' for revert.")
+        finally:
+            # Always kill the development server when done
+            print("\n🔄 Cleaning up development server...")
+            self.kill_npm_process()
+            print("✅ Development server stopped")
 
 def main():
     """Command line interface for gallery management."""
