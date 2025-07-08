@@ -19,7 +19,7 @@ from datetime import datetime
 parent_dir = Path(__file__).parent.parent / "blog_management"
 sys.path.append(str(parent_dir))
 
-from process_management import run_lint_fix, deploy_changes
+from process_management import run_lint_fix, deploy_changes, kill_npm_process
 import file_operations
 
 class TipsManager:
@@ -403,55 +403,62 @@ def find_tips_file(filename):
 
 def main():
     """Main function to handle command line execution"""
-    if len(sys.argv) != 2:
-        print("Usage: python tips_manager.py <tips_json_filename>")
-        print("Example: python tips_manager.py trinidad-and-tobago-tips.json")
-        print("         python tips_manager.py ~/Downloads/trinidad-and-tobago-tips.json")
-        print()
-        print("The script will automatically search for the file in:")
-        print("  • Downloads folder")
-        print("  • Desktop")
-        print("  • Documents")
-        print("  • Current directory")
-        sys.exit(1)
-
-    filename = sys.argv[1]
-
-    # Smart file search
-    tips_file_path = find_tips_file(filename)
-
-    if not tips_file_path:
-        print(f"\n❌ Tips file '{filename}' not found in any common locations!")
-        print("\nSearched in:")
-        print("  • ~/Downloads/")
-        print("  • ~/Desktop/")
-        print("  • ~/Documents/")
-        print("  • Current directory")
-        print("\nPlease ensure the file exists in one of these locations.")
-        sys.exit(1)
-
     try:
-        # Load tips data from file
-        with open(tips_file_path, 'r', encoding='utf-8') as f:
-            tips_data = json.load(f)
-
-        # Initialize tips manager and save content
-        manager = TipsManager()
-        success = manager.save_tips_content(tips_data)
-
-        if success:
-            print("\n🎉 Tips content deployment completed successfully!")
-            sys.exit(0)
-        else:
-            print("\n💥 Tips content deployment failed!")
+        if len(sys.argv) != 2:
+            print("Usage: python tips_manager.py <tips_json_filename>")
+            print("Example: python tips_manager.py trinidad-and-tobago-tips.json")
+            print("         python tips_manager.py ~/Downloads/trinidad-and-tobago-tips.json")
+            print()
+            print("The script will automatically search for the file in:")
+            print("  • Downloads folder")
+            print("  • Desktop")
+            print("  • Documents")
+            print("  • Current directory")
             sys.exit(1)
 
-    except json.JSONDecodeError as e:
-        print(f"❌ Invalid JSON file: {e}")
-        sys.exit(1)
-    except Exception as e:
-        print(f"❌ Error: {e}")
-        sys.exit(1)
+        filename = sys.argv[1]
+
+        # Smart file search
+        tips_file_path = find_tips_file(filename)
+
+        if not tips_file_path:
+            print(f"\n❌ Tips file '{filename}' not found in any common locations!")
+            print("\nSearched in:")
+            print("  • ~/Downloads/")
+            print("  • ~/Desktop/")
+            print("  • ~/Documents/")
+            print("  • Current directory")
+            print("\nPlease ensure the file exists in one of these locations.")
+            sys.exit(1)
+
+        try:
+            # Load tips data from file
+            with open(tips_file_path, 'r', encoding='utf-8') as f:
+                tips_data = json.load(f)
+
+            # Initialize tips manager and save content
+            manager = TipsManager()
+            success = manager.save_tips_content(tips_data)
+
+            if success:
+                print("\n🎉 Tips content deployment completed successfully!")
+                sys.exit(0)
+            else:
+                print("\n💥 Tips content deployment failed!")
+                sys.exit(1)
+
+        except json.JSONDecodeError as e:
+            print(f"❌ Invalid JSON file: {e}")
+            sys.exit(1)
+        except Exception as e:
+            print(f"❌ Error: {e}")
+            sys.exit(1)
+
+    finally:
+        # Always kill any stray npm processes at the end
+        print("\n🛑 Cleaning up any remaining processes...")
+        kill_npm_process()
+        print("✅ Cleanup complete")
 
 if __name__ == "__main__":
     main()
