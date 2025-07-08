@@ -131,7 +131,7 @@ const GalleryForm = ({
                 type="file"
                 className="gallery-file-input"
                 multiple
-                accept=".jpg,.jpeg,.png,.webp,.gif"
+                accept=".jpg,.jpeg,.JPG,.JPEG,.png,.PNG,.webp,.WEBP,.gif,.GIF"
                 onChange={handleFileInputChange}
               />
             </label>

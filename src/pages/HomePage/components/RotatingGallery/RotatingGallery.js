@@ -9,7 +9,7 @@ const RotatingGallery = () => {
     require.context(
       "../../../../assets/homePageGallery",
       false,
-      /\.(png|jpe?g|svg)$/,
+      /\.(png|jpe?g|svg)$/i,
     ),
   );
 

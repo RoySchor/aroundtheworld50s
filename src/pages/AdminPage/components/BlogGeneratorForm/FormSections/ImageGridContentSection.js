@@ -50,7 +50,7 @@ const ImageGridContentSection = ({
               type="file"
               value={image}
               onChange={(file) => handleImageChange(imageIndex, file)}
-              accept=".jpg,.jpeg,.png,.webp,.gif"
+              accept=".jpg,.jpeg,.JPG,.JPEG,.png,.PNG,.webp,.WEBP,.gif,.GIF"
             />
             {(section.images || []).length > 1 && (
               <button

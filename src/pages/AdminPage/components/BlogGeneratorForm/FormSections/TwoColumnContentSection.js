@@ -99,7 +99,7 @@ const TwoColumnContentSection = ({
         type="file"
         value={section.image || null}
         onChange={handleImageChange}
-        accept=".jpg,.jpeg,.png,.webp,.gif"
+        accept=".jpg,.jpeg,.JPG,.JPEG,.png,.PNG,.webp,.WEBP,.gif,.GIF"
       />
 
       <div className="blog-form-section-info">

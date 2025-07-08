@@ -162,7 +162,7 @@ const BlogGeneratorForm = ({
         type="file"
         value={formData.background_image}
         onChange={(value) => onInputChange("background_image", value)}
-        accept=".jpg,.jpeg,.png,.webp,.gif"
+        accept=".jpg,.jpeg,.JPG,.JPEG,.png,.PNG,.webp,.WEBP,.gif,.GIF"
         required
       />
 
