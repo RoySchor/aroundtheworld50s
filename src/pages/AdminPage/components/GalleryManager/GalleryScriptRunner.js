@@ -3,17 +3,21 @@ import PropTypes from "prop-types";
 
 const GalleryScriptRunner = ({ newImages, removedImages, onComplete }) => {
   const [showInstructions, setShowInstructions] = useState(false);
+  const [folderName, setFolderName] = useState("");
 
   // Generate the gallery changes data for the Python script
   const generateGalleryData = () => {
-    return {
+    const data = {
       add_images: newImages.map((img) => img.name),
       remove_images: removedImages.map((img) => img.name),
-      new_image_files: newImages.map((img) => ({
-        name: img.name,
-        // Note: User will need to have these files accessible to the script
-      })),
     };
+
+    // Only include folder_name if it's provided
+    if (folderName.trim()) {
+      data.folder_name = folderName.trim();
+    }
+
+    return data;
   };
 
   const galleryData = generateGalleryData();
@@ -68,6 +72,26 @@ const GalleryScriptRunner = ({ newImages, removedImages, onComplete }) => {
             </ul>
           </div>
 
+          {newImages.length > 0 && (
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Desktop Folder Name (Optional)
+              </label>
+              <input
+                type="text"
+                value={folderName}
+                onChange={(e) => setFolderName(e.target.value)}
+                placeholder="e.g., my-gallery-images"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+              <p className="mt-1 text-xs text-gray-500">
+                If your images are in a folder on your Desktop, enter the folder
+                name here. Otherwise, images will be searched for directly on
+                your Desktop.
+              </p>
+            </div>
+          )}
+
           <div className="bg-blue-50 border border-blue-200 rounded p-3 mb-4">
             <p className="text-sm text-blue-800">
               <strong>💡 How it works:</strong> You'll run a simple terminal
@@ -79,8 +103,9 @@ const GalleryScriptRunner = ({ newImages, removedImages, onComplete }) => {
           {newImages.length > 0 && (
             <div className="bg-yellow-50 border border-yellow-200 rounded p-3 mb-4">
               <p className="text-sm text-yellow-800">
-                <strong>⚠️ Important:</strong> Make sure you have your new image
-                files saved locally before running the script.
+                <strong>⚠️ Important:</strong> Make sure your image files are{" "}
+                {folderName ? `in the '${folderName}' folder on` : "on"} your
+                Desktop before running the script.
               </p>
             </div>
           )}
@@ -121,6 +146,25 @@ const GalleryScriptRunner = ({ newImages, removedImages, onComplete }) => {
                 </li>
               ))}
             </ul>
+          </div>
+        )}
+
+        {/* New Images Location */}
+        {newImages.length > 0 && (
+          <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+            <h4 className="font-semibold text-gray-800 mb-2">
+              📁 Image Location
+            </h4>
+            <p className="text-sm text-gray-700 mb-2">
+              The script will look for your images in:
+            </p>
+            <div className="font-mono text-sm bg-white p-2 rounded border">
+              {folderName ? `~/Desktop/${folderName}/` : "~/Desktop/"}
+            </div>
+            <p className="text-xs text-gray-600 mt-2">
+              Make sure your images are in the correct location before
+              proceeding.
+            </p>
           </div>
         )}
 

@@ -12,6 +12,7 @@ class GalleryManager:
     def __init__(self):
         self.base_dir = Path.cwd()
         self.gallery_dir = self.base_dir / "src/assets/homePageGallery"
+        self.desktop_path = Path.home() / "Desktop"
 
     def get_current_images(self):
         """Get list of current images in the gallery."""
@@ -166,29 +167,45 @@ class GalleryManager:
             print(f"❌ Failed to revert changes: {e}")
             return False
 
-    def find_image_files(self, image_names):
-        """Find image files in common locations."""
-        search_paths = [
-            Path.home() / "Desktop",
-            Path.home() / "Downloads",
-            Path.home() / "Documents",
-            Path.cwd()
-        ]
+    def find_image_files(self, image_names, folder_name=None):
+        """Find image files on desktop or in specified desktop folder.
 
+        Args:
+            image_names: List of image filenames to find
+            folder_name: Optional folder name on desktop containing images
+
+        Returns:
+            tuple: (found_files, missing_files)
+        """
         found_files = []
         missing_files = []
 
-        for image_name in image_names:
-            found = False
-            for search_path in search_paths:
-                potential_file = search_path / image_name
-                if potential_file.exists():
-                    found_files.append(str(potential_file))
-                    found = True
-                    break
+        # Determine search path
+        if folder_name:
+            search_path = self.desktop_path / folder_name
+            if not search_path.exists() or not search_path.is_dir():
+                print(f"❌ Error: Folder '{folder_name}' not found on Desktop")
+                print(f"Expected location: {search_path}")
+                return [], image_names
+        else:
+            search_path = self.desktop_path
 
-            if not found:
+        print(f"\n🔍 Looking for images in: {search_path}")
+
+        for image_name in image_names:
+            image_path = search_path / image_name
+            if image_path.exists() and image_path.is_file():
+                found_files.append(str(image_path))
+            else:
                 missing_files.append(image_name)
+
+        # Print summary
+        if found_files:
+            print(f"✅ Found {len(found_files)} image(s)")
+        if missing_files:
+            print(f"❌ Could not find {len(missing_files)} image(s):")
+            for missing in missing_files:
+                print(f"   • {missing}")
 
         return found_files, missing_files
 
@@ -196,37 +213,33 @@ class GalleryManager:
         """Main method to update the gallery with given changes."""
         print("🖼️ Starting gallery update process...")
 
-        # Show summary of changes
+        # Extract data
         add_images = changes_data.get('add_images', [])
         remove_images = changes_data.get('remove_images', [])
+        folder_name = changes_data.get('folder_name', None)  # Optional folder name on desktop
 
         print(f"📋 Changes to apply:")
         if add_images:
             print(f"  ➕ Add {len(add_images)} images: {', '.join(add_images)}")
         if remove_images:
             print(f"  ➖ Remove {len(remove_images)} images: {', '.join(remove_images)}")
+        if folder_name:
+            print(f"  📁 Looking in Desktop folder: {folder_name}")
+        else:
+            print("  📁 Looking directly on Desktop")
 
         # Kill any existing npm processes
         self.kill_npm_process()
 
         try:
-            # Process additions - try to find files automatically
+            # Process additions
             if add_images:
-                print(f"\n🔍 Looking for new image files...")
-                found_files, missing_files = self.find_image_files(add_images)
+                found_files, missing_files = self.find_image_files(add_images, folder_name)
 
                 if missing_files:
-                    print(f"⚠️ Could not find these files automatically: {', '.join(missing_files)}")
-                    print("Please provide full paths for missing files:")
-
-                    for missing_file in missing_files:
-                        while True:
-                            file_path = input(f"  Path for {missing_file}: ").strip()
-                            if Path(file_path).exists():
-                                found_files.append(file_path)
-                                break
-                            else:
-                                print("  File not found. Please try again.")
+                    print("\n❌ Aborting due to missing files")
+                    self.revert_changes()
+                    return False
 
                 print(f"\n➕ Adding {len(found_files)} new images...")
                 self.add_images(found_files)
