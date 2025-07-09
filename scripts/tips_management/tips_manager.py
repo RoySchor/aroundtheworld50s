@@ -132,14 +132,14 @@ class TipsManager:
             has_content = False
             for section in expected_sections:
                 section_data = content.get(section)
-                if (
-                    section_data
-                    and isinstance(section_data, dict)
-                    and section_data.get('content')
-                    and isinstance(section_data['content'], str)
-                    and section_data['content'].strip()
-                    and section_data.get('enabled', True)  # Check if section is enabled, default to True
-                ):
+                if isinstance(section_data, dict):
+                    content_text = section_data.get('content', '')
+                    enabled = section_data.get('enabled', True)
+                    if enabled and content_text and isinstance(content_text, str) and content_text.strip():
+                        has_content = True
+                        break
+                elif isinstance(section_data, str) and section_data.strip():
+                    # Backward compatibility with old string format
                     has_content = True
                     break
 
@@ -239,16 +239,29 @@ class TipsManager:
                     if enabled and content:
                         # Format markdown content to HTML
                         html_content = self.format_markdown_text(content)
-                        transformed_data['content'][section_key] = html_content
+                        transformed_data['content'][section_key] = {
+                            'content': html_content,
+                            'enabled': enabled
+                        }
                     else:
-                        transformed_data['content'][section_key] = ''
+                        # Save as object with enabled state, even if no content
+                        transformed_data['content'][section_key] = {
+                            'content': '',
+                            'enabled': enabled
+                        }
                 else:
-                    # Handle string content directly
+                    # Handle string content directly (backward compatibility)
                     if section_data:
                         html_content = self.format_markdown_text(section_data)
-                        transformed_data['content'][section_key] = html_content
+                        transformed_data['content'][section_key] = {
+                            'content': html_content,
+                            'enabled': True
+                        }
                     else:
-                        transformed_data['content'][section_key] = ''
+                        transformed_data['content'][section_key] = {
+                            'content': '',
+                            'enabled': False
+                        }
 
             # Add timestamp
             transformed_data['lastModified'] = datetime.now().isoformat()
@@ -300,8 +313,16 @@ class TipsManager:
                         preview = preview[:200] + "..."
                     print(f"  {preview}")
                 else:
-                    print(f"\n{title}:")
+                    status = "enabled" if enabled else "disabled"
+                    print(f"\n{title}: ({status})")
                     print("  (empty)")
+            elif isinstance(section_data, str) and section_data.strip():
+                # Backward compatibility with old string format
+                print(f"\n{title}:")
+                preview = section_data
+                if len(preview) > 200:
+                    preview = preview[:200] + "..."
+                print(f"  {preview}")
             else:
                 print(f"\n{title}:")
                 print("  (empty)")

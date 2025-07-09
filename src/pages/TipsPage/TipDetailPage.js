@@ -30,7 +30,26 @@ const TipDetailPage = () => {
   }, [tip]);
 
   const renderContentSection = (title, contentKey, placeholder) => {
-    const content = tipsContent?.content?.[contentKey];
+    const section = tipsContent?.content?.[contentKey];
+
+    // Handle both old (string) and new (object) formats
+    let enabled = true;
+    let content = "";
+
+    if (typeof section === "string") {
+      // Old format: just a string
+      content = section;
+      enabled = !!section; // Enable if there's content
+    } else if (typeof section === "object" && section !== null) {
+      // New format: object with content and enabled
+      content = section.content || "";
+      enabled = section.enabled !== false; // Default to true if not specified
+    }
+
+    // Don't render disabled sections
+    if (!enabled) {
+      return null;
+    }
 
     return (
       <div className="tip-section">

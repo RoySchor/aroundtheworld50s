@@ -60,12 +60,30 @@ export const formatTipsForSaving = (tipData, tipsContent) => {
       updated_at: new Date().toISOString(),
     },
     content: {
-      essentialTips: tipsContent.essentialTips || "",
-      budgetPlanning: tipsContent.budgetPlanning || "",
-      foodDining: tipsContent.foodDining || "",
-      transportation: tipsContent.transportation || "",
-      accommodation: tipsContent.accommodation || "",
-      safetyHealth: tipsContent.safetyHealth || "",
+      essentialTips: {
+        content: tipsContent.essentialTips?.content || "",
+        enabled: tipsContent.essentialTips?.enabled !== false,
+      },
+      budgetPlanning: {
+        content: tipsContent.budgetPlanning?.content || "",
+        enabled: tipsContent.budgetPlanning?.enabled !== false,
+      },
+      foodDining: {
+        content: tipsContent.foodDining?.content || "",
+        enabled: tipsContent.foodDining?.enabled !== false,
+      },
+      transportation: {
+        content: tipsContent.transportation?.content || "",
+        enabled: tipsContent.transportation?.enabled !== false,
+      },
+      accommodation: {
+        content: tipsContent.accommodation?.content || "",
+        enabled: tipsContent.accommodation?.enabled !== false,
+      },
+      safetyHealth: {
+        content: tipsContent.safetyHealth?.content || "",
+        enabled: tipsContent.safetyHealth?.enabled !== false,
+      },
     },
     lastModified: new Date().toISOString(),
   };

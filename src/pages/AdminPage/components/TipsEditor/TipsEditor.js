@@ -58,13 +58,27 @@ const TipsEditor = () => {
         // Convert HTML content to markdown for editing
         const convertedContent = {};
         Object.keys(existingContent.content).forEach((section) => {
-          const htmlContent = existingContent.content[section];
-          convertedContent[section] = {
-            content: convertHtmlToMarkdown(htmlContent),
-            enabled: !!(
-              htmlContent || existingContent.sectionConfig?.[section]
-            ),
-          };
+          const sectionData = existingContent.content[section];
+
+          // Handle both old (string) and new (object) formats
+          if (typeof sectionData === "string") {
+            // Old format: just a string
+            convertedContent[section] = {
+              content: convertHtmlToMarkdown(sectionData),
+              enabled: !!sectionData, // Enable if there's content
+            };
+          } else if (typeof sectionData === "object" && sectionData !== null) {
+            // New format: object with content and enabled
+            convertedContent[section] = {
+              content: convertHtmlToMarkdown(sectionData.content || ""),
+              enabled: sectionData.enabled !== false, // Default to true if not specified
+            };
+          } else {
+            convertedContent[section] = {
+              content: "",
+              enabled: false,
+            };
+          }
         });
 
         // Load converted content for editing
