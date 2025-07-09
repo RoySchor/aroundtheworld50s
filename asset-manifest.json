@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/aroundtheworld50s/static/css/main.830d846d.css",
-    "main.js": "/aroundtheworld50s/static/js/main.1cb01772.js",
-    "static/js/368.87d6c154.chunk.js": "/aroundtheworld50s/static/js/368.87d6c154.chunk.js",
+    "main.js": "/aroundtheworld50s/static/js/main.218ae5f5.js",
+    "static/js/368.528cba72.chunk.js": "/aroundtheworld50s/static/js/368.528cba72.chunk.js",
     "static/js/453.5be98b05.chunk.js": "/aroundtheworld50s/static/js/453.5be98b05.chunk.js",
     "static/media/IMG_1354.jpeg": "/aroundtheworld50s/static/media/IMG_1354.dd0bafebf4edd0c44475.jpeg",
     "static/media/IMG_1325.jpeg": "/aroundtheworld50s/static/media/IMG_1325.b2229c5bf7726d46e558.jpeg",
@@ -55,11 +55,11 @@
     "static/media/flat-world-map.webp": "/aroundtheworld50s/static/media/flat-world-map.93be244b96785ff75d03.webp",
     "index.html": "/aroundtheworld50s/index.html",
     "main.830d846d.css.map": "/aroundtheworld50s/static/css/main.830d846d.css.map",
-    "main.1cb01772.js.map": "/aroundtheworld50s/static/js/main.1cb01772.js.map",
+    "main.218ae5f5.js.map": "/aroundtheworld50s/static/js/main.218ae5f5.js.map",
     "453.5be98b05.chunk.js.map": "/aroundtheworld50s/static/js/453.5be98b05.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.830d846d.css",
-    "static/js/main.1cb01772.js"
+    "static/js/main.218ae5f5.js"
   ]
 }
