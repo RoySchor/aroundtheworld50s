@@ -18,6 +18,7 @@ import TipDetailPage from "./pages/TipsPage/TipDetailPage";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import TrinidadandTobagoPost1 from "./pages/BlogPage/Blogs/trinidad-and-tobago/1/TrinidadandTobagoPost1.tsx";
+import UnitedStatesNewEnglandPost1 from "./pages/BlogPage/Blogs/united-states-new-england/1/UnitedStatesNewEnglandPost1.tsx";
 
 function App() {
   return (
@@ -55,6 +56,11 @@ function BlogPost() {
     case "trinidad-and-tobago":
       if (index === "1") {
         return <TrinidadandTobagoPost1 />;
+      }
+      break;
+    case "united-states-new-england":
+      if (index === "1") {
+        return <UnitedStatesNewEnglandPost1 />;
       }
       break;
     default:

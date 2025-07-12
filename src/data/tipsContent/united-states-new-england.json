@@ -1,0 +1,18 @@
+{
+  "tip": {
+    "country": "United States",
+    "country_code": "US",
+    "state": "New England",
+    "path": "united-states-new-england",
+    "title": "United States, New England Travel Tips",
+    "description": "Essential tips for traveling in United States, New England"
+  },
+  "content": {
+    "essentialTips": "default content",
+    "budgetPlanning": "default content",
+    "foodDining": "default content",
+    "transportation": "default content",
+    "accommodation": "default content",
+    "safetyHealth": "default content"
+  }
+}
