@@ -48,6 +48,19 @@ const blogs = [
       "✨Beyond the State House: Exploring Providence on Foot👣",
     state: "Rhode Island",
   },
+  {
+    id: "united-states-new-york-1",
+    created_at: "2025-07-13",
+    country: "United States",
+    country_code: "US",
+    title: "NYC's Living Canvas: Getting Painted in Union Square! 🏙️🌟",
+    folder: "united-states-new-york/1",
+    background_image: "IMG_0544.jpeg",
+    path: "/blog/united-states-new-york/1",
+    blog_description:
+      "Painted Paradise: Our Wild Body Painting Adventure in NYC! 🎨✨🗽",
+    state: "New York",
+  },
 ];
 
 export default blogs;
