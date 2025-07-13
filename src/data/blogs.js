@@ -23,6 +23,18 @@ const blogs = [
       "✨A 4th of July Escape to Rhode Island & Massachusetts🎇",
     state: "New England",
   },
+  {
+    id: "united-states-connecticut-1",
+    created_at: "2025-07-13",
+    country: "United States",
+    country_code: "US",
+    title: "📍Mystic, Just a Quick, But Memorable, Pause! ⏳📸",
+    folder: "united-states-connecticut/1",
+    background_image: "IMG_0018.jpeg",
+    path: "/blog/united-states-connecticut/1",
+    blog_description: "Our Enchanting Stop in Mystic, CT! ⚓🍕✨",
+    state: "Connecticut",
+  },
 ];
 
 export default blogs;
