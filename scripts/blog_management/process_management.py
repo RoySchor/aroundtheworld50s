@@ -145,4 +145,25 @@ def clear_webpack_cache(base_dir):
     """Clear webpack cache to ensure fresh build."""
     cache_dir = base_dir / "node_modules/.cache"
     if cache_dir.exists():
-        shutil.rmtree(cache_dir)
+        try:
+            # First try to remove the entire directory
+            shutil.rmtree(cache_dir)
+        except OSError:
+            # If that fails, try to remove files one by one
+            print("⚠️ Could not remove cache directory directly, trying individual files...")
+            try:
+                for item in cache_dir.glob("**/*"):
+                    if item.is_file():
+                        try:
+                            item.unlink()
+                        except OSError:
+                            pass  # Skip files that can't be removed
+                    elif item.is_dir():
+                        try:
+                            item.rmdir()
+                        except OSError:
+                            pass  # Skip directories that can't be removed
+                print("✅ Cache cleared (some files may remain)")
+            except Exception as e:
+                print(f"⚠️ Warning: Could not fully clear cache: {e}")
+                print("This is not critical, continuing with deployment...")

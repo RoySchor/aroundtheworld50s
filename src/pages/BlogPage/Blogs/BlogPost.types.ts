@@ -14,6 +14,7 @@ interface ItineraryWithMapLayout extends BaseLayout {
 interface ImageGridLayout extends BaseLayout {
   type: "image-grid";
   images?: string[];
+  captions?: string[];
 }
 
 interface TwoColumnLayout extends BaseLayout {
@@ -23,6 +24,7 @@ interface TwoColumnLayout extends BaseLayout {
   leftImage?: string;
   rightImage?: string;
   imageAlt?: string;
+  imageCaption?: string;
 }
 
 export type LayoutType = {
@@ -30,6 +32,7 @@ export type LayoutType = {
   leftType?: "text" | "image";
   rightType?: "text" | "image";
   imageAlt?: string;
+  imageCaption?: string;
   mapIndex?: number;
 };
 
@@ -43,6 +46,7 @@ export interface ContentSection {
   layout: LayoutType;
   content: string | null;
   images?: string[];
+  imageCaptions?: string[];
   leftImage?: string;
   rightImage?: string;
 }

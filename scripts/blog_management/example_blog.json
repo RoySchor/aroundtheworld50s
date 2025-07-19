@@ -75,6 +75,18 @@
           "test-bg.jpg",
           "test-bg.jpg",
           "test-bg.jpg"
+        ],
+        "imageCaptions": [
+          "Beautiful sunset at Example Beach",
+          "Local market scene",
+          "Historic architecture",
+          "Street food vendors",
+          "Example Park fountain",
+          "Traditional dancers",
+          "City skyline",
+          "Local cuisine",
+          "Example Cathedral",
+          "Example Square at night"
         ]
       },
       {

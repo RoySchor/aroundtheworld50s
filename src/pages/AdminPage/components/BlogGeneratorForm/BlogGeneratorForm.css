@@ -315,3 +315,11 @@
 .country-validation-message.invalid {
   @apply text-red-600;
 }
+
+.blog-form-image-input-group {
+  @apply flex-1 space-y-2;
+}
+
+.blog-form-image-row {
+  @apply flex gap-4 items-start mb-4;
+}

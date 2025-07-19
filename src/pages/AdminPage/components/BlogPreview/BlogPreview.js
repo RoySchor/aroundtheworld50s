@@ -101,9 +101,17 @@ const BlogPreview = ({ formData }) => {
                   <div key={imgIndex} className="image-grid-item">
                     <img
                       src={imageUrl}
-                      alt={`Gallery ${imgIndex + 1}`}
+                      alt={
+                        section.imageCaptions?.[imgIndex] ||
+                        `Gallery ${imgIndex + 1}`
+                      }
                       className="image-grid-image"
                     />
+                    {section.imageCaptions?.[imgIndex] && (
+                      <div className="image-grid-caption">
+                        {section.imageCaptions[imgIndex]}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -129,6 +137,10 @@ const BlogPreview = ({ formData }) => {
                   ? URL.createObjectURL(leftImage)
                   : undefined,
                 imageAlt: section.layout.image_alt,
+                imageCaption:
+                  section.layout.left_type === "image"
+                    ? section.layout.image_caption
+                    : undefined,
                 content: leftContent,
               }}
               rightPane={{
@@ -137,6 +149,10 @@ const BlogPreview = ({ formData }) => {
                   ? URL.createObjectURL(rightImage)
                   : undefined,
                 imageAlt: section.layout.image_alt,
+                imageCaption:
+                  section.layout.right_type === "image"
+                    ? section.layout.image_caption
+                    : undefined,
                 content: rightContent,
               }}
             />

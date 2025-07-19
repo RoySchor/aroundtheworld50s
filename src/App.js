@@ -100,8 +100,16 @@ function BlogSectionPage() {
     return <ErrorPage />;
   }
 
+  // Helper function to properly capitalize words
+  const capitalizeWords = (str) => {
+    return str
+      .split(" ")
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+  };
+
   const displayName = locationBlogs[0].state
-    ? `${locationBlogs[0].state}, ${locationBlogs[0].country}`
+    ? `${capitalizeWords(locationBlogs[0].state)}, ${locationBlogs[0].country}`
     : locationBlogs[0].country;
 
   return <BlogSection country={displayName} />;

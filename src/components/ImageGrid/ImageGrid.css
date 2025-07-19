@@ -21,6 +21,10 @@
   @apply transform scale-125 z-10;
 }
 
+.image-grid-caption {
+  @apply text-sm text-gray-600 mt-2 text-center;
+}
+
 @media (max-width: 640px) {
   .image-grid {
     @apply grid-cols-3;

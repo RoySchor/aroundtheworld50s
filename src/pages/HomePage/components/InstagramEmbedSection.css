@@ -14,6 +14,14 @@
   @apply flex justify-center w-full;
 }
 
+.instagram-embed-error {
+  @apply bg-white rounded-lg p-6 text-center shadow-md;
+}
+
+.instagram-embed-link {
+  @apply inline-block mt-4 px-6 py-2 bg-[#6CC9B9] text-white rounded-full hover:bg-[#5BB9A9] transition-colors duration-200;
+}
+
 @media (max-width: 640px) {
   .instagram-embed-section {
     @apply p-2.5;

@@ -21,18 +21,28 @@ const DestinationsPage = () => {
       let locationKey, displayName, path;
 
       if (blog.state && isUSCountry(blog.country_code)) {
+        // For US states, use the state as the key
         locationKey = `USA-${blog.state}`;
         displayName = `${blog.state}, USA`;
-        path = blog.path.replace(/\/\d+$/, ""); // Remove post number
+        path = `/blog/united-states-${serializeLocation(blog.state)}`;
       } else {
         locationKey = blog.country;
         displayName = blog.country;
         path = `/blog/${serializeLocation(blog.country)}`;
       }
 
+      // If this location doesn't exist yet, create it
       if (!accumulator[locationKey]) {
-        accumulator[locationKey] = { displayName, path };
+        accumulator[locationKey] = {
+          displayName,
+          path,
+          blogs: []  // Add an array to store all blogs for this location
+        };
       }
+
+      // Add this blog to the location's blogs array
+      accumulator[locationKey].blogs.push(blog);
+
       return accumulator;
     }, {}),
   );

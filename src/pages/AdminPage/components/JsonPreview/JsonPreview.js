@@ -237,6 +237,22 @@ const JsonPreview = ({ formData }) => {
             contentSection.content = null;
           }
 
+          if (section.layout.type === "image-grid") {
+            contentSection.images = section.images
+              .filter((image) => image !== null)
+              .map((image) => image.name);
+
+            // Add captions if they exist
+            if (
+              section.imageCaptions &&
+              section.imageCaptions.some((caption) => caption)
+            ) {
+              contentSection.imageCaptions = section.imageCaptions
+                .slice(0, contentSection.images.length) // Only keep captions for existing images
+                .map((caption) => caption || ""); // Convert null/undefined to empty string
+            }
+          }
+
           if (
             section.layout.type === "two-column" &&
             section.image &&
@@ -247,14 +263,11 @@ const JsonPreview = ({ formData }) => {
             } else if (section.layout.right_type === "image") {
               contentSection.right_image = section.image.name;
             }
-          }
 
-          if (section.layout.type === "image-grid" && section.images) {
-            const validImages = section.images.filter(
-              (image) => image !== null && image.name,
-            );
-            if (validImages.length > 0) {
-              contentSection.images = validImages.map((image) => image.name);
+            // Add caption if it exists
+            if (section.layout.image_caption) {
+              contentSection.layout.image_caption =
+                section.layout.image_caption.trim();
             }
           }
 

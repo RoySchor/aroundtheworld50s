@@ -179,6 +179,33 @@ def normalize_country_name(country):
 
     return ' '.join(capitalized)
 
+def normalize_state_name(state):
+    """Normalize state name to proper format.
+
+    Rules:
+    1. Each word is capitalized
+    2. Extra spaces are removed
+    3. Special cases (like DC) are handled
+    """
+    if not state:
+        return state
+
+    # Handle special cases
+    special_cases = {
+        'dc': 'DC',
+        'd.c.': 'DC',
+        'washington dc': 'Washington DC',
+        'washington d.c.': 'Washington DC',
+    }
+
+    normalized = state.strip().lower()
+    if normalized in special_cases:
+        return special_cases[normalized]
+
+    # Split into words and capitalize each word
+    words = normalized.split()
+    return ' '.join(word.capitalize() for word in words)
+
 def normalize_us_country(country, country_code):
     """Normalize US country variants to standard format."""
     if not country and not country_code:

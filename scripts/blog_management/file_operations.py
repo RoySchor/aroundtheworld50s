@@ -5,7 +5,15 @@ import json
 import re
 import sys
 from datetime import datetime
-from utils import serialize_location, create_component_name, create_constants_name, convert_markdown_links, normalize_us_country, is_us_country
+from utils import (
+    serialize_location,
+    create_component_name,
+    create_constants_name,
+    convert_markdown_links,
+    normalize_us_country,
+    normalize_state_name,
+    is_us_country
+)
 
 def setup_directories(base_dir, country_name, post_index, state_name=None):
     """Create necessary directories for assets and data."""
@@ -67,8 +75,9 @@ def update_blogs_js(base_dir, blog_data, post_index):
 
     # Create serialized location and unique ID
     if blog_data.get('state') and is_us_country(blog_data['country'], blog_data['country_code']):
-        # For US states, use state-specific serialization
-        serialized_location = f"united-states-{serialize_location(blog_data['state'])}"
+        # For US states, normalize and serialize state name
+        normalized_state = normalize_state_name(blog_data['state'])
+        serialized_location = f"united-states-{serialize_location(normalized_state)}"
         unique_id = f"{serialized_location}-{post_index}"
     else:
         serialized_location = serialize_location(normalized_country)
@@ -87,7 +96,7 @@ def update_blogs_js(base_dir, blog_data, post_index):
     }
 
     if 'state' in blog_data:
-        new_blog['state'] = blog_data['state']
+        new_blog['state'] = normalize_state_name(blog_data['state'])
 
     blog_entry = json.dumps(new_blog, indent=2, ensure_ascii=False)
     blog_entry = re.sub(r'(\s+)"([^"]+)":', r'\1\2:', blog_entry)
@@ -180,7 +189,11 @@ const {component_name} = () => {{
           />
         );
       case "image-grid":
-        return <ImageGrid images={{section.images || []}} blogPath="{blog_path}" />;
+        return <ImageGrid
+          images={{section.images || []}}
+          captions={{section.imageCaptions}}
+          blogPath="{blog_path}"
+        />;
       case "two-column":
         return (
           <TwoColumnLayout
@@ -191,6 +204,7 @@ const {component_name} = () => {{
                   ? getImagePathFromBlogPost({constants_name}, section.leftImage || "")
                   : undefined,
               imageAlt: section.layout.imageAlt,
+              imageCaption: section.layout.image_caption,
               content:
                 section.layout.leftType === "text"
                   ? section.content
@@ -203,6 +217,7 @@ const {component_name} = () => {{
                   ? getImagePathFromBlogPost({constants_name}, section.rightImage || "")
                   : undefined,
               imageAlt: section.layout.imageAlt,
+              imageCaption: section.layout.image_caption,
               content:
                 section.layout.rightType === "text"
                   ? section.content
@@ -320,6 +335,8 @@ def create_blog_constants(blog_component_dir, blog_data, post_index):
         # Add optional fields
         if 'images' in section:
             section_obj['images'] = section['images']
+        if 'imageCaptions' in section:
+            section_obj['imageCaptions'] = section['imageCaptions']
         if 'left_image' in section:
             section_obj['leftImage'] = section['left_image']
         if 'right_image' in section:
@@ -391,6 +408,8 @@ def convert_layout_structure(layout):
         converted["rightType"] = layout.get("right_type", "text")
         if "image_alt" in layout:
             converted["imageAlt"] = layout["image_alt"]
+        if "image_caption" in layout:
+            converted["imageCaption"] = layout["image_caption"]
 
     return converted
 
