@@ -292,6 +292,17 @@ const AdminPage = () => {
     });
   };
 
+  const handleClearForm = () => {
+    if (
+      window.confirm(
+        "Are you sure you want to clear the form? This will remove all entered data.",
+      )
+    ) {
+      setFormData(initialFormState);
+      sessionStorage.removeItem("blogFormData");
+    }
+  };
+
   // Get debounced form data for preview
   const debouncedFormData = useSmartDebounce(formData);
 
@@ -320,13 +331,22 @@ const AdminPage = () => {
               Manage blog posts, gallery images, and travel tips
             </p>
           </div>
-          <button
-            onClick={handleLogout}
-            className="admin-logout-btn"
-            title="Logout"
-          >
-            🚪 Logout
-          </button>
+          <div className="admin-header-actions">
+            <button
+              onClick={handleClearForm}
+              className="admin-clear-btn"
+              title="Clear form"
+            >
+              🗑️ Clear Form
+            </button>
+            <button
+              onClick={handleLogout}
+              className="admin-logout-btn"
+              title="Logout"
+            >
+              🚪 Logout
+            </button>
+          </div>
         </div>
       </div>
 
