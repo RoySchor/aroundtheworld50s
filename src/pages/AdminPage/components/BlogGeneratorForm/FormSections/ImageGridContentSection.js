@@ -9,37 +9,40 @@ const ImageGridContentSection = ({
   generateKey,
 }) => {
   const handleImageAdd = () => {
-    const currentImages = section.images || [];
-    const currentCaptions = section.imageCaptions || [];
-    onContentChange(sectionIndex, "images", [...currentImages, null]);
-    onContentChange(sectionIndex, "imageCaptions", [...currentCaptions, ""]);
+    const currentImages = section.layout.images || [];
+    const currentCaptions = section.layout.imageCaptions || [];
+    onContentChange(sectionIndex, "layout.images", [...currentImages, null]);
+    onContentChange(sectionIndex, "layout.imageCaptions", [
+      ...currentCaptions,
+      "",
+    ]);
   };
 
   const handleImageRemove = (imageIndex) => {
-    const currentImages = section.images || [];
-    const currentCaptions = section.imageCaptions || [];
+    const currentImages = section.layout.images || [];
+    const currentCaptions = section.layout.imageCaptions || [];
     if (currentImages.length > 1) {
       const updatedImages = currentImages.filter((_, i) => i !== imageIndex);
       const updatedCaptions = currentCaptions.filter(
         (_, i) => i !== imageIndex,
       );
-      onContentChange(sectionIndex, "images", updatedImages);
-      onContentChange(sectionIndex, "imageCaptions", updatedCaptions);
+      onContentChange(sectionIndex, "layout.images", updatedImages);
+      onContentChange(sectionIndex, "layout.imageCaptions", updatedCaptions);
     }
   };
 
   const handleImageChange = (imageIndex, file) => {
-    const currentImages = section.images || [];
+    const currentImages = section.layout.images || [];
     const updatedImages = [...currentImages];
     updatedImages[imageIndex] = file;
-    onContentChange(sectionIndex, "images", updatedImages);
+    onContentChange(sectionIndex, "layout.images", updatedImages);
   };
 
   const handleCaptionChange = (imageIndex, caption) => {
-    const currentCaptions = section.imageCaptions || [];
+    const currentCaptions = section.layout.imageCaptions || [];
     const updatedCaptions = [...currentCaptions];
     updatedCaptions[imageIndex] = caption;
-    onContentChange(sectionIndex, "imageCaptions", updatedCaptions);
+    onContentChange(sectionIndex, "layout.imageCaptions", updatedCaptions);
   };
 
   return (
@@ -49,7 +52,7 @@ const ImageGridContentSection = ({
           <label className="blog-form-label">Grid Images</label>
         </div>
 
-        {(section.images || [null]).map((image, imageIndex) => (
+        {(section.layout.images || [null]).map((image, imageIndex) => (
           <div key={imageIndex} className="blog-form-image-row">
             <div className="blog-form-image-input-group">
               <FormField
@@ -64,12 +67,12 @@ const ImageGridContentSection = ({
                 id={`image_grid_${sectionIndex}_caption_${imageIndex}`}
                 label="Caption (optional)"
                 type="text"
-                value={(section.imageCaptions || [])[imageIndex] || ""}
+                value={(section.layout.imageCaptions || [])[imageIndex] || ""}
                 onChange={(value) => handleCaptionChange(imageIndex, value)}
                 placeholder="Add a caption for this image"
               />
             </div>
-            {(section.images || []).length > 1 && (
+            {(section.layout.images || []).length > 1 && (
               <button
                 type="button"
                 onClick={() => handleImageRemove(imageIndex)}
@@ -106,10 +109,10 @@ ImageGridContentSection.propTypes = {
     key: PropTypes.string.isRequired,
     layout: PropTypes.shape({
       type: PropTypes.string.isRequired,
+      images: PropTypes.arrayOf(PropTypes.object),
+      imageCaptions: PropTypes.arrayOf(PropTypes.string),
     }).isRequired,
     content: PropTypes.string,
-    images: PropTypes.arrayOf(PropTypes.object),
-    imageCaptions: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   sectionIndex: PropTypes.number.isRequired,
   onContentChange: PropTypes.func.isRequired,

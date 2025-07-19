@@ -32,7 +32,7 @@
         "key": "firstItinerary",
         "layout": {
           "type": "itinerary-with-map",
-          "map_index": 0
+          "mapIndex": 0
         },
         "content": null
       },
@@ -46,19 +46,19 @@
       {
         "key": "imageGrid",
         "layout": {
-          "type": "image-grid"
+          "type": "image-grid",
+          "images": [
+            "image1.jpg",
+            "image2.jpg",
+            "image3.jpg"
+          ],
+          "imageCaptions": [
+            "Caption for image 1",
+            "Caption for image 2",
+            "Caption for image 3"
+          ]
         },
-        "content": null,
-        "images": [
-          "image1.jpg",
-          "image2.jpg",
-          "image3.jpg"
-        ],
-        "imageCaptions": [
-          "Caption for image 1",
-          "Caption for image 2",
-          "Caption for image 3"
-        ]
+        "content": null
       },
       {
         "key": "twoColumnSection",

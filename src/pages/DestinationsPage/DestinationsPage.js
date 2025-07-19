@@ -36,7 +36,7 @@ const DestinationsPage = () => {
         accumulator[locationKey] = {
           displayName,
           path,
-          blogs: []  // Add an array to store all blogs for this location
+          blogs: [], // Add an array to store all blogs for this location
         };
       }
 

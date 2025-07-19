@@ -34,6 +34,8 @@ export type LayoutType = {
   imageAlt?: string;
   imageCaption?: string;
   mapIndex?: number;
+  images?: string[];
+  imageCaptions?: string[];
 };
 
 export interface Itinerary {
@@ -46,7 +48,6 @@ export interface ContentSection {
   layout: LayoutType;
   content: string | null;
   images?: string[];
-  imageCaptions?: string[];
   leftImage?: string;
   rightImage?: string;
 }

@@ -25,9 +25,10 @@ const InstagramEmbedSection = ({
 
     // Add error handling for the Instagram embed API
     window.instgrm = window.instgrm || {};
-    const originalProcess = window.instgrm.Embeds && window.instgrm.Embeds.process;
+    const originalProcess =
+      window.instgrm.Embeds && window.instgrm.Embeds.process;
     if (originalProcess) {
-      window.instgrm.Embeds.process = function() {
+      window.instgrm.Embeds.process = function () {
         try {
           originalProcess.apply(this, arguments);
         } catch (e) {

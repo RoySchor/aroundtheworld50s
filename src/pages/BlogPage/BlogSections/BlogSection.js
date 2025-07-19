@@ -19,12 +19,12 @@ const BlogSection = ({ country }) => {
     filteredBlogs = blogs.filter(
       (blog) =>
         normalizeText(blog.country) === normalizedCountry &&
-        normalizeText(blog.state || '') === normalizedState
+        normalizeText(blog.state || "") === normalizedState,
     );
   } else {
     const normalizedCountry = normalizeText(country);
     filteredBlogs = blogs.filter(
-      (blog) => normalizeText(blog.country) === normalizedCountry
+      (blog) => normalizeText(blog.country) === normalizedCountry,
     );
   }
 
@@ -67,11 +67,16 @@ const BlogSection = ({ country }) => {
                     <Link to={blog.path} className="blog-link">
                       <div className="blog-image-wrapper">
                         <div className="blog-title">{blog.title}</div>
-                        <div className="blog-date">{new Date(blog.created_at).toLocaleDateString('en-US', {
-                          month: 'long',
-                          day: 'numeric',
-                          year: 'numeric'
-                        })}</div>
+                        <div className="blog-date">
+                          {new Date(blog.created_at).toLocaleDateString(
+                            "en-US",
+                            {
+                              month: "long",
+                              day: "numeric",
+                              year: "numeric",
+                            },
+                          )}
+                        </div>
                         <div
                           className="blog-image"
                           style={{ backgroundImage: `url(${imagePath})` }}

@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -13,16 +13,18 @@ class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     // You can log the error to an error reporting service here
-    console.log('Error caught by ErrorBoundary:', error, errorInfo);
+    console.log("Error caught by ErrorBoundary:", error, errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
       // You can render any custom fallback UI
-      return this.props.fallback || (
-        <div className="error-boundary-fallback">
-          <p>Something went wrong loading this component.</p>
-        </div>
+      return (
+        this.props.fallback || (
+          <div className="error-boundary-fallback">
+            <p>Something went wrong loading this component.</p>
+          </div>
+        )
       );
     }
 

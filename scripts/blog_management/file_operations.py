@@ -190,8 +190,8 @@ const {component_name} = () => {{
         );
       case "image-grid":
         return <ImageGrid
-          images={{section.images || []}}
-          imageCaptions={{section.imageCaptions}}
+          images={{section.layout.images || []}}
+          imageCaptions={{section.layout.imageCaptions}}
           blogPath="{blog_path}"
         />;
       case "two-column":
