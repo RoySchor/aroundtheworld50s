@@ -86,3 +86,9 @@
 .blog-link:hover .blog-image::before {
   background-color: rgba(131, 197, 190, 0.7);
 }
+
+.blog-date {
+  font-size: 1rem;
+  color: #666;
+  font-weight: normal;
+}
