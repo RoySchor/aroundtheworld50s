@@ -191,7 +191,7 @@ const {component_name} = () => {{
       case "image-grid":
         return <ImageGrid
           images={{section.images || []}}
-          captions={{section.imageCaptions}}
+          imageCaptions={{section.imageCaptions}}
           blogPath="{blog_path}"
         />;
       case "two-column":
@@ -204,7 +204,7 @@ const {component_name} = () => {{
                   ? getImagePathFromBlogPost({constants_name}, section.leftImage || "")
                   : undefined,
               imageAlt: section.layout.imageAlt,
-              imageCaption: section.layout.image_caption,
+              imageCaption: section.layout.imageCaption,
               content:
                 section.layout.leftType === "text"
                   ? section.content
@@ -217,7 +217,7 @@ const {component_name} = () => {{
                   ? getImagePathFromBlogPost({constants_name}, section.rightImage || "")
                   : undefined,
               imageAlt: section.layout.imageAlt,
-              imageCaption: section.layout.image_caption,
+              imageCaption: section.layout.imageCaption,
               content:
                 section.layout.rightType === "text"
                   ? section.content

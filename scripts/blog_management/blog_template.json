@@ -64,13 +64,13 @@
         "key": "twoColumnSection",
         "layout": {
           "type": "two-column",
-          "left_type": "image",
-          "right_type": "text",
-          "image_alt": "Alt text for image",
-          "image_caption": "A beautiful scene from our journey"
+          "leftType": "image",
+          "rightType": "text",
+          "imageAlt": "Alt text for image",
+          "imageCaption": "A beautiful scene from our journey"
         },
         "content": "This text will appear on the right side and can also contain [embedded links](https://en.wikipedia.org/wiki/Caribbean) to external websites.",
-        "left_image": "image-for-left-side.jpg"
+        "leftImage": "image-for-left-side.jpg"
       },
       {
         "key": "instagramSection",

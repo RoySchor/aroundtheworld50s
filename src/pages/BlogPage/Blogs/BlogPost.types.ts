@@ -14,7 +14,7 @@ interface ItineraryWithMapLayout extends BaseLayout {
 interface ImageGridLayout extends BaseLayout {
   type: "image-grid";
   images?: string[];
-  captions?: string[];
+  imageCaptions?: string[];
 }
 
 interface TwoColumnLayout extends BaseLayout {
