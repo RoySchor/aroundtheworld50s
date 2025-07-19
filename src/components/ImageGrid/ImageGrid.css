@@ -3,8 +3,9 @@
 }
 
 .image-grid-item {
-  @apply relative overflow-hidden rounded-lg transition-transform duration-300;
+  @apply relative overflow-hidden rounded-lg transition-transform duration-300 flex items-center justify-center;
   aspect-ratio: 1;
+  width: 100%;
 }
 
 @media (min-width: 640px) {
@@ -19,10 +20,6 @@
 
 .image-grid-item:hover {
   @apply transform scale-125 z-10;
-}
-
-.image-grid-caption {
-  @apply text-sm text-gray-600 mt-2 text-center;
 }
 
 @media (max-width: 640px) {

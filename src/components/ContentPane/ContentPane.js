@@ -7,7 +7,6 @@ const ContentPane = ({
   content,
   imageAlt,
   imageUrl,
-  imageCaption,
   mapComponent,
   listTitle,
   listItems,
@@ -25,9 +24,6 @@ const ContentPane = ({
         return (
           <div className="image-container">
             <img src={imageUrl} alt={imageAlt || "Content image"} />
-            {imageCaption && (
-              <div className="image-grid-caption">{imageCaption}</div>
-            )}
           </div>
         );
       case "list":
@@ -58,7 +54,6 @@ ContentPane.propTypes = {
   content: PropTypes.node,
   imageAlt: PropTypes.string,
   imageUrl: PropTypes.string,
-  imageCaption: PropTypes.string,
   mapComponent: PropTypes.node,
   listTitle: PropTypes.string,
   listItems: PropTypes.arrayOf(PropTypes.node),

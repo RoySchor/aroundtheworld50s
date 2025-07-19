@@ -241,33 +241,11 @@ const JsonPreview = ({ formData }) => {
             contentSection.images = section.images
               .filter((image) => image !== null)
               .map((image) => image.name);
-
-            // Add captions if they exist
-            if (
-              section.imageCaptions &&
-              section.imageCaptions.some((caption) => caption)
-            ) {
-              contentSection.imageCaptions = section.imageCaptions
-                .slice(0, contentSection.images.length) // Only keep captions for existing images
-                .map((caption) => caption || ""); // Convert null/undefined to empty string
-            }
           }
 
-          if (
-            section.layout.type === "two-column" &&
-            section.image &&
-            section.image.name
-          ) {
-            if (section.layout.left_type === "image") {
-              contentSection.left_image = section.image.name;
-            } else if (section.layout.right_type === "image") {
-              contentSection.right_image = section.image.name;
-            }
-
-            // Add caption if it exists
-            if (section.layout.image_caption) {
-              contentSection.layout.image_caption =
-                section.layout.image_caption.trim();
+          if (section.layout.type === "two-column") {
+            if (section.image) {
+              contentSection.image = section.image.name;
             }
           }
 

@@ -191,7 +191,6 @@ const {component_name} = () => {{
       case "image-grid":
         return <ImageGrid
           images={{section.layout.images || []}}
-          imageCaptions={{section.layout.imageCaptions}}
           blogPath="{blog_path}"
         />;
       case "two-column":
@@ -204,7 +203,6 @@ const {component_name} = () => {{
                   ? getImagePathFromBlogPost({constants_name}, section.leftImage || "")
                   : undefined,
               imageAlt: section.layout.imageAlt,
-              imageCaption: section.layout.imageCaption,
               content:
                 section.layout.leftType === "text"
                   ? section.content
@@ -217,7 +215,6 @@ const {component_name} = () => {{
                   ? getImagePathFromBlogPost({constants_name}, section.rightImage || "")
                   : undefined,
               imageAlt: section.layout.imageAlt,
-              imageCaption: section.layout.imageCaption,
               content:
                 section.layout.rightType === "text"
                   ? section.content
@@ -335,8 +332,6 @@ def create_blog_constants(blog_component_dir, blog_data, post_index):
         # Add optional fields
         if 'images' in section:
             section_obj['images'] = section['images']
-        if 'imageCaptions' in section:
-            section_obj['imageCaptions'] = section['imageCaptions']
         if 'left_image' in section:
             section_obj['leftImage'] = section['left_image']
         if 'right_image' in section:
@@ -408,8 +403,6 @@ def convert_layout_structure(layout):
         converted["rightType"] = layout.get("right_type", "text")
         if "image_alt" in layout:
             converted["imageAlt"] = layout["image_alt"]
-        if "image_caption" in layout:
-            converted["imageCaption"] = layout["image_caption"]
 
     return converted
 
