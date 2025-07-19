@@ -33,13 +33,6 @@ const ImageGridContentSection = ({
       <div className="blog-form-images-section">
         <div className="blog-form-images-header">
           <label className="blog-form-label">Grid Images</label>
-          <button
-            type="button"
-            onClick={handleImageAdd}
-            className="blog-form-add-item-btn"
-          >
-            + Add Image
-          </button>
         </div>
 
         {(section.images || [null]).map((image, imageIndex) => (
@@ -71,6 +64,14 @@ const ImageGridContentSection = ({
           grid layout. Images will be displayed in the order you upload them.
         </small>
       </div>
+
+      <button
+        type="button"
+        onClick={handleImageAdd}
+        className="blog-form-floating-add-btn"
+      >
+        + Add Image
+      </button>
     </div>
   );
 };

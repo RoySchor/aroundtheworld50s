@@ -12,6 +12,7 @@ const ContentSections = ({
   onContentChange,
   onAddContentSection,
   onRemoveContentSection,
+  onMoveContentSection,
 }) => {
   const generateKey = (type, index) => {
     return `${type}Section${index + 1}`;
@@ -192,13 +193,35 @@ const ContentSections = ({
                 <h5 className="blog-form-group-title">
                   {getSectionTitle(section.layout.type)} {sectionIndex + 1}
                 </h5>
-                <button
-                  type="button"
-                  onClick={() => onRemoveContentSection(sectionIndex)}
-                  className="blog-form-remove-btn"
-                >
-                  Remove
-                </button>
+                <div className="blog-form-group-actions">
+                  <button
+                    type="button"
+                    onClick={() => onMoveContentSection(sectionIndex, "up")}
+                    className="blog-form-move-btn"
+                    disabled={sectionIndex === 0}
+                    title="Move section up"
+                  >
+                    ↑
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onMoveContentSection(sectionIndex, "down")}
+                    className="blog-form-move-btn"
+                    disabled={
+                      sectionIndex === formData.content_sections.length - 1
+                    }
+                    title="Move section down"
+                  >
+                    ↓
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onRemoveContentSection(sectionIndex)}
+                    className="blog-form-remove-btn"
+                  >
+                    Remove
+                  </button>
+                </div>
               </div>
 
               {section.layout.type === "text" && (
@@ -286,6 +309,7 @@ ContentSections.propTypes = {
   onContentChange: PropTypes.func.isRequired,
   onAddContentSection: PropTypes.func.isRequired,
   onRemoveContentSection: PropTypes.func.isRequired,
+  onMoveContentSection: PropTypes.func.isRequired,
 };
 
 export default ContentSections;

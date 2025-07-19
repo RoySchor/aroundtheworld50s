@@ -275,6 +275,23 @@ const AdminPage = () => {
     }));
   };
 
+  const handleMoveContentSection = (fromIndex, direction) => {
+    const toIndex = direction === "up" ? fromIndex - 1 : fromIndex + 1;
+
+    if (toIndex < 0 || toIndex >= formData.content_sections.length) {
+      return;
+    }
+
+    const newContentSections = [...formData.content_sections];
+    const [movedSection] = newContentSections.splice(fromIndex, 1);
+    newContentSections.splice(toIndex, 0, movedSection);
+
+    setFormData({
+      ...formData,
+      content_sections: newContentSections,
+    });
+  };
+
   // Get debounced form data for preview
   const debouncedFormData = useSmartDebounce(formData);
 
@@ -353,6 +370,7 @@ const AdminPage = () => {
               onContentChange={handleContentChange}
               onAddContentSection={addContentSection}
               onRemoveContentSection={removeContentSection}
+              onMoveContentSection={handleMoveContentSection}
             />
           </div>
 

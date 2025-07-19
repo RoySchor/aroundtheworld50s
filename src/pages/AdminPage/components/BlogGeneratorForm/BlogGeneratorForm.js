@@ -25,6 +25,7 @@ const BlogGeneratorForm = ({
   onContentChange,
   onAddContentSection,
   onRemoveContentSection,
+  onMoveContentSection,
 }) => {
   // State for country validation
   const [countryValidation, setCountryValidation] = useState({
@@ -249,6 +250,7 @@ const BlogGeneratorForm = ({
         onContentChange={onContentChange}
         onAddContentSection={onAddContentSection}
         onRemoveContentSection={onRemoveContentSection}
+        onMoveContentSection={onMoveContentSection}
       />
     </div>
   );
@@ -304,6 +306,7 @@ BlogGeneratorForm.propTypes = {
   onContentChange: PropTypes.func.isRequired,
   onAddContentSection: PropTypes.func.isRequired,
   onRemoveContentSection: PropTypes.func.isRequired,
+  onMoveContentSection: PropTypes.func.isRequired,
 };
 
 export default BlogGeneratorForm;

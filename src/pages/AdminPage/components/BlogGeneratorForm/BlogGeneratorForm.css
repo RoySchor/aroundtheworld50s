@@ -70,6 +70,31 @@
   @apply bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-sm font-medium transition-colors duration-200;
 }
 
+.blog-form-group-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.blog-form-move-btn {
+  padding: 4px 8px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.blog-form-move-btn:hover:not(:disabled) {
+  background-color: #e0e0e0;
+}
+
+.blog-form-move-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Items section */
 .blog-form-items-section {
   @apply mt-4;
@@ -101,7 +126,8 @@
 
 /* Content sections */
 .blog-form-content-buttons-container {
-  @apply sticky top-0 z-10 bg-gray-50 p-4 rounded-lg mb-4 border-l-4 border-blue-500;
+  @apply sticky top-0 bg-gray-50 p-4 rounded-lg mb-4 border-l-4 border-blue-500;
+  z-index: 20;
 }
 
 .blog-form-content-buttons {
@@ -145,6 +171,22 @@
 .blog-form-image-grid-section,
 .blog-form-itinerary-map-section {
   @apply space-y-4;
+}
+
+.blog-form-image-grid-section {
+  @apply relative pb-[60px];
+}
+
+.blog-form-floating-add-btn {
+  @apply sticky bottom-4 right-4 ml-auto bg-green-500 text-white px-4 py-2 rounded-full shadow-md cursor-pointer font-medium transition-all duration-200 z-10 flex items-center gap-1;
+}
+
+.blog-form-floating-add-btn:hover {
+  @apply bg-green-600 shadow-lg -translate-y-[1px];
+}
+
+.blog-form-floating-add-btn:active {
+  @apply translate-y-[1px];
 }
 
 /* Radio button styles */
