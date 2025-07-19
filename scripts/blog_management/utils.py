@@ -50,14 +50,28 @@ def validate_json(json_data):
 
 def get_next_post_index(assets_dir):
     """Get the next available post index for a country."""
-    if not assets_dir.exists():
+    # Check both assets and blog components directories
+    blog_components_dir = Path(str(assets_dir).replace("assets/blog", "pages/BlogPage/Blogs"))
+
+    # Get all existing indices from both directories
+    existing_indices = set()
+
+    # Check assets directory
+    if assets_dir.exists():
+        existing_indices.update(int(d.name) for d in assets_dir.iterdir() if d.is_dir() and d.name.isdigit())
+
+    # Check blog components directory
+    if blog_components_dir.exists():
+        existing_indices.update(int(d.name) for d in blog_components_dir.iterdir() if d.is_dir() and d.name.isdigit())
+
+    # If no existing indices, start with 1
+    if not existing_indices:
         return 1
 
-    existing_dirs = [d for d in assets_dir.iterdir() if d.is_dir() and d.name.isdigit()]
-    if not existing_dirs:
-        return 1
-
-    return max(int(d.name) for d in existing_dirs) + 1
+    # Find the next available index
+    next_index = max(existing_indices) + 1
+    print(f"\nFound existing blog posts. Next post index will be: {next_index}")
+    return next_index
 
 def validate_blog(blog_data):
     """Validate blog structure."""
@@ -95,9 +109,13 @@ def serialize_location(location):
 
 def create_component_name(country, state=None):
     """Create a component name from country and optional state."""
+    def capitalize_words(text):
+        """Capitalize each word in the text."""
+        return ''.join(word.capitalize() for word in text.replace('&', 'And').replace('-', ' ').split())
+
     if state:
-        return f"{country.replace(' ', '').replace('&', 'And')}{state.replace(' ', '')}"
-    return country.replace(' ', '').replace('&', 'And')
+        return f"{capitalize_words(country)}{capitalize_words(state)}"
+    return capitalize_words(country)
 
 def create_constants_name(country, state=None):
     """Create a constants name from country and optional state."""
@@ -119,6 +137,47 @@ def convert_markdown_links(text):
         return f'<a href="{url}" class="post-link" target="_blank" rel="noopener noreferrer">{link_text}</a>'
 
     return re.sub(pattern, replace_link, text)
+
+def normalize_country_name(country):
+    """Normalize country name to proper format.
+
+    Rules:
+    1. Each word is capitalized
+    2. "and" remains lowercase unless at start
+    3. "&" is converted to "and"
+    4. Extra spaces are removed
+    5. Special cases (like US) are handled separately
+    """
+    if not country:
+        return country
+
+    # First normalize whitespace and convert & to and
+    normalized = country.strip().replace('&', 'and')
+
+    # Special case for US variants - handled by normalize_us_country
+    us_variants = [
+        'us',
+        'usa',
+        'united states',
+        'united states of america',
+        'america',
+        'u.s.',
+        'u.s.a.',
+        'u.s.a',
+    ]
+    if normalized.lower() in us_variants:
+        return "United States"
+
+    # Split into words and capitalize each word except "and"
+    words = normalized.split()
+    capitalized = []
+    for i, word in enumerate(words):
+        if word.lower() == 'and' and i > 0:
+            capitalized.append('and')
+        else:
+            capitalized.append(word.capitalize())
+
+    return ' '.join(capitalized)
 
 def normalize_us_country(country, country_code):
     """Normalize US country variants to standard format."""
@@ -142,7 +201,8 @@ def normalize_us_country(country, country_code):
     if normalized_code == 'US' or normalized_country in us_variants:
         return "United States", "US"
 
-    return country, country_code
+    # For non-US countries, normalize the country name
+    return normalize_country_name(country), country_code
 
 def is_us_country(country, country_code):
     """Check if country is a US variant."""

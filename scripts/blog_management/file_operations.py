@@ -19,8 +19,22 @@ def setup_directories(base_dir, country_name, post_index, state_name=None):
     assets_dir = base_dir / "src/assets/blog" / serialized_location / str(post_index)
     blog_component_dir = base_dir / "src/pages/BlogPage/Blogs" / serialized_location / str(post_index)
 
-    for directory in [assets_dir, blog_component_dir]:
-        directory.mkdir(parents=True, exist_ok=True)
+    # Check if directories already exist
+    if assets_dir.exists():
+        print(f"\nError: Assets directory already exists: {assets_dir}")
+        print("This indicates a problem with the post index calculation.")
+        print(f"Please check both the assets and blog components directories for any inconsistencies.")
+        sys.exit(1)
+
+    if blog_component_dir.exists():
+        print(f"\nError: Blog component directory already exists: {blog_component_dir}")
+        print("This indicates a problem with the post index calculation.")
+        print(f"Please check both the assets and blog components directories for any inconsistencies.")
+        sys.exit(1)
+
+    # Create directories only if they don't exist
+    assets_dir.mkdir(parents=True)
+    blog_component_dir.mkdir(parents=True)
 
     return assets_dir, blog_component_dir
 
@@ -78,15 +92,16 @@ def update_blogs_js(base_dir, blog_data, post_index):
     blog_entry = json.dumps(new_blog, indent=2, ensure_ascii=False)
     blog_entry = re.sub(r'(\s+)"([^"]+)":', r'\1\2:', blog_entry)
 
-    blogs_array_end = content.rindex('];')
+    # Find the end of the array
+    array_end = content.rindex('];')
 
-    # Extract the part before the closing of the array
-    content_before_end = content[:blogs_array_end].rstrip()
-
-    # Check whether to add a comma before the new entry
-    needs_comma = content_before_end[-1] != '[' and not content_before_end.endswith(',')
-    insertion = (',\n  ' if needs_comma else '  ') + blog_entry + ',\n'
-    new_content = content[:blogs_array_end] + insertion + content[blogs_array_end:]
+    # Check if we need to add a comma (if there are existing entries)
+    if content[:array_end].strip().endswith('},'):
+        # There are existing entries, add new entry with same formatting
+        new_content = content[:array_end] + '  ' + blog_entry + ',\n' + content[array_end:]
+    else:
+        # This is the first entry
+        new_content = content[:array_end] + '  ' + blog_entry + '\n' + content[array_end:]
 
     with open(blogs_file, 'w') as f:
         f.write(new_content)

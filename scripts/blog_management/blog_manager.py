@@ -3,7 +3,13 @@ import json
 import sys
 from datetime import datetime
 from pathlib import Path
-from utils import get_desktop_path, validate_json, get_next_post_index, is_us_country
+from utils import (
+    get_desktop_path,
+    validate_json,
+    get_next_post_index,
+    is_us_country,
+    serialize_location
+)
 from file_operations import (
     setup_directories,
     copy_images,
@@ -106,12 +112,15 @@ class BlogManager:
         # Determine the correct path for post index calculation
         if blog_data.get('state') and is_us_country(blog_data['country'], blog_data['country_code']):
             # For US states, use state-specific path
-            from utils import serialize_location
             location_path = f"united-states-{serialize_location(blog_data['state'])}"
         else:
             location_path = blog_data['country']
 
-        post_index = get_next_post_index(self.base_dir / "src/assets/blog" / location_path)
+        # Get the next post index first
+        post_index = get_next_post_index(self.base_dir / "src/assets/blog" / serialize_location(location_path))
+        print(f"\n📝 Creating blog post {post_index} for {location_path}")
+
+        # Then setup directories with the correct index
         assets_dir, blog_component_dir = setup_directories(
             self.base_dir,
             blog_data['country'],
@@ -184,12 +193,10 @@ class BlogManager:
         # Generate tips path based on location
         if state and country_code == 'US':
             # For US states: united-states-california
-            from utils import serialize_location
             tips_path = f"united-states-{serialize_location(state)}"
             location_display = f"{country}, {state}"
         else:
             # For countries: trinidad-and-tobago
-            from utils import serialize_location
             tips_path = serialize_location(country)
             location_display = country
 
