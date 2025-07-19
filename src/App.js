@@ -18,10 +18,8 @@ import TipDetailPage from "./pages/TipsPage/TipDetailPage";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import TrinidadandTobagoPost1 from "./pages/BlogPage/Blogs/trinidad-and-tobago/1/TrinidadandTobagoPost1.tsx";
-import UnitedStatesNewEnglandPost1 from "./pages/BlogPage/Blogs/united-states-new-england/1/UnitedStatesNewEnglandPost1.tsx";
 import UnitedStatesConnecticutPost1 from "./pages/BlogPage/Blogs/united-states-connecticut/1/UnitedStatesConnecticutPost1.tsx";
 import UnitedStatesRhodeIslandPost1 from "./pages/BlogPage/Blogs/united-states-rhode-island/1/UnitedStatesRhodeIslandPost1.tsx";
-import UnitedStatesNewYorkPost1 from "./pages/BlogPage/Blogs/united-states-new-york/1/UnitedStatesNewYorkPost1.tsx";
 
 function App() {
   return (
@@ -61,11 +59,6 @@ function BlogPost() {
         return <TrinidadandTobagoPost1 />;
       }
       break;
-    case "united-states-new-england":
-      if (index === "1") {
-        return <UnitedStatesNewEnglandPost1 />;
-      }
-      break;
     case "united-states-connecticut":
       if (index === "1") {
         return <UnitedStatesConnecticutPost1 />;
@@ -74,11 +67,6 @@ function BlogPost() {
     case "united-states-rhode-island":
       if (index === "1") {
         return <UnitedStatesRhodeIslandPost1 />;
-      }
-      break;
-    case "united-states-new-york":
-      if (index === "1") {
-        return <UnitedStatesNewYorkPost1 />;
       }
       break;
     default:

@@ -12,26 +12,6 @@ const tips = [
     description: "Essential tips for traveling in Trinidad and Tobago",
     created_at: new Date("2025-07-07"),
   },
-  {
-    id: 2,
-    country: "United States",
-    country_code: "US",
-    state: "New England",
-    path: "united-states-new-england",
-    title: "United States, New England Travel Tips",
-    description: "Essential tips for traveling in United States, New England",
-    created_at: new Date("2025-07-12"),
-  },
-  {
-    id: 3,
-    country: "United States",
-    country_code: "US",
-    state: "Connecticut",
-    path: "united-states-connecticut",
-    title: "United States, Connecticut Travel Tips",
-    description: "Essential tips for traveling in United States, Connecticut",
-    created_at: new Date("2025-07-13"),
-  },
 ];
 
 // Helper function to find existing tips page

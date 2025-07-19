@@ -11,19 +11,6 @@ const blogs = [
     blog_description: "🌟Island Capital Insights, Beyond the Waterfront🌟",
   },
   {
-    id: "united-states-new-england-1",
-    created_at: "2025-07-12",
-    country: "United States",
-    country_code: "US",
-    title: "📍New England Getaway: A Long Weekend Adventure",
-    folder: "united-states-new-england/1",
-    background_image: "IMG_0296.jpeg",
-    path: "/blog/united-states-new-england/1",
-    blog_description:
-      "✨A 4th of July Escape to Rhode Island & Massachusetts🎇",
-    state: "New England",
-  },
-  {
     id: "united-states-connecticut-1",
     created_at: "2025-07-13",
     country: "United States",
@@ -47,19 +34,6 @@ const blogs = [
     blog_description:
       "✨Beyond the State House: Exploring Providence on Foot👣",
     state: "Rhode Island",
-  },
-  {
-    id: "united-states-new-york-1",
-    created_at: "2025-07-13",
-    country: "United States",
-    country_code: "US",
-    title: "NYC's Living Canvas: Getting Painted in Union Square! 🏙️🌟",
-    folder: "united-states-new-york/1",
-    background_image: "IMG_0544.jpeg",
-    path: "/blog/united-states-new-york/1",
-    blog_description:
-      "Painted Paradise: Our Wild Body Painting Adventure in NYC! 🎨✨🗽",
-    state: "New York",
   },
 ];
 
