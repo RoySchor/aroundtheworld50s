@@ -35,10 +35,6 @@ const TwoColumnContentSection = ({
     }
   };
 
-  const handleCaptionChange = (caption) => {
-    handleLayoutChange("image_caption", caption);
-  };
-
   return (
     <div className="blog-form-two-column-section">
       <div className="blog-form-layout-selection">
@@ -106,14 +102,6 @@ const TwoColumnContentSection = ({
           onChange={handleImageChange}
           accept=".jpg,.jpeg,.JPG,.JPEG,.png,.PNG,.webp,.WEBP,.gif,.GIF"
         />
-        <FormField
-          id={`two_column_caption_${sectionIndex}`}
-          label="Image Caption (optional)"
-          type="text"
-          value={section.layout.image_caption || ""}
-          onChange={handleCaptionChange}
-          placeholder="Add a caption for this image"
-        />
       </div>
 
       <div className="blog-form-section-info">
@@ -122,7 +110,6 @@ const TwoColumnContentSection = ({
           {section.layout.left_type === "image"
             ? "Image will appear on the left, text on the right"
             : "Text will appear on the left, image on the right"}
-          . Add an optional caption to provide more context for the image.
         </small>
       </div>
     </div>
@@ -137,7 +124,6 @@ TwoColumnContentSection.propTypes = {
       left_type: PropTypes.string,
       right_type: PropTypes.string,
       image_alt: PropTypes.string,
-      image_caption: PropTypes.string,
     }).isRequired,
     content: PropTypes.string,
     image: PropTypes.object,

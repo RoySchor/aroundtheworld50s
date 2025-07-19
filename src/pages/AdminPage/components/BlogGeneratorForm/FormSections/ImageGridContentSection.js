@@ -9,40 +9,23 @@ const ImageGridContentSection = ({
   generateKey,
 }) => {
   const handleImageAdd = () => {
-    const currentImages = section.layout.images || [];
-    const currentCaptions = section.layout.imageCaptions || [];
-    onContentChange(sectionIndex, "layout.images", [...currentImages, null]);
-    onContentChange(sectionIndex, "layout.imageCaptions", [
-      ...currentCaptions,
-      "",
-    ]);
+    const currentImages = section.images || [];
+    onContentChange(sectionIndex, "images", [...currentImages, null]);
   };
 
   const handleImageRemove = (imageIndex) => {
-    const currentImages = section.layout.images || [];
-    const currentCaptions = section.layout.imageCaptions || [];
+    const currentImages = section.images || [];
     if (currentImages.length > 1) {
       const updatedImages = currentImages.filter((_, i) => i !== imageIndex);
-      const updatedCaptions = currentCaptions.filter(
-        (_, i) => i !== imageIndex,
-      );
-      onContentChange(sectionIndex, "layout.images", updatedImages);
-      onContentChange(sectionIndex, "layout.imageCaptions", updatedCaptions);
+      onContentChange(sectionIndex, "images", updatedImages);
     }
   };
 
   const handleImageChange = (imageIndex, file) => {
-    const currentImages = section.layout.images || [];
+    const currentImages = section.images || [];
     const updatedImages = [...currentImages];
     updatedImages[imageIndex] = file;
-    onContentChange(sectionIndex, "layout.images", updatedImages);
-  };
-
-  const handleCaptionChange = (imageIndex, caption) => {
-    const currentCaptions = section.layout.imageCaptions || [];
-    const updatedCaptions = [...currentCaptions];
-    updatedCaptions[imageIndex] = caption;
-    onContentChange(sectionIndex, "layout.imageCaptions", updatedCaptions);
+    onContentChange(sectionIndex, "images", updatedImages);
   };
 
   return (
@@ -52,7 +35,7 @@ const ImageGridContentSection = ({
           <label className="blog-form-label">Grid Images</label>
         </div>
 
-        {(section.layout.images || [null]).map((image, imageIndex) => (
+        {(section.images || [null]).map((image, imageIndex) => (
           <div key={imageIndex} className="blog-form-image-row">
             <div className="blog-form-image-input-group">
               <FormField
@@ -63,16 +46,8 @@ const ImageGridContentSection = ({
                 onChange={(file) => handleImageChange(imageIndex, file)}
                 accept=".jpg,.jpeg,.JPG,.JPEG,.png,.PNG,.webp,.WEBP,.gif,.GIF"
               />
-              <FormField
-                id={`image_grid_${sectionIndex}_caption_${imageIndex}`}
-                label="Caption (optional)"
-                type="text"
-                value={(section.layout.imageCaptions || [])[imageIndex] || ""}
-                onChange={(value) => handleCaptionChange(imageIndex, value)}
-                placeholder="Add a caption for this image"
-              />
             </div>
-            {(section.layout.images || []).length > 1 && (
+            {(section.images || []).length > 1 && (
               <button
                 type="button"
                 onClick={() => handleImageRemove(imageIndex)}
@@ -89,7 +64,6 @@ const ImageGridContentSection = ({
         <small className="blog-form-help-text">
           💡 <strong>Tip:</strong> Upload multiple images to create a beautiful
           grid layout. Images will be displayed in the order you upload them.
-          Add optional captions to provide more context.
         </small>
       </div>
 
@@ -109,10 +83,9 @@ ImageGridContentSection.propTypes = {
     key: PropTypes.string.isRequired,
     layout: PropTypes.shape({
       type: PropTypes.string.isRequired,
-      images: PropTypes.arrayOf(PropTypes.object),
-      imageCaptions: PropTypes.arrayOf(PropTypes.string),
     }).isRequired,
     content: PropTypes.string,
+    images: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
   sectionIndex: PropTypes.number.isRequired,
   onContentChange: PropTypes.func.isRequired,
