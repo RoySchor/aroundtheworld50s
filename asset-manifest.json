@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/aroundtheworld50s/static/css/main.3d432550.css",
+    "main.css": "/aroundtheworld50s/static/css/main.24dcb81c.css",
     "main.js": "/aroundtheworld50s/static/js/main.de916ec6.js",
     "static/js/368.e4fb2e41.chunk.js": "/aroundtheworld50s/static/js/368.e4fb2e41.chunk.js",
     "static/js/453.5be98b05.chunk.js": "/aroundtheworld50s/static/js/453.5be98b05.chunk.js",
@@ -84,12 +84,12 @@
     "static/media/about-me-page-bg.webp": "/aroundtheworld50s/static/media/about-me-page-bg.dc31fa0927ea11efdc00.webp",
     "static/media/flat-world-map.webp": "/aroundtheworld50s/static/media/flat-world-map.93be244b96785ff75d03.webp",
     "index.html": "/aroundtheworld50s/index.html",
-    "main.3d432550.css.map": "/aroundtheworld50s/static/css/main.3d432550.css.map",
+    "main.24dcb81c.css.map": "/aroundtheworld50s/static/css/main.24dcb81c.css.map",
     "main.de916ec6.js.map": "/aroundtheworld50s/static/js/main.de916ec6.js.map",
     "453.5be98b05.chunk.js.map": "/aroundtheworld50s/static/js/453.5be98b05.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.3d432550.css",
+    "static/css/main.24dcb81c.css",
     "static/js/main.de916ec6.js"
   ]
 }
