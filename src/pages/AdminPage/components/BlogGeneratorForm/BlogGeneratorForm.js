@@ -4,6 +4,7 @@ import FormField from "../FormField/FormField";
 import ItinerariesSection from "./FormSections/ItinerariesSection";
 import MapsSection from "./FormSections/MapsSection";
 import ContentSections from "./FormSections/ContentSections";
+import { validateState } from "../../../../utils/stateValidation";
 import "./BlogGeneratorForm.css";
 
 // Import i18n-iso-countries
@@ -32,6 +33,13 @@ const BlogGeneratorForm = ({
     isValid: true,
     message: "",
     countryCode: "",
+  });
+
+  // State for state validation
+  const [stateValidation, setStateValidation] = useState({
+    isValid: true,
+    message: "",
+    normalizedName: "",
   });
 
   // Helper function to validate country and get country code
@@ -103,6 +111,19 @@ const BlogGeneratorForm = ({
     }
   }, [formData.country, formData.country_code, onInputChange]);
 
+  // Update state validation when state changes and country is US
+  useEffect(() => {
+    if (isUSCountry(countryValidation.countryCode)) {
+      const validation = validateState(formData.state);
+      setStateValidation(validation);
+
+      // Auto-update state name to normalized version if valid
+      if (validation.isValid && validation.normalizedName !== formData.state) {
+        onInputChange("state", validation.normalizedName);
+      }
+    }
+  }, [formData.state, countryValidation.countryCode, onInputChange]);
+
   return (
     <div className="blog-form-container">
       <h2 className="blog-form-title">Blog Configuration Form</h2>
@@ -127,14 +148,23 @@ const BlogGeneratorForm = ({
 
       {/* State field - only show for United States */}
       {isUSCountry(countryValidation.countryCode) && (
-        <FormField
-          id="state"
-          label="State"
-          value={formData.state}
-          onChange={(value) => onInputChange("state", value)}
-          placeholder="Enter state name (e.g., California, New York, Texas)"
-          required
-        />
+        <div className="form-field-container">
+          <FormField
+            id="state"
+            label="State"
+            value={formData.state}
+            onChange={(value) => onInputChange("state", value)}
+            placeholder="Enter state name (e.g., California, New York, New England)"
+            required
+          />
+          {stateValidation.message && (
+            <div
+              className={`country-validation-message ${stateValidation.isValid ? "valid" : "invalid"}`}
+            >
+              {stateValidation.message}
+            </div>
+          )}
+        </div>
       )}
 
       <FormField
