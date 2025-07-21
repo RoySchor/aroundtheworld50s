@@ -244,6 +244,8 @@ const AdminPage = () => {
           left_type: "image",
           right_type: "text",
           image_alt: "",
+          leftType: "image",
+          rightType: "text",
         }),
         ...(type === "itinerary-with-map" && {
           map_index: 0,
