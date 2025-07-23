@@ -99,6 +99,10 @@ export const locationCoordinates = {
     left: "28.6%",
     top: "49.5%",
   },
+  "USA-Massachusetts": {
+    left: "31.8%",
+    top: "42.5%",
+  },
   "USA-New England": {
     left: "31.8%",
     top: "42.5%",
