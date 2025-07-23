@@ -47,6 +47,17 @@ const blogs = [
     blog_description: "✨Step Back in Time: Discover Historic Plymouth, MA🚢",
     state: "Massachusetts",
   },
+  {
+    id: "trinidad-and-tobago-2",
+    created_at: "2025-07-22",
+    country: "Trinidad and Tobago",
+    country_code: "TT",
+    title: "📍North Coast, Trinidad 🇹🇹",
+    folder: "trinidad-and-tobago/2",
+    background_image: "IMG_1471.jpeg",
+    path: "/blog/trinidad-and-tobago/2",
+    blog_description: "🩴Sandy beaches, inviting waters🌊",
+  },
 ];
 
 export default blogs;
