@@ -12,6 +12,16 @@ const tips = [
     description: "Essential tips for traveling in Trinidad and Tobago",
     created_at: new Date("2025-07-07"),
   },
+  {
+    id: 2,
+    country: "United States",
+    country_code: "US",
+    state: "Massachusetts",
+    path: "united-states-massachusetts",
+    title: "United States, Massachusetts Travel Tips",
+    description: "Essential tips for traveling in United States, Massachusetts",
+    created_at: new Date("2025-07-22"),
+  },
 ];
 
 // Helper function to find existing tips page

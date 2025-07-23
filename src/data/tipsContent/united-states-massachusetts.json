@@ -1,0 +1,18 @@
+{
+  "tip": {
+    "country": "United States",
+    "country_code": "US",
+    "state": "Massachusetts",
+    "path": "united-states-massachusetts",
+    "title": "United States, Massachusetts Travel Tips",
+    "description": "Essential tips for traveling in United States, Massachusetts"
+  },
+  "content": {
+    "essentialTips": "default content",
+    "budgetPlanning": "default content",
+    "foodDining": "default content",
+    "transportation": "default content",
+    "accommodation": "default content",
+    "safetyHealth": "default content"
+  }
+}

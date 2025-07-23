@@ -20,6 +20,7 @@ import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import TrinidadandTobagoPost1 from "./pages/BlogPage/Blogs/trinidad-and-tobago/1/TrinidadandTobagoPost1.tsx";
 import UnitedStatesConnecticutPost1 from "./pages/BlogPage/Blogs/united-states-connecticut/1/UnitedStatesConnecticutPost1.tsx";
 import UnitedStatesRhodeIslandPost1 from "./pages/BlogPage/Blogs/united-states-rhode-island/1/UnitedStatesRhodeIslandPost1.tsx";
+import UnitedStatesMassachusettsPost1 from "./pages/BlogPage/Blogs/united-states-massachusetts/1/UnitedStatesMassachusettsPost1.tsx";
 
 function App() {
   return (
@@ -67,6 +68,11 @@ function BlogPost() {
     case "united-states-rhode-island":
       if (index === "1") {
         return <UnitedStatesRhodeIslandPost1 />;
+      }
+      break;
+    case "united-states-massachusetts":
+      if (index === "1") {
+        return <UnitedStatesMassachusettsPost1 />;
       }
       break;
     default:

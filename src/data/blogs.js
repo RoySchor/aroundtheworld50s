@@ -35,6 +35,18 @@ const blogs = [
       "✨Beyond the State House: Exploring Providence on Foot👣",
     state: "Rhode Island",
   },
+  {
+    id: "united-states-massachusetts-1",
+    created_at: "2025-07-22",
+    country: "United States",
+    country_code: "US",
+    title: "📍Plymouth, Massachusetts",
+    folder: "united-states-massachusetts/1",
+    background_image: "IMG_0296.jpeg",
+    path: "/blog/united-states-massachusetts/1",
+    blog_description: "✨Step Back in Time: Discover Historic Plymouth, MA🚢",
+    state: "Massachusetts",
+  },
 ];
 
 export default blogs;
