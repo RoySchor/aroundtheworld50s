@@ -58,6 +58,17 @@ const blogs = [
     path: "/blog/trinidad-and-tobago/2",
     blog_description: "🩴Sandy beaches, inviting waters🌊",
   },
+  {
+    id: "trinidad-and-tobago-3",
+    created_at: "2025-07-28",
+    country: "Trinidad and Tobago",
+    country_code: "TT",
+    title: "✨A West Coast Adventure: A Glimpse of Trinidad's Heartbeat",
+    folder: "trinidad-and-tobago/3",
+    background_image: "IMG_1737.jpeg",
+    path: "/blog/trinidad-and-tobago/3",
+    blog_description: "✨A West Coast Adventure✨",
+  },
 ];
 
 export default blogs;
