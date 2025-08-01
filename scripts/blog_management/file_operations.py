@@ -332,10 +332,10 @@ def create_blog_constants(blog_component_dir, blog_data, post_index):
         # Add optional fields
         if 'images' in section:
             section_obj['images'] = section['images']
-        if 'left_image' in section:
-            section_obj['leftImage'] = section['left_image']
-        if 'right_image' in section:
-            section_obj['rightImage'] = section['right_image']
+        if 'leftImage' in section:
+            section_obj['leftImage'] = section['leftImage']
+        if 'rightImage' in section:
+            section_obj['rightImage'] = section['rightImage']
 
         content_sections.append(section_obj)
 
@@ -399,10 +399,10 @@ def convert_layout_structure(layout):
     if layout["type"] == "itinerary-with-map":
         converted["mapIndex"] = layout.get("map_index", 0)
     elif layout["type"] == "two-column":
-        converted["leftType"] = layout.get("left_type", "text")
-        converted["rightType"] = layout.get("right_type", "text")
-        if "image_alt" in layout:
-            converted["imageAlt"] = layout["image_alt"]
+        converted["leftType"] = layout.get("leftType", "text")
+        converted["rightType"] = layout.get("rightType", "text")
+        if "imageAlt" in layout:
+            converted["imageAlt"] = layout["imageAlt"]
 
     return converted
 

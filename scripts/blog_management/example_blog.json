@@ -81,12 +81,12 @@
         "key": "arrivalDescription",
         "layout": {
           "type": "two-column",
-          "left_type": "image",
-          "right_type": "text",
-          "image_alt": "Example City"
+          "leftType": "image",
+          "rightType": "text",
+          "imageAlt": "Example City"
         },
         "content": "The ✈️ touched down in 📌Example City just before noon. We hailed a 🚕taxi to our hotel, The #Test Hotel, Premium Collection. We selected this 🏨for its upscale accommodations, great deal, and proximity to key attractions like 📌Example Park.",
-        "left_image": "test-bg.jpg"
+        "leftImage": "test-bg.jpg"
       },
       {
         "key": "magnificentSeven",
@@ -118,12 +118,12 @@
         "key": "memorialPark",
         "layout": {
           "type": "two-column",
-          "left_type": "image",
-          "right_type": "text",
-          "image_alt": "Example City"
+          "leftType": "image",
+          "rightType": "text",
+          "imageAlt": "Example City"
         },
         "content": "As we strolled leisurely through 📌Sample Park and the iconic 📌Example Park Oval, we couldn't resist indulging in this cold, refreshing 🥥coconut water from street vendors.",
-        "left_image": "test-bg.jpg"
+        "leftImage": "test-bg.jpg"
       },
       {
         "key": "downtownDescription",
@@ -144,12 +144,12 @@
         "key": "independenceSquare",
         "layout": {
           "type": "two-column",
-          "left_type": "image",
-          "right_type": "text",
-          "image_alt": "Example City"
+          "leftType": "image",
+          "rightType": "text",
+          "imageAlt": "Example City"
         },
         "content": "We asked the driver to drop us off few blocks from 📌Example Square, so we could soak in the vibrant #atmosphere of downtown. Example Square was a bustling hub of activity, with people going about their day and street vendors selling their wares. We wandered through the square, soaking up the vibrant atmosphere and admiring the architecture of the surrounding buildings. Towering government buildings, like silent sentinels, watched over the square. We passed the Test House, the seat of Parliament, a grand building that whispered tales of political history. The Supreme Court, a majestic edifice, stood nearby, a reminder of the island's legal system. It was a fascinating walk, a journey through the heart of Example Island's governance.",
-        "left_image": "test-bg.jpg"
+        "leftImage": "test-bg.jpg"
       },
       {
         "key": "cathedral",
@@ -169,12 +169,12 @@
         "key": "trinityCathedral",
         "layout": {
           "type": "two-column",
-          "left_type": "text",
-          "right_type": "image",
-          "image_alt": "Example City"
+          "leftType": "text",
+          "rightType": "image",
+          "imageAlt": "Example City"
         },
         "content": "We continued our exploration, venturing towards 📌Test Cathedral⛪, architectural beauty, a breathtaking testament to the island's history. Stepping inside was like stepping back in time. We continued along the road, passing charming gardens adorned with sculptures, until we reached the traffic light where the police station was located, and our #journey came to an unexpected halt. A friendly 👮police officer advised us against proceeding further, citing safety concerns for tourists in that particular area.",
-        "right_image": "test-bg.jpg"
+        "rightImage": "test-bg.jpg"
       },
       {
         "key": "ariapitaAvenue",

@@ -31,7 +31,7 @@ const TwoColumnContentSection = ({
 
     if (file && file.name) {
       const altText = generateAltText(file.name);
-      handleLayoutChange("image_alt", altText);
+      handleLayoutChange("imageAlt", altText);
     }
   };
 
@@ -46,12 +46,12 @@ const TwoColumnContentSection = ({
               name={`layout_${sectionIndex}`}
               value="image-left"
               checked={
-                section.layout.left_type === "image" &&
-                section.layout.right_type === "text"
+                section.layout.leftType === "image" &&
+                section.layout.rightType === "text"
               }
               onChange={() => {
-                handleLayoutChange("left_type", "image");
-                handleLayoutChange("right_type", "text");
+                handleLayoutChange("leftType", "image");
+                handleLayoutChange("rightType", "text");
               }}
               className="blog-form-radio"
             />
@@ -65,12 +65,12 @@ const TwoColumnContentSection = ({
               name={`layout_${sectionIndex}`}
               value="image-right"
               checked={
-                section.layout.left_type === "text" &&
-                section.layout.right_type === "image"
+                section.layout.leftType === "text" &&
+                section.layout.rightType === "image"
               }
               onChange={() => {
-                handleLayoutChange("left_type", "text");
-                handleLayoutChange("right_type", "image");
+                handleLayoutChange("leftType", "text");
+                handleLayoutChange("rightType", "image");
               }}
               className="blog-form-radio"
             />
@@ -107,7 +107,7 @@ const TwoColumnContentSection = ({
       <div className="blog-form-section-info">
         <small className="blog-form-help-text">
           💡 <strong>Layout Preview:</strong>{" "}
-          {section.layout.left_type === "image"
+          {section.layout.leftType === "image"
             ? "Image will appear on the left, text on the right"
             : "Text will appear on the left, image on the right"}
         </small>
@@ -121,9 +121,9 @@ TwoColumnContentSection.propTypes = {
     key: PropTypes.string.isRequired,
     layout: PropTypes.shape({
       type: PropTypes.string.isRequired,
-      left_type: PropTypes.string,
-      right_type: PropTypes.string,
-      image_alt: PropTypes.string,
+      leftType: PropTypes.string,
+      rightType: PropTypes.string,
+      imageAlt: PropTypes.string,
     }).isRequired,
     content: PropTypes.string,
     image: PropTypes.object,

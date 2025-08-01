@@ -245,19 +245,19 @@ const JsonPreview = ({ formData }) => {
 
           if (section.layout.type === "two-column") {
             // Convert camelCase to snake_case for layout properties
-            contentSection.layout.left_type = section.layout.leftType;
-            contentSection.layout.right_type = section.layout.rightType;
-            contentSection.layout.image_alt = section.layout.imageAlt;
-            delete contentSection.layout.leftType;
-            delete contentSection.layout.rightType;
-            delete contentSection.layout.imageAlt;
+            contentSection.layout = {
+              type: "two-column",
+              leftType: section.layout.leftType,
+              rightType: section.layout.rightType,
+              imageAlt: section.layout.imageAlt,
+            };
 
             if (section.image) {
               // Set left_image or right_image based on layout type
               if (section.layout.leftType === "image") {
-                contentSection.left_image = section.image.name;
+                contentSection.leftImage = section.image.name;
               } else if (section.layout.rightType === "image") {
-                contentSection.right_image = section.image.name;
+                contentSection.rightImage = section.image.name;
               }
             }
           }

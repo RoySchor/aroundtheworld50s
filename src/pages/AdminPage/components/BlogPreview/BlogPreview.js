@@ -113,30 +113,30 @@ const BlogPreview = ({ formData }) => {
 
         case "two-column": {
           const leftContent =
-            section.layout.left_type === "text" ? section.content : null;
+            section.layout.leftType === "text" ? section.content : null;
           const rightContent =
-            section.layout.right_type === "text" ? section.content : null;
+            section.layout.rightType === "text" ? section.content : null;
           const leftImage =
-            section.layout.left_type === "image" ? section.image : null;
+            section.layout.leftType === "image" ? section.image : null;
           const rightImage =
-            section.layout.right_type === "image" ? section.image : null;
+            section.layout.rightType === "image" ? section.image : null;
 
           return (
             <TwoColumnLayout
               leftPane={{
-                type: section.layout.left_type,
+                type: section.layout.leftType,
                 imageUrl: leftImage
                   ? URL.createObjectURL(leftImage)
                   : undefined,
-                imageAlt: section.layout.image_alt,
+                imageAlt: section.layout.imageAlt,
                 content: leftContent,
               }}
               rightPane={{
-                type: section.layout.right_type,
+                type: section.layout.rightType,
                 imageUrl: rightImage
                   ? URL.createObjectURL(rightImage)
                   : undefined,
-                imageAlt: section.layout.image_alt,
+                imageAlt: section.layout.imageAlt,
                 content: rightContent,
               }}
             />
