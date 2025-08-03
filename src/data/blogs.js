@@ -81,6 +81,18 @@ const blogs = [
     blog_description:
       "Trinidad's Natural Wonders – La Brea & Caroni Swamp Journey 🦩🖤✨",
   },
+  {
+    id: "trinidad-and-tobago-5",
+    created_at: "2025-08-02",
+    country: "Trinidad and Tobago",
+    country_code: "TT",
+    title: "📍Tobago: Island Paradise Awaits",
+    folder: "trinidad-and-tobago/5",
+    background_image: "IMG_1828.jpeg",
+    path: "/blog/trinidad-and-tobago/5",
+    blog_description:
+      "Tropical vibes, endless beaches, and pure relaxation. Tobago, you've captured my heart! 🌴🏖️🌲",
+  },
 ];
 
 export default blogs;
