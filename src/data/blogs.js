@@ -69,6 +69,18 @@ const blogs = [
     path: "/blog/trinidad-and-tobago/3",
     blog_description: "✨A West Coast Adventure✨",
   },
+  {
+    id: "trinidad-and-tobago-4",
+    created_at: "2025-08-02",
+    country: "Trinidad and Tobago",
+    country_code: "TT",
+    title: "📍A South Coast Journey, Trinidad 🇹🇹",
+    folder: "trinidad-and-tobago/4",
+    background_image: "IMG_1638.jpeg",
+    path: "/blog/trinidad-and-tobago/4",
+    blog_description:
+      "Trinidad's Natural Wonders – La Brea & Caroni Swamp Journey 🦩🖤✨",
+  },
 ];
 
 export default blogs;
