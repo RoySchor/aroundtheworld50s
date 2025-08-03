@@ -90,7 +90,7 @@ src/pages/BlogPage/Blogs/france/1/
 
 ### 1. Terminal Interface
 ```bash
-# From project root
+# From the project root
 python3 -m scripts.blog_management.blog_manager
 ```
 
