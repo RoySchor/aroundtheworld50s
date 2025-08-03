@@ -93,6 +93,18 @@ const blogs = [
     blog_description:
       "Tropical vibes, endless beaches, and pure relaxation. Tobago, you've captured my heart! 🌴🏖️🌲",
   },
+  {
+    id: "trinidad-and-tobago-6",
+    created_at: "2025-08-03",
+    country: "Trinidad and Tobago",
+    country_code: "TT",
+    title: "📍Unveiling Tobago's Treasures",
+    folder: "trinidad-and-tobago/6",
+    background_image: "IMG_1867.jpeg",
+    path: "/blog/trinidad-and-tobago/6",
+    blog_description:
+      "Beneath the Waves: Tobago's Iconic Water Adventures 💦🐠",
+  },
 ];
 
 export default blogs;
