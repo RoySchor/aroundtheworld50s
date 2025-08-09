@@ -1,6 +1,6 @@
 # Around The World 50s 🌎✈️
 
-[![Website](https://img.shields.io/website?url=https%3A%2F%2Froyschor.github.io%2Faroundtheworld50s)](https://royschor.github.io/aroundtheworld50s)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Faroundtheworld50s.com)](https://aroundtheworld50s.com)
 
 > A mother's journey around the world, made possible through automated blogging magic ✨
 
