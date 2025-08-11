@@ -26,6 +26,7 @@ import TrinidadAndTobagoPost3 from "./pages/BlogPage/Blogs/trinidad-and-tobago/3
 import TrinidadAndTobagoPost4 from "./pages/BlogPage/Blogs/trinidad-and-tobago/4/TrinidadAndTobagoPost4.tsx";
 import TrinidadAndTobagoPost5 from "./pages/BlogPage/Blogs/trinidad-and-tobago/5/TrinidadAndTobagoPost5.tsx";
 import TrinidadAndTobagoPost6 from "./pages/BlogPage/Blogs/trinidad-and-tobago/6/TrinidadAndTobagoPost6.tsx";
+import UnitedStatesNewYorkPost1 from "./pages/BlogPage/Blogs/united-states-new-york/1/UnitedStatesNewYorkPost1.tsx";
 
 function App() {
   return (
@@ -93,6 +94,11 @@ function BlogPost() {
     case "united-states-massachusetts":
       if (index === "1") {
         return <UnitedStatesMassachusettsPost1 />;
+      }
+      break;
+    case "united-states-new-york":
+      if (index === "1") {
+        return <UnitedStatesNewYorkPost1 />;
       }
       break;
     default:

@@ -105,6 +105,19 @@ const blogs = [
     blog_description:
       "Beneath the Waves: Tobago's Iconic Water Adventures 💦🐠",
   },
+  {
+    id: "united-states-new-york-1",
+    created_at: "2025-08-10",
+    country: "United States",
+    country_code: "US",
+    title: "📍Body Painting, Union Square, Manhattan",
+    folder: "united-states-new-york/1",
+    background_image: "IMG_0731.jpeg",
+    path: "/blog/united-states-new-york/1",
+    blog_description:
+      "✨A Farewell to Fantastic: Witnessing the Last NYC Body Painting Day🎨",
+    state: "New York",
+  },
 ];
 
 export default blogs;

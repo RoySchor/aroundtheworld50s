@@ -22,6 +22,16 @@ const tips = [
     description: "Essential tips for traveling in United States, Massachusetts",
     created_at: new Date("2025-07-22"),
   },
+  {
+    id: 3,
+    country: "United States",
+    country_code: "US",
+    state: "New York",
+    path: "united-states-new-york",
+    title: "United States, New York Travel Tips",
+    description: "Essential tips for traveling in United States, New York",
+    created_at: new Date("2025-08-10"),
+  },
 ];
 
 // Helper function to find existing tips page
