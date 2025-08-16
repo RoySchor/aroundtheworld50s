@@ -118,6 +118,18 @@ const blogs = [
       "✨A Farewell to Fantastic: Witnessing the Last NYC Body Painting Day🎨",
     state: "New York",
   },
+  {
+    id: "united-states-new-york-2",
+    created_at: "2025-08-16",
+    country: "United States",
+    country_code: "US",
+    title: "📍4th of July fireworks Over the Hudson",
+    folder: "united-states-new-york/2",
+    background_image: "IMG_1138.jpeg",
+    path: "/blog/united-states-new-york/2",
+    blog_description: "4th of July Spectacle: Fireworks on the Hudson! 🎆🗽🇺🇸",
+    state: "New York",
+  },
 ];
 
 export default blogs;
