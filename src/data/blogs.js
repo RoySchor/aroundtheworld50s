@@ -130,6 +130,18 @@ const blogs = [
     blog_description: "4th of July Spectacle: Fireworks on the Hudson! 🎆🗽🇺🇸",
     state: "New York",
   },
+  {
+    id: "united-states-new-york-3",
+    created_at: "2025-08-17",
+    country: "United States",
+    country_code: "US",
+    title: "📍Fireworks Over the Hudson",
+    folder: "united-states-new-york/3",
+    background_image: "IMG_1137.jpeg",
+    path: "/blog/united-states-new-york/3",
+    blog_description: "A 4th of July NYC Spectacle over the Hudson River",
+    state: "New York",
+  },
 ];
 
 export default blogs;
