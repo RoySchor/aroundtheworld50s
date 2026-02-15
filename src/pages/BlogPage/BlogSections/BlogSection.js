@@ -4,6 +4,7 @@ import "../BlogPage.css";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import blogs from "../../../data/blogs";
+import { getBlogImageUrl } from "../../../utils/cloudinary";
 
 const BlogSection = ({ country }) => {
   let filteredBlogs;
@@ -33,9 +34,7 @@ const BlogSection = ({ country }) => {
 
   const background =
     filteredBlogs.length > 0
-      ? require(
-          `../../../assets/blog/${filteredBlogs[0].folder}/${filteredBlogs[0].background_image}`,
-        )
+      ? getBlogImageUrl(filteredBlogs[0].folder, filteredBlogs[0].background_image)
       : null;
 
   return (
@@ -58,9 +57,7 @@ const BlogSection = ({ country }) => {
           <h1 className="page-title">{country}</h1>
           <div className="blog-grid">
             {filteredBlogs.map((blog) => {
-              const imagePath = require(
-                `../../../assets/blog/${blog.folder}/${blog.background_image}`,
-              );
+              const imagePath = getBlogImageUrl(blog.folder, blog.background_image);
               return (
                 <div className="blog-item-wrapper" key={blog.id}>
                   <div className="blog-item">

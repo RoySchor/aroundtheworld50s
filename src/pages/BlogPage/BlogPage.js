@@ -3,6 +3,7 @@ import "../../styles/layout.css";
 import "./BlogPage.css";
 import { Link } from "react-router-dom";
 import blogs from "../../data/blogs";
+import { getBlogImageUrl } from "../../utils/cloudinary";
 
 const BlogPage = () => {
   const formatDate = (dateString) => {
@@ -32,9 +33,7 @@ const BlogPage = () => {
           <h1 className="page-title">Blog</h1>
           <div className="blog-grid">
             {sortedBlogs.map((blog) => {
-              const imagePath = require(
-                `../../assets/blog/${blog.folder}/${blog.background_image}`,
-              );
+              const imagePath = getBlogImageUrl(blog.folder, blog.background_image);
               return (
                 <div className="blog-item-wrapper" key={blog.id}>
                   <div className="blog-item">

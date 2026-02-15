@@ -4,6 +4,7 @@ import "../../../BlogPage/BlogPage.css";
 import "./MostRecentPosts.css";
 import blogs from "../../../../data/blogs";
 import { Link } from "react-router-dom";
+import { getBlogImageUrl } from "../../../../utils/cloudinary";
 
 const MostRecentPosts = () => {
   const formatDate = (dateString) => {
@@ -35,9 +36,7 @@ const MostRecentPosts = () => {
       </div>
       <div className="blog-grid">
         {mostRecentBlogs.map((blog) => {
-          const imagePath = require(
-            `../../../../assets/blog/${blog.folder}/${blog.background_image}`,
-          );
+          const imagePath = getBlogImageUrl(blog.folder, blog.background_image);
           return (
             <div className="blog-item-wrapper" key={blog.id}>
               <div className="blog-item">

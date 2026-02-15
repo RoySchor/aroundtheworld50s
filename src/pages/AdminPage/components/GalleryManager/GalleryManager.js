@@ -3,6 +3,7 @@ import GalleryForm from "./GalleryForm";
 import GalleryPreview from "./GalleryPreview";
 import GalleryScriptRunner from "./GalleryScriptRunner";
 import "./GalleryManager.css";
+import { fetchGalleryImages } from "../../../../data/galleryImages";
 
 const GalleryManager = () => {
   const [activeTab, setActiveTab] = useState("manage"); // "manage", "preview", or "deploy"
@@ -18,23 +19,18 @@ const GalleryManager = () => {
   const loadCurrentImages = async () => {
     try {
       setIsLoading(true);
-      // Get the current images from the rotating gallery directory
-      const requireContext = require.context(
-        "../../../../assets/homePageGallery",
-        false,
-        /\.(png|jpe?g|webp|gif)$/i,
-      );
+      // Fetch images from Cloudinary
+      const cloudinaryImages = await fetchGalleryImages();
 
-      const imageData = requireContext.keys().map((path, index) => {
-        // Extract the real filename from the webpack path
-        // path looks like "./filename.jpg"
-        const realFileName = path.replace("./", "");
-        const imageModule = requireContext(path);
+      const imageData = cloudinaryImages.map((url, index) => {
+        // Extract filename from Cloudinary URL
+        const urlParts = url.split('/');
+        const filename = urlParts[urlParts.length - 1];
 
         return {
           id: index,
-          name: realFileName, // Use the actual filename
-          src: imageModule.default || imageModule,
+          name: filename,
+          src: url,
           isNew: false,
         };
       });
