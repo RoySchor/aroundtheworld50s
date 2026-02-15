@@ -2,7 +2,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/layout.css";
 import "./DestinationsPage.css";
-import background from "../../assets/destinations-page-bg.jpg";
+import { STATIC_ASSETS } from "../../utils/cloudinary";
+
+const background = STATIC_ASSETS.destinationsPageBg;
 import WorldMap from "./components/WorldMap";
 import blogs from "../../data/blogs";
 import { serializeLocation } from "./DestinationPage.utils";

@@ -1,6 +1,8 @@
 import React from "react";
 import "./aboutMePage.css";
-import aboutMeImage from "../../assets/about-me-page-bg.webp";
+import { STATIC_ASSETS } from "../../utils/cloudinary";
+
+const aboutMeImage = STATIC_ASSETS.aboutMePageBg;
 import Contact from "../../components/Contact/Contact";
 
 const AboutMePage = () => {

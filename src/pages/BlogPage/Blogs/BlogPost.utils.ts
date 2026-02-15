@@ -1,5 +1,6 @@
 import { BlogPostContent } from "./BlogPost.types";
+import { getBlogImageUrl } from "../../../utils/cloudinary";
 
 export const getImagePathFromBlogPost = (blogPost: BlogPostContent, imageName: string) => {
-  return require(`../../../assets/blog/${blogPost.path}/${imageName}`);
+  return getBlogImageUrl(blogPost.path, imageName);
 };

@@ -1,7 +1,9 @@
 import React from "react";
 import "../../styles/layout.css";
 import "./HomePage.css";
-import background from "../../assets/home-page-bg.webp";
+import { STATIC_ASSETS } from "../../utils/cloudinary";
+
+const background = STATIC_ASSETS.homePageBg;
 import { Link } from "react-router-dom";
 import MostRecentPosts from "./components/MostRecentPosts/MostRecentPosts";
 import RotatingGallery from "./components/RotatingGallery/RotatingGallery";

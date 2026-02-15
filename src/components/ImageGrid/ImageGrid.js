@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "./ImageGrid.css";
+import { getBlogImageUrl } from "../../utils/cloudinary";
 
 const ImageGrid = ({ images, blogPath }) => {
   return (
@@ -8,7 +9,7 @@ const ImageGrid = ({ images, blogPath }) => {
       {images.map((image, index) => (
         <div key={index} className="image-grid-item">
           <img
-            src={require(`../../assets/blog/${blogPath}/${image}`)}
+            src={getBlogImageUrl(blogPath, image)}
             alt={`Gallery ${index + 1}`}
             className="image-grid-image"
           />

@@ -15,49 +15,59 @@ from utils import (
     is_us_country
 )
 
+# Import Cloudinary utilities
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from cloudinary_utils import upload_blog_images, configure_cloudinary
+
 def setup_directories(base_dir, country_name, post_index, state_name=None):
-    """Create necessary directories for assets and data."""
+    """Create necessary directories for blog components (images go to Cloudinary)."""
     if state_name and is_us_country(country_name, None):
         # For US states, use state-specific serialization
         serialized_location = f"united-states-{serialize_location(state_name)}"
     else:
         serialized_location = serialize_location(country_name)
 
-    # Create directories
-    assets_dir = base_dir / "src/assets/blog" / serialized_location / str(post_index)
+    # Only create blog component directory (images go to Cloudinary now)
     blog_component_dir = base_dir / "src/pages/BlogPage/Blogs" / serialized_location / str(post_index)
-
-    # Check if directories already exist
-    if assets_dir.exists():
-        print(f"\nError: Assets directory already exists: {assets_dir}")
-        print("This indicates a problem with the post index calculation.")
-        print(f"Please check both the assets and blog components directories for any inconsistencies.")
-        sys.exit(1)
 
     if blog_component_dir.exists():
         print(f"\nError: Blog component directory already exists: {blog_component_dir}")
         print("This indicates a problem with the post index calculation.")
-        print(f"Please check both the assets and blog components directories for any inconsistencies.")
         sys.exit(1)
 
-    # Create directories only if they don't exist
-    assets_dir.mkdir(parents=True)
     blog_component_dir.mkdir(parents=True)
 
-    return assets_dir, blog_component_dir
+    # Return the blog path for Cloudinary uploads
+    blog_path = f"{serialized_location}/{post_index}"
+    return blog_path, blog_component_dir
 
-def copy_images(source_dir, assets_dir, background_image):
-    """Copy images from source directory to assets directory."""
+def upload_images(source_dir, blog_path, background_image):
+    """Upload images from source directory to Cloudinary."""
     # Verify background image exists
     bg_path = source_dir / background_image
     if not bg_path.exists():
         print(f"Error: Background image '{background_image}' not found in the source folder")
         sys.exit(1)
 
-    # Copy all images
-    for file in source_dir.glob("*"):
-        if file.suffix.lower() in ['.jpg', '.jpeg', '.png', '.webp', '.gif']:
-            shutil.copy2(file, assets_dir)
+    # Configure and upload to Cloudinary
+    if not configure_cloudinary():
+        print("\n⚠️  Cloudinary not configured. Please set environment variables:")
+        print('  export CLOUDINARY_API_KEY="your_api_key"')
+        print('  export CLOUDINARY_API_SECRET="your_api_secret"')
+        sys.exit(1)
+
+    # Upload all images to Cloudinary
+    uploaded = upload_blog_images(source_dir, blog_path)
+    if not uploaded:
+        print("Error: No images were uploaded to Cloudinary")
+        sys.exit(1)
+
+    return uploaded
+
+# Keep old function name for backwards compatibility
+def copy_images(source_dir, blog_path, background_image):
+    """Deprecated: Use upload_images instead. This now uploads to Cloudinary."""
+    return upload_images(source_dir, blog_path, background_image)
 
 def update_blogs_js(base_dir, blog_data, post_index):
     """Update the blogs.js file with the new blog entry."""

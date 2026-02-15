@@ -6,36 +6,54 @@ from pathlib import Path
 import subprocess
 import json
 
+# Add scripts directory to path for imports
+scripts_dir = Path(__file__).parent.parent
+sys.path.insert(0, str(scripts_dir))
+
+from cloudinary_utils import configure_cloudinary, upload_gallery_image, delete_gallery_image
+
 class GalleryManager:
     """Main class for managing home page gallery operations."""
 
     def __init__(self):
         self.base_dir = Path.cwd()
-        self.gallery_dir = self.base_dir / "src/assets/homePageGallery"
+        self.gallery_dir = self.base_dir / "src/assets/homePageGallery"  # Legacy, not used for Cloudinary
         self.desktop_path = Path.home() / "Desktop"
 
     def get_current_images(self):
-        """Get list of current images in the gallery."""
-        if not self.gallery_dir.exists():
+        """Get list of current images in the gallery from Cloudinary."""
+        if not configure_cloudinary():
+            print("❌ Failed to configure Cloudinary. Check your credentials.")
             return []
 
-        supported_formats = ['.jpg', '.jpeg', '.png', '.webp', '.gif']
-        images = []
+        try:
+            import cloudinary.api
+            # List all resources with the homePageGallery tag
+            result = cloudinary.api.resources_by_tag(
+                "homePageGallery",
+                resource_type="image",
+                max_results=100
+            )
 
-        for file in self.gallery_dir.iterdir():
-            if file.is_file() and file.suffix.lower() in supported_formats:
+            images = []
+            for resource in result.get('resources', []):
                 images.append({
-                    'name': file.name,
-                    'path': str(file),
-                    'size': file.stat().st_size
+                    'name': resource['public_id'].split('/')[-1],
+                    'public_id': resource['public_id'],
+                    'url': resource['secure_url'],
+                    'size': resource.get('bytes', 0)
                 })
 
-        return sorted(images, key=lambda x: x['name'])
+            return sorted(images, key=lambda x: x['name'])
+        except Exception as e:
+            print(f"❌ Failed to fetch images from Cloudinary: {e}")
+            return []
 
     def add_images(self, image_files):
-        """Add new images to the gallery."""
-        if not self.gallery_dir.exists():
-            self.gallery_dir.mkdir(parents=True, exist_ok=True)
+        """Add new images to the gallery by uploading to Cloudinary."""
+        if not configure_cloudinary():
+            print("❌ Failed to configure Cloudinary. Check your credentials.")
+            return []
 
         added_images = []
 
@@ -45,34 +63,26 @@ class GalleryManager:
                 print(f"Warning: Image file not found: {image_file}")
                 continue
 
-            # Copy image to gallery directory
-            dest_path = self.gallery_dir / source_path.name
-
-            # Handle naming conflicts
-            counter = 1
-            while dest_path.exists():
-                name_parts = source_path.stem, counter, source_path.suffix
-                dest_path = self.gallery_dir / f"{name_parts[0]}_{name_parts[1]}{name_parts[2]}"
-                counter += 1
-
-            shutil.copy2(source_path, dest_path)
-            added_images.append(dest_path.name)
-            print(f"✅ Added: {dest_path.name}")
+            # Upload to Cloudinary
+            url = upload_gallery_image(source_path, source_path.name)
+            if url:
+                added_images.append(source_path.name)
 
         return added_images
 
     def remove_images(self, image_names):
-        """Remove images from the gallery."""
+        """Remove images from the gallery by deleting from Cloudinary."""
+        if not configure_cloudinary():
+            print("❌ Failed to configure Cloudinary. Check your credentials.")
+            return []
+
         removed_images = []
 
         for image_name in image_names:
-            image_path = self.gallery_dir / image_name
-            if image_path.exists():
-                image_path.unlink()
+            if delete_gallery_image(image_name):
                 removed_images.append(image_name)
-                print(f"❌ Removed: {image_name}")
             else:
-                print(f"Warning: Image not found for removal: {image_name}")
+                print(f"Warning: Could not remove image: {image_name}")
 
         return removed_images
 
@@ -212,17 +222,18 @@ class GalleryManager:
     def update_gallery(self, changes_data):
         """Main method to update the gallery with given changes."""
         print("🖼️ Starting gallery update process...")
+        print("☁️ Images are stored in Cloudinary (no local files)")
 
         # Extract data
         add_images = changes_data.get('add_images', [])
-        remove_images = changes_data.get('remove_images', [])
+        remove_images_list = changes_data.get('remove_images', [])
         folder_name = changes_data.get('folder_name', None)  # Optional folder name on desktop
 
         print(f"📋 Changes to apply:")
         if add_images:
             print(f"  ➕ Add {len(add_images)} images: {', '.join(add_images)}")
-        if remove_images:
-            print(f"  ➖ Remove {len(remove_images)} images: {', '.join(remove_images)}")
+        if remove_images_list:
+            print(f"  ➖ Remove {len(remove_images_list)} images: {', '.join(remove_images_list)}")
         if folder_name:
             print(f"  📁 Looking in Desktop folder: {folder_name}")
         else:
@@ -237,65 +248,51 @@ class GalleryManager:
                 found_files, missing_files = self.find_image_files(add_images, folder_name)
 
                 if missing_files:
-                    print("\n❌ Aborting due to missing files")
-                    self.revert_changes()
+                    print("\n❌ Aborting due to missing files on desktop")
                     return False
 
-                print(f"\n➕ Adding {len(found_files)} new images...")
-                self.add_images(found_files)
+                print(f"\n➕ Uploading {len(found_files)} new images to Cloudinary...")
+                added = self.add_images(found_files)
+                if not added:
+                    print("❌ Failed to upload images to Cloudinary")
+                    return False
 
             # Process removals
-            if remove_images:
-                print(f"\n➖ Removing {len(remove_images)} images...")
-                self.remove_images(remove_images)
-
-            # Run linting
-            self.run_lint_fix()
+            if remove_images_list:
+                print(f"\n➖ Removing {len(remove_images_list)} images from Cloudinary...")
+                self.remove_images(remove_images_list)
 
             # Start development server for preview
             self.start_dev_server()
 
             print("\n✨ Gallery update completed!")
             print("🌐 Please check http://localhost:3000 to review changes")
+            print("ℹ️ Note: Changes are already live in Cloudinary!")
 
-            # Interactive approval process
-            self.interactive_approval()
+            # Interactive confirmation
+            self.interactive_confirmation()
 
             return True
 
         except Exception as e:
             print(f"❌ Gallery update failed: {e}")
-            self.revert_changes()
             return False
 
-    def interactive_approval(self):
-        """Interactive approval process for changes."""
+    def interactive_confirmation(self):
+        """Interactive confirmation after Cloudinary changes (already live)."""
         print("\n" + "="*50)
         print("🔍 REVIEW YOUR CHANGES")
         print("="*50)
         print("Please review the gallery at: http://localhost:3000")
         print("Navigate to the home page and check the rotating gallery.")
+        print("")
+        print("⚠️ Note: Changes are already live in Cloudinary!")
+        print("If you need to revert, you'll need to re-upload/delete manually.")
         print("="*50)
 
         try:
-            while True:
-                choice = input("\nDo you want to approve these changes? (y/n/r): ").lower().strip()
-
-                if choice in ['y', 'yes']:
-                    print("\n✅ Changes approved! Deploying...")
-                    if self.commit_and_deploy():
-                        print("🎉 Gallery successfully updated and deployed!")
-                    else:
-                        print("⚠️ Deployment failed, but changes are saved locally.")
-                    break
-
-                elif choice in ['n', 'no', 'r', 'revert']:
-                    print("\n❌ Changes rejected. Reverting...")
-                    self.revert_changes()
-                    break
-
-                else:
-                    print("Please enter 'y' for yes, 'n' for no, or 'r' for revert.")
+            input("\nPress Enter when done reviewing...")
+            print("\n✅ Review complete!")
 
         finally:
             # Always kill the development server when done

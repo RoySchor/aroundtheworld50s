@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import "./navbar.css";
 import { Link, useLocation } from "react-router-dom";
 import { FaInstagram, FaTiktok, FaBars, FaTimes } from "react-icons/fa";
-import siteLogo from "../../assets/around_the_world_50s_logo.png";
+import { STATIC_ASSETS } from "../../utils/cloudinary";
+
+const siteLogo = STATIC_ASSETS.logo;
 
 const Navbar = () => {
   const location = useLocation();

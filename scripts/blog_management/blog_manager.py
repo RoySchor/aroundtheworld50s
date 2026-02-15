@@ -116,20 +116,20 @@ class BlogManager:
         else:
             location_path = blog_data['country']
 
-        # Get the next post index first
-        post_index = get_next_post_index(self.base_dir / "src/assets/blog" / serialize_location(location_path))
+        # Get the next post index first (check blog components dir since assets are now on Cloudinary)
+        post_index = get_next_post_index(self.base_dir / "src/pages/BlogPage/Blogs" / serialize_location(location_path))
         print(f"\n📝 Creating blog post {post_index} for {location_path}")
 
         # Then setup directories with the correct index
-        assets_dir, blog_component_dir = setup_directories(
+        blog_path, blog_component_dir = setup_directories(
             self.base_dir,
             blog_data['country'],
             post_index,
             blog_data.get('state')  # Pass state if present
         )
 
-        # Copy images
-        copy_images(source_dir, assets_dir, blog_data['background_image'])
+        # Upload images to Cloudinary
+        copy_images(source_dir, blog_path, blog_data['background_image'])
 
         # Update blogs.js
         update_blogs_js(self.base_dir, blog_data, post_index)
@@ -170,8 +170,8 @@ class BlogManager:
             print("Please answer 'yes' or 'no'")
 
         if response == 'no':
-            # Revert all changes
-            revert_changes(self.base_dir, assets_dir, blog_component_dir, blog_data, post_index)
+            # Revert all changes (blog_path passed for compatibility, images on Cloudinary need manual cleanup)
+            revert_changes(self.base_dir, blog_path, blog_component_dir, blog_data, post_index)
             print("\nAll changes have been reverted. You can try again with different content.")
         else:
             # Deploy changes

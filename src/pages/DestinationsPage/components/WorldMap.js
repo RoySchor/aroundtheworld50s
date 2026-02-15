@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./WorldMap.css";
-import worldMap from "../../../assets/flat-world-map.webp";
+import { STATIC_ASSETS, getBlogImageUrl } from "../../../utils/cloudinary";
 import blogs from "../../../data/blogs";
 import { locationCoordinates } from "./WorldMap.constants";
 import Flag from "react-world-flags";
+
+const worldMap = STATIC_ASSETS.flatWorldMap;
 
 const WorldMap = () => {
   const [hoveredLocation, setHoveredLocation] = useState(null);
@@ -97,9 +99,7 @@ const WorldMap = () => {
         <div className="hover-info-container">
           <div className="hover-info-image-container">
             <img
-              src={require(
-                `../../../assets/blog/${hoveredLocation.folder}/${hoveredLocation.background_image}`,
-              )}
+              src={getBlogImageUrl(hoveredLocation.folder, hoveredLocation.background_image)}
               alt={hoveredLocation.state || hoveredLocation.country}
               className="hover-info-image"
             />

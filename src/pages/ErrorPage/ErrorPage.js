@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import siteLogo from "../../assets/around_the_world_50s_logo.png";
+import { STATIC_ASSETS } from "../../utils/cloudinary";
+
+const siteLogo = STATIC_ASSETS.logo;
 
 const ErrorPage = () => {
   return (
