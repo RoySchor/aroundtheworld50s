@@ -2,12 +2,12 @@ import React from "react";
 import "../../styles/layout.css";
 import "./HomePage.css";
 import { STATIC_ASSETS } from "../../utils/cloudinary";
-
-const background = STATIC_ASSETS.homePageBg;
 import { Link } from "react-router-dom";
 import MostRecentPosts from "./components/MostRecentPosts/MostRecentPosts";
 import RotatingGallery from "./components/RotatingGallery/RotatingGallery";
 import InstagramEmbedSection from "./components/InstagramEmbedSection";
+
+const background = STATIC_ASSETS.homePageBg;
 
 const HomePage = () => {
   return (

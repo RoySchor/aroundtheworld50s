@@ -1,9 +1,9 @@
 import React from "react";
 import "./aboutMePage.css";
 import { STATIC_ASSETS } from "../../utils/cloudinary";
+import Contact from "../../components/Contact/Contact";
 
 const aboutMeImage = STATIC_ASSETS.aboutMePageBg;
-import Contact from "../../components/Contact/Contact";
 
 const AboutMePage = () => {
   return (

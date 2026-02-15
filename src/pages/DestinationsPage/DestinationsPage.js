@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/layout.css";
 import "./DestinationsPage.css";
 import { STATIC_ASSETS } from "../../utils/cloudinary";
-
-const background = STATIC_ASSETS.destinationsPageBg;
 import WorldMap from "./components/WorldMap";
 import blogs from "../../data/blogs";
 import { serializeLocation } from "./DestinationPage.utils";
+
+const background = STATIC_ASSETS.destinationsPageBg;
 
 const DestinationsPage = () => {
   const navigate = useNavigate();
