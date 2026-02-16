@@ -28,7 +28,7 @@ cd path/to/around-the-world-50s
 
 ### Features
 1. **Content Processing**
-   - Downloads and organizes necessary files
+   - Uploads images to Cloudinary CDN automatically
    - Parses content and metadata
    - Creates required directories
    - Generates React components automatically
@@ -43,6 +43,12 @@ cd path/to/around-the-world-50s
    - Validates all changes
    - Handles Git operations
    - Deploys to production or reverts changes based on approval
+
+## ☁️ Image Hosting
+
+All images are hosted on **Cloudinary CDN** for optimal performance:
+- Automatic quality optimization
+- No local image storage in the repository
 
 All of this happens automatically with a single command:
 ```bash
@@ -136,7 +142,7 @@ graph TD
     B[Generate Blog Button] -->|Single Command| C[Blog Manager Script]
     C --> D[Generate Code]
     C --> E[Create Directories]
-    C --> F[Process Images]
+    C --> F[Upload Images to Cloudinary]
     D --> G[Run ESlint Code Formatting]
     G --> H[Preview Server]
     E --> G

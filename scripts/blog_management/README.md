@@ -2,13 +2,13 @@
 
 > **A Python-based content management system that generates React blog components from JSON configurations**
 
-This system automates the creation and deployment of travel blog posts, supporting both international destinations and US state-specific content. It generates complete React components with routing, handles asset management, and provides both CLI and web-based interfaces.
+This system automates the creation and deployment of travel blog posts, supporting both international destinations and US state-specific content. It generates complete React components with routing, uploads images to Cloudinary CDN, and provides both CLI and web-based interfaces.
 
 ## 🚀 Quick Overview
 
 **What it does:**
 - Converts JSON blog configurations into fully functional React components
-- Automatically handles file structure, routing, and asset organization
+- Automatically uploads images to Cloudinary CDN
 - Supports rich content layouts (text, image grids, itineraries with maps)
 - Provides both terminal-based and web-based interfaces
 - Includes automatic link formatting and country/state validation
@@ -103,7 +103,7 @@ python3 -m scripts.blog_management.blog_manager
 ## 🛠️ Technical Features
 
 - **Automatic routing generation** - Updates React Router configurations
-- **Asset optimization** - Handles image copying and organization
+- **Cloudinary CDN integration** - Uploads images with automatic optimization
 - **TypeScript support** - Generates proper type definitions
 - **Development integration** - Auto-starts/stops dev server for testing
 - **Validation** - JSON schema validation and country code verification

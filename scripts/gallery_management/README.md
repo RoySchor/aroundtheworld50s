@@ -2,7 +2,7 @@
 
 > **Modern web interface and automated script for managing the home page gallery**
 
-This system provides an intuitive web interface and automated script for managing the rotating gallery on your home page, making it easy for non-technical users to update their gallery while maintaining code quality and deployment safety.
+This system provides an intuitive web interface and automated script for managing the rotating gallery on your home page. Images are stored on **Cloudinary CDN** for optimal performance, making it easy for non-technical users to update their gallery.
 
 ## 🎨 Web Interface Features
 
@@ -16,10 +16,10 @@ This system provides an intuitive web interface and automated script for managin
 ## 🤖 Automation Features
 
 - **One-Click Execution** - Run changes directly from the web interface
-- **Smart File Operations** - Automatic image copying and cleanup
+- **Cloudinary Integration** - Automatic upload to CDN with optimization
 - **Quality Assurance** - Automatic code formatting and linting
 - **Preview Environment** - Development server for change verification
-- **Automated Deployment** - Handles git operations and production updates
+- **Live Updates** - Changes are immediately live on Cloudinary CDN
 
 ## 🖥️ How to Update Your Gallery
 
@@ -47,53 +47,49 @@ python3 -m scripts.gallery_management.gallery_manager update '{"add_images": ["v
 
 1. **Upload** - Add images through drag-and-drop interface
 2. **Preview** - See live preview of gallery changes
-3. **Validate** - Automatic image format and size validation
-4. **Execute** - One-click to apply changes
-5. **Review** - Automatic preview in development environment
-6. **Deploy** - Automated git operations and deployment
+3. **Validate** - Automatic image format validation
+4. **Execute** - One-click to upload to Cloudinary
+5. **Review** - Preview in development environment
+6. **Done** - Images are immediately live on CDN
 
-## 🔍 Smart File Management
+## ☁️ Cloudinary CDN
 
-The system handles files intelligently:
-- **Automatic Discovery** - Finds images in common locations
+Images are hosted on Cloudinary with automatic optimization:
 - **Format Support** - Handles `.jpg`, `.jpeg`, `.png`, `.webp`, `.gif`
-- **Size Optimization** - Automatic image resizing and compression
-- **Name Conflict Resolution** - Smart file naming system
+- **Auto Optimization** - Cloudinary automatically optimizes format and quality
+- **Global CDN** - Fast delivery worldwide
+- **No Local Storage** - Images are not stored in the repository
 
-## 🔄 Deployment Process
+## 🔄 How It Works
 
-The automated deployment process includes:
+1. **Validation** - Check image formats
+2. **Upload** - Images are uploaded to Cloudinary CDN
+3. **Optimization** - Cloudinary handles format/quality optimization
+4. **Preview** - Launch development environment to verify
+5. **Live** - Changes are immediately available on the CDN
 
-1. **Validation** - Check image formats and sizes
-2. **Processing** - Optimize and prepare images
-3. **Integration** - Update necessary code files
-4. **Quality Check** - Run linting and formatting
-5. **Preview** - Launch development environment
-6. **Deployment** - Handle git operations and production update
+## 🛡️ Notes
 
-## 🛡️ Safety Features
-
-- **Automatic Rollback** - One-click revert if needed
-- **Format Validation** - Ensures image compatibility
-- **Backup System** - Preserves original files
-- **Error Prevention** - Validates changes before deployment
-- **Process Management** - Handles server and resource cleanup
+- **Immediate Updates** - Changes to Cloudinary are live immediately
+- **Format Validation** - Ensures image compatibility before upload
+- **Error Handling** - Clear feedback on upload failures
+- **Manual Revert** - If needed, re-upload/delete images manually
 
 ## 👩‍💻 Developer Commands
 
-*Note: These commands are for development purposes only. Regular users should use the web interface.*
+*Note: Requires `CLOUDINARY_API_KEY` and `CLOUDINARY_API_SECRET` environment variables.*
 
 ```bash
-# List current images
+# List current images from Cloudinary
 python3 -m scripts.gallery_management.gallery_manager list
 
-# Add images (provide full paths)
+# Add images (uploads to Cloudinary)
 python3 -m scripts.gallery_management.gallery_manager add ~/Desktop/image1.jpg ~/Desktop/image2.png
 
-# Remove images (provide filenames)
+# Remove images (deletes from Cloudinary)
 python3 -m scripts.gallery_management.gallery_manager remove IMG_1508.jpeg IMG_1628.jpeg
 ```
 
 ---
 
-**Modern Web Interface** | **Automated Workflow** | **Non-Technical User Friendly**
+**Modern Web Interface** | **Cloudinary CDN** | **Non-Technical User Friendly**
