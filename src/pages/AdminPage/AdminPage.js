@@ -105,7 +105,6 @@ const AdminPage = () => {
             },
           );
         }
-        console.log("Saving form data to sessionStorage:", formDataToSave);
         sessionStorage.setItem("blogFormData", JSON.stringify(formDataToSave));
       } catch (error) {
         console.error("Error saving form data:", error);
