@@ -1,5 +1,5 @@
 {
-  "id": "aa40b47f-23c3-4662-b638-41e00f66eb26",
+  "id": "100bd2b6-0ad0-46b3-b968-76ce3caf67ff",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -437,23 +437,7 @@
           "default": "now()"
         }
       },
-      "indexes": {
-        "gallery_images_position_idx": {
-          "name": "gallery_images_position_idx",
-          "columns": [
-            {
-              "expression": "position",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
@@ -462,6 +446,13 @@
           "nullsNotDistinct": false,
           "columns": [
             "cloudinary_public_id"
+          ]
+        },
+        "gallery_images_position_unique": {
+          "name": "gallery_images_position_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "position"
           ]
         }
       },

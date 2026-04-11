@@ -34,6 +34,17 @@
  *   unique constraint are intentionally omitted. Postgres uses the leading
  *   column of the composite index for single-column lookups.
  *
+ * - Every `(parent, position)` unique constraint is converted to
+ *   DEFERRABLE INITIALLY DEFERRED in the migration's post-init section.
+ *   Drizzle's `unique()` builder can't express that, so it's done with a
+ *   DROP + ADD in SQL. Reason: batch reorders inside a single transaction
+ *   (`UPDATE ... SET position = position + 1 WHERE position >= N`) would
+ *   otherwise fail mid-statement on a non-deferrable unique. The
+ *   constraint still holds at COMMIT, so the invariant is preserved at
+ *   rest. Applies to: blog_blocks, blog_itineraries, blog_itinerary_items,
+ *   gallery_images. NOT applied to `blog_posts(country_slug, post_index)`
+ *   because `post_index` is a stable identifier, not a reorderable slot.
+ *
  * - `instagram` is intentionally NOT in `blogBlockType` — the v1 embed is
  *   broken and porting it is a fast-follow. Adding it later is a one-line
  *   enum migration, not a redesign.
@@ -405,6 +416,12 @@ export const tipSections = pgTable(
  * meant the order came from whatever Cloudinary returned. Moving it into
  * Postgres gives the admin explicit ordering and per-image metadata
  * (caption, etc.) without needing to re-tag assets.
+ *
+ * `position` is unique on its own (no parent FK to scope it). The unique
+ * is converted to DEFERRABLE INITIALLY DEFERRED in the migration so the
+ * admin can swap or shift positions inside one transaction. The unique's
+ * implicit B-tree index also serves the gallery's only sort path, so no
+ * separate `position` index is needed.
  */
 export const galleryImages = pgTable(
   "gallery_images",
@@ -420,7 +437,7 @@ export const galleryImages = pgTable(
       .notNull()
       .defaultNow(),
   },
-  (t) => [index("gallery_images_position_idx").on(t.position)],
+  (t) => [unique("gallery_images_position_unique").on(t.position)],
 );
 
 // ---------------------------------------------------------------------------

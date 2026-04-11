@@ -64,7 +64,8 @@ CREATE TABLE "gallery_images" (
 	"position" integer NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "gallery_images_cloudinary_public_id_unique" UNIQUE("cloudinary_public_id")
+	CONSTRAINT "gallery_images_cloudinary_public_id_unique" UNIQUE("cloudinary_public_id"),
+	CONSTRAINT "gallery_images_position_unique" UNIQUE("position")
 );
 --> statement-breakpoint
 CREATE TABLE "profiles" (
@@ -108,19 +109,19 @@ ALTER TABLE "blog_itineraries" ADD CONSTRAINT "blog_itineraries_post_id_blog_pos
 ALTER TABLE "blog_itinerary_items" ADD CONSTRAINT "blog_itinerary_items_itinerary_id_blog_itineraries_id_fk" FOREIGN KEY ("itinerary_id") REFERENCES "public"."blog_itineraries"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "blog_posts" ADD CONSTRAINT "blog_posts_author_id_profiles_id_fk" FOREIGN KEY ("author_id") REFERENCES "public"."profiles"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "tip_sections" ADD CONSTRAINT "tip_sections_tip_id_tips_id_fk" FOREIGN KEY ("tip_id") REFERENCES "public"."tips"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-CREATE INDEX "gallery_images_position_idx" ON "gallery_images" USING btree ("position");--> statement-breakpoint
 CREATE INDEX "tips_country_code_idx" ON "tips" USING btree ("country_code");--> statement-breakpoint
 -- ---------------------------------------------------------------------------
 -- Post-init SQL (hand-maintained).
 --
 -- Drizzle Kit generates the structural DDL above. Everything below is
 -- written by hand because it's either not expressible in schema.ts
--- (triggers, functions) or deliberately kept out of Drizzle's model
--- (row-level security policies).
+-- (triggers, functions, deferrable constraints) or deliberately kept out
+-- of Drizzle's model (row-level security policies).
 --
--- This section is part of migration 0000 on purpose: triggers and RLS are
--- baseline requirements, not a follow-up. Drizzle Kit will never regenerate
--- this file once meta/0000_snapshot.json exists, so these edits are safe.
+-- This section is part of migration 0000 on purpose: triggers, deferrable
+-- uniques, and RLS are baseline requirements, not a follow-up. Drizzle
+-- Kit will never regenerate this file once meta/0000_snapshot.json
+-- exists, so these edits are safe.
 -- ---------------------------------------------------------------------------
 
 -- updated_at auto-bump. Runs for any UPDATE regardless of the client:
@@ -161,6 +162,28 @@ FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 CREATE TRIGGER gallery_images_set_updated_at
 BEFORE UPDATE ON "gallery_images"
 FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+--> statement-breakpoint
+-- Convert every (parent, position) unique to DEFERRABLE INITIALLY DEFERRED
+-- so the admin can shift or swap positions inside one transaction without
+-- the constraint firing mid-statement. The invariant still holds at COMMIT.
+-- Drizzle's `unique()` builder can't express deferrable, so we DROP + ADD.
+-- `blog_posts(country_slug, post_index)` is intentionally excluded —
+-- post_index is a stable identifier, not a reorderable slot.
+ALTER TABLE "blog_blocks" DROP CONSTRAINT "blog_blocks_post_position_unique";
+--> statement-breakpoint
+ALTER TABLE "blog_blocks" ADD CONSTRAINT "blog_blocks_post_position_unique" UNIQUE ("post_id", "position") DEFERRABLE INITIALLY DEFERRED;
+--> statement-breakpoint
+ALTER TABLE "blog_itineraries" DROP CONSTRAINT "blog_itineraries_post_position_unique";
+--> statement-breakpoint
+ALTER TABLE "blog_itineraries" ADD CONSTRAINT "blog_itineraries_post_position_unique" UNIQUE ("post_id", "position") DEFERRABLE INITIALLY DEFERRED;
+--> statement-breakpoint
+ALTER TABLE "blog_itinerary_items" DROP CONSTRAINT "blog_itinerary_items_itinerary_position_unique";
+--> statement-breakpoint
+ALTER TABLE "blog_itinerary_items" ADD CONSTRAINT "blog_itinerary_items_itinerary_position_unique" UNIQUE ("itinerary_id", "position") DEFERRABLE INITIALLY DEFERRED;
+--> statement-breakpoint
+ALTER TABLE "gallery_images" DROP CONSTRAINT "gallery_images_position_unique";
+--> statement-breakpoint
+ALTER TABLE "gallery_images" ADD CONSTRAINT "gallery_images_position_unique" UNIQUE ("position") DEFERRABLE INITIALLY DEFERRED;
 --> statement-breakpoint
 -- Enable row-level security on every public table.
 --
