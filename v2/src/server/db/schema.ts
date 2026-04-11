@@ -28,7 +28,11 @@
  *
  * - `updated_at` is bumped by a BEFORE UPDATE trigger (`set_updated_at`),
  *   not by app code. That way any write path — Drizzle, Supabase Studio,
- *   background jobs, raw SQL — keeps the column honest.
+ *   background jobs, raw SQL — keeps the column honest. The trigger only
+ *   bumps when `NEW IS DISTINCT FROM OLD`, so no-op UPDATEs (e.g. a
+ *   fetch-then-save flow that reissues the same values) don't rewrite
+ *   the timestamp. `updated_at` means "content changed at this time",
+ *   not "an UPDATE statement ran at this time".
  *
  * - Single-column indexes that duplicate the leading column of a composite
  *   unique constraint are intentionally omitted. Postgres uses the leading
@@ -251,6 +255,13 @@ export const blogItineraries = pgTable(
   ],
 );
 
+/**
+ * Items belong to an itinerary and are usually authored once. Audit
+ * columns (`createdAt` / `updatedAt`) are still tracked because v1 has
+ * typo fixes and URL touch-ups in the wild — when items become editable,
+ * the audit trail is already there. Adding the columns later would mean
+ * a backfill migration on existing rows.
+ */
 export const blogItineraryItems = pgTable(
   "blog_itinerary_items",
   {
@@ -260,6 +271,12 @@ export const blogItineraryItems = pgTable(
       .references(() => blogItineraries.id, { onDelete: "cascade" }),
     position: integer("position").notNull(),
     content: text("content").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
   },
   (t) => [
     unique("blog_itinerary_items_itinerary_position_unique").on(

@@ -30,6 +30,8 @@ CREATE TABLE "blog_itinerary_items" (
 	"itinerary_id" uuid NOT NULL,
 	"position" integer NOT NULL,
 	"content" text NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "blog_itinerary_items_itinerary_position_unique" UNIQUE("itinerary_id","position")
 );
 --> statement-breakpoint
@@ -127,10 +129,19 @@ CREATE INDEX "tips_country_code_idx" ON "tips" USING btree ("country_code");--> 
 -- updated_at auto-bump. Runs for any UPDATE regardless of the client:
 -- Drizzle, Supabase Studio, background jobs, psql — they all get consistent
 -- timestamps. Cheaper and more reliable than bumping in app code.
+--
+-- The IS DISTINCT FROM guard makes this a content-change timestamp, not
+-- an UPDATE-statement timestamp. Fetch-then-save flows that reissue the
+-- same row values (common in edit forms that don't diff) leave updated_at
+-- alone. Downstream readers — caches, sitemaps, audit logs — get the
+-- semantic they actually want. IS DISTINCT FROM is null-safe so columns
+-- toggling between NULL and non-NULL are still detected as changes.
 CREATE OR REPLACE FUNCTION public.set_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW IS DISTINCT FROM OLD THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -145,6 +156,10 @@ FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 --> statement-breakpoint
 CREATE TRIGGER blog_itineraries_set_updated_at
 BEFORE UPDATE ON "blog_itineraries"
+FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+--> statement-breakpoint
+CREATE TRIGGER blog_itinerary_items_set_updated_at
+BEFORE UPDATE ON "blog_itinerary_items"
 FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 --> statement-breakpoint
 CREATE TRIGGER blog_blocks_set_updated_at
