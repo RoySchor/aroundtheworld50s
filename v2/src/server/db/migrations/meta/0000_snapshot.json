@@ -1,5 +1,5 @@
 {
-  "id": "12f9116d-b6be-4019-bcbc-7624ef256dfb",
+  "id": "ca0f69fa-ccca-47f9-bc1e-76650fac9a74",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -38,8 +38,7 @@
           "name": "data",
           "type": "jsonb",
           "primaryKey": false,
-          "notNull": true,
-          "default": "'{}'::jsonb"
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -56,23 +55,7 @@
           "default": "now()"
         }
       },
-      "indexes": {
-        "blog_blocks_post_idx": {
-          "name": "blog_blocks_post_idx",
-          "columns": [
-            {
-              "expression": "post_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "blog_blocks_post_id_blog_posts_id_fk": {
           "name": "blog_blocks_post_id_blog_posts_id_fk",
@@ -147,23 +130,7 @@
           "default": "now()"
         }
       },
-      "indexes": {
-        "blog_itineraries_post_idx": {
-          "name": "blog_itineraries_post_idx",
-          "columns": [
-            {
-              "expression": "post_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "blog_itineraries_post_id_blog_posts_id_fk": {
           "name": "blog_itineraries_post_id_blog_posts_id_fk",
@@ -224,23 +191,7 @@
           "notNull": true
         }
       },
-      "indexes": {
-        "blog_itinerary_items_itinerary_idx": {
-          "name": "blog_itinerary_items_itinerary_idx",
-          "columns": [
-            {
-              "expression": "itinerary_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "blog_itinerary_items_itinerary_id_blog_itineraries_id_fk": {
           "name": "blog_itinerary_items_itinerary_id_blog_itineraries_id_fk",
@@ -258,8 +209,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "blog_itinerary_items_position_unique": {
-          "name": "blog_itinerary_items_position_unique",
+        "blog_itinerary_items_itinerary_position_unique": {
+          "name": "blog_itinerary_items_itinerary_position_unique",
           "nullsNotDistinct": false,
           "columns": [
             "itinerary_id",
@@ -342,8 +293,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "tips_section": {
-          "name": "tips_section",
+        "tips_cta_copy": {
+          "name": "tips_cta_copy",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -389,38 +340,7 @@
           "default": "now()"
         }
       },
-      "indexes": {
-        "blog_posts_country_slug_idx": {
-          "name": "blog_posts_country_slug_idx",
-          "columns": [
-            {
-              "expression": "country_slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "blog_posts_status_idx": {
-          "name": "blog_posts_status_idx",
-          "columns": [
-            {
-              "expression": "status",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "blog_posts_author_id_profiles_id_fk": {
           "name": "blog_posts_author_id_profiles_id_fk",
@@ -438,8 +358,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "blog_posts_slug_index_unique": {
-          "name": "blog_posts_slug_index_unique",
+        "blog_posts_country_slug_post_index_unique": {
+          "name": "blog_posts_country_slug_post_index_unique",
           "nullsNotDistinct": false,
           "columns": [
             "country_slug",
@@ -448,7 +368,12 @@
         }
       },
       "policies": {},
-      "checkConstraints": {},
+      "checkConstraints": {
+        "blog_posts_status_published_at_check": {
+          "name": "blog_posts_status_published_at_check",
+          "value": "(\"blog_posts\".\"status\" = 'draft' AND \"blog_posts\".\"published_at\" IS NULL) OR (\"blog_posts\".\"status\" = 'published' AND \"blog_posts\".\"published_at\" IS NOT NULL)"
+        }
+      },
       "isRLSEnabled": false
     },
     "public.gallery_images": {
@@ -536,7 +461,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'admin'"
+          "default": "'reader'"
         },
         "display_name": {
           "name": "display_name",
@@ -618,23 +543,7 @@
           "default": "now()"
         }
       },
-      "indexes": {
-        "tip_sections_tip_idx": {
-          "name": "tip_sections_tip_idx",
-          "columns": [
-            {
-              "expression": "tip_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "tip_sections_tip_id_tips_id_fk": {
           "name": "tip_sections_tip_id_tips_id_fk",
@@ -652,8 +561,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "tip_sections_tip_key_unique": {
-          "name": "tip_sections_tip_key_unique",
+        "tip_sections_tip_id_section_key_unique": {
+          "name": "tip_sections_tip_id_section_key_unique",
           "nullsNotDistinct": false,
           "columns": [
             "tip_id",
@@ -770,7 +679,12 @@
         }
       },
       "policies": {},
-      "checkConstraints": {},
+      "checkConstraints": {
+        "tips_status_published_at_check": {
+          "name": "tips_status_published_at_check",
+          "value": "(\"tips\".\"status\" = 'draft' AND \"tips\".\"published_at\" IS NULL) OR (\"tips\".\"status\" = 'published' AND \"tips\".\"published_at\" IS NOT NULL)"
+        }
+      },
       "isRLSEnabled": false
     }
   },
@@ -809,7 +723,8 @@
       "name": "user_role",
       "schema": "public",
       "values": [
-        "admin"
+        "admin",
+        "reader"
       ]
     }
   },

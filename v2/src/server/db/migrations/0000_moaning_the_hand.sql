@@ -1,13 +1,13 @@
 CREATE TYPE "public"."blog_block_type" AS ENUM('text', 'two_column', 'image_grid', 'itinerary_with_map');--> statement-breakpoint
 CREATE TYPE "public"."publish_status" AS ENUM('draft', 'published');--> statement-breakpoint
 CREATE TYPE "public"."tip_section_key" AS ENUM('essential_tips', 'budget_planning', 'food_dining', 'transportation', 'accommodation', 'safety_health');--> statement-breakpoint
-CREATE TYPE "public"."user_role" AS ENUM('admin');--> statement-breakpoint
+CREATE TYPE "public"."user_role" AS ENUM('admin', 'reader');--> statement-breakpoint
 CREATE TABLE "blog_blocks" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"post_id" uuid NOT NULL,
 	"position" integer NOT NULL,
 	"type" "blog_block_type" NOT NULL,
-	"data" jsonb DEFAULT '{}'::jsonb NOT NULL,
+	"data" jsonb NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "blog_blocks_post_position_unique" UNIQUE("post_id","position")
@@ -28,7 +28,7 @@ CREATE TABLE "blog_itinerary_items" (
 	"itinerary_id" uuid NOT NULL,
 	"position" integer NOT NULL,
 	"content" text NOT NULL,
-	CONSTRAINT "blog_itinerary_items_position_unique" UNIQUE("itinerary_id","position")
+	CONSTRAINT "blog_itinerary_items_itinerary_position_unique" UNIQUE("itinerary_id","position")
 );
 --> statement-breakpoint
 CREATE TABLE "blog_posts" (
@@ -43,14 +43,15 @@ CREATE TABLE "blog_posts" (
 	"header" text,
 	"description" text,
 	"background_image" text,
-	"tips_section" text,
+	"tips_cta_copy" text,
 	"tips_slug" text,
 	"status" "publish_status" DEFAULT 'draft' NOT NULL,
 	"published_at" timestamp with time zone,
 	"author_id" uuid,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "blog_posts_slug_index_unique" UNIQUE("country_slug","post_index")
+	CONSTRAINT "blog_posts_country_slug_post_index_unique" UNIQUE("country_slug","post_index"),
+	CONSTRAINT "blog_posts_status_published_at_check" CHECK (("blog_posts"."status" = 'draft' AND "blog_posts"."published_at" IS NULL) OR ("blog_posts"."status" = 'published' AND "blog_posts"."published_at" IS NOT NULL))
 );
 --> statement-breakpoint
 CREATE TABLE "gallery_images" (
@@ -64,7 +65,7 @@ CREATE TABLE "gallery_images" (
 --> statement-breakpoint
 CREATE TABLE "profiles" (
 	"id" uuid PRIMARY KEY NOT NULL,
-	"role" "user_role" DEFAULT 'admin' NOT NULL,
+	"role" "user_role" DEFAULT 'reader' NOT NULL,
 	"display_name" text,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
@@ -78,7 +79,7 @@ CREATE TABLE "tip_sections" (
 	"enabled" boolean DEFAULT true NOT NULL,
 	"position" integer NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "tip_sections_tip_key_unique" UNIQUE("tip_id","section_key")
+	CONSTRAINT "tip_sections_tip_id_section_key_unique" UNIQUE("tip_id","section_key")
 );
 --> statement-breakpoint
 CREATE TABLE "tips" (
@@ -93,7 +94,8 @@ CREATE TABLE "tips" (
 	"published_at" timestamp with time zone,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "tips_slug_unique" UNIQUE("slug")
+	CONSTRAINT "tips_slug_unique" UNIQUE("slug"),
+	CONSTRAINT "tips_status_published_at_check" CHECK (("tips"."status" = 'draft' AND "tips"."published_at" IS NULL) OR ("tips"."status" = 'published' AND "tips"."published_at" IS NOT NULL))
 );
 --> statement-breakpoint
 ALTER TABLE "blog_blocks" ADD CONSTRAINT "blog_blocks_post_id_blog_posts_id_fk" FOREIGN KEY ("post_id") REFERENCES "public"."blog_posts"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -101,11 +103,78 @@ ALTER TABLE "blog_itineraries" ADD CONSTRAINT "blog_itineraries_post_id_blog_pos
 ALTER TABLE "blog_itinerary_items" ADD CONSTRAINT "blog_itinerary_items_itinerary_id_blog_itineraries_id_fk" FOREIGN KEY ("itinerary_id") REFERENCES "public"."blog_itineraries"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "blog_posts" ADD CONSTRAINT "blog_posts_author_id_profiles_id_fk" FOREIGN KEY ("author_id") REFERENCES "public"."profiles"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "tip_sections" ADD CONSTRAINT "tip_sections_tip_id_tips_id_fk" FOREIGN KEY ("tip_id") REFERENCES "public"."tips"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-CREATE INDEX "blog_blocks_post_idx" ON "blog_blocks" USING btree ("post_id");--> statement-breakpoint
-CREATE INDEX "blog_itineraries_post_idx" ON "blog_itineraries" USING btree ("post_id");--> statement-breakpoint
-CREATE INDEX "blog_itinerary_items_itinerary_idx" ON "blog_itinerary_items" USING btree ("itinerary_id");--> statement-breakpoint
-CREATE INDEX "blog_posts_country_slug_idx" ON "blog_posts" USING btree ("country_slug");--> statement-breakpoint
-CREATE INDEX "blog_posts_status_idx" ON "blog_posts" USING btree ("status");--> statement-breakpoint
 CREATE INDEX "gallery_images_position_idx" ON "gallery_images" USING btree ("position");--> statement-breakpoint
-CREATE INDEX "tip_sections_tip_idx" ON "tip_sections" USING btree ("tip_id");--> statement-breakpoint
-CREATE INDEX "tips_country_code_idx" ON "tips" USING btree ("country_code");
+CREATE INDEX "tips_country_code_idx" ON "tips" USING btree ("country_code");--> statement-breakpoint
+-- ---------------------------------------------------------------------------
+-- Post-init SQL (hand-maintained).
+--
+-- Drizzle Kit generates the structural DDL above. Everything below is
+-- written by hand because it's either not expressible in schema.ts
+-- (triggers, functions) or deliberately kept out of Drizzle's model
+-- (row-level security policies).
+--
+-- This section is part of migration 0000 on purpose: triggers and RLS are
+-- baseline requirements, not a follow-up. Drizzle Kit will never regenerate
+-- this file once meta/0000_snapshot.json exists, so these edits are safe.
+-- ---------------------------------------------------------------------------
+
+-- updated_at auto-bump. Runs for any UPDATE regardless of the client:
+-- Drizzle, Supabase Studio, background jobs, psql — they all get consistent
+-- timestamps. Cheaper and more reliable than bumping in app code.
+CREATE OR REPLACE FUNCTION public.set_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+--> statement-breakpoint
+CREATE TRIGGER profiles_set_updated_at
+BEFORE UPDATE ON "profiles"
+FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+--> statement-breakpoint
+CREATE TRIGGER blog_posts_set_updated_at
+BEFORE UPDATE ON "blog_posts"
+FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+--> statement-breakpoint
+CREATE TRIGGER blog_itineraries_set_updated_at
+BEFORE UPDATE ON "blog_itineraries"
+FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+--> statement-breakpoint
+CREATE TRIGGER blog_blocks_set_updated_at
+BEFORE UPDATE ON "blog_blocks"
+FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+--> statement-breakpoint
+CREATE TRIGGER tips_set_updated_at
+BEFORE UPDATE ON "tips"
+FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+--> statement-breakpoint
+CREATE TRIGGER tip_sections_set_updated_at
+BEFORE UPDATE ON "tip_sections"
+FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+--> statement-breakpoint
+-- Enable row-level security on every public table.
+--
+-- No policies are created yet: with RLS ON and no policies, non-superuser
+-- roles (i.e. `anon` and `authenticated` accessing via PostgREST with the
+-- publishable key) are denied by default. This closes the exposure of the
+-- Supabase auto-generated REST API without breaking our app, which
+-- connects via DATABASE_URL as the `postgres` role (which has BYPASSRLS).
+--
+-- Policies (public SELECT for published rows, admin ALL via profiles.role)
+-- will be added in a follow-up migration once the admin auth flow lands.
+ALTER TABLE "profiles" ENABLE ROW LEVEL SECURITY;
+--> statement-breakpoint
+ALTER TABLE "blog_posts" ENABLE ROW LEVEL SECURITY;
+--> statement-breakpoint
+ALTER TABLE "blog_itineraries" ENABLE ROW LEVEL SECURITY;
+--> statement-breakpoint
+ALTER TABLE "blog_itinerary_items" ENABLE ROW LEVEL SECURITY;
+--> statement-breakpoint
+ALTER TABLE "blog_blocks" ENABLE ROW LEVEL SECURITY;
+--> statement-breakpoint
+ALTER TABLE "tips" ENABLE ROW LEVEL SECURITY;
+--> statement-breakpoint
+ALTER TABLE "tip_sections" ENABLE ROW LEVEL SECURITY;
+--> statement-breakpoint
+ALTER TABLE "gallery_images" ENABLE ROW LEVEL SECURITY;

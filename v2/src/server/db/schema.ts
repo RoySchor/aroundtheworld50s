@@ -3,7 +3,9 @@
  *
  * Migrations are generated from this file via `npm run db:generate` and
  * applied via `npm run db:migrate`. Do NOT hand-edit files in
- * `./migrations/` — the generator owns them.
+ * `./migrations/` — the generator owns them, except for the manually
+ * appended "post-init" section at the bottom of 0000 (trigger function,
+ * BEFORE UPDATE triggers, and RLS enables). Those are load-bearing.
  *
  * Design notes that aren't obvious from the column list:
  *
@@ -24,6 +26,14 @@
  *   them into separate per-type tables would force joins for no query we
  *   actually run.
  *
+ * - `updated_at` is bumped by a BEFORE UPDATE trigger (`set_updated_at`),
+ *   not by app code. That way any write path — Drizzle, Supabase Studio,
+ *   background jobs, raw SQL — keeps the column honest.
+ *
+ * - Single-column indexes that duplicate the leading column of a composite
+ *   unique constraint are intentionally omitted. Postgres uses the leading
+ *   column of the composite index for single-column lookups.
+ *
  * - `instagram` is intentionally NOT in `blogBlockType` — the v1 embed is
  *   broken and porting it is a fast-follow. Adding it later is a one-line
  *   enum migration, not a redesign.
@@ -32,6 +42,7 @@
 import { sql } from "drizzle-orm";
 import {
   boolean,
+  check,
   index,
   integer,
   jsonb,
@@ -47,7 +58,7 @@ import {
 // Enums
 // ---------------------------------------------------------------------------
 
-export const userRole = pgEnum("user_role", ["admin"]);
+export const userRole = pgEnum("user_role", ["admin", "reader"]);
 
 /**
  * Posts and tips share the same publish lifecycle. Draft rows are visible
@@ -90,11 +101,16 @@ export const tipSectionKey = pgEnum("tip_section_key", [
  * App-level user record. The `id` matches `auth.users.id` in the Supabase
  * auth schema — we don't create the FK at the Drizzle level because that
  * schema is managed by Supabase, not by us. Insert a row here via a
- * trigger or server action when a new admin is created.
+ * trigger or server action when a new user is created.
+ *
+ * `role` defaults to `'reader'` — the least-privileged value. Admin is
+ * always granted explicitly, never by omission. `'reader'` has no flow
+ * wired up yet; it exists purely as a safe default so a forgotten role
+ * on insert can't silently grant admin.
  */
 export const profiles = pgTable("profiles", {
   id: uuid("id").primaryKey(),
-  role: userRole("role").notNull().default("admin"),
+  role: userRole("role").notNull().default("reader"),
   displayName: text("display_name"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
@@ -118,6 +134,10 @@ export const profiles = pgTable("profiles", {
  *
  * `tipsSlug` is a soft reference (plain text, not a FK) because a post can
  * be authored before its tips page exists. The app resolves it at read time.
+ *
+ * `tipsCtaCopy` is the CTA label shown above the tips link on the post
+ * (e.g. "💥 Insider Tips: Your Key to an Unforgettable Trip"). Named
+ * explicitly so it isn't mistaken for a FK to `tip_sections`.
  */
 export const blogPosts = pgTable(
   "blog_posts",
@@ -139,7 +159,7 @@ export const blogPosts = pgTable(
     description: text("description"), // HTML allowed
 
     backgroundImage: text("background_image"), // Cloudinary public_id
-    tipsSection: text("tips_section"), // the CTA copy ("💥 Insider Tips...")
+    tipsCtaCopy: text("tips_cta_copy"), // CTA label ("💥 Insider Tips...")
     tipsSlug: text("tips_slug"), // soft ref to tips.slug
 
     // Draft lifecycle — see publishStatus comment.
@@ -147,7 +167,9 @@ export const blogPosts = pgTable(
     publishedAt: timestamp("published_at", { withTimezone: true }),
 
     // Audit columns. `createdAt` is backfilled from v1's committed dates so
-    // historical ordering stays accurate after the port.
+    // historical ordering stays accurate after the port. `updatedAt` is
+    // bumped by the `set_updated_at` trigger — see the post-init section
+    // of the 0000 migration.
     authorId: uuid("author_id").references(() => profiles.id, {
       onDelete: "set null",
     }),
@@ -159,9 +181,15 @@ export const blogPosts = pgTable(
       .defaultNow(),
   },
   (t) => [
-    unique("blog_posts_slug_index_unique").on(t.countrySlug, t.postIndex),
-    index("blog_posts_country_slug_idx").on(t.countrySlug),
-    index("blog_posts_status_idx").on(t.status),
+    unique("blog_posts_country_slug_post_index_unique").on(
+      t.countrySlug,
+      t.postIndex,
+    ),
+    // Invariant: published rows have a publish timestamp; drafts don't.
+    check(
+      "blog_posts_status_published_at_check",
+      sql`(${t.status} = 'draft' AND ${t.publishedAt} IS NULL) OR (${t.status} = 'published' AND ${t.publishedAt} IS NOT NULL)`,
+    ),
   ],
 );
 
@@ -193,7 +221,6 @@ export const blogItineraries = pgTable(
   },
   (t) => [
     unique("blog_itineraries_post_position_unique").on(t.postId, t.position),
-    index("blog_itineraries_post_idx").on(t.postId),
   ],
 );
 
@@ -208,11 +235,10 @@ export const blogItineraryItems = pgTable(
     content: text("content").notNull(),
   },
   (t) => [
-    unique("blog_itinerary_items_position_unique").on(
+    unique("blog_itinerary_items_itinerary_position_unique").on(
       t.itineraryId,
       t.position,
     ),
-    index("blog_itinerary_items_itinerary_idx").on(t.itineraryId),
   ],
 );
 
@@ -230,6 +256,10 @@ export const blogItineraryItems = pgTable(
  *                         imageAlt?, html: string }
  *   image_grid:         { images: string[] }
  *   itinerary_with_map: { itineraryId: string }  // UUID, not ordinal
+ *
+ * `data` has no default on purpose: every block type requires shape-
+ * specific fields, and defaulting to `{}` would let zod-bypassing writes
+ * drop garbage into the DB.
  */
 export const blogBlocks = pgTable(
   "blog_blocks",
@@ -240,7 +270,7 @@ export const blogBlocks = pgTable(
       .references(() => blogPosts.id, { onDelete: "cascade" }),
     position: integer("position").notNull(),
     type: blogBlockType("type").notNull(),
-    data: jsonb("data").notNull().default(sql`'{}'::jsonb`),
+    data: jsonb("data").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),
@@ -250,7 +280,6 @@ export const blogBlocks = pgTable(
   },
   (t) => [
     unique("blog_blocks_post_position_unique").on(t.postId, t.position),
-    index("blog_blocks_post_idx").on(t.postId),
   ],
 );
 
@@ -284,7 +313,13 @@ export const tips = pgTable(
       .notNull()
       .defaultNow(),
   },
-  (t) => [index("tips_country_code_idx").on(t.countryCode)],
+  (t) => [
+    index("tips_country_code_idx").on(t.countryCode),
+    check(
+      "tips_status_published_at_check",
+      sql`(${t.status} = 'draft' AND ${t.publishedAt} IS NULL) OR (${t.status} = 'published' AND ${t.publishedAt} IS NOT NULL)`,
+    ),
+  ],
 );
 
 /**
@@ -308,8 +343,10 @@ export const tipSections = pgTable(
       .defaultNow(),
   },
   (t) => [
-    unique("tip_sections_tip_key_unique").on(t.tipId, t.sectionKey),
-    index("tip_sections_tip_idx").on(t.tipId),
+    unique("tip_sections_tip_id_section_key_unique").on(
+      t.tipId,
+      t.sectionKey,
+    ),
   ],
 );
 
