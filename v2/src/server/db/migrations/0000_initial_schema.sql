@@ -10,7 +10,8 @@ CREATE TABLE "blog_blocks" (
 	"data" jsonb NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "blog_blocks_post_position_unique" UNIQUE("post_id","position")
+	CONSTRAINT "blog_blocks_post_position_unique" UNIQUE("post_id","position"),
+	CONSTRAINT "blog_blocks_data_object_check" CHECK (jsonb_typeof("blog_blocks"."data") = 'object')
 );
 --> statement-breakpoint
 CREATE TABLE "blog_itineraries" (
@@ -18,6 +19,7 @@ CREATE TABLE "blog_itineraries" (
 	"post_id" uuid NOT NULL,
 	"position" integer NOT NULL,
 	"title" text NOT NULL,
+	"map_embed_url" text,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "blog_itineraries_post_position_unique" UNIQUE("post_id","position")
@@ -42,6 +44,7 @@ CREATE TABLE "blog_posts" (
 	"subtitle" text,
 	"header" text,
 	"description" text,
+	"excerpt" text,
 	"background_image" text,
 	"tips_cta_copy" text,
 	"tips_slug" text,
@@ -60,6 +63,7 @@ CREATE TABLE "gallery_images" (
 	"caption" text,
 	"position" integer NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "gallery_images_cloudinary_public_id_unique" UNIQUE("cloudinary_public_id")
 );
 --> statement-breakpoint
@@ -78,6 +82,7 @@ CREATE TABLE "tip_sections" (
 	"content" text,
 	"enabled" boolean DEFAULT true NOT NULL,
 	"position" integer NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "tip_sections_tip_id_section_key_unique" UNIQUE("tip_id","section_key")
 );
@@ -151,6 +156,10 @@ FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 --> statement-breakpoint
 CREATE TRIGGER tip_sections_set_updated_at
 BEFORE UPDATE ON "tip_sections"
+FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+--> statement-breakpoint
+CREATE TRIGGER gallery_images_set_updated_at
+BEFORE UPDATE ON "gallery_images"
 FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 --> statement-breakpoint
 -- Enable row-level security on every public table.

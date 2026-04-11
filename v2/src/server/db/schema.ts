@@ -138,6 +138,13 @@ export const profiles = pgTable("profiles", {
  * `tipsCtaCopy` is the CTA label shown above the tips link on the post
  * (e.g. "💥 Insider Tips: Your Key to an Unforgettable Trip"). Named
  * explicitly so it isn't mistaken for a FK to `tip_sections`.
+ *
+ * `description` and `excerpt` are deliberately separate. `description` is
+ * the long HTML body shown on the post detail page (anchors, emoji, multi-
+ * sentence). `excerpt` is the short bare-text hook used on listing cards
+ * (e.g. v1's `blog_description` field). They never coincide in v1, and
+ * collapsing them forces the renderer to either ship HTML to the card or
+ * strip tags on read — both wrong.
  */
 export const blogPosts = pgTable(
   "blog_posts",
@@ -156,7 +163,8 @@ export const blogPosts = pgTable(
     title: text("title").notNull(),
     subtitle: text("subtitle"),
     header: text("header"),
-    description: text("description"), // HTML allowed
+    description: text("description"), // long HTML body for the detail page
+    excerpt: text("excerpt"), // short bare-text hook for listing cards
 
     backgroundImage: text("background_image"), // Cloudinary public_id
     tipsCtaCopy: text("tips_cta_copy"), // CTA label ("💥 Insider Tips...")
@@ -202,6 +210,13 @@ export const blogPosts = pgTable(
  * block can reference them by UUID instead of by ordinal index. In v1 the
  * block carries a `mapIndex: number` which silently breaks when the author
  * reorders itineraries; a real FK makes reorder a plain UPDATE.
+ *
+ * `mapEmbedUrl` is the iframe `src` for the itinerary's map (Google Maps
+ * today, but the column is provider-agnostic — the URL self-describes).
+ * Nullable so itineraries that don't ship with a map are still valid.
+ * Lives on the itinerary, not on the block, because one itinerary maps to
+ * one route — the URL is a property of the itinerary itself, not of the
+ * block that happens to render it.
  */
 export const blogItineraries = pgTable(
   "blog_itineraries",
@@ -212,6 +227,7 @@ export const blogItineraries = pgTable(
       .references(() => blogPosts.id, { onDelete: "cascade" }),
     position: integer("position").notNull(),
     title: text("title").notNull(),
+    mapEmbedUrl: text("map_embed_url"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),
@@ -249,17 +265,40 @@ export const blogItineraryItems = pgTable(
 /**
  * Ordered content blocks for a post. `data` carries the shape-specific
  * payload — the app parses it with a zod discriminated union keyed on
- * `type`. Example shapes:
+ * `type`. Image references are always Cloudinary public_ids (the same
+ * shape stored in `gallery_images.cloudinary_public_id`), never URLs and
+ * never v1's bare filename strings.
  *
- *   text:               { html: string }
- *   two_column:         { leftType, rightType, leftImage?, rightImage?,
- *                         imageAlt?, html: string }
- *   image_grid:         { images: string[] }
- *   itinerary_with_map: { itineraryId: string }  // UUID, not ordinal
+ * Example shapes — these are the contract the zod discriminated union
+ * MUST match. Update both sides together.
+ *
+ *   text: {
+ *     html: string
+ *   }
+ *
+ *   two_column: {
+ *     leftType: "image" | "text",
+ *     rightType: "image" | "text",
+ *     leftImage?: string,        // Cloudinary public_id
+ *     leftImageAlt?: string,
+ *     rightImage?: string,       // Cloudinary public_id
+ *     rightImageAlt?: string,
+ *     html: string
+ *   }
+ *
+ *   image_grid: {
+ *     images: string[]           // Cloudinary public_ids
+ *   }
+ *
+ *   itinerary_with_map: {
+ *     itineraryId: string        // UUID, FK-by-convention to blog_itineraries.id
+ *   }
  *
  * `data` has no default on purpose: every block type requires shape-
  * specific fields, and defaulting to `{}` would let zod-bypassing writes
- * drop garbage into the DB.
+ * drop garbage into the DB. The `jsonb_typeof = 'object'` CHECK below
+ * blocks the other JSONB-NULL footguns: scalars, arrays, and `'null'::jsonb`
+ * (which `NOT NULL` does NOT catch — it's a JSON value, not SQL NULL).
  */
 export const blogBlocks = pgTable(
   "blog_blocks",
@@ -280,6 +319,10 @@ export const blogBlocks = pgTable(
   },
   (t) => [
     unique("blog_blocks_post_position_unique").on(t.postId, t.position),
+    check(
+      "blog_blocks_data_object_check",
+      sql`jsonb_typeof(${t.data}) = 'object'`,
+    ),
   ],
 );
 
@@ -338,6 +381,9 @@ export const tipSections = pgTable(
     content: text("content"), // HTML allowed
     enabled: boolean("enabled").notNull().default(true),
     position: integer("position").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true })
       .notNull()
       .defaultNow(),
@@ -368,6 +414,9 @@ export const galleryImages = pgTable(
     caption: text("caption"),
     position: integer("position").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
       .notNull()
       .defaultNow(),
   },

@@ -1,5 +1,5 @@
 {
-  "id": "ca0f69fa-ccca-47f9-bc1e-76650fac9a74",
+  "id": "aa40b47f-23c3-4662-b638-41e00f66eb26",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -83,7 +83,12 @@
         }
       },
       "policies": {},
-      "checkConstraints": {},
+      "checkConstraints": {
+        "blog_blocks_data_object_check": {
+          "name": "blog_blocks_data_object_check",
+          "value": "jsonb_typeof(\"blog_blocks\".\"data\") = 'object'"
+        }
+      },
       "isRLSEnabled": false
     },
     "public.blog_itineraries": {
@@ -114,6 +119,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "map_embed_url": {
+          "name": "map_embed_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -287,6 +298,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "excerpt": {
+          "name": "excerpt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "background_image": {
           "name": "background_image",
           "type": "text",
@@ -407,6 +424,13 @@
         },
         "created_at": {
           "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
@@ -534,6 +558,13 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
