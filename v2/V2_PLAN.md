@@ -183,7 +183,7 @@ Sub-tasks:
 
 **1.2 Shared layout + navbar**
 - Root `layout.tsx`: fonts, global nav, footer
-- **Fonts**: audit v1's 8 fonts before installing. Core fonts based on actual usage: Caveat (hero titles), Inter (body), Dancing Script (accents). The rest may be vestigial — verify each appears in rendered output before adding. Use `next/font` for self-hosting + automatic optimization.
+- **Fonts**: 4 fonts confirmed in use — Inter (body/buttons/nav), Caveat (hero overlay), Scope One (section headings), Grandstander (blog subtitle/description). Use `next/font` for self-hosting + automatic optimization. Do NOT install Dancing Script, Kalam, Dosis, or Playpen Sans (zero references in v1).
 - `Navbar` component: logo (Cloudinary), nav links, social icons (Instagram, TikTok), mobile hamburger
 - Transparent-on-hero logic (route-aware or prop-based)
 - Admin link: **hidden for unauthenticated users**. Show only when session has admin role. No security-through-obscurity.
@@ -496,7 +496,7 @@ HTML textarea + preview is sufficient for this author (she manages raw HTML in v
 Requires `CLOUDINARY_API_KEY` + `CLOUDINARY_API_SECRET` in server env. The Cloudinary Node SDK or signed upload URLs are the two paths. v1's Python scripts use the SDK pattern — port that.
 
 **6. Font performance.**
-v1 installs 8 fonts. Not all may be used. Audit before installing — each unused font is ~50-200KB of dead weight. `next/font` self-hosts and optimizes automatically, but only for fonts you actually load.
+v1 installs 8 fonts. Audit confirmed only 4 are used: Inter (body/buttons/nav), Caveat (hero overlay), Scope One (section headings), Grandstander (blog subtitle/description). The other 4 (Dancing Script, Kalam, Dosis, Playpen Sans) have zero references anywhere in v1 — do not install them in v2.
 
 **7. Tailwind v3 → v4 migration.**
 v1's custom config (extended fonts, colors, `@apply`) needs manual porting. Tailwind v4 uses CSS-based config, not `tailwind.config.js`.
@@ -517,17 +517,23 @@ These were open questions in the first draft. Resolved based on review feedback:
 | WorldMap coordinates | Static constants file | Aspirational destinations are editorial intent, not derivable from DB |
 | Admin form persistence | Draft rows in DB | Replaces v1's sessionStorage. Auto-save on edit. |
 | `two_column` enforcement | Zod validation, not convention | At least one side must be "image" and at least one "text". `html` goes in the text pane. |
+| Rich text editor | Decide when we get to it | Start with HTML textarea + preview. Evaluate tiptap/Lexical only if the author finds raw HTML unworkable. |
+| Image optimization | Whichever is more reliable | Evaluate Next.js `<Image>` + Cloudinary loader vs `<CldImage>` during Phase 1 implementation. Pick based on reliability. |
+| Hosting during transition | Both — v2 on Vercel's provided URL | v1 stays on GitHub Pages at `aroundtheworld50s.com`. v2 runs on the Vercel-provided URL (e.g. `project.vercel.app`) until validated, then DNS cutover. |
+| Fonts | 4 fonts: Inter, Caveat, Scope One, Grandstander | Audit confirmed. Dancing Script, Kalam, Dosis, Playpen Sans have zero references in v1 — dead weight, do not install. |
+| Near-duplicate posts NY2/NY3 | Seed as-is | Port everything exactly as it exists. CRUD logic is stable in either direction — can always delete later. |
 
 ---
 
-## 9. Open Questions
+## 9. Progress Tracker
 
-1. **Rich text editor**: HTML textarea + preview is the starting point. If the author finds raw HTML unworkable, evaluate tiptap or Lexical. Don't pre-commit to a rich editor before seeing if the simple path works.
+<!-- Update this section after each step is completed -->
 
-2. **Image optimization**: use Next.js `<Image>` with a Cloudinary loader (responsive `srcSet` from Cloudinary transforms), or Cloudinary's own `<CldImage>` component? The Next.js loader is more portable; Cloudinary's component is more feature-rich.
-
-3. **Hosting during transition**: run v1 (GitHub Pages) and v2 (Vercel) side-by-side on different subdomains during validation, or cut over in one go? Side-by-side is safer but doubles the DNS surface.
-
-4. **Font audit results**: which of the 8 v1 fonts are actually rendered in the live site? Candidates for the core set: Caveat, Inter, Dancing Script. Candidates for removal: Dosis, Grandstander, Playpen Sans, Kalam, Scope One. Needs manual verification against rendered pages.
-
-5. **Near-duplicate posts NY2 and NY3**: same event, very similar text, overlapping images. Clean up during seed, or port as-is and let the author decide later?
+| Step | Status | Commit |
+|---|---|---|
+| Phase 0.1: Drizzle schema import | Done | `e954e6b` |
+| Phase 0.2: tip_sections position unique | Done | `e954e6b` |
+| Phase 0.3: .env.example + Cloudinary env vars | Done | `367321a` |
+| Phase 0.4: Run migration against Supabase | **Next** | — |
+| Phase 0.5: Profile-creation trigger | Pending | — |
+| Phase 0.6: Seed script | Pending | — |
