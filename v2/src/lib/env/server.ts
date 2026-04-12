@@ -23,12 +23,21 @@ const ServerEnvSchema = z.object({
     .url(
       "Postgres direct connection string used by Drizzle migrations (pooler does not support all DDL)",
     ),
+  // Cloudinary credentials — required for admin image uploads (Phase 2).
+  // Optional here so the dev server runs during Phases 0-1 without them.
+  // The upload service validates at call time.
+  CLOUDINARY_CLOUD_NAME: z.string().optional(),
+  CLOUDINARY_API_KEY: z.string().optional(),
+  CLOUDINARY_API_SECRET: z.string().optional(),
 });
 
 const parsed = ServerEnvSchema.safeParse({
   SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
   DATABASE_URL: process.env.DATABASE_URL,
   DIRECT_URL: process.env.DIRECT_URL,
+  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
 });
 
 if (!parsed.success) {
