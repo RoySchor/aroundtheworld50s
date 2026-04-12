@@ -1,5 +1,5 @@
 {
-  "id": "d38b8d82-00a8-4861-9d15-c38213104020",
+  "id": "880765d6-95c6-4759-ae3e-2ef44d345791",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -603,6 +603,14 @@
           "columns": [
             "tip_id",
             "section_key"
+          ]
+        },
+        "tip_sections_tip_id_position_unique": {
+          "name": "tip_sections_tip_id_position_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "tip_id",
+            "position"
           ]
         }
       },

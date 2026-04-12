@@ -1,6 +1,7 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { serverEnv } from "@/lib/env/server";
+import * as schema from "./schema";
 
 /**
  * Postgres client stashed on `globalThis` in development so Next.js HMR
@@ -27,4 +28,4 @@ if (process.env.NODE_ENV !== "production") {
   globalForDb.pgClient = client;
 }
 
-export const db = drizzle(client);
+export const db = drizzle(client, { schema });

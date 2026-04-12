@@ -46,8 +46,9 @@
  *   otherwise fail mid-statement on a non-deferrable unique. The
  *   constraint still holds at COMMIT, so the invariant is preserved at
  *   rest. Applies to: blog_blocks, blog_itineraries, blog_itinerary_items,
- *   gallery_images. NOT applied to `blog_posts(country_slug, post_index)`
- *   because `post_index` is a stable identifier, not a reorderable slot.
+ *   tip_sections, gallery_images. NOT applied to
+ *   `blog_posts(country_slug, post_index)` because `post_index` is a stable
+ *   identifier, not a reorderable slot.
  *
  * - `instagram` is intentionally NOT in `blogBlockType` — the v1 embed is
  *   broken and porting it is a fast-follow. Adding it later is a one-line
@@ -421,6 +422,7 @@ export const tipSections = pgTable(
       t.tipId,
       t.sectionKey,
     ),
+    unique("tip_sections_tip_id_position_unique").on(t.tipId, t.position),
   ],
 );
 

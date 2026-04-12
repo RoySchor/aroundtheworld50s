@@ -87,7 +87,8 @@ CREATE TABLE "tip_sections" (
 	"position" integer NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "tip_sections_tip_id_section_key_unique" UNIQUE("tip_id","section_key")
+	CONSTRAINT "tip_sections_tip_id_section_key_unique" UNIQUE("tip_id","section_key"),
+	CONSTRAINT "tip_sections_tip_id_position_unique" UNIQUE("tip_id","position")
 );
 --> statement-breakpoint
 CREATE TABLE "tips" (
@@ -195,6 +196,10 @@ ALTER TABLE "blog_itineraries" ADD CONSTRAINT "blog_itineraries_post_position_un
 ALTER TABLE "blog_itinerary_items" DROP CONSTRAINT "blog_itinerary_items_itinerary_position_unique";
 --> statement-breakpoint
 ALTER TABLE "blog_itinerary_items" ADD CONSTRAINT "blog_itinerary_items_itinerary_position_unique" UNIQUE ("itinerary_id", "position") DEFERRABLE INITIALLY DEFERRED;
+--> statement-breakpoint
+ALTER TABLE "tip_sections" DROP CONSTRAINT "tip_sections_tip_id_position_unique";
+--> statement-breakpoint
+ALTER TABLE "tip_sections" ADD CONSTRAINT "tip_sections_tip_id_position_unique" UNIQUE ("tip_id", "position") DEFERRABLE INITIALLY DEFERRED;
 --> statement-breakpoint
 ALTER TABLE "gallery_images" DROP CONSTRAINT "gallery_images_position_unique";
 --> statement-breakpoint
