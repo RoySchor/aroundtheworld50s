@@ -534,6 +534,6 @@ These were open questions in the first draft. Resolved based on review feedback:
 | Phase 0.1: Drizzle schema import | Done | `e954e6b` |
 | Phase 0.2: tip_sections position unique | Done | `e954e6b` |
 | Phase 0.3: .env.example + Cloudinary env vars | Done | `367321a` |
-| Phase 0.4: Run migration against Supabase | **Next** | — |
-| Phase 0.5: Profile-creation trigger | Pending | — |
-| Phase 0.6: Seed script | Pending | — |
+| Phase 0.4: Run migration against Supabase | Done | Applied via Supabase MCP |
+| Phase 0.5: Profile-creation trigger | Done | Applied via Supabase MCP (`handle_new_user` + `on_auth_user_created`) |
+| Phase 0.6: Seed script | Done | Applied via Supabase MCP (12 posts, 9 itineraries, 53 items, 102 blocks, 3 tips, 18 sections, 5 gallery) |
