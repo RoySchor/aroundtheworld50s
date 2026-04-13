@@ -47,3 +47,268 @@ body {
 .logo-rotate:hover {
   animation: rotateY 4s linear infinite;
 }
+
+/* ------------------------------------------------------------------ */
+/* Page layout (shared across blog, tips, destinations, etc.)         */
+/* ------------------------------------------------------------------ */
+
+.page-container {
+  @apply relative min-h-screen bg-gray-50;
+}
+
+.container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.page-content {
+  @apply py-12 text-center;
+}
+
+.page-title {
+  @apply text-4xl font-bold mb-4;
+}
+
+/* ------------------------------------------------------------------ */
+/* Parallax hero (country listing + post detail)                      */
+/* ------------------------------------------------------------------ */
+
+.parallax-hero {
+  @apply relative h-screen bg-cover bg-center bg-fixed flex items-center justify-center;
+}
+
+.parallax-hero::before {
+  content: "";
+  @apply absolute top-0 left-0 w-full h-full bg-black opacity-30;
+}
+
+.parallax-hero-title {
+  @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Helvetica Neue", Arial, sans-serif;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+@media (min-width: 640px) {
+  .parallax-hero-title {
+    @apply font-caveat text-white;
+    text-shadow:
+      3px 3px 6px rgba(0, 0, 0, 0.9),
+      -2px -2px 4px rgba(0, 0, 0, 0.7),
+      2px -2px 4px rgba(0, 0, 0, 0.7),
+      -2px 2px 4px rgba(0, 0, 0, 0.7);
+  }
+}
+
+@media (max-width: 640px) {
+  .parallax-hero {
+    background-attachment: scroll;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Blog post typography                                               */
+/* ------------------------------------------------------------------ */
+
+.post-title {
+  @apply font-sans font-black text-4xl text-black py-8;
+}
+
+.post-subtitle {
+  @apply font-grandstander text-3xl text-gray-800 mb-6;
+}
+
+.post-description {
+  @apply font-grandstander text-2xl text-justify my-6;
+}
+
+.post-bolded-text {
+  @apply text-2xl font-bold;
+}
+
+@media (max-width: 640px) {
+  .post-description {
+    @apply text-lg px-6;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Tips CTA section (inside blog posts)                               */
+/* ------------------------------------------------------------------ */
+
+.post-tips-section-container {
+  @apply mx-auto bg-blue-100 p-6 w-2/3 rounded-lg my-8;
+}
+
+.post-tips-link {
+  @apply block w-full h-full text-inherit no-underline cursor-pointer transition-colors duration-200;
+}
+
+.post-tips-link:hover {
+  @apply bg-blue-200 rounded-lg;
+}
+
+.post-tips-link:focus {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2 rounded-lg;
+}
+
+@media (max-width: 640px) {
+  .post-tips-section-container {
+    @apply w-11/12 rounded-lg my-8 text-lg;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Image grid (blog image-grid blocks)                                */
+/* ------------------------------------------------------------------ */
+
+.image-grid {
+  @apply grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 my-10 justify-items-center;
+}
+
+.image-grid-item {
+  @apply relative overflow-hidden rounded-lg transition-transform duration-300 flex items-center justify-center;
+  aspect-ratio: 1;
+  width: 100%;
+}
+
+.image-grid-image {
+  @apply w-full h-full object-cover;
+}
+
+.image-grid-item:hover {
+  @apply scale-125 z-10;
+}
+
+@media (max-width: 640px) {
+  .image-grid {
+    @apply grid-cols-3;
+  }
+
+  .image-grid-item {
+    max-width: 100px;
+  }
+
+  .image-grid-item:hover {
+    @apply scale-150;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Two-column layout (blog two_column + itinerary_with_map blocks)    */
+/* ------------------------------------------------------------------ */
+
+.two-column-layout {
+  @apply flex flex-col md:flex-row gap-2;
+}
+
+.two-col-column {
+  @apply flex-1 flex flex-col items-center justify-center;
+  min-height: 200px;
+}
+
+.image-container {
+  @apply w-full h-full relative overflow-hidden bg-gray-200 rounded-lg mx-auto;
+  max-height: 500px;
+  min-height: 300px;
+}
+
+.image-container img {
+  @apply w-full h-full object-cover;
+}
+
+@media (max-width: 768px) {
+  .two-col-column {
+    @apply w-full;
+    min-height: unset;
+  }
+
+  .image-container {
+    @apply h-[300px];
+  }
+}
+
+@media (max-width: 640px) {
+  .image-container {
+    @apply w-4/5;
+    min-height: 150px;
+    max-height: 200px;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Content pane wrappers (inside two-column blocks)                   */
+/* ------------------------------------------------------------------ */
+
+.content-pane-text {
+  @apply w-full h-full flex items-center justify-center;
+}
+
+.content-pane-image {
+  @apply w-full h-full;
+}
+
+.content-pane-list {
+  @apply w-full h-full flex items-start justify-center p-4;
+}
+
+.content-pane-map {
+  @apply w-full h-full min-h-[300px];
+}
+
+@media (max-width: 768px) {
+  .content-pane-text {
+    @apply p-4;
+  }
+
+  .content-pane-image {
+    @apply min-h-[300px];
+  }
+
+  .content-pane-map {
+    @apply min-h-[250px];
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Itinerary section (inside itinerary_with_map blocks)               */
+/* ------------------------------------------------------------------ */
+
+.post-itinerary-section {
+  @apply bg-white p-6 rounded-lg shadow-md w-4/5;
+}
+
+.post-itinerary-title {
+  @apply text-2xl font-bold mb-4;
+}
+
+.post-itinerary-section ul {
+  @apply list-disc pl-6;
+}
+
+.post-itinerary-section li {
+  @apply mb-2;
+}
+
+@media (max-width: 640px) {
+  .post-itinerary-section {
+    @apply w-full mx-6;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Map embed (Google Maps iframe)                                     */
+/* ------------------------------------------------------------------ */
+
+.map-embed {
+  @apply bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl;
+}
+
+.map-title {
+  @apply text-xl font-bold mb-4;
+}
+
+.map-container {
+  @apply rounded-lg overflow-hidden;
+}
