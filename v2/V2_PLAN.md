@@ -2,7 +2,7 @@
 
 Senior engineering review and implementation roadmap for the Next.js 16 rewrite of aroundtheworld50s.
 
-Last updated: 2026-04-12
+Last updated: 2026-04-13
 
 ---
 
@@ -65,7 +65,7 @@ We audited all 12 v1 blog posts, 3 tips pages, the gallery, and every Python scr
 | v1 Feature | v1 Implementation | v2 Plan |
 |---|---|---|
 | Blog post display | Hardcoded TSX per post | Dynamic pages from DB |
-| Blog listing (all) | Static array from `blogs.js` | DB query, sorted by `created_at` desc |
+| Blog listing (all) | Static array from `blogs.js` | DB query, sorted by `published_at` desc (with `created_at` as secondary tiebreaker) |
 | Blog country listing + hero | Full-screen parallax hero (first post's bg image + country overlay) + filtered grid | DB query + hero component using first post's `background_image` |
 | Blog blocks: text | `dangerouslySetInnerHTML` | Server-side sanitized HTML render |
 | Blog blocks: two-column | `TwoColumnLayout` + `ContentPane` | Port component |
@@ -195,14 +195,16 @@ Sub-tasks:
 - `lib/constants/worldMapCoordinates.ts`: port v1's 30+ coordinate entries from `WorldMap.constants.js`. These include aspirational destinations (Belize, France, Italy, etc.) with no blog posts — they're editorial intent, not derivable from DB.
 
 **1.4 Data access layer (repositories)**
-- `src/server/repositories/blog.ts`: `getPublishedPosts()`, `getPostBySlugAndIndex()`, `getPostsByCountry()` — each returns post with blocks + itineraries + items via `db.query` relational API
+- `src/server/repositories/blog.ts`: `getPublishedPosts()`, `getPostBySlugAndIndex()`, `getPostsByCountrySlug()` — each returns post with blocks + itineraries + items via `db.query` relational API
 - `src/server/repositories/tips.ts`: `getPublishedTips()`, `getTipBySlug()` — tip with sections ordered by position
 - `src/server/repositories/gallery.ts`: `getGalleryImages()` — ordered by position
 - All queries filter on `status = 'published'` for the public path
 - Return Drizzle inferred types — no manual type declarations
+- Drizzle `relations()` definitions added to `schema.ts` (TypeScript-only metadata, no migration) — required for the relational query API (`db.query.*.findFirst({ with: {...} })`)
+- `blogPostsRelations` includes `author` relation to `profiles` for future use
 
 **1.5 Blog pages**
-- `app/blog/page.tsx` — listing grid, sorted by `created_at` desc
+- `app/blog/page.tsx` — listing grid, sorted by `published_at` desc (with `created_at` as secondary tiebreaker)
 - `app/blog/[countrySlug]/page.tsx` — **full-screen parallax hero** (first post's `background_image` + country name overlay) + filtered listing grid. This is a prominent visual in v1 — not just a filtered list.
 - `app/blog/[countrySlug]/[postIndex]/page.tsx` — full post detail
 - **HTML rendering decision**: use `sanitize-html` server-side on all HTML content. Strip `<script>`, event handlers, and dangerous attributes. Allow safe tags (p, a, strong, em, br, span, div, ul, ol, li, h1-h6, img). This affects text blocks, two-column HTML, post description, and tip section content. Low XSS risk for admin-authored content, but sanitization at the render boundary is the right call for a lasting project.
@@ -522,6 +524,10 @@ These were open questions in the first draft. Resolved based on review feedback:
 | Hosting during transition | Both — v2 on Vercel's provided URL | v1 stays on GitHub Pages at `aroundtheworld50s.com`. v2 runs on the Vercel-provided URL (e.g. `project.vercel.app`) until validated, then DNS cutover. |
 | Fonts | 4 fonts: Inter, Caveat, Scope One, Grandstander | Audit confirmed. Dancing Script, Kalam, Dosis, Playpen Sans have zero references in v1 — dead weight, do not install. |
 | Near-duplicate posts NY2/NY3 | Seed as-is | Port everything exactly as it exists. CRUD logic is stable in either direction — can always delete later. |
+| `font-scope` mapping | Scope One (intentional) | v1 mapped `font-scope` to Dosis — this was a naming bug. v2 corrects it to Scope One, which is what the class name implies. |
+| Blog listing sort order | `published_at` desc, `created_at` as tiebreaker | `published_at` reflects when the author chose to publish, which is the meaningful date for readers. `created_at` is a secondary tiebreaker for posts published at the same instant. |
+| Cloudinary loader quality | Custom transform string | `cloudinaryLoader` builds its own transform string (`f_auto,q_auto,w_{width}` or `f_auto,w_{width},q_{quality}`) to avoid double-specifying quality when Next.js passes an explicit quality value. |
+| Navbar positioning | `absolute` (not `fixed`) | Matches v1 behavior — navbar scrolls with the page. |
 
 ---
 
@@ -537,3 +543,7 @@ These were open questions in the first draft. Resolved based on review feedback:
 | Phase 0.4: Run migration against Supabase | Done | Applied via Supabase MCP |
 | Phase 0.5: Profile-creation trigger | Done | Applied via Supabase MCP (`handle_new_user` + `on_auth_user_created`) |
 | Phase 0.6: Seed script | Done | Applied via Supabase MCP (12 posts, 9 itineraries, 53 items, 102 blocks, 3 tips, 18 sections, 5 gallery) |
+| Phase 1.1: Cloudinary URL utility | Done | `1d6b77e` — `lib/cloudinary.ts` with URL builder, Next.js Image loader, static assets map |
+| Phase 1.2: Shared layout + navbar | Done | `1d6b77e` — Navbar (absolute positioning, transparent-on-hero, mobile menu), Footer, root layout with 4 `next/font` fonts |
+| Phase 1.3: Constants files | Done | `1d6b77e` — `lib/constants.ts`, `lib/constants/social-links.ts`, `lib/constants/world-map-coordinates.ts` |
+| Phase 1.4: Data access layer | Done | `feat/phase-1.4-data-access-layer` — Drizzle relations added to schema, blog/tips/gallery repositories |
