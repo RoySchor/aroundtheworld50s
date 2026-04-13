@@ -3,6 +3,7 @@ import { Inter, Caveat, Scope_One, Grandstander } from "next/font/google";
 import { Navbar } from "@/components/shared/Navbar";
 import { Footer } from "@/components/shared/Footer";
 import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants";
+import { SITE_URL, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import "./globals.css";
 
 const inter = Inter({
@@ -27,11 +28,23 @@ const grandstander = Grandstander({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: SITE_NAME,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    locale: "en_US",
+    images: [
+      { url: DEFAULT_OG_IMAGE, width: 1200, height: 630, alt: SITE_NAME },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function RootLayout({

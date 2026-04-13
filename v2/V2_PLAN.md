@@ -2,7 +2,7 @@
 
 Senior engineering review and implementation roadmap for the Next.js 16 rewrite of aroundtheworld50s.
 
-Last updated: 2026-04-13
+Last updated: 2026-04-14
 
 ---
 
@@ -18,9 +18,9 @@ v2 has **infrastructure and data modeling done, zero application code**. Specifi
 - Zod-validated environment variables (client + server split, `server-only` import guard)
 - Drizzle DB client with schema import for relational queries, HMR-safe `globalThis` singleton, `max: 1` for serverless
 - Tailwind v4, ESLint 9, Prettier, TypeScript strict mode
+- SEO: per-page metadata with OG/Twitter cards, `metadataBase`, `sitemap.ts`, `robots.ts`, JSON-LD Article schema for blog posts (Phase 1.9)
 
 **Not done:**
-- SEO metadata, sitemap, JSON-LD (Phase 1.9)
 - Auth + admin CRUD (Phase 2)
 - Vercel deployment, polish, v1 sunset (Phase 3)
 
@@ -242,7 +242,7 @@ Sub-tasks:
     - 30+ aspirational destinations from static coordinates file
 - `app/not-found.tsx` and `error.tsx` — error pages with Cloudinary GIF
 
-**1.9 SEO**
+**1.9 SEO** _(done)_
 - Per-page `metadata` exports (title, description, OG image from Cloudinary)
 - `app/sitemap.ts` — dynamic sitemap from published posts + tips
 - `app/robots.ts`
@@ -477,7 +477,7 @@ v2/src/
 2. **Phase 1.1-1.3** (Cloudinary util, layout/nav/fonts, constants) — get the shell rendering.
 3. **Phase 1.4-1.5** (repositories + blog pages) — blog posts visible from DB.
 4. **Phase 1.6-1.8** (tips, home, destinations, static pages) — full public site parity with v1.
-5. **Phase 1.9** (SEO) — metadata, sitemap, structured data.
+5. **Phase 1.9** (SEO) — metadata, sitemap, structured data. _(done)_
 6. **Phase 2.1-2.3** (auth + admin layout) — login works, admin shell exists.
 7. **Phase 2.4-2.7** (validators + admin CRUD) — the whole point of v2.
 8. **Phase 3** (polish, deploy, v1 sunset).

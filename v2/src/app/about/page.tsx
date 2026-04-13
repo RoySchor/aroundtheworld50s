@@ -1,10 +1,22 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { STATIC_ASSETS } from "@/lib/cloudinary";
+import { getOgImageUrl } from "@/lib/seo";
 import { ContactForm } from "@/components/about/ContactForm";
 
 export const metadata: Metadata = {
   title: "About",
+  description:
+    "Learn about our journey exploring the world as a couple in our 50s — from family road trips to spontaneous city escapes.",
+  openGraph: {
+    images: [
+      {
+        url: getOgImageUrl(STATIC_ASSETS.aboutMePageBg),
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
 };
 
 export default function AboutPage() {

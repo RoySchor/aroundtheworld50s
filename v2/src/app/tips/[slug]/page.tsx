@@ -21,11 +21,15 @@ export async function generateMetadata({
   const { slug } = await params;
   const tip = await getTipBySlug(slug);
 
-  if (!tip) return { title: "Tips Not Found" };
+  if (!tip) return { title: "Tip Not Found" };
 
   return {
     title: tip.title,
     description: tip.description ?? undefined,
+    openGraph: {
+      title: tip.title,
+      description: tip.description ?? undefined,
+    },
   };
 }
 
