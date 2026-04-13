@@ -6,7 +6,7 @@ import { blogBlocks, blogItineraries, blogItineraryItems, blogPosts } from "@/se
 export async function getPublishedPosts() {
   return db.query.blogPosts.findMany({
     where: eq(blogPosts.status, "published"),
-    orderBy: [desc(blogPosts.publishedAt)],
+    orderBy: [desc(blogPosts.publishedAt), desc(blogPosts.createdAt)],
   });
 }
 
@@ -40,6 +40,6 @@ export async function getPostsByCountrySlug(countrySlug: string) {
       eq(blogPosts.countrySlug, countrySlug),
       eq(blogPosts.status, "published"),
     ),
-    orderBy: [desc(blogPosts.publishedAt)],
+    orderBy: [desc(blogPosts.publishedAt), desc(blogPosts.createdAt)],
   });
 }

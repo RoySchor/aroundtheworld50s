@@ -464,7 +464,15 @@ export const galleryImages = pgTable(
 // No SQL generated, no migration needed.
 // ---------------------------------------------------------------------------
 
-export const blogPostsRelations = relations(blogPosts, ({ many }) => ({
+export const profilesRelations = relations(profiles, ({ many }) => ({
+  posts: many(blogPosts),
+}));
+
+export const blogPostsRelations = relations(blogPosts, ({ one, many }) => ({
+  author: one(profiles, {
+    fields: [blogPosts.authorId],
+    references: [profiles.id],
+  }),
   blocks: many(blogBlocks),
   itineraries: many(blogItineraries),
 }));
