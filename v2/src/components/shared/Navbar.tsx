@@ -13,7 +13,7 @@ import {
   TRANSPARENT_NAVBAR_PATHS,
 } from "@/lib/constants";
 import { SOCIAL_LINKS } from "@/lib/constants/social-links";
-import { getStaticAssetUrl, STATIC_ASSETS } from "@/lib/cloudinary";
+import { getStaticAssetUrl } from "@/lib/cloudinary";
 
 function SocialIcons({ className }: { className?: string }) {
   return (

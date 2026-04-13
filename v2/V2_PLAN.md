@@ -2,13 +2,13 @@
 
 Senior engineering review and implementation roadmap for the Next.js 16 rewrite of aroundtheworld50s.
 
-Last updated: 2026-04-14
+Last updated: 2026-04-13
 
 ---
 
 ## 1. Where We Are
 
-v2 has **infrastructure and data modeling done, zero application code**. Specifically:
+v2 has **Phase 0 (foundation) and Phase 1 (public read path) complete**. The public site achieves feature parity with v1 — all reader-facing pages render from the database with proper SEO.
 
 **Done and solid:**
 - Next.js 16 + React 19 scaffold with App Router
@@ -18,6 +18,14 @@ v2 has **infrastructure and data modeling done, zero application code**. Specifi
 - Zod-validated environment variables (client + server split, `server-only` import guard)
 - Drizzle DB client with schema import for relational queries, HMR-safe `globalThis` singleton, `max: 1` for serverless
 - Tailwind v4, ESLint 9, Prettier, TypeScript strict mode
+- Seed data ported: 12 blog posts, 3 tips pages, gallery images (Phase 0.6)
+- Cloudinary URL utility + global Next.js Image loader (Phase 1.1)
+- Shared layout: Navbar (transparent/solid, mobile hamburger), Footer, 4 fonts via `next/font` (Phase 1.2)
+- Data access layer: Drizzle relations + blog/tips/gallery repositories (Phase 1.4)
+- Blog pages: listing, country hero + grid, post detail with 4 block types, sanitized HTML (Phase 1.5)
+- Tips pages: listing with country flags, detail with 6 sections, inline not-found (Phase 1.6)
+- Home page: parallax hero, Travel With Us, 4 recent posts, gallery slider (5s auto-advance), Instagram fallback (Phase 1.7)
+- Static pages: About Me + EmailJS contact form, Destinations with interactive WorldMap + dropdown, error/404 pages (Phase 1.8)
 - SEO: per-page metadata with OG/Twitter cards, `metadataBase`, `sitemap.ts`, `robots.ts`, JSON-LD Article schema for blog posts (Phase 1.9)
 
 **Not done:**
@@ -540,6 +548,7 @@ These were open questions in the first draft. Resolved based on review feedback:
 | Post title/subtitle HTML | `<h2>` / `<h3>` (semantic) | Hero is `<h1>`, post title is `<h2>`, subtitle is `<h3>`. Better document outline for SEO and accessibility. Class-based CSS still applies. |
 | Tips not-found rendering | Inline UI (not `notFound()`) | Renders "The tips page for '{slug}' doesn't exist yet" with the slug preserved in the message — matches v1's UX intent. |
 | `react-world-flags` wrapper | `"use client"` `CountryFlag.tsx` | The library's UMD bundle uses `this` reference that fails in RSC strict ESM evaluation. Thin client wrapper avoids the issue. |
+| OG metadata in child pages | Redundantly specify `type`, `siteName`, `locale` | Next.js replaces (not merges) the parent's `openGraph` wholesale when a child defines its own. Pages with custom OG images must re-specify these fields or lose the layout defaults. Pages with no custom OG (home, blog listing, tips listing, tips detail) omit `openGraph` entirely and inherit. |
 
 ---
 
@@ -563,3 +572,4 @@ These were open questions in the first draft. Resolved based on review feedback:
 | Phase 1.6: Tips pages | Done | `feat/phase-1.6-tips-pages` — tips listing w/ country flags, tip detail w/ section rendering, 7 new files |
 | Phase 1.7: Home page | Done | `feat/phase-1.7-home-page` — parallax hero, Travel With Us section, 4 most recent posts (BlogGrid w/ columns prop), gallery slider (client component), Instagram fallback |
 | Phase 1.8: Static pages + destinations | Done | `feat/phase-1.8-static-destinations` — About Me page w/ ContactForm (EmailJS), Destinations page w/ interactive WorldMap + dropdown, not-found + error boundary pages, 8 new files |
+| Phase 1.9: SEO | Done | `feat/phase-1.9-seo` PR #8 — per-page metadata with OG/Twitter, `sitemap.ts`, `robots.ts`, JSON-LD Article schema, `lib/seo.ts` helper |

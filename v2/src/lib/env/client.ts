@@ -18,11 +18,19 @@ const ClientEnvSchema = z.object({
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: z
     .string()
     .min(1, "Supabase publishable (anon) key — safe to ship to the browser"),
+  // EmailJS — used by ContactForm on /about. Optional so the app starts
+  // without them; ContactForm shows a fallback message if they're missing.
+  NEXT_PUBLIC_EMAILJS_SERVICE_ID: z.string().optional(),
+  NEXT_PUBLIC_EMAILJS_TEMPLATE_ID: z.string().optional(),
+  NEXT_PUBLIC_EMAILJS_PUBLIC_KEY: z.string().optional(),
 });
 
 const parsed = ClientEnvSchema.safeParse({
   NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+  NEXT_PUBLIC_EMAILJS_SERVICE_ID: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+  NEXT_PUBLIC_EMAILJS_TEMPLATE_ID: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
+  NEXT_PUBLIC_EMAILJS_PUBLIC_KEY: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
 });
 
 if (!parsed.success) {
