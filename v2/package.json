@@ -17,6 +17,7 @@
     "db:seed": "tsx --env-file=.env.local scripts/seed.ts"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@supabase/ssr": "^0.10.2",
     "@supabase/supabase-js": "^2.103.0",
     "drizzle-orm": "^0.45.2",
