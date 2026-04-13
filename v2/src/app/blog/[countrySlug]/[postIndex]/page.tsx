@@ -5,6 +5,8 @@ import {
   getPostBySlugAndIndex,
 } from "@/server/repositories/blog";
 import { sanitizeHtml } from "@/lib/sanitize";
+import { SITE_NAME } from "@/lib/constants";
+import { getOgImageUrl } from "@/lib/seo";
 import { ParallaxHero } from "@/components/blog/ParallaxHero";
 import { BlockRenderer } from "@/components/blog/BlockRenderer";
 import { TipsCta } from "@/components/blog/TipsCta";
@@ -28,6 +30,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: post.title,
     description: post.excerpt ?? undefined,
+    openGraph: {
+      type: "article",
+      siteName: SITE_NAME,
+      locale: "en_US",
+      title: post.title,
+      description: post.excerpt ?? undefined,
+      publishedTime: post.publishedAt?.toISOString(),
+      images: post.backgroundImage
+        ? [{ url: getOgImageUrl(post.backgroundImage), width: 1200, height: 630 }]
+        : undefined,
+    },
   };
 }
 
@@ -37,7 +50,24 @@ export default async function PostDetailPage({ params }: PageProps) {
 
   if (!post) notFound();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt,
+    image: post.backgroundImage
+      ? getOgImageUrl(post.backgroundImage)
+      : undefined,
+    datePublished: post.publishedAt?.toISOString(),
+    author: { "@type": "Person", name: "Around the World 50s" },
+  };
+
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     <div className="page-container">
       {post.backgroundImage && post.header && (
         <ParallaxHero
@@ -78,5 +108,6 @@ export default async function PostDetailPage({ params }: PageProps) {
         </div>
       </div>
     </div>
+    </>
   );
 }

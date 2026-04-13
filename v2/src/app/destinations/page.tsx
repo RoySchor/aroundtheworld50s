@@ -1,12 +1,28 @@
 import type { Metadata } from "next";
 import { getPublishedPosts } from "@/server/repositories/blog";
 import { buildCloudinaryUrl, STATIC_ASSETS } from "@/lib/cloudinary";
+import { SITE_NAME } from "@/lib/constants";
+import { getOgImageUrl } from "@/lib/seo";
 import { DestinationDropdown } from "@/components/destinations/DestinationDropdown";
 import { WorldMap } from "@/components/destinations/WorldMap";
 import type { MapLocationData } from "@/components/destinations/WorldMap";
 
 export const metadata: Metadata = {
   title: "Destinations",
+  description:
+    "Explore all the destinations we've visited around the world on an interactive map.",
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    locale: "en_US",
+    images: [
+      {
+        url: getOgImageUrl(STATIC_ASSETS.destinationsPageBg),
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
 };
 
 export default async function DestinationsPage() {

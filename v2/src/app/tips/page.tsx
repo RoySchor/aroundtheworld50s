@@ -4,6 +4,8 @@ import { TipCard } from "@/components/tips/TipCard";
 
 export const metadata: Metadata = {
   title: "Tips",
+  description:
+    "Practical travel tips and advice from our experiences around the world.",
 };
 
 export default async function TipsListingPage() {

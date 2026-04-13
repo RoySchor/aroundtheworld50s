@@ -4,6 +4,8 @@ import { BlogGrid } from "@/components/blog/BlogGrid";
 
 export const metadata: Metadata = {
   title: "Blog",
+  description:
+    "Read our travel stories and adventures from around the world.",
 };
 
 export default async function BlogListingPage() {

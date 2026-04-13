@@ -5,6 +5,8 @@ import {
   getPostsByCountrySlug,
 } from "@/server/repositories/blog";
 import { formatLocation } from "@/lib/format";
+import { SITE_NAME } from "@/lib/constants";
+import { getOgImageUrl } from "@/lib/seo";
 import { ParallaxHero } from "@/components/blog/ParallaxHero";
 import { BlogGrid } from "@/components/blog/BlogGrid";
 
@@ -23,7 +25,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const posts = await getPostsByCountrySlug(countrySlug);
   if (posts.length === 0) return {};
   const displayName = formatLocation(posts[0]);
-  return { title: displayName };
+  const description = `Travel stories and adventures from ${displayName}.`;
+  return {
+    title: displayName,
+    description,
+    openGraph: {
+      type: "website",
+      siteName: SITE_NAME,
+      locale: "en_US",
+      title: displayName,
+      description,
+      images: posts[0].backgroundImage
+        ? [{ url: getOgImageUrl(posts[0].backgroundImage), width: 1200, height: 630 }]
+        : undefined,
+    },
+  };
 }
 
 export default async function CountryBlogPage({ params }: PageProps) {
