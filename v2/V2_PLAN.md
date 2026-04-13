@@ -20,12 +20,12 @@ v2 has **infrastructure and data modeling done, zero application code**. Specifi
 - Tailwind v4, ESLint 9, Prettier, TypeScript strict mode
 
 **Not done:**
-- Migration has not been run against Supabase
-- No repositories, services, API routes, server actions, pages, components, or frontend code
-- No data seed script
-- No admin UI
-- No Cloudinary integration (server-side)
-- No SEO, analytics, contact form, or error handling
+- Tips pages (Phase 1.6)
+- Home page with gallery slider (Phase 1.7)
+- Static pages + destinations/WorldMap (Phase 1.8)
+- SEO metadata, sitemap, JSON-LD (Phase 1.9)
+- Auth + admin CRUD (Phase 2)
+- Vercel deployment, polish, v1 sunset (Phase 3)
 
 ---
 
@@ -397,14 +397,17 @@ v2/src/
       Footer.tsx
       ContactForm.tsx                 # EmailJS
     blog/                             # blog-specific components
-      BlockRenderer.tsx
-      TextBlock.tsx
-      TwoColumnBlock.tsx
-      ImageGridBlock.tsx
-      ItineraryWithMapBlock.tsx
-      MapEmbed.tsx
-      PostCard.tsx
-      PostHero.tsx
+      ParallaxHero.tsx                # shared hero for country + post detail pages
+      BlogCard.tsx                    # post card with hover overlay
+      BlogGrid.tsx                    # responsive 1→2→3 col grid
+      BlockRenderer.tsx               # dispatcher switching on block.type
+      TipsCta.tsx                     # blue card linking to tips page
+      blocks/
+        TextBlock.tsx
+        TwoColumnBlock.tsx
+        ImageGridBlock.tsx
+        ItineraryWithMapBlock.tsx
+        MapEmbed.tsx
     tips/
       TipCard.tsx
       TipSection.tsx
@@ -421,6 +424,9 @@ v2/src/
       ImageUploader.tsx
   lib/
     cloudinary.ts                     # URL builder (cloud name, transforms, responsive)
+    cloudinary-loader.ts              # Global Next.js Image loader (loaderFile in next.config.ts)
+    sanitize.ts                       # sanitize-html wrapper with allowlisted tags
+    format.ts                         # formatBlogDate, formatBlogDateWithYear
     constants.ts                      # site name, tagline, Cloudinary config
     constants/
       socialLinks.ts                  # Instagram, TikTok URLs
@@ -459,8 +465,10 @@ v2/src/
       tips.ts
       gallery.ts
       auth.ts
-  styles/
-    content.css                       # CSS classes used inside blog HTML (post-link, etc.)
+  types/
+    blog.ts                           # Block data interfaces (TextBlockData, etc.) + FullBlogPost
+  # Note: blog content CSS (post-link, parallax-hero, image-grid, etc.) lives in app/globals.css
+  # rather than a separate styles/content.css — simpler for Tailwind v4's @apply directives
 ```
 
 ---
@@ -520,7 +528,7 @@ These were open questions in the first draft. Resolved based on review feedback:
 | Admin form persistence | Draft rows in DB | Replaces v1's sessionStorage. Auto-save on edit. |
 | `two_column` enforcement | Zod validation, not convention | At least one side must be "image" and at least one "text". `html` goes in the text pane. |
 | Rich text editor | Decide when we get to it | Start with HTML textarea + preview. Evaluate tiptap/Lexical only if the author finds raw HTML unworkable. |
-| Image optimization | Whichever is more reliable | Evaluate Next.js `<Image>` + Cloudinary loader vs `<CldImage>` during Phase 1 implementation. Pick based on reliability. |
+| Image optimization | Global `loaderFile` in `next.config.ts` | Next.js 16 disallows function props to Client Components — `loader={fn}` on `<Image>` fails at build. Use `images.loaderFile` pointing to `src/lib/cloudinary-loader.ts`. All `<Image>` components use `src={publicId}` directly, no `loader` prop. |
 | Hosting during transition | Both — v2 on Vercel's provided URL | v1 stays on GitHub Pages at `aroundtheworld50s.com`. v2 runs on the Vercel-provided URL (e.g. `project.vercel.app`) until validated, then DNS cutover. |
 | Fonts | 4 fonts: Inter, Caveat, Scope One, Grandstander | Audit confirmed. Dancing Script, Kalam, Dosis, Playpen Sans have zero references in v1 — dead weight, do not install. |
 | Near-duplicate posts NY2/NY3 | Seed as-is | Port everything exactly as it exists. CRUD logic is stable in either direction — can always delete later. |
@@ -528,6 +536,10 @@ These were open questions in the first draft. Resolved based on review feedback:
 | Blog listing sort order | `published_at` desc, `created_at` as tiebreaker | `published_at` reflects when the author chose to publish, which is the meaningful date for readers. `created_at` is a secondary tiebreaker for posts published at the same instant. |
 | Cloudinary loader quality | Custom transform string | `cloudinaryLoader` builds its own transform string (`f_auto,q_auto,w_{width}` or `f_auto,w_{width},q_{quality}`) to avoid double-specifying quality when Next.js passes an explicit quality value. |
 | Navbar positioning | `absolute` (not `fixed`) | Matches v1 behavior — navbar scrolls with the page. |
+| Image loader | Global `loaderFile` in `next.config.ts` | Next.js 16 / React 19 disallows passing functions as props to Client Components. Per-component `loader={fn}` fails at build. `cloudinary-loader.ts` is the standalone loader file. |
+| DB connection | Transaction pooler (`aws-1-us-west-2.pooler.supabase.com:6543`) | Direct connection hostname (`db.*.supabase.co`) doesn't resolve from local dev. Pooler is Supabase's recommendation for ORMs. `prepare: false` already set. Password must be URL-encoded (special chars like `$`). |
+| `text-center` on `.page-content` | Blog-only, not global | v1 only centers in `BlogPage.css`, not `layout.css`. Adding to base class would leak to tips/about/destinations pages. Applied via `text-center` class on blog route JSX instead. |
+| Post title/subtitle HTML | `<h2>` / `<h3>` (semantic) | Hero is `<h1>`, post title is `<h2>`, subtitle is `<h3>`. Better document outline for SEO and accessibility. Class-based CSS still applies. |
 
 ---
 
@@ -547,3 +559,4 @@ These were open questions in the first draft. Resolved based on review feedback:
 | Phase 1.2: Shared layout + navbar | Done | `1d6b77e` — Navbar (absolute positioning, transparent-on-hero, mobile menu), Footer, root layout with 4 `next/font` fonts |
 | Phase 1.3: Constants files | Done | `1d6b77e` — `lib/constants.ts`, `lib/constants/social-links.ts`, `lib/constants/world-map-coordinates.ts` |
 | Phase 1.4: Data access layer | Done | `feat/phase-1.4-data-access-layer` — Drizzle relations added to schema, blog/tips/gallery repositories |
+| Phase 1.5: Blog pages | Done | `feat/phase-1.5-blog-pages` PR #4 — blog listing, country listing w/ parallax hero, post detail w/ block rendering, 17 new files |
