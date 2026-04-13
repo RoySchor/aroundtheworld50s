@@ -363,7 +363,7 @@ body {
 }
 
 .tip-card-location {
-  @apply text-sm text-gray-500 mt-1 mb-0;
+  @apply text-sm text-gray-500 mt-2 mb-0;
 }
 
 .tip-card-description {
@@ -414,7 +414,7 @@ body {
 }
 
 .tip-section h2 {
-  @apply text-xl md:text-2xl font-semibold text-gray-800 text-center mb-6;
+  @apply text-xl md:text-2xl font-semibold text-gray-800 text-center mb-4;
 }
 
 .tip-placeholder {

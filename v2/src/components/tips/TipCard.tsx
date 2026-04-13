@@ -1,13 +1,10 @@
 import Link from "next/link";
 import type { Tip } from "@/server/db/schema";
+import { formatLocation } from "@/lib/format";
 import { CountryFlag } from "./CountryFlag";
 
 interface TipCardProps {
   tip: Tip;
-}
-
-function getLocation(tip: { state: string | null; country: string }) {
-  return tip.state ? `${tip.state}, ${tip.country}` : tip.country;
 }
 
 export function TipCard({ tip }: TipCardProps) {
@@ -17,7 +14,7 @@ export function TipCard({ tip }: TipCardProps) {
         <CountryFlag code={tip.countryCode} country={tip.country} />
         <div>
           <h2 className="tip-card-title">{tip.title}</h2>
-          <p className="tip-card-location">{getLocation(tip)}</p>
+          <p className="tip-card-location">{formatLocation(tip)}</p>
         </div>
       </div>
       {tip.description && (

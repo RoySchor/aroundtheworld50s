@@ -3,6 +3,7 @@ import {
   getPublishedTips,
   getTipBySlug,
 } from "@/server/repositories/tips";
+import { formatLocation } from "@/lib/format";
 import { TipSection } from "@/components/tips/TipSection";
 
 interface TipDetailPageProps {
@@ -28,10 +29,6 @@ export async function generateMetadata({
   };
 }
 
-function getLocation(tip: { state: string | null; country: string }) {
-  return tip.state ? `${tip.state}, ${tip.country}` : tip.country;
-}
-
 export default async function TipDetailPage({ params }: TipDetailPageProps) {
   const { slug } = await params;
   const tip = await getTipBySlug(slug);
@@ -51,6 +48,10 @@ export default async function TipDetailPage({ params }: TipDetailPageProps) {
     );
   }
 
+  // Sections come from the DB (enabled only, ordered by position). If the seed
+  // or future admin CRUD doesn't create all 6 section rows for a tip, missing
+  // sections simply won't render — no placeholder appears. Phase 2 admin will
+  // ensure all 6 rows are created on tip creation.
   return (
     <div className="page-container mt-44">
       <div className="container">
@@ -58,7 +59,7 @@ export default async function TipDetailPage({ params }: TipDetailPageProps) {
           <div className="tip-detail-header">
             <div className="tip-detail-title-section">
               <h1 className="tip-detail-title">{tip.title}</h1>
-              <p className="tip-detail-location">{getLocation(tip)}</p>
+              <p className="tip-detail-location">{formatLocation(tip)}</p>
             </div>
           </div>
 

@@ -13,6 +13,14 @@ export function formatBlogDate(date: Date | string): string {
   return `${month} ${ordinal(d.getDate())}`;
 }
 
+/** "Massachusetts, United States" or just "United States". Used on tips + blog country pages. */
+export function formatLocation(item: {
+  state: string | null;
+  country: string;
+}) {
+  return item.state ? `${item.state}, ${item.country}` : item.country;
+}
+
 /** "July 7, 2025" — with year. Used on country listing pages. */
 export function formatBlogDateWithYear(date: Date | string): string {
   const d = typeof date === "string" ? new Date(date) : date;

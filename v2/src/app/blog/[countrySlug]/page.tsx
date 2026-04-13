@@ -4,15 +4,12 @@ import {
   getPublishedPosts,
   getPostsByCountrySlug,
 } from "@/server/repositories/blog";
+import { formatLocation } from "@/lib/format";
 import { ParallaxHero } from "@/components/blog/ParallaxHero";
 import { BlogGrid } from "@/components/blog/BlogGrid";
 
 interface PageProps {
   params: Promise<{ countrySlug: string }>;
-}
-
-function getDisplayName(post: { state: string | null; country: string }) {
-  return post.state ? `${post.state}, ${post.country}` : post.country;
 }
 
 export async function generateStaticParams() {
@@ -25,7 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { countrySlug } = await params;
   const posts = await getPostsByCountrySlug(countrySlug);
   if (posts.length === 0) return {};
-  const displayName = getDisplayName(posts[0]);
+  const displayName = formatLocation(posts[0]);
   return { title: displayName };
 }
 
@@ -35,7 +32,7 @@ export default async function CountryBlogPage({ params }: PageProps) {
 
   if (posts.length === 0) notFound();
 
-  const displayName = getDisplayName(posts[0]);
+  const displayName = formatLocation(posts[0]);
   const heroImage = posts[0].backgroundImage;
 
   return (
