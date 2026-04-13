@@ -3,6 +3,7 @@
 @theme inline {
   --font-sans: var(--font-inter);
   --font-caveat: var(--font-caveat-var);
+  /* v1 mapped font-scope to Dosis (naming bug). v2 intentionally uses Scope One. */
   --font-scope: var(--font-scope-one-var);
   --font-grandstander: var(--font-grandstander-var);
 
@@ -16,7 +17,7 @@ body {
 
 /* Blog post inline links (HTML in DB uses class="post-link") */
 .post-link {
-  @apply text-blue-600 underline transition-colors duration-200;
+  @apply text-blue-500 underline cursor-pointer transition-colors duration-200;
 }
 .post-link:hover {
   @apply text-blue-800;
@@ -31,10 +32,13 @@ body {
   color: rgb(209 213 219);
 }
 
-/* Logo 3D rotation on hover */
+/* Logo 3D rotation on hover — completes at 90%, holds for final 10% (matches v1) */
 @keyframes rotateY {
   0% {
     transform: rotateY(0deg);
+  }
+  90% {
+    transform: rotateY(360deg);
   }
   100% {
     transform: rotateY(360deg);

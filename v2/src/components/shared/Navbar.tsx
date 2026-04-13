@@ -50,7 +50,7 @@ export function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-colors ${
+      className={`absolute top-0 left-0 w-full z-50 transition-colors ${
         isTransparent ? "bg-transparent" : "bg-gray-600 shadow-md"
       }`}
     >
@@ -124,7 +124,7 @@ export function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="lg:hidden absolute top-full left-0 w-full bg-black/50 backdrop-blur-sm py-4">
+        <div className="lg:hidden absolute top-full left-1/2 w-2/3 -translate-x-1/2 space-y-4 py-6 px-4 bg-black/50 backdrop-blur-sm">
           {[...NAV_LINKS_LEFT, ...NAV_LINKS_RIGHT].map((link) => (
             <Link
               key={link.href}

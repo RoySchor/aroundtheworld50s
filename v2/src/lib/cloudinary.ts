@@ -36,7 +36,8 @@ export function getBlogImageUrl(publicId: string): string {
 }
 
 /**
- * Get URL for a gallery image stored at aroundtheworld50s/homePageGallery/<filename>.
+ * Get URL for a gallery image.
+ * v2 DB stores full public_ids, so this passes through to buildCloudinaryUrl.
  */
 export function getGalleryImageUrl(publicId: string): string {
   return buildCloudinaryUrl(publicId);
@@ -45,6 +46,9 @@ export function getGalleryImageUrl(publicId: string): string {
 /**
  * Next.js <Image> custom loader for Cloudinary.
  * Use as: <Image loader={cloudinaryLoader} src={publicId} ... />
+ *
+ * Builds its own transform string instead of going through buildCloudinaryUrl,
+ * because the loader needs w_ and optionally q_ without the default q_auto.
  */
 export function cloudinaryLoader({
   src,
@@ -55,11 +59,18 @@ export function cloudinaryLoader({
   width: number;
   quality?: number;
 }): string {
-  const q = quality || 75;
-  return buildCloudinaryUrl(src, `w_${width},q_${q}`);
+  const transforms = quality
+    ? `f_auto,w_${width},q_${quality}`
+    : `f_auto,q_auto,w_${width}`;
+  return `${CLOUDINARY_BASE_URL}/${transforms}/${src}`;
 }
 
-/** Pre-built public_ids for static assets used across the site. */
+/**
+ * Pre-built public_ids for static assets used across the site.
+ * Static assets retain file extensions in their public_ids (matching how they
+ * were uploaded to Cloudinary). Blog/gallery images stored in the DB have
+ * extensions stripped — Cloudinary's f_auto handles format negotiation.
+ */
 export const STATIC_ASSETS = {
   logo: `${CLOUDINARY_ASSET_PREFIX}/around_the_world_50s_logo.png`,
   homePageBg: `${CLOUDINARY_ASSET_PREFIX}/home-page-bg.webp`,
