@@ -45,7 +45,7 @@ export default async function CountryBlogPage({ params }: PageProps) {
       )}
 
       <div className="container">
-        <div className="page-content">
+        <div className="page-content text-center">
           <h1 className="page-title">{displayName}</h1>
           <BlogGrid posts={posts} showYear />
         </div>

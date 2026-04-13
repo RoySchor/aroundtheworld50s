@@ -47,11 +47,11 @@ export default async function PostDetailPage({ params }: PageProps) {
       )}
 
       <div className="container">
-        <div className="page-content">
-          <div className="post-title">{post.title}</div>
+        <div className="page-content text-center">
+          <h2 className="post-title">{post.title}</h2>
 
           {post.subtitle && (
-            <div className="post-subtitle">{post.subtitle}</div>
+            <h3 className="post-subtitle">{post.subtitle}</h3>
           )}
 
           {post.description && (

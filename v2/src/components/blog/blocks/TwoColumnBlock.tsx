@@ -15,7 +15,7 @@ function Pane({
   type: "image" | "text";
   image?: string;
   imageAlt?: string;
-  html: string;
+  html?: string;
 }) {
   if (type === "image" && image) {
     return (
@@ -32,6 +32,8 @@ function Pane({
       </div>
     );
   }
+
+  if (!html) return null;
 
   return (
     <div className="content-pane-text">

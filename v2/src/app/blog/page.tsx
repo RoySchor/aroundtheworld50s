@@ -12,7 +12,7 @@ export default async function BlogListingPage() {
   return (
     <div className="page-container mt-44">
       <div className="container">
-        <div className="page-content">
+        <div className="page-content text-center mb-8">
           <h1 className="page-title">Blog</h1>
           <BlogGrid posts={posts} />
         </div>

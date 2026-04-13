@@ -20,7 +20,7 @@ body {
   @apply text-blue-500 underline cursor-pointer transition-colors duration-200;
 }
 .post-link:hover {
-  @apply text-blue-800;
+  color: #1d4fd89a;
 }
 
 /* Navbar link text stroke for readability over images */
@@ -61,7 +61,7 @@ body {
 }
 
 .page-content {
-  @apply py-12 text-center;
+  @apply py-12;
 }
 
 .page-title {
