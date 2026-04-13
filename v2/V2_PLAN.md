@@ -20,7 +20,6 @@ v2 has **infrastructure and data modeling done, zero application code**. Specifi
 - Tailwind v4, ESLint 9, Prettier, TypeScript strict mode
 
 **Not done:**
-- Tips pages (Phase 1.6)
 - Home page with gallery slider (Phase 1.7)
 - Static pages + destinations/WorldMap (Phase 1.8)
 - SEO metadata, sitemap, JSON-LD (Phase 1.9)
@@ -378,8 +377,7 @@ v2/src/
     tips/
       page.tsx                        # all tips listing (with flags)
       [slug]/
-        page.tsx                      # tip detail
-        not-found.tsx                 # "tips for '{slug}' doesn't exist yet"
+        page.tsx                      # tip detail (inline not-found with slug in message)
     login/page.tsx
     admin/
       layout.tsx                      # auth-gated admin shell
@@ -409,6 +407,7 @@ v2/src/
         ItineraryWithMapBlock.tsx
         MapEmbed.tsx
     tips/
+      CountryFlag.tsx                  # "use client" wrapper for react-world-flags
       TipCard.tsx
       TipSection.tsx
     gallery/
@@ -430,6 +429,7 @@ v2/src/
     constants.ts                      # site name, tagline, Cloudinary config
     constants/
       socialLinks.ts                  # Instagram, TikTok URLs
+      tip-sections.ts                 # Section key → emoji label mapping, placeholder text
       worldMapCoordinates.ts          # 30+ destinations (aspirational + active)
     env/
       client.ts
@@ -540,6 +540,8 @@ These were open questions in the first draft. Resolved based on review feedback:
 | DB connection | Transaction pooler (`aws-1-us-west-2.pooler.supabase.com:6543`) | Direct connection hostname (`db.*.supabase.co`) doesn't resolve from local dev. Pooler is Supabase's recommendation for ORMs. `prepare: false` already set. Password must be URL-encoded (special chars like `$`). |
 | `text-center` on `.page-content` | Blog-only, not global | v1 only centers in `BlogPage.css`, not `layout.css`. Adding to base class would leak to tips/about/destinations pages. Applied via `text-center` class on blog route JSX instead. |
 | Post title/subtitle HTML | `<h2>` / `<h3>` (semantic) | Hero is `<h1>`, post title is `<h2>`, subtitle is `<h3>`. Better document outline for SEO and accessibility. Class-based CSS still applies. |
+| Tips not-found rendering | Inline UI (not `notFound()`) | Renders "The tips page for '{slug}' doesn't exist yet" with the slug preserved in the message — matches v1's UX intent. |
+| `react-world-flags` wrapper | `"use client"` `CountryFlag.tsx` | The library's UMD bundle uses `this` reference that fails in RSC strict ESM evaluation. Thin client wrapper avoids the issue. |
 
 ---
 
@@ -560,3 +562,4 @@ These were open questions in the first draft. Resolved based on review feedback:
 | Phase 1.3: Constants files | Done | `1d6b77e` — `lib/constants.ts`, `lib/constants/social-links.ts`, `lib/constants/world-map-coordinates.ts` |
 | Phase 1.4: Data access layer | Done | `feat/phase-1.4-data-access-layer` — Drizzle relations added to schema, blog/tips/gallery repositories |
 | Phase 1.5: Blog pages | Done | `feat/phase-1.5-blog-pages` PR #4 — blog listing, country listing w/ parallax hero, post detail w/ block rendering, 17 new files |
+| Phase 1.6: Tips pages | Done | `feat/phase-1.6-tips-pages` — tips listing w/ country flags, tip detail w/ section rendering, 7 new files |

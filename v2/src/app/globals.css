@@ -312,3 +312,168 @@ body {
 .map-container {
   @apply rounded-lg overflow-hidden;
 }
+
+/* ------------------------------------------------------------------ */
+/* Tips listing page                                                   */
+/* ------------------------------------------------------------------ */
+
+.tips-page-subtitle {
+  @apply text-lg text-gray-500 mb-12;
+}
+
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
+.tip-card {
+  @apply block bg-white rounded-xl p-6 no-underline text-inherit;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tip-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.tip-card:focus {
+  @apply outline-none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+
+.tip-card-header {
+  @apply flex items-start gap-4 mb-4;
+}
+
+.tip-card-flag {
+  @apply flex-shrink-0 rounded overflow-hidden;
+  width: 36px;
+  height: 24px;
+}
+
+.tip-card-flag img {
+  @apply w-full h-full object-cover;
+}
+
+.tip-card-title {
+  @apply text-xl font-semibold m-0;
+}
+
+.tip-card-location {
+  @apply text-sm text-gray-500 mt-2 mb-0;
+}
+
+.tip-card-description {
+  @apply text-base text-gray-600 m-0 leading-relaxed;
+}
+
+@media (max-width: 768px) {
+  .tips-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .tip-card {
+    @apply p-5;
+  }
+
+  .tips-page-subtitle {
+    @apply text-base mb-8;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Tip detail page                                                     */
+/* ------------------------------------------------------------------ */
+
+.tip-detail-header {
+  @apply mb-12;
+}
+
+.tip-detail-title-section {
+  @apply text-center;
+}
+
+.tip-detail-title {
+  @apply text-2xl md:text-4xl font-bold text-gray-800 mb-2;
+}
+
+.tip-detail-location {
+  @apply text-lg text-gray-500 font-medium;
+}
+
+.tip-detail-content {
+  @apply max-w-4xl mx-auto;
+}
+
+.tip-section {
+  @apply bg-white border border-gray-200 rounded-xl p-6 md:p-8 mb-8 shadow-sm;
+}
+
+.tip-section h2 {
+  @apply text-xl md:text-2xl font-semibold text-gray-800 text-center mb-4;
+}
+
+.tip-placeholder {
+  @apply text-gray-500 italic leading-relaxed text-left;
+}
+
+.tip-placeholder p {
+  @apply mb-3 last:mb-0;
+}
+
+.tip-content {
+  @apply text-gray-700 leading-relaxed text-left;
+}
+
+.tip-content p {
+  @apply mb-4;
+}
+
+.tip-content ul,
+.tip-content ol {
+  @apply mb-4 pl-6;
+}
+
+.tip-content li {
+  @apply mb-2 leading-6;
+}
+
+.tip-content ul li {
+  @apply list-disc;
+}
+
+.tip-content ol li {
+  @apply list-decimal;
+}
+
+.tip-content strong {
+  @apply font-semibold text-gray-800;
+}
+
+.tip-content em {
+  @apply italic text-gray-600;
+}
+
+.tip-content h3 {
+  @apply text-lg font-semibold text-gray-800 mt-6 mb-3;
+}
+
+.tip-content h4 {
+  @apply text-base font-semibold text-gray-700 mt-4 mb-2;
+}
+
+.tip-not-found {
+  @apply text-center py-12 px-4 md:py-16 md:px-8;
+}
+
+.tip-not-found h1 {
+  @apply text-xl md:text-2xl font-bold text-gray-800 mb-4;
+}
+
+.tip-not-found p {
+  @apply text-lg text-gray-500 mb-8;
+}
