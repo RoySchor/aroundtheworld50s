@@ -18,11 +18,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   const countrySlugs = [...new Set(posts.map((p) => p.countrySlug))];
-  const countryPages: MetadataRoute.Sitemap = countrySlugs.map((slug) => ({
-    url: `${SITE_URL}/blog/${slug}`,
-    changeFrequency: "weekly",
-    priority: 0.7,
-  }));
+  const countryPages: MetadataRoute.Sitemap = countrySlugs.map((slug) => {
+    const latest = posts.find((p) => p.countrySlug === slug);
+    return {
+      url: `${SITE_URL}/blog/${slug}`,
+      lastModified: latest?.updatedAt ?? latest?.publishedAt ?? undefined,
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    };
+  });
 
   const postPages: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${SITE_URL}/blog/${post.countrySlug}/${post.postIndex}`,

@@ -5,6 +5,7 @@ import {
   getPostBySlugAndIndex,
 } from "@/server/repositories/blog";
 import { sanitizeHtml } from "@/lib/sanitize";
+import { SITE_NAME } from "@/lib/constants";
 import { getOgImageUrl } from "@/lib/seo";
 import { ParallaxHero } from "@/components/blog/ParallaxHero";
 import { BlockRenderer } from "@/components/blog/BlockRenderer";
@@ -30,9 +31,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: post.title,
     description: post.excerpt ?? undefined,
     openGraph: {
+      type: "article",
+      siteName: SITE_NAME,
+      locale: "en_US",
       title: post.title,
       description: post.excerpt ?? undefined,
-      type: "article",
       publishedTime: post.publishedAt?.toISOString(),
       images: post.backgroundImage
         ? [{ url: getOgImageUrl(post.backgroundImage), width: 1200, height: 630 }]

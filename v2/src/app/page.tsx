@@ -1,20 +1,10 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { getPublishedPosts } from "@/server/repositories/blog";
 import { getGalleryImages } from "@/server/repositories/gallery";
 import { buildCloudinaryUrl, STATIC_ASSETS } from "@/lib/cloudinary";
-import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants";
 import { SOCIAL_LINKS } from "@/lib/constants/social-links";
 import { BlogGrid } from "@/components/blog/BlogGrid";
 import { GallerySlider } from "@/components/gallery/GallerySlider";
-
-export const metadata: Metadata = {
-  description: SITE_DESCRIPTION,
-  openGraph: {
-    title: SITE_NAME,
-    description: SITE_DESCRIPTION,
-  },
-};
 
 const instagramUrl =
   SOCIAL_LINKS.find((l) => l.platform === "instagram")?.url ??

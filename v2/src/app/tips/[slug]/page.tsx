@@ -26,10 +26,6 @@ export async function generateMetadata({
   return {
     title: tip.title,
     description: tip.description ?? undefined,
-    openGraph: {
-      title: tip.title,
-      description: tip.description ?? undefined,
-    },
   };
 }
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { STATIC_ASSETS } from "@/lib/cloudinary";
+import { SITE_NAME } from "@/lib/constants";
 import { getOgImageUrl } from "@/lib/seo";
 import { ContactForm } from "@/components/about/ContactForm";
 
@@ -9,6 +10,9 @@ export const metadata: Metadata = {
   description:
     "Learn about our journey exploring the world as a couple in our 50s — from family road trips to spontaneous city escapes.",
   openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    locale: "en_US",
     images: [
       {
         url: getOgImageUrl(STATIC_ASSETS.aboutMePageBg),

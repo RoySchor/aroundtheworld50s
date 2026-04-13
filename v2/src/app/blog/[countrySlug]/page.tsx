@@ -5,6 +5,7 @@ import {
   getPostsByCountrySlug,
 } from "@/server/repositories/blog";
 import { formatLocation } from "@/lib/format";
+import { SITE_NAME } from "@/lib/constants";
 import { getOgImageUrl } from "@/lib/seo";
 import { ParallaxHero } from "@/components/blog/ParallaxHero";
 import { BlogGrid } from "@/components/blog/BlogGrid";
@@ -29,6 +30,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: displayName,
     description,
     openGraph: {
+      type: "website",
+      siteName: SITE_NAME,
+      locale: "en_US",
       title: displayName,
       description,
       images: posts[0].backgroundImage
