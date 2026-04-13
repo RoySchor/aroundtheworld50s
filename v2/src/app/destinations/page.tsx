@@ -1,8 +1,13 @@
+import type { Metadata } from "next";
 import { getPublishedPosts } from "@/server/repositories/blog";
 import { buildCloudinaryUrl, STATIC_ASSETS } from "@/lib/cloudinary";
 import { DestinationDropdown } from "@/components/destinations/DestinationDropdown";
 import { WorldMap } from "@/components/destinations/WorldMap";
 import type { MapLocationData } from "@/components/destinations/WorldMap";
+
+export const metadata: Metadata = {
+  title: "Destinations",
+};
 
 export default async function DestinationsPage() {
   const posts = await getPublishedPosts();

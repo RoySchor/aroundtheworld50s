@@ -9,6 +9,7 @@ export function ContactForm() {
     email: "",
     message: "",
   });
+  const [honeypot, setHoneypot] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
     type: "success" | "error";
@@ -28,6 +29,9 @@ export function ContactForm() {
     setSubmitStatus(null);
 
     try {
+      // Honeypot — bots fill hidden fields, humans don't
+      if (honeypot) return;
+
       if (
         !formData.name.trim() ||
         !formData.email.trim() ||
@@ -101,6 +105,18 @@ export function ContactForm() {
       </div>
 
       <form className="contact-form" onSubmit={handleSubmit}>
+        {/* Honeypot — hidden from real users, bots auto-fill it */}
+        <input
+          type="text"
+          name="website"
+          value={honeypot}
+          onChange={(e) => setHoneypot(e.target.value)}
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          className="absolute -left-[9999px]"
+        />
+
         <div className="form-group">
           <label htmlFor="name" className="form-label">
             Name *

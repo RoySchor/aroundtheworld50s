@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { STATIC_ASSETS } from "@/lib/cloudinary";
 import { ContactForm } from "@/components/about/ContactForm";
+
+export const metadata: Metadata = {
+  title: "About",
+};
 
 export default function AboutPage() {
   return (
