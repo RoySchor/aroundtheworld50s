@@ -20,7 +20,6 @@ v2 has **infrastructure and data modeling done, zero application code**. Specifi
 - Tailwind v4, ESLint 9, Prettier, TypeScript strict mode
 
 **Not done:**
-- Home page with gallery slider (Phase 1.7)
 - Static pages + destinations/WorldMap (Phase 1.8)
 - SEO metadata, sitemap, JSON-LD (Phase 1.9)
 - Auth + admin CRUD (Phase 2)
@@ -563,3 +562,4 @@ These were open questions in the first draft. Resolved based on review feedback:
 | Phase 1.4: Data access layer | Done | `feat/phase-1.4-data-access-layer` — Drizzle relations added to schema, blog/tips/gallery repositories |
 | Phase 1.5: Blog pages | Done | `feat/phase-1.5-blog-pages` PR #4 — blog listing, country listing w/ parallax hero, post detail w/ block rendering, 17 new files |
 | Phase 1.6: Tips pages | Done | `feat/phase-1.6-tips-pages` — tips listing w/ country flags, tip detail w/ section rendering, 7 new files |
+| Phase 1.7: Home page | Done | `feat/phase-1.7-home-page` — parallax hero, Travel With Us section, 4 most recent posts (BlogGrid w/ columns prop), gallery slider (client component), Instagram fallback |

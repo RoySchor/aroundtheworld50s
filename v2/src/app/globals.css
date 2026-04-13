@@ -477,3 +477,97 @@ body {
 .tip-not-found p {
   @apply text-lg text-gray-500 mb-8;
 }
+
+/* ------------------------------------------------------------------ */
+/* Home page: hero button                                              */
+/* ------------------------------------------------------------------ */
+
+.home-page-hero-button {
+  @apply mt-16 sm:mt-24 md:mt-32 px-6 sm:px-8 py-3 sm:py-4
+    text-lg sm:text-xl font-bold font-sans sm:font-caveat
+    border-4 border-white rounded-full
+    hover:border-tan hover:text-tan transition duration-300;
+}
+
+/* ------------------------------------------------------------------ */
+/* Home page: section containers (Travel With Us, etc.)                */
+/* ------------------------------------------------------------------ */
+
+.home-page-section-container {
+  @apply mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-14;
+}
+
+.home-page-section-title {
+  @apply text-2xl sm:text-3xl font-scope font-semibold text-black text-center;
+}
+
+.home-page-section-description {
+  @apply text-base sm:text-lg text-black leading-relaxed mt-4;
+}
+
+/* ------------------------------------------------------------------ */
+/* Home page: most recent posts                                        */
+/* ------------------------------------------------------------------ */
+
+.recent-posts-container {
+  @apply pt-6 sm:pt-8 lg:pt-10 px-4 sm:px-8;
+}
+
+.recent-posts-title {
+  @apply text-center text-2xl sm:text-3xl lg:text-4xl font-scope text-gray-800;
+}
+
+/* ------------------------------------------------------------------ */
+/* Home page: gallery slider                                           */
+/* ------------------------------------------------------------------ */
+
+.gallery-container {
+  @apply py-6 sm:py-8 lg:py-10 px-4 sm:px-8;
+}
+
+.gallery-title {
+  @apply text-center text-2xl sm:text-3xl lg:text-4xl font-scope text-gray-800 mb-4 sm:mb-6;
+}
+
+.gallery-slider-container {
+  @apply relative py-4 sm:py-6 lg:py-8 max-w-5xl mx-auto px-4;
+}
+
+.gallery-image-row {
+  @apply flex sm:flex-row gap-4 justify-center;
+}
+
+.gallery-image-box {
+  @apply relative w-full sm:w-1/2 lg:w-1/3 h-52 sm:h-64 bg-gray-200 rounded-lg overflow-hidden shadow-lg;
+}
+
+.gallery-nav-button {
+  @apply absolute top-1/3 transform translate-y-1/2
+    bg-gray-800 text-white w-8 h-8 sm:w-10 sm:h-10
+    rounded-md hover:bg-gray-700 focus:outline-none z-10;
+}
+
+.gallery-counter {
+  @apply text-center mt-4 text-base sm:text-lg text-gray-600;
+}
+
+/* ------------------------------------------------------------------ */
+/* Home page: Instagram fallback                                       */
+/* ------------------------------------------------------------------ */
+
+.instagram-fallback {
+  @apply max-w-[850px] mx-auto p-5 sm:p-8;
+}
+
+.instagram-fallback-card {
+  @apply bg-white rounded-lg p-6 text-center shadow-md;
+}
+
+.instagram-fallback-title {
+  @apply text-2xl text-center mb-5 leading-tight;
+}
+
+.instagram-fallback-link {
+  @apply inline-block mt-4 px-6 py-2 bg-teal-accent text-white rounded-full
+    hover:opacity-80 transition-colors duration-200;
+}
