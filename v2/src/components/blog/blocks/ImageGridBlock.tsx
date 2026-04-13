@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { cloudinaryLoader } from "@/lib/cloudinary";
 import type { ImageGridBlockData } from "@/types/blog";
 
 interface ImageGridBlockProps {
@@ -12,7 +11,6 @@ export function ImageGridBlock({ data }: ImageGridBlockProps) {
       {data.images.map((publicId, index) => (
         <div key={`${publicId}-${index}`} className="image-grid-item">
           <Image
-            loader={cloudinaryLoader}
             src={publicId}
             alt={`Gallery ${index + 1}`}
             fill

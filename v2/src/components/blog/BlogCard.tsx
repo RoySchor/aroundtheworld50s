@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { cloudinaryLoader } from "@/lib/cloudinary";
 import { formatBlogDate, formatBlogDateWithYear } from "@/lib/format";
 import type { BlogPost } from "@/server/db/schema";
 
@@ -33,7 +32,6 @@ export function BlogCard({ post, showYear = false }: BlogCardProps) {
           <div className="relative h-[400px] w-[400px] max-w-full overflow-hidden">
             {post.backgroundImage && (
               <Image
-                loader={cloudinaryLoader}
                 src={post.backgroundImage}
                 alt={post.title}
                 fill

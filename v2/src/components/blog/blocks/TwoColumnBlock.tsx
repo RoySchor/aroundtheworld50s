@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { cloudinaryLoader } from "@/lib/cloudinary";
 import { sanitizeHtml } from "@/lib/sanitize";
 import type { TwoColumnBlockData } from "@/types/blog";
 
@@ -23,7 +22,6 @@ function Pane({
       <div className="content-pane-image">
         <div className="image-container">
           <Image
-            loader={cloudinaryLoader}
             src={image}
             alt={imageAlt || "Blog image"}
             fill
