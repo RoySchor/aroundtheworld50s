@@ -55,7 +55,7 @@
  *   enum migration, not a redesign.
  */
 
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   boolean,
   check,
@@ -458,6 +458,63 @@ export const galleryImages = pgTable(
   },
   (t) => [unique("gallery_images_position_unique").on(t.position)],
 );
+
+// ---------------------------------------------------------------------------
+// Relations — TypeScript-only metadata for Drizzle's relational query API.
+// No SQL generated, no migration needed.
+// ---------------------------------------------------------------------------
+
+export const profilesRelations = relations(profiles, ({ many }) => ({
+  posts: many(blogPosts),
+}));
+
+export const blogPostsRelations = relations(blogPosts, ({ one, many }) => ({
+  author: one(profiles, {
+    fields: [blogPosts.authorId],
+    references: [profiles.id],
+  }),
+  blocks: many(blogBlocks),
+  itineraries: many(blogItineraries),
+}));
+
+export const blogBlocksRelations = relations(blogBlocks, ({ one }) => ({
+  post: one(blogPosts, {
+    fields: [blogBlocks.postId],
+    references: [blogPosts.id],
+  }),
+}));
+
+export const blogItinerariesRelations = relations(
+  blogItineraries,
+  ({ one, many }) => ({
+    post: one(blogPosts, {
+      fields: [blogItineraries.postId],
+      references: [blogPosts.id],
+    }),
+    items: many(blogItineraryItems),
+  }),
+);
+
+export const blogItineraryItemsRelations = relations(
+  blogItineraryItems,
+  ({ one }) => ({
+    itinerary: one(blogItineraries, {
+      fields: [blogItineraryItems.itineraryId],
+      references: [blogItineraries.id],
+    }),
+  }),
+);
+
+export const tipsRelations = relations(tips, ({ many }) => ({
+  sections: many(tipSections),
+}));
+
+export const tipSectionsRelations = relations(tipSections, ({ one }) => ({
+  tip: one(tips, {
+    fields: [tipSections.tipId],
+    references: [tips.id],
+  }),
+}));
 
 // ---------------------------------------------------------------------------
 // Inferred types — import these in repositories/services instead of
