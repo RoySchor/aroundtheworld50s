@@ -1,6 +1,6 @@
 "use server";
 
-import { and, eq, gt, sql } from "drizzle-orm";
+import { eq, gt, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/server/db";
 import { galleryImages } from "@/server/db/schema";
@@ -17,6 +17,7 @@ import type { ActionResult } from "./types";
 // Helpers
 // ---------------------------------------------------------------------------
 
+/** Revalidate homepage — currently the only page rendering the gallery slider. */
 function revalidateGallery() {
   revalidatePath("/");
 }
@@ -55,6 +56,12 @@ export async function createGalleryImage(
   } catch (err) {
     const pgErr = err as { code?: string };
     if (pgErr.code === "23505") {
+      // Clean up the Cloudinary asset that was uploaded before the DB insert failed
+      try {
+        await deleteImage(parsed.data.cloudinaryPublicId);
+      } catch {
+        // Best-effort cleanup
+      }
       return {
         success: false,
         error: "This image is already in the gallery",
@@ -78,10 +85,15 @@ export async function updateGalleryImage(
     };
   }
 
-  await db
+  const [row] = await db
     .update(galleryImages)
     .set(parsed.data)
-    .where(eq(galleryImages.id, id));
+    .where(eq(galleryImages.id, id))
+    .returning({ id: galleryImages.id });
+
+  if (!row) {
+    return { success: false, error: "Image not found" };
+  }
 
   revalidateGallery();
   return { success: true, data: undefined };
