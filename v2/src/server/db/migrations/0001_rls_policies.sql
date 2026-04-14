@@ -146,10 +146,12 @@ CREATE POLICY "tips_admin_all"
 -- tip_sections (child of tips)
 -- =====================================================================
 
+-- enabled = false sections are author-only (hidden from public readers)
 CREATE POLICY "tip_sections_select_published"
   ON tip_sections FOR SELECT
   USING (
-    EXISTS (
+    tip_sections.enabled = true
+    AND EXISTS (
       SELECT 1 FROM tips
       WHERE tips.id = tip_sections.tip_id
         AND tips.status = 'published'
