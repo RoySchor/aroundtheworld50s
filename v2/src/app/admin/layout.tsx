@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { getAuthenticatedAdmin } from "@/server/auth";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };

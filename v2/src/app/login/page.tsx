@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { getAdminProfileIfAuthenticated } from "@/server/auth";
 import { LoginForm } from "@/components/auth/LoginForm";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Login",
   robots: { index: false, follow: false },
