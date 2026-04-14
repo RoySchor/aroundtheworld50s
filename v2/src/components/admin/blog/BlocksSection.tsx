@@ -8,8 +8,7 @@ import {
 } from "@/server/actions/blog-blocks";
 import { BlockForm } from "./BlockForm";
 import type { BlogBlock, BlogItinerary, BlogItineraryItem } from "@/server/db/schema";
-
-type BlockType = "text" | "two_column" | "image_grid" | "itinerary_with_map";
+import type { BlockType } from "@/server/validators/blog";
 
 const BLOCK_TYPE_LABELS: Record<BlockType, string> = {
   text: "Text",

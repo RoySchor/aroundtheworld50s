@@ -34,10 +34,10 @@ const itineraryWithMapBlockFields = {
 };
 
 // Shape-only schemas (for type inference — no `type` discriminator)
-const textBlockDataShape = z.object(textBlockFields);
-const twoColumnBlockDataShape = z.object(twoColumnBlockFields);
-const imageGridBlockDataShape = z.object(imageGridBlockFields);
-const itineraryWithMapBlockDataShape = z.object(itineraryWithMapBlockFields);
+const _textBlockDataShape = z.object(textBlockFields);
+const _twoColumnBlockDataShape = z.object(twoColumnBlockFields);
+const _imageGridBlockDataShape = z.object(imageGridBlockFields);
+const _itineraryWithMapBlockDataShape = z.object(itineraryWithMapBlockFields);
 
 // ---------------------------------------------------------------------------
 // Discriminated union (includes `type` for server action validation)
@@ -153,8 +153,15 @@ export const updateBlogItineraryItemSchema = z.object({
 // Slugify helper — used by blog create server action to derive countrySlug
 // ---------------------------------------------------------------------------
 
+// Characters that NFD decomposition doesn't handle (single-codepoint special chars)
+const CHAR_MAP: Record<string, string> = {
+  ø: "o", Ø: "O", ð: "d", Ð: "D", ł: "l", Ł: "L", đ: "d", Đ: "D",
+  ß: "ss", æ: "ae", Æ: "AE", œ: "oe", Œ: "OE", þ: "th", Þ: "Th",
+};
+
 export function slugify(name: string): string {
   return name
+    .replace(/[øØðÐłŁđĐßæÆœŒþÞ]/g, (ch) => CHAR_MAP[ch] ?? ch)
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
@@ -171,12 +178,15 @@ export function slugify(name: string): string {
 // ---------------------------------------------------------------------------
 
 // Renderer types (no `type` field — match existing interface contract)
-export type TextBlockData = z.infer<typeof textBlockDataShape>;
-export type TwoColumnBlockData = z.infer<typeof twoColumnBlockDataShape>;
-export type ImageGridBlockData = z.infer<typeof imageGridBlockDataShape>;
+export type TextBlockData = z.infer<typeof _textBlockDataShape>;
+export type TwoColumnBlockData = z.infer<typeof _twoColumnBlockDataShape>;
+export type ImageGridBlockData = z.infer<typeof _imageGridBlockDataShape>;
 export type ItineraryWithMapBlockData = z.infer<
-  typeof itineraryWithMapBlockDataShape
+  typeof _itineraryWithMapBlockDataShape
 >;
+
+// Block type union — single source of truth for admin components
+export type BlockType = "text" | "two_column" | "image_grid" | "itinerary_with_map";
 
 // Server action input types
 export type BlogBlockInput = z.infer<typeof blogBlockDataSchema>;

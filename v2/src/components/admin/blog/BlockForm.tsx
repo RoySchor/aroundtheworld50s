@@ -4,8 +4,7 @@ import { useState, useTransition } from "react";
 import { createBlogBlock, updateBlogBlock } from "@/server/actions/blog-blocks";
 import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
 import type { BlogBlock, BlogItinerary, BlogItineraryItem } from "@/server/db/schema";
-
-type BlockType = "text" | "two_column" | "image_grid" | "itinerary_with_map";
+import type { BlockType } from "@/server/validators/blog";
 
 interface BlockFormProps {
   postId: string;

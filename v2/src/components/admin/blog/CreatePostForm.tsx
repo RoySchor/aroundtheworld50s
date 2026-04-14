@@ -14,6 +14,7 @@ export function CreatePostForm() {
   const [state, setState] = useState("");
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
+  const [header, setHeader] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [description, setDescription] = useState("");
   const [backgroundImage, setBackgroundImage] = useState("");
@@ -33,6 +34,7 @@ export function CreatePostForm() {
         state: isUS && state ? state : null,
         title,
         subtitle: subtitle || null,
+        header: header || null,
         excerpt: excerpt || null,
         description: description || null,
         backgroundImage: backgroundImage || null,
@@ -121,6 +123,18 @@ export function CreatePostForm() {
           value={subtitle}
           onChange={(e) => setSubtitle(e.target.value)}
           className="w-full rounded border px-3 py-2 text-sm"
+        />
+      </label>
+
+      {/* Header */}
+      <label className="block">
+        <span className="mb-1 block text-sm font-medium">Header</span>
+        <input
+          type="text"
+          value={header}
+          onChange={(e) => setHeader(e.target.value)}
+          className="w-full rounded border px-3 py-2 text-sm"
+          placeholder="e.g. A Week in Trinidad"
         />
       </label>
 

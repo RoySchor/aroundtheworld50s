@@ -2,10 +2,7 @@
 
 import { getAuthenticatedAdmin } from "@/server/auth";
 import { uploadImage as cloudinaryUpload } from "@/server/services/cloudinary";
-
-export type ActionResult<T = void> =
-  | { success: true; data: T }
-  | { success: false; error: string };
+import type { ActionResult } from "./types";
 
 /**
  * Upload an image via FormData. Expects a "file" field and an optional "folder" field.
@@ -25,8 +22,16 @@ export async function uploadImage(
     return { success: false, error: "File must be an image" };
   }
 
+  if (file.size > 10 * 1024 * 1024) {
+    return { success: false, error: "File must be under 10MB" };
+  }
+
   const folder =
     (formData.get("folder") as string | null) ?? "aroundtheworld50s/uploads";
+
+  if (!folder.startsWith("aroundtheworld50s/")) {
+    return { success: false, error: "Invalid upload folder" };
+  }
 
   try {
     const bytes = await file.arrayBuffer();

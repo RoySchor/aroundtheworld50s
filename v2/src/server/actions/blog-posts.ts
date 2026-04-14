@@ -12,7 +12,7 @@ import {
   slugify,
 } from "@/server/validators/blog";
 import { getNextPostIndex } from "@/server/repositories/admin-blog";
-import type { ActionResult } from "./upload";
+import type { ActionResult } from "./types";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -65,6 +65,7 @@ export async function createBlogPost(
     })
     .returning({ id: blogPosts.id });
 
+  // redirect() throws NEXT_REDIRECT — the ActionResult return type only applies to the error path above
   redirect(`/admin/blog/${post.id}`);
 }
 
@@ -81,7 +82,19 @@ export async function updateBlogPost(
 
   const data = parsed.data;
 
-  await db.update(blogPosts).set(data).where(eq(blogPosts.id, id));
+  const [post] = await db
+    .update(blogPosts)
+    .set(data)
+    .where(eq(blogPosts.id, id))
+    .returning({
+      countrySlug: blogPosts.countrySlug,
+      postIndex: blogPosts.postIndex,
+      status: blogPosts.status,
+    });
+
+  if (post?.status === "published") {
+    revalidatePublicPaths(post.countrySlug, post.postIndex);
+  }
 
   return { success: true, data: undefined };
 }
@@ -142,5 +155,6 @@ export async function deleteBlogPost(id: string): Promise<ActionResult> {
   }
 
   revalidatePublicPaths(post.countrySlug, post.postIndex);
+  // redirect() throws NEXT_REDIRECT — the ActionResult return type only applies to the error path above
   redirect("/admin/blog");
 }

@@ -1,12 +1,10 @@
 "use server";
 
 import { and, eq, gt, sql } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
 import { db } from "@/server/db";
 import {
   blogItineraries,
   blogItineraryItems,
-  blogPosts,
 } from "@/server/db/schema";
 import { getAuthenticatedAdmin } from "@/server/auth";
 import {
@@ -15,21 +13,12 @@ import {
   createBlogItineraryItemSchema,
   updateBlogItineraryItemSchema,
 } from "@/server/validators/blog";
-import type { ActionResult } from "./upload";
+import type { ActionResult } from "./types";
+import { revalidatePostPaths } from "./helpers";
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-async function revalidatePostPaths(postId: string) {
-  const post = await db.query.blogPosts.findFirst({
-    where: eq(blogPosts.id, postId),
-    columns: { countrySlug: true, postIndex: true, status: true },
-  });
-  if (post?.status === "published") {
-    revalidatePath(`/blog/${post.countrySlug}/${post.postIndex}`);
-  }
-}
 
 async function getPostIdForItinerary(itineraryId: string): Promise<string | null> {
   const itin = await db.query.blogItineraries.findFirst({
@@ -99,22 +88,28 @@ export async function updateBlogItinerary(
 export async function deleteBlogItinerary(id: string): Promise<ActionResult> {
   await getAuthenticatedAdmin();
 
-  const [deleted] = await db
-    .delete(blogItineraries)
-    .where(eq(blogItineraries.id, id))
-    .returning({ postId: blogItineraries.postId, position: blogItineraries.position });
+  const deleted = await db.transaction(async (tx) => {
+    const [row] = await tx
+      .delete(blogItineraries)
+      .where(eq(blogItineraries.id, id))
+      .returning({ postId: blogItineraries.postId, position: blogItineraries.position });
+
+    if (!row) return null;
+
+    await tx
+      .update(blogItineraries)
+      .set({ position: sql`${blogItineraries.position} - 1` })
+      .where(
+        and(
+          eq(blogItineraries.postId, row.postId),
+          gt(blogItineraries.position, row.position),
+        ),
+      );
+
+    return row;
+  });
 
   if (!deleted) return { success: false, error: "Itinerary not found" };
-
-  await db
-    .update(blogItineraries)
-    .set({ position: sql`${blogItineraries.position} - 1` })
-    .where(
-      and(
-        eq(blogItineraries.postId, deleted.postId),
-        gt(blogItineraries.position, deleted.position),
-      ),
-    );
 
   await revalidatePostPaths(deleted.postId);
   return { success: true, data: undefined };
@@ -214,25 +209,31 @@ export async function deleteBlogItineraryItem(
 ): Promise<ActionResult> {
   await getAuthenticatedAdmin();
 
-  const [deleted] = await db
-    .delete(blogItineraryItems)
-    .where(eq(blogItineraryItems.id, id))
-    .returning({
-      itineraryId: blogItineraryItems.itineraryId,
-      position: blogItineraryItems.position,
-    });
+  const deleted = await db.transaction(async (tx) => {
+    const [row] = await tx
+      .delete(blogItineraryItems)
+      .where(eq(blogItineraryItems.id, id))
+      .returning({
+        itineraryId: blogItineraryItems.itineraryId,
+        position: blogItineraryItems.position,
+      });
+
+    if (!row) return null;
+
+    await tx
+      .update(blogItineraryItems)
+      .set({ position: sql`${blogItineraryItems.position} - 1` })
+      .where(
+        and(
+          eq(blogItineraryItems.itineraryId, row.itineraryId),
+          gt(blogItineraryItems.position, row.position),
+        ),
+      );
+
+    return row;
+  });
 
   if (!deleted) return { success: false, error: "Item not found" };
-
-  await db
-    .update(blogItineraryItems)
-    .set({ position: sql`${blogItineraryItems.position} - 1` })
-    .where(
-      and(
-        eq(blogItineraryItems.itineraryId, deleted.itineraryId),
-        gt(blogItineraryItems.position, deleted.position),
-      ),
-    );
 
   const postId = await getPostIdForItinerary(deleted.itineraryId);
   if (postId) await revalidatePostPaths(postId);

@@ -11,19 +11,11 @@ let configured = false;
 function ensureConfigured() {
   if (configured) return;
 
-  const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
-    serverEnv;
-
-  if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_API_KEY || !CLOUDINARY_API_SECRET) {
-    throw new Error(
-      "Cloudinary credentials missing. Set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET in .env.local",
-    );
-  }
-
+  // serverEnv is Zod-validated at startup — credentials are guaranteed present
   cloudinary.config({
-    cloud_name: CLOUDINARY_CLOUD_NAME,
-    api_key: CLOUDINARY_API_KEY,
-    api_secret: CLOUDINARY_API_SECRET,
+    cloud_name: serverEnv.CLOUDINARY_CLOUD_NAME,
+    api_key: serverEnv.CLOUDINARY_API_KEY,
+    api_secret: serverEnv.CLOUDINARY_API_SECRET,
   });
 
   configured = true;

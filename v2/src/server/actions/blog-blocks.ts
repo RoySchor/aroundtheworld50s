@@ -1,12 +1,12 @@
 "use server";
 
-import { and, eq, gt, lt, sql } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { and, eq, gt, sql } from "drizzle-orm";
 import { db } from "@/server/db";
-import { blogBlocks, blogPosts } from "@/server/db/schema";
+import { blogBlocks } from "@/server/db/schema";
 import { getAuthenticatedAdmin } from "@/server/auth";
 import { blogBlockDataSchema } from "@/server/validators/blog";
-import type { ActionResult } from "./upload";
+import type { ActionResult } from "./types";
+import { revalidatePostPaths } from "./helpers";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -21,16 +21,6 @@ async function getMaxBlockPosition(postId: string): Promise<number> {
     .where(eq(blogBlocks.postId, postId));
 
   return result[0]?.maxPos ?? -1;
-}
-
-async function revalidatePostPaths(postId: string) {
-  const post = await db.query.blogPosts.findFirst({
-    where: eq(blogPosts.id, postId),
-    columns: { countrySlug: true, postIndex: true, status: true },
-  });
-  if (post?.status === "published") {
-    revalidatePath(`/blog/${post.countrySlug}/${post.postIndex}`);
-  }
 }
 
 // ---------------------------------------------------------------------------
@@ -92,28 +82,34 @@ export async function updateBlogBlock(
 export async function deleteBlogBlock(id: string): Promise<ActionResult> {
   await getAuthenticatedAdmin();
 
-  const [deleted] = await db
-    .delete(blogBlocks)
-    .where(eq(blogBlocks.id, id))
-    .returning({
-      postId: blogBlocks.postId,
-      position: blogBlocks.position,
-    });
+  const deleted = await db.transaction(async (tx) => {
+    const [row] = await tx
+      .delete(blogBlocks)
+      .where(eq(blogBlocks.id, id))
+      .returning({
+        postId: blogBlocks.postId,
+        position: blogBlocks.position,
+      });
+
+    if (!row) return null;
+
+    // Re-number positions above the deleted block
+    await tx
+      .update(blogBlocks)
+      .set({ position: sql`${blogBlocks.position} - 1` })
+      .where(
+        and(
+          eq(blogBlocks.postId, row.postId),
+          gt(blogBlocks.position, row.position),
+        ),
+      );
+
+    return row;
+  });
 
   if (!deleted) {
     return { success: false, error: "Block not found" };
   }
-
-  // Re-number positions above the deleted block
-  await db
-    .update(blogBlocks)
-    .set({ position: sql`${blogBlocks.position} - 1` })
-    .where(
-      and(
-        eq(blogBlocks.postId, deleted.postId),
-        gt(blogBlocks.position, deleted.position),
-      ),
-    );
 
   await revalidatePostPaths(deleted.postId);
   return { success: true, data: undefined };
