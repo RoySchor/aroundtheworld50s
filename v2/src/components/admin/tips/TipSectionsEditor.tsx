@@ -1,0 +1,189 @@
+"use client";
+
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import {
+  updateTipSection,
+  reorderTipSection,
+} from "@/server/actions/tips";
+import { TIP_SECTION_LABELS } from "@/lib/constants/tip-sections";
+import type { TipSection } from "@/server/db/schema";
+
+interface TipSectionsEditorProps {
+  tipId: string;
+  sections: TipSection[];
+}
+
+export function TipSectionsEditor({ sections }: TipSectionsEditorProps) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [drafts, setDrafts] = useState<Record<string, string>>({});
+  const [error, setError] = useState<string | null>(null);
+
+  function toggleExpand(id: string) {
+    setExpandedId((prev) => (prev === id ? null : id));
+  }
+
+  function getDraft(section: TipSection) {
+    return drafts[section.id] ?? section.content ?? "";
+  }
+
+  function setDraft(id: string, value: string) {
+    setDrafts((prev) => ({ ...prev, [id]: value }));
+  }
+
+  function handleToggleEnabled(section: TipSection) {
+    setError(null);
+    startTransition(async () => {
+      const result = await updateTipSection(section.id, {
+        enabled: !section.enabled,
+      });
+      if (result.success) {
+        router.refresh();
+      } else {
+        setError(result.error);
+      }
+    });
+  }
+
+  function handleSaveContent(sectionId: string) {
+    setError(null);
+    startTransition(async () => {
+      const result = await updateTipSection(sectionId, {
+        content: drafts[sectionId] ?? null,
+      });
+      if (result.success) {
+        router.refresh();
+      } else {
+        setError(result.error);
+      }
+    });
+  }
+
+  function handleReorder(id: string, direction: "up" | "down") {
+    setError(null);
+    startTransition(async () => {
+      const result = await reorderTipSection(id, direction);
+      if (result.success) {
+        router.refresh();
+      } else {
+        setError(result.error);
+      }
+    });
+  }
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-lg font-semibold">Sections</h2>
+
+      {error && (
+        <div className="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+          {error}
+        </div>
+      )}
+
+      {sections.map((section, idx) => {
+        const isExpanded = expandedId === section.id;
+        const label =
+          TIP_SECTION_LABELS[section.sectionKey] ?? section.sectionKey;
+
+        return (
+          <div
+            key={section.id}
+            className="rounded border bg-white"
+          >
+            {/* Header */}
+            <div className="flex items-center gap-3 px-4 py-3">
+              <span className="text-xs font-medium text-gray-400">
+                #{section.position}
+              </span>
+
+              <span className="font-medium">{label}</span>
+
+              <span
+                className={`ml-1 inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
+                  section.enabled
+                    ? "bg-green-100 text-green-800"
+                    : "bg-gray-100 text-gray-500"
+                }`}
+              >
+                {section.enabled ? "on" : "off"}
+              </span>
+
+              <div className="ml-auto flex items-center gap-2">
+                {/* Reorder */}
+                <button
+                  type="button"
+                  onClick={() => handleReorder(section.id, "up")}
+                  disabled={isPending || idx === 0}
+                  className="rounded px-2 py-1 text-xs text-gray-500 hover:bg-gray-100 disabled:opacity-30"
+                  title="Move up"
+                >
+                  &uarr;
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleReorder(section.id, "down")}
+                  disabled={isPending || idx === sections.length - 1}
+                  className="rounded px-2 py-1 text-xs text-gray-500 hover:bg-gray-100 disabled:opacity-30"
+                  title="Move down"
+                >
+                  &darr;
+                </button>
+
+                {/* Toggle enabled */}
+                <button
+                  type="button"
+                  onClick={() => handleToggleEnabled(section)}
+                  disabled={isPending}
+                  className={`rounded px-3 py-1 text-xs font-medium disabled:opacity-50 ${
+                    section.enabled
+                      ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
+                      : "bg-green-100 text-green-800 hover:bg-green-200"
+                  }`}
+                >
+                  {section.enabled ? "Disable" : "Enable"}
+                </button>
+
+                {/* Expand / Collapse */}
+                <button
+                  type="button"
+                  onClick={() => toggleExpand(section.id)}
+                  className="rounded px-3 py-1 text-xs font-medium text-blue-600 hover:bg-blue-50"
+                >
+                  {isExpanded ? "Collapse" : "Edit"}
+                </button>
+              </div>
+            </div>
+
+            {/* Body */}
+            {isExpanded && (
+              <div className="border-t px-4 py-4">
+                <label className="block">
+                  <span className="mb-1 block text-sm font-medium">
+                    Content (HTML)
+                  </span>
+                  <textarea
+                    value={getDraft(section)}
+                    onChange={(e) => setDraft(section.id, e.target.value)}
+                    rows={10}
+                    className="w-full rounded border px-3 py-2 font-mono text-sm"
+                  />
+                </label>
+                <button
+                  type="button"
+                  onClick={() => handleSaveContent(section.id)}
+                  disabled={isPending}
+                  className="mt-3 rounded bg-blue-600 px-5 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {isPending ? "Saving..." : "Save Content"}
+                </button>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
