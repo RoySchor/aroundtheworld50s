@@ -2,13 +2,13 @@
 
 Senior engineering review and implementation roadmap for the Next.js 16 rewrite of aroundtheworld50s.
 
-Last updated: 2026-04-13
+Last updated: 2026-04-14
 
 ---
 
 ## 1. Where We Are
 
-v2 has **Phase 0 (foundation) and Phase 1 (public read path) complete**. The public site achieves feature parity with v1 — all reader-facing pages render from the database with proper SEO.
+v2 has **Phases 0-1 (foundation + public read path) and Phase 2.1-2.5 (auth + admin blog CRUD) complete**. The public site has feature parity with v1. The admin can log in, create/edit/publish/delete blog posts with all block types, manage itineraries, and upload images to Cloudinary.
 
 **Done and solid:**
 - Next.js 16 + React 19 scaffold with App Router
@@ -29,7 +29,7 @@ v2 has **Phase 0 (foundation) and Phase 1 (public read path) complete**. The pub
 - SEO: per-page metadata with OG/Twitter cards, `metadataBase`, `sitemap.ts`, `robots.ts`, JSON-LD Article schema for blog posts (Phase 1.9)
 
 **Not done:**
-- Auth + admin CRUD (Phase 2)
+- Tips admin (Phase 2.6), Gallery admin (Phase 2.7)
 - Vercel deployment, polish, v1 sunset (Phase 3)
 
 ---
@@ -260,23 +260,23 @@ Sub-tasks:
 
 *Goal: the author can log in and create/edit content through the browser instead of Python scripts.*
 
-**2.1 Auth flow**
+~~**2.1 Auth flow**~~ DONE
 - `app/login/page.tsx` — Supabase email/password login (or magic link)
 - Create initial admin user in Supabase Auth dashboard, manually set `profiles.role = 'admin'`
 - Server-side auth check utility: `getAuthenticatedAdmin()` — verifies session + `profiles.role = 'admin'`
 - Protect admin routes with middleware or layout-level auth check
 
-**2.2 RLS policies (migration 0001)**
+~~**2.2 RLS policies (migration 0001)**~~ DONE
 - Public tables (`blog_posts`, `blog_blocks`, `blog_itineraries`, `blog_itinerary_items`, `tips`, `tip_sections`, `gallery_images`): `SELECT` where `status = 'published'` (or parent post/tip is published)
 - Admin full access: `ALL` where `auth.uid()` maps to a `profiles` row with `role = 'admin'`
 - `profiles`: users can `SELECT` their own row, admins can `SELECT ALL`
 - Test with Supabase Studio as both anon and authenticated
 
-**2.3 Admin layout**
+~~**2.3 Admin layout**~~ DONE
 - `app/admin/layout.tsx` — auth-gated layout, sidebar navigation (Blog, Tips, Gallery)
 - Redirect to login if unauthenticated or non-admin
 
-**2.4 Zod validation schemas**
+~~**2.4 Zod validation schemas**~~ DONE
 - `src/server/validators/blog.ts`:
   - Discriminated union for block data keyed on `type`
   - `two_column` rule: at least one side must be `"image"` and at least one `"text"`. `html` is the text-pane content. Enforce this in Zod, not by convention.
@@ -286,21 +286,15 @@ Sub-tasks:
 - Used at the server action boundary — never trust client input
 - Keep in sync with `blog_blocks.data` shapes documented in schema.ts
 
-**2.5 Blog admin**
-- `app/admin/blog/page.tsx` — list all posts (draft + published), create new
-- `app/admin/blog/[id]/page.tsx` — edit post metadata + blocks
-- **Block editor**: form for each block type
-  - Text: HTML textarea with preview pane (v1's author manages fine with raw HTML — a full rich text editor like tiptap is overkill for now, can be added later)
-  - Two-column: left/right type pickers, image upload, text editor
-  - Image grid: multi-image upload
-  - Itinerary with map: select from post's itineraries
-- **Itinerary editor**: add/remove/reorder itineraries + items per post
-- **Image upload server action**: accepts file, uploads to Cloudinary via API (`CLOUDINARY_API_KEY`/`CLOUDINARY_API_SECRET`), returns public_id
-- **Save server action**: validates with Zod discriminated union, upserts `blog_posts` + child rows in a transaction. Draft rows auto-save — replaces v1's sessionStorage persistence.
-- **Publish action**: sets `status = 'published'`, `published_at = now()`, calls `revalidatePath('/blog/...')`
-- **Preview**: renders the post using the same block renderer as the public page
-- **Position reorder**: drag-and-drop or move-up/down buttons, batch update in a deferred transaction
-- **US state validation**: port v1's `stateValidation.js` fuzzy matching to `server/validators/`
+~~**2.5 Blog admin**~~ DONE
+- `app/admin/blog/page.tsx` — post listing (draft + published) with create button
+- `app/admin/blog/new/page.tsx` — create post form → redirects to edit page
+- `app/admin/blog/[id]/page.tsx` — edit post: metadata form, status bar (publish/unpublish/delete), blocks section (add/edit/reorder/delete per type), itineraries section (nested items, reorder)
+- Server actions: `blog-posts.ts` (5), `blog-blocks.ts` (4), `blog-itineraries.ts` (8), `upload.ts` (1)
+- Cloudinary upload via `cloudinary` npm package (server-side base64 upload)
+- Admin repository: `admin-blog.ts` (all statuses, nested content)
+- Position reorder: up/down swap buttons with DEFERRABLE constraints
+- US state dropdown from `lib/constants/us-states.ts`
 
 **2.6 Tips admin**
 - `app/admin/tips/page.tsx` — list all tips
