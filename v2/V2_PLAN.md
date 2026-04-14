@@ -573,3 +573,4 @@ These were open questions in the first draft. Resolved based on review feedback:
 | Phase 1.7: Home page | Done | `feat/phase-1.7-home-page` — parallax hero, Travel With Us section, 4 most recent posts (BlogGrid w/ columns prop), gallery slider (client component), Instagram fallback |
 | Phase 1.8: Static pages + destinations | Done | `feat/phase-1.8-static-destinations` — About Me page w/ ContactForm (EmailJS), Destinations page w/ interactive WorldMap + dropdown, not-found + error boundary pages, 8 new files |
 | Phase 1.9: SEO | Done | `feat/phase-1.9-seo` PR #8 — per-page metadata with OG/Twitter, `sitemap.ts`, `robots.ts`, JSON-LD Article schema, `lib/seo.ts` helper |
+| Phase 2.1: Auth flow | Done | `feat/phase-2.1-auth` — `getAuthenticatedAdmin()` utility, `signOut()` server action, LoginForm client component, `/login` page, `/admin` layout auth gate, placeholder dashboard |
