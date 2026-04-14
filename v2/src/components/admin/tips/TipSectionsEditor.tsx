@@ -10,7 +10,6 @@ import { TIP_SECTION_LABELS } from "@/lib/constants/tip-sections";
 import type { TipSection } from "@/server/db/schema";
 
 interface TipSectionsEditorProps {
-  tipId: string;
   sections: TipSection[];
 }
 
@@ -49,10 +48,10 @@ export function TipSectionsEditor({ sections }: TipSectionsEditorProps) {
 
   function handleSaveContent(sectionId: string) {
     setError(null);
+    const section = sections.find((s) => s.id === sectionId);
+    const content = drafts[sectionId] ?? section?.content ?? null;
     startTransition(async () => {
-      const result = await updateTipSection(sectionId, {
-        content: drafts[sectionId] ?? null,
-      });
+      const result = await updateTipSection(sectionId, { content });
       if (result.success) {
         router.refresh();
       } else {
@@ -96,7 +95,7 @@ export function TipSectionsEditor({ sections }: TipSectionsEditorProps) {
             {/* Header */}
             <div className="flex items-center gap-3 px-4 py-3">
               <span className="text-xs font-medium text-gray-400">
-                #{section.position}
+                #{idx + 1}
               </span>
 
               <span className="font-medium">{label}</span>

@@ -1,7 +1,6 @@
 "use server";
 
 import { and, eq, sql } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/server/db";
 import { tips, tipSections } from "@/server/db/schema";
@@ -13,17 +12,7 @@ import {
 } from "@/server/validators/tips";
 import { TIP_SECTIONS } from "@/lib/constants/tip-sections";
 import type { ActionResult } from "./types";
-import { revalidateTipPaths } from "./helpers";
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-function revalidatePublicTipPaths(slug: string) {
-  revalidatePath("/");
-  revalidatePath("/tips");
-  revalidatePath(`/tips/${slug}`);
-}
+import { revalidateTipPaths, revalidatePublicTipPaths } from "./helpers";
 
 // ---------------------------------------------------------------------------
 // Tip CRUD
@@ -44,6 +33,7 @@ export async function createTip(
 
   const data = parsed.data;
 
+  let tipId: string;
   try {
     const tip = await db.transaction(async (tx) => {
       const [row] = await tx
@@ -73,13 +63,8 @@ export async function createTip(
 
       return row;
     });
-
-    // redirect() throws NEXT_REDIRECT — the ActionResult return type only applies to the error path above
-    redirect(`/admin/tips/${tip.id}`);
+    tipId = tip.id;
   } catch (err) {
-    // Re-throw Next.js redirect
-    if (err instanceof Error && err.message === "NEXT_REDIRECT") throw err;
-
     // Handle unique constraint violation on slug
     const pgErr = err as { code?: string };
     if (pgErr.code === "23505") {
@@ -91,6 +76,9 @@ export async function createTip(
 
     throw err;
   }
+
+  // redirect() throws NEXT_REDIRECT — called outside try/catch so it propagates naturally
+  redirect(`/admin/tips/${tipId}`);
 }
 
 export async function updateTip(
@@ -121,14 +109,26 @@ export async function updateTip(
     }
   }
 
-  const [tip] = await db
-    .update(tips)
-    .set(data)
-    .where(eq(tips.id, id))
-    .returning({
-      slug: tips.slug,
-      status: tips.status,
-    });
+  let tip: { slug: string; status: string } | undefined;
+  try {
+    [tip] = await db
+      .update(tips)
+      .set(data)
+      .where(eq(tips.id, id))
+      .returning({
+        slug: tips.slug,
+        status: tips.status,
+      });
+  } catch (err) {
+    const pgErr = err as { code?: string };
+    if (pgErr.code === "23505") {
+      return {
+        success: false,
+        error: "A tip with this slug already exists",
+      };
+    }
+    throw err;
+  }
 
   if (tip?.status === "published") {
     revalidatePublicTipPaths(tip.slug);

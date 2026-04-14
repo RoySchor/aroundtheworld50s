@@ -18,8 +18,11 @@ export async function revalidatePostPaths(postId: string) {
 }
 
 /**
- * Revalidate public tip paths if the tip is published.
- * Used after mutations to tip sections to bust the ISR cache.
+ * Revalidate public tip paths. Two signatures:
+ * - `revalidateTipPaths(tipId)` — looks up the tip, only revalidates if published.
+ *   Used by section-level actions that only have a tipId.
+ * - `revalidatePublicTipPaths(slug)` — revalidates unconditionally given a slug.
+ *   Used by tip-level actions that already know the tip is published.
  */
 export async function revalidateTipPaths(tipId: string) {
   const tip = await db.query.tips.findFirst({
@@ -27,8 +30,12 @@ export async function revalidateTipPaths(tipId: string) {
     columns: { slug: true, status: true },
   });
   if (tip?.status === "published") {
-    revalidatePath("/");
-    revalidatePath("/tips");
-    revalidatePath(`/tips/${tip.slug}`);
+    revalidatePublicTipPaths(tip.slug);
   }
+}
+
+export function revalidatePublicTipPaths(slug: string) {
+  revalidatePath("/");
+  revalidatePath("/tips");
+  revalidatePath(`/tips/${slug}`);
 }

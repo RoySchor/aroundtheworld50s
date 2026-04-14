@@ -37,7 +37,7 @@ export default async function EditTipPage({
 
       <hr />
 
-      <TipSectionsEditor tipId={tip.id} sections={tip.sections} />
+      <TipSectionsEditor sections={tip.sections} />
     </div>
   );
 }
