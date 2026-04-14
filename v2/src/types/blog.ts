@@ -5,31 +5,15 @@ import type {
   BlogItineraryItem,
 } from "@/server/db/schema";
 
-// ---------------------------------------------------------------------------
-// Block data shapes — must match the JSONB contract in schema.ts
-// ---------------------------------------------------------------------------
-
-export interface TextBlockData {
-  html: string;
-}
-
-export interface TwoColumnBlockData {
-  leftType: "image" | "text";
-  rightType: "image" | "text";
-  leftImage?: string;
-  leftImageAlt?: string;
-  rightImage?: string;
-  rightImageAlt?: string;
-  html: string;
-}
-
-export interface ImageGridBlockData {
-  images: string[];
-}
-
-export interface ItineraryWithMapBlockData {
-  itineraryId: string;
-}
+// Block data types — derived from Zod schemas (source of truth).
+// Type-only re-exports are erased at compile time, so the "server-only"
+// guard in the validators module does not affect client components.
+export type {
+  TextBlockData,
+  TwoColumnBlockData,
+  ImageGridBlockData,
+  ItineraryWithMapBlockData,
+} from "@/server/validators/blog";
 
 // ---------------------------------------------------------------------------
 // Full post with nested relations (return type of getPostBySlugAndIndex)
