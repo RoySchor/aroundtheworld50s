@@ -42,8 +42,6 @@ export const updateTipSchema = z.object({
     .min(1)
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
     .optional(),
-  country: z.string().min(1).optional(),
-  countryCode: z.string().min(2).max(3).optional(),
   state: z.string().nullable().optional(),
   title: z.string().min(1).optional(),
   description: z.string().nullable().optional(),

@@ -27,9 +27,10 @@ v2 has **Phases 0-1 (foundation + public read path) and Phase 2.1-2.5 (auth + ad
 - Home page: parallax hero, Travel With Us, 4 recent posts, gallery slider (5s auto-advance), Instagram fallback (Phase 1.7)
 - Static pages: About Me + EmailJS contact form, Destinations with interactive WorldMap + dropdown, error/404 pages (Phase 1.8)
 - SEO: per-page metadata with OG/Twitter cards, `metadataBase`, `sitemap.ts`, `robots.ts`, JSON-LD Article schema for blog posts (Phase 1.9)
+- Tips admin: CRUD + publish/unpublish, 6 auto-created sections with enable/disable + reorder + HTML editing (Phase 2.6)
 
 **Not done:**
-- Tips admin (Phase 2.6), Gallery admin (Phase 2.7)
+- Gallery admin (Phase 2.7)
 - Vercel deployment, polish, v1 sunset (Phase 3)
 
 ---
