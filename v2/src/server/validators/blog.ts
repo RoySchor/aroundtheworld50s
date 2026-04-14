@@ -34,10 +34,12 @@ const itineraryWithMapBlockFields = {
 };
 
 // Shape-only schemas (for type inference — no `type` discriminator)
-const _textBlockDataShape = z.object(textBlockFields);
-const _twoColumnBlockDataShape = z.object(twoColumnBlockFields);
-const _imageGridBlockDataShape = z.object(imageGridBlockFields);
-const _itineraryWithMapBlockDataShape = z.object(itineraryWithMapBlockFields);
+type TextBlockDataShape = z.ZodObject<typeof textBlockFields>;
+type TwoColumnBlockDataShape = z.ZodObject<typeof twoColumnBlockFields>;
+type ImageGridBlockDataShape = z.ZodObject<typeof imageGridBlockFields>;
+type ItineraryWithMapBlockDataShape = z.ZodObject<
+  typeof itineraryWithMapBlockFields
+>;
 
 // ---------------------------------------------------------------------------
 // Discriminated union (includes `type` for server action validation)
@@ -178,12 +180,10 @@ export function slugify(name: string): string {
 // ---------------------------------------------------------------------------
 
 // Renderer types (no `type` field — match existing interface contract)
-export type TextBlockData = z.infer<typeof _textBlockDataShape>;
-export type TwoColumnBlockData = z.infer<typeof _twoColumnBlockDataShape>;
-export type ImageGridBlockData = z.infer<typeof _imageGridBlockDataShape>;
-export type ItineraryWithMapBlockData = z.infer<
-  typeof _itineraryWithMapBlockDataShape
->;
+export type TextBlockData = z.infer<TextBlockDataShape>;
+export type TwoColumnBlockData = z.infer<TwoColumnBlockDataShape>;
+export type ImageGridBlockData = z.infer<ImageGridBlockDataShape>;
+export type ItineraryWithMapBlockData = z.infer<ItineraryWithMapBlockDataShape>;
 
 // Block type union — single source of truth for admin components
 export type BlockType = "text" | "two_column" | "image_grid" | "itinerary_with_map";

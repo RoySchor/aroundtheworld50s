@@ -29,10 +29,9 @@ v2 has **Phases 0-1 (foundation + public read path) and Phase 2.1-2.5 (auth + ad
 - SEO: per-page metadata with OG/Twitter cards, `metadataBase`, `sitemap.ts`, `robots.ts`, JSON-LD Article schema for blog posts (Phase 1.9)
 - Tips admin: CRUD + publish/unpublish, 6 auto-created sections with enable/disable + reorder + HTML editing (Phase 2.6)
 - Gallery admin: Cloudinary upload, inline caption editing, reorder, delete with Cloudinary cleanup (Phase 2.7)
-
-- Loading skeletons for blog, tips, and admin routes (Phase 3.4)
-- v1 hash router redirect script for `/#/...` bookmarks (Phase 3.5)
-- Vercel Analytics (Phase 3.6)
+- Loading skeletons for blog, tips, and admin routes — matched to actual page layouts (Phase 3.4)
+- v1 hash router redirect (`HashRedirect` client component in root layout) for `/#/...` bookmarks (Phase 3.5)
+- Vercel Analytics via `@vercel/analytics/next` (Phase 3.6)
 
 **Not done:**
 - Vercel deployment + DNS cutover (Phase 3.2 — ops/manual)
