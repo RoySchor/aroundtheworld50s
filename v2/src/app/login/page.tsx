@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-import { db } from "@/server/db";
-import { profiles } from "@/server/db/schema";
-import { eq } from "drizzle-orm";
+import { getAdminProfileIfAuthenticated } from "@/server/auth";
 import { LoginForm } from "@/components/auth/LoginForm";
 
 export const metadata: Metadata = {
@@ -12,20 +9,8 @@ export const metadata: Metadata = {
 };
 
 export default async function LoginPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (user) {
-    const [profile] = await db
-      .select()
-      .from(profiles)
-      .where(eq(profiles.id, user.id))
-      .limit(1);
-
-    if (profile?.role === "admin") redirect("/admin");
-  }
+  const profile = await getAdminProfileIfAuthenticated();
+  if (profile) redirect("/admin");
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
