@@ -7,13 +7,6 @@ import { z } from "zod";
 
 const publishStatusSchema = z.enum(["draft", "published"]);
 
-const blogBlockTypeSchema = z.enum([
-  "text",
-  "two_column",
-  "image_grid",
-  "itinerary_with_map",
-]);
-
 // ---------------------------------------------------------------------------
 // Block data field objects (no `type` — used for renderer type inference)
 // ---------------------------------------------------------------------------
@@ -162,8 +155,11 @@ export const updateBlogItineraryItemSchema = z.object({
 
 export function slugify(name: string): string {
   return name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .trim()
+    .replace(/&/g, "and")
     .replace(/[^\w\s-]/g, "")
     .replace(/[\s_]+/g, "-")
     .replace(/-+/g, "-")
