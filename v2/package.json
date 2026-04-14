@@ -20,6 +20,7 @@
     "@emailjs/browser": "^4.4.1",
     "@supabase/ssr": "^0.10.2",
     "@supabase/supabase-js": "^2.103.0",
+    "@vercel/analytics": "^2.0.1",
     "cloudinary": "^2.9.0",
     "drizzle-orm": "^0.45.2",
     "lucide-react": "^1.8.0",

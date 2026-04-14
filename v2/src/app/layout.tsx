@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Caveat, Scope_One, Grandstander } from "next/font/google";
 import { Navbar } from "@/components/shared/Navbar";
 import { Footer } from "@/components/shared/Footer";
+import { HashRedirect } from "@/components/shared/HashRedirect";
+import { Analytics } from "@vercel/analytics/next";
 import { getAdminProfileIfAuthenticated } from "@/server/auth";
 import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants";
 import { SITE_URL, DEFAULT_OG_IMAGE } from "@/lib/seo";
@@ -61,9 +63,11 @@ export default async function RootLayout({
       className={`${inter.variable} ${caveat.variable} ${scopeOne.variable} ${grandstander.variable}`}
     >
       <body className="min-h-screen flex flex-col">
+        <HashRedirect />
         <Navbar isAdmin={!!adminProfile} />
         <main className="flex-1">{children}</main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );

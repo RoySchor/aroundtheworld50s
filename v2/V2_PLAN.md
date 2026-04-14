@@ -30,8 +30,13 @@ v2 has **Phases 0-1 (foundation + public read path) and Phase 2.1-2.5 (auth + ad
 - Tips admin: CRUD + publish/unpublish, 6 auto-created sections with enable/disable + reorder + HTML editing (Phase 2.6)
 - Gallery admin: Cloudinary upload, inline caption editing, reorder, delete with Cloudinary cleanup (Phase 2.7)
 
+- Loading skeletons for blog, tips, and admin routes (Phase 3.4)
+- v1 hash router redirect script for `/#/...` bookmarks (Phase 3.5)
+- Vercel Analytics (Phase 3.6)
+
 **Not done:**
-- Vercel deployment, polish, v1 sunset (Phase 3)
+- Vercel deployment + DNS cutover (Phase 3.2 — ops/manual)
+- Instagram embed block type (Phase 3.7 — deferred)
 
 ---
 
