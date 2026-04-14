@@ -13,7 +13,7 @@ import {
   TRANSPARENT_NAVBAR_PATHS,
 } from "@/lib/constants";
 import { SOCIAL_LINKS } from "@/lib/constants/social-links";
-import { getStaticAssetUrl } from "@/lib/cloudinary";
+import { STATIC_ASSETS } from "@/lib/cloudinary";
 
 function SocialIcons({ className }: { className?: string }) {
   return (
@@ -38,7 +38,7 @@ function SocialIcons({ className }: { className?: string }) {
   );
 }
 
-export function Navbar() {
+export function Navbar({ isAdmin }: { isAdmin: boolean }) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -46,7 +46,7 @@ export function Navbar() {
     TRANSPARENT_NAVBAR_PATHS.includes(pathname) ||
     pathname.startsWith("/blog/");
 
-  const logoUrl = getStaticAssetUrl("around_the_world_50s_logo.png");
+  const logoSrc = STATIC_ASSETS.logo;
 
   return (
     <nav
@@ -70,7 +70,7 @@ export function Navbar() {
 
         <Link href="/" className="mx-8 flex items-center justify-center z-50">
           <Image
-            src={logoUrl}
+            src={logoSrc}
             alt="Around the World 50s"
             width={176}
             height={176}
@@ -89,6 +89,14 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className="nav-link text-white text-xl font-bold transition-colors"
+            >
+              ADMIN
+            </Link>
+          )}
           <SocialIcons />
         </div>
       </div>
@@ -97,7 +105,7 @@ export function Navbar() {
       <div className="flex lg:hidden items-center justify-between w-full px-4 py-2">
         <Link href="/" className="flex items-center">
           <Image
-            src={logoUrl}
+            src={logoSrc}
             alt="Around the World 50s"
             width={96}
             height={96}
@@ -135,6 +143,15 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
+          {isAdmin && (
+            <Link
+              href="/admin"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-center text-white text-xl font-bold py-2 nav-link"
+            >
+              ADMIN
+            </Link>
+          )}
         </div>
       )}
     </nav>
