@@ -38,7 +38,7 @@ function SocialIcons({ className }: { className?: string }) {
   );
 }
 
-export function Navbar() {
+export function Navbar({ isAdmin }: { isAdmin: boolean }) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -89,6 +89,14 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className="nav-link text-white text-xl font-bold transition-colors"
+            >
+              ADMIN
+            </Link>
+          )}
           <SocialIcons />
         </div>
       </div>
@@ -135,6 +143,15 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
+          {isAdmin && (
+            <Link
+              href="/admin"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-center text-white text-xl font-bold py-2 nav-link"
+            >
+              ADMIN
+            </Link>
+          )}
         </div>
       )}
     </nav>
