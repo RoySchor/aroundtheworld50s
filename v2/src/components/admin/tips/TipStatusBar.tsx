@@ -35,7 +35,7 @@ export function TipStatusBar({ tipId, status, slug }: TipStatusBarProps) {
   function handleDelete() {
     if (
       !confirm(
-        "Are you sure you want to delete this tip? This cannot be undone.",
+        "Delete this tip? All content will be permanently removed.",
       )
     ) {
       return;

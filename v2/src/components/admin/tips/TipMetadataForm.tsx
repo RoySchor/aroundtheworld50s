@@ -90,7 +90,7 @@ export function TipMetadataForm({ tip }: TipMetadataFormProps) {
       </div>
 
       <label className="block">
-        <span className="mb-1 block text-sm font-medium">Title *</span>
+        <span className="mb-1 block text-sm font-medium">Title <span className="text-red-500">*</span></span>
         <input
           type="text"
           value={title}

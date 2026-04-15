@@ -43,7 +43,7 @@ export function PostStatusBar({
   }
 
   function handleDelete() {
-    if (!confirm("Are you sure you want to delete this post? This cannot be undone.")) {
+    if (!confirm("Delete this post? All content will be permanently removed.")) {
       return;
     }
     setError(null);

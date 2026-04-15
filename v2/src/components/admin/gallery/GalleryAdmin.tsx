@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { uploadImage } from "@/server/actions/upload";
@@ -21,6 +21,13 @@ export function GalleryAdmin({ images }: GalleryAdminProps) {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
+  // Auto-dismiss success messages after 3 seconds
+  useEffect(() => {
+    if (!success) return;
+    const timer = setTimeout(() => setSuccess(null), 3000);
+    return () => clearTimeout(timer);
+  }, [success]);
 
   // Upload state
   const fileRef = useRef<HTMLInputElement>(null);
@@ -90,7 +97,7 @@ export function GalleryAdmin({ images }: GalleryAdminProps) {
   }
 
   function handleDelete(id: string) {
-    if (!confirm("Delete this image? It will also be removed from Cloudinary.")) {
+    if (!confirm("Remove this image? It will be permanently deleted.")) {
       return;
     }
     setError(null);
@@ -137,7 +144,7 @@ export function GalleryAdmin({ images }: GalleryAdminProps) {
         <h2 className="mb-4 text-lg font-semibold">Add Image</h2>
         <div className="flex flex-wrap items-end gap-4">
           <label className="block">
-            <span className="mb-1 block text-sm font-medium">Image *</span>
+            <span className="mb-1 block text-sm font-medium">Image <span className="text-red-500">*</span></span>
             <input
               ref={fileRef}
               type="file"

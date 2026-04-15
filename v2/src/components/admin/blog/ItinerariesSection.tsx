@@ -75,7 +75,7 @@ export function ItinerariesSection({
   }
 
   function handleDeleteItinerary(id: string) {
-    if (!confirm("Delete this itinerary and all its items?")) return;
+    if (!confirm("Remove this itinerary? All its items will also be deleted.")) return;
     startTransition(async () => {
       await deleteBlogItinerary(id);
       refresh();
@@ -109,7 +109,7 @@ export function ItinerariesSection({
   }
 
   function handleDeleteItem(id: string) {
-    if (!confirm("Delete this item?")) return;
+    if (!confirm("Remove this item?")) return;
     startTransition(async () => {
       await deleteBlogItineraryItem(id);
       refresh();
@@ -346,7 +346,7 @@ export function ItinerariesSection({
       {showAdd ? (
         <form onSubmit={handleAddItinerary} className="mt-4 space-y-3 rounded border bg-white p-4">
           <label className="block">
-            <span className="mb-1 block text-sm font-medium">Title *</span>
+            <span className="mb-1 block text-sm font-medium">Title <span className="text-red-500">*</span></span>
             <input
               type="text"
               value={newTitle}
