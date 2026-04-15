@@ -20,6 +20,7 @@
     "@emailjs/browser": "^4.4.1",
     "@supabase/ssr": "^0.10.2",
     "@supabase/supabase-js": "^2.103.0",
+    "@tailwindcss/typography": "^0.5.19",
     "@tiptap/extension-link": "^3.22.3",
     "@tiptap/extension-underline": "^3.22.3",
     "@tiptap/pm": "^3.22.3",

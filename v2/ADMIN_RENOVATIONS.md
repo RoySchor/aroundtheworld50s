@@ -206,6 +206,11 @@ After Phase 2 lands, verify that all save operations (metadata, blocks, sections
 
 The rich text toolbar needs to work on tablet-width screens (the admin is unlikely to be used on phone, but iPad is plausible). Verify toolbar buttons don't overflow.
 
+### 4.4 Known gaps to revisit
+
+- **Unsaved-changes: client-side navigation not intercepted.** `useUnsavedChanges` only covers `beforeunload` (browser back/refresh/tab close). Clicking sidebar links or back buttons while a form is dirty silently discards changes. Next.js App Router has no stable `routeChangeStart` event. Consider a lightweight interception wrapper if this causes real data loss.
+- **Link insertion uses `window.prompt`.** Works but looks jarring — native browser dialog doesn't match admin UI. Consider a small inline popover for a more polished experience.
+
 ---
 
 ## File Inventory
@@ -247,7 +252,7 @@ The rich text toolbar needs to work on tablet-width screens (the admin is unlike
 
 | Phase | Status | PR/Commit |
 |-------|--------|-----------|
-| Phase 1: Navigation & Sticky Status Bar | Done | PR #17 |
-| Phase 2: Rich Text Toolbar | Done | PR #17 |
-| Phase 3: Create Post Flow | Done | PR #17 |
+| Phase 1: Navigation & Sticky Status Bar | Done | admin-nav-and-login-redesign |
+| Phase 2: Rich Text Toolbar | Done | admin-nav-and-login-redesign |
+| Phase 3: Create Post Flow | Done | admin-nav-and-login-redesign |
 | Phase 4: Polish | Pending (verification only) | |

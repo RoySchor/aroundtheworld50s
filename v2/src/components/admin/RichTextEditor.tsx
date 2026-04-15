@@ -173,7 +173,7 @@ export function RichTextEditor({
       {tab === "edit" ? (
         <div className="relative">
           <EditorContent editor={editor} />
-          {!value && placeholder && !editor.isFocused && (
+          {editor.isEmpty && placeholder && !editor.isFocused && (
             <p className="pointer-events-none absolute left-3 top-2 text-sm text-gray-400">
               {placeholder}
             </p>
