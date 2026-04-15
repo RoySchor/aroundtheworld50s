@@ -2,7 +2,7 @@
 
 Senior engineering review and implementation roadmap for the Next.js 16 rewrite of aroundtheworld50s.
 
-Last updated: 2026-04-14
+Last updated: 2026-04-15
 
 ---
 
@@ -35,10 +35,12 @@ v2 has **Phases 0-1 (foundation + public read path) and Phase 2.1-2.5 (auth + ad
 - `force-dynamic` on admin layout and login page to prevent Vercel build timeouts (Phase 3.8)
 - Google Analytics (gtag.js `G-ZMPS9V91QZ`) via `next/script` alongside Vercel Analytics (Phase 3.9)
 - Font fix: replaced Scope_One with Dosis to match v1's actual `font-scope` mapping (Phase 3.10)
-- Navbar logo centering: `flex-1` on both left/right link containers so logo stays centered when ADMIN is hidden (Phase 3.11)
+- Navbar logo centering: `flex-1` on both left/right link containers so logo stays centered (Phase 3.11)
 - BlogCard visual parity: border `0.5em` (was `0.75em`), responsive image height `200px`/`275px` (was fixed `400x400`), smaller mobile title (Phase 3.12)
 - Tips grid: `minmax(250px, 1fr)` for 4 columns at standard desktop widths (was `300px`) (Phase 3.13)
 - Gallery data migration: imported 20 Cloudinary `homePageGallery` images into DB (Phase 3.14)
+- Admin nav & login redesign: always-visible ADMIN nav link, redesigned login page, admin sidebar improvements (bigger text, centered name, back-to-site link), Hebrew dashboard with helpful links (Phase 3.15)
+- Admin UX parity: plain-language labels (no slugs/CTA/HTML jargon), preview routes for blog posts and tips (overlay with public rendering components), auto-populate country code + tip slug, collapsible formatting help, friendlier confirmations, red asterisks on required fields, auto-dismiss success messages (Phase 3.16)
 
 **Not done:**
 - Gallery SQL needs to be run against Supabase DB (Phase 3.14 — pending execution)
@@ -103,7 +105,7 @@ We audited all 12 v1 blog posts, 3 tips pages, the gallery, and every Python scr
 | v1 Feature | v1 Implementation | v2 Plan |
 |---|---|---|
 | Routing | HashRouter (`/#/blog/...`) | App Router (`/blog/...`) — real URLs |
-| Navbar | Transparent on hero pages, ADMIN link visible to everyone | Port transparency logic. Admin link: hidden for unauthenticated users — show only when logged in as admin. No security-through-obscurity. |
+| Navbar | Transparent on hero pages, ADMIN link visible to everyone | Port transparency logic. Admin link: always visible to all visitors. Unauthenticated clicks redirect to `/login`. Auth enforced server-side. |
 | Contact form | EmailJS (client-side) | Keep EmailJS — zero backend, already working, avoids email delivery infra |
 | Error page | Static GIF from Cloudinary | `not-found.tsx` + `error.tsx` |
 | Auth | `sessionStorage` + env password hash | Supabase Auth + profiles table. Login page, profile trigger, RLS policies. |
@@ -204,7 +206,7 @@ Sub-tasks:
 - **Fonts**: 4 fonts confirmed in use — Inter (body/buttons/nav), Caveat (hero overlay), Scope One (section headings), Grandstander (blog subtitle/description). Use `next/font` for self-hosting + automatic optimization. Do NOT install Dancing Script, Kalam, Dosis, or Playpen Sans (zero references in v1).
 - `Navbar` component: logo (Cloudinary), nav links, social icons (Instagram, TikTok), mobile hamburger
 - Transparent-on-hero logic (route-aware or prop-based)
-- Admin link: **hidden for unauthenticated users**. Show only when session has admin role. No security-through-obscurity.
+- Admin link: **always visible** to all visitors. Unauthenticated clicks redirect to `/login`. Auth enforced server-side on admin routes.
 - **Dependency**: add `react-world-flags` — used on tips cards, world map hover, destinations
 
 **1.3 Constants files**
@@ -401,6 +403,12 @@ v2/src/
         page.tsx
         [id]/page.tsx
       gallery/page.tsx
+      blog/[id]/preview/
+        layout.tsx                    # overlay layout for blog preview
+        page.tsx                      # blog post preview using public components
+      tips/[id]/preview/
+        layout.tsx                    # overlay layout for tip preview
+        page.tsx                      # tip preview using public components
   components/
     ui/                               # generic UI primitives
     shared/                           # app-wide shared components
@@ -438,6 +446,8 @@ v2/src/
     cloudinary.ts                     # URL builder (cloud name, transforms, responsive)
     cloudinary-loader.ts              # Global Next.js Image loader (loaderFile in next.config.ts)
     sanitize.ts                       # sanitize-html wrapper with allowlisted tags
+    slugify.ts                        # shared slugify (extracted from server validators for client use)
+    country-codes.ts                  # country name → ISO alpha-2 code lookup (~80 entries)
     format.ts                         # formatBlogDate, formatBlogDateWithYear
     constants.ts                      # site name, tagline, Cloudinary config
     constants/
@@ -536,7 +546,7 @@ These were open questions in the first draft. Resolved based on review feedback:
 | Analytics | Vercel Analytics | Zero-config, included with Vercel hosting, sufficient for ~100 readers |
 | Cache invalidation | `revalidatePath()` in server actions | Simple, correct, debuggable. ISR is over-engineering for this scale. |
 | HTML sanitization | `sanitize-html` server-side at render boundary | Low XSS risk for admin-authored content, but correct for a lasting project |
-| Navbar admin link | Hidden for unauthenticated users | No security-through-obscurity. Show only when logged in as admin. |
+| Navbar admin link | Always visible | Link is shown to all visitors in both desktop and mobile nav. Unauthenticated clicks redirect to `/login`. No security risk — auth is enforced server-side on all admin routes. Simpler than conditional rendering with session checks in the Navbar. |
 | WorldMap coordinates | Static constants file | Aspirational destinations are editorial intent, not derivable from DB |
 | Admin form persistence | Draft rows in DB | Replaces v1's sessionStorage. Auto-save on edit. |
 | `two_column` enforcement | Zod validation, not convention | At least one side must be "image" and at least one "text". `html` goes in the text pane. |
@@ -582,5 +592,20 @@ These were open questions in the first draft. Resolved based on review feedback:
 | Phase 1.9: SEO | Done | `feat/phase-1.9-seo` PR #8 — per-page metadata with OG/Twitter, `sitemap.ts`, `robots.ts`, JSON-LD Article schema, `lib/seo.ts` helper |
 | Phase 2.1: Auth flow | Done | `feat/phase-2.1-auth` — `getAuthenticatedAdmin()` utility, `signOut()` server action, LoginForm client component, `/login` page, `/admin` layout auth gate, placeholder dashboard |
 | Phase 2.2: RLS policies | Done | `feat/phase-2.2-rls-policies` — `is_admin()` helper function, 17 RLS policies across 8 tables (public SELECT for published content, admin ALL, self-read on profiles), migration `0001_rls_policies.sql` |
-| Phase 2.3: Admin layout shell | Done | `feat/phase-2.3-admin-shell` — AdminSidebar client component (Dashboard/Blog/Tips/Gallery nav + sign-out), admin layout as `fixed inset-0 z-[100]` overlay covering root Navbar/Footer, `robots: noindex`, placeholder sub-pages for /admin/blog/tips/gallery, conditional ADMIN link in public Navbar via `isAdmin` prop from root layout |
+| Phase 2.3: Admin layout shell | Done | `feat/phase-2.3-admin-shell` — AdminSidebar client component (Dashboard/Blog/Tips/Gallery nav + sign-out), admin layout as `fixed inset-0 z-[100]` overlay covering root Navbar/Footer, `robots: noindex`, placeholder sub-pages for /admin/blog/tips/gallery, always-visible ADMIN link in public Navbar |
 | Phase 2.4: Zod validators | Done | `feat/phase-2.4-zod-validators` — blog block discriminated union with `two_column` cross-field refinements (superRefine), blog post/itinerary create+update schemas, tips/section schemas, gallery image schemas, `slugify()` helper, Zod-inferred types replace manual interfaces in `types/blog.ts`, `server-only` guard on all validator files |
+| Phase 2.5: Blog admin CRUD | Done | `feat/phase-2.5-blog-admin` — post listing/create/edit, metadata form, status bar (publish/unpublish/delete), blocks section (4 types), itineraries section (nested items, reorder), server actions, Cloudinary upload, admin repository |
+| Phase 2.6: Tips admin | Done | Tips listing, create/edit forms, section editor (HTML textarea, enable/disable, reorder), publish/unpublish |
+| Phase 2.7: Gallery admin | Done | Upload to Cloudinary + DB, inline caption editing, reorder, delete with Cloudinary cleanup |
+| Phase 3.4: Loading skeletons | Done | Matched to actual page layouts for blog, tips, and admin routes |
+| Phase 3.5: v1 hash redirect | Done | `HashRedirect` client component in root layout for `/#/...` bookmarks |
+| Phase 3.6: Vercel Analytics | Done | `@vercel/analytics/next` |
+| Phase 3.8: force-dynamic | Done | On admin layout and login page to prevent Vercel build timeouts |
+| Phase 3.9: Google Analytics | Done | gtag.js `G-ZMPS9V91QZ` via `next/script` |
+| Phase 3.10: Font fix | Done | Replaced Scope_One with Dosis to match v1's actual `font-scope` mapping |
+| Phase 3.11: Navbar logo centering | Done | `flex-1` on both left/right link containers |
+| Phase 3.12: BlogCard visual parity | Done | Border, responsive image height, smaller mobile title |
+| Phase 3.13: Tips grid | Done | `minmax(250px, 1fr)` for 4 columns |
+| Phase 3.14: Gallery data migration | Done | 20 Cloudinary `homePageGallery` images into DB |
+| Phase 3.15: Admin nav & login redesign | Done | PR #17 — always-visible ADMIN link, login redesign, sidebar improvements, Hebrew dashboard |
+| Phase 3.16: Admin UX parity | Done | PR #17 — plain-language labels, preview routes (blog + tips), auto-populate country code + slug, formatting help, friendlier confirmations, red asterisks, auto-dismiss success |

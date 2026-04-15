@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { publishTip, unpublishTip, deleteTip } from "@/server/actions/tips";
 
@@ -34,7 +35,7 @@ export function TipStatusBar({ tipId, status, slug }: TipStatusBarProps) {
   function handleDelete() {
     if (
       !confirm(
-        "Are you sure you want to delete this tip? This cannot be undone.",
+        "Delete this tip? All content will be permanently removed.",
       )
     ) {
       return;
@@ -58,7 +59,7 @@ export function TipStatusBar({ tipId, status, slug }: TipStatusBarProps) {
             : "bg-yellow-100 text-yellow-800"
         }`}
       >
-        {status}
+        {status.charAt(0).toUpperCase() + status.slice(1)}
       </span>
 
       <button
@@ -73,6 +74,13 @@ export function TipStatusBar({ tipId, status, slug }: TipStatusBarProps) {
       >
         {isPending ? "..." : isPublished ? "Unpublish" : "Publish"}
       </button>
+
+      <Link
+        href={`/admin/tips/${tipId}/preview`}
+        className="rounded bg-blue-100 px-4 py-1.5 text-sm font-medium text-blue-700 hover:bg-blue-200"
+      >
+        Preview
+      </Link>
 
       {isPublished && (
         <a

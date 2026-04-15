@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   publishBlogPost,
@@ -42,7 +43,7 @@ export function PostStatusBar({
   }
 
   function handleDelete() {
-    if (!confirm("Are you sure you want to delete this post? This cannot be undone.")) {
+    if (!confirm("Delete this post? All content will be permanently removed.")) {
       return;
     }
     setError(null);
@@ -64,7 +65,7 @@ export function PostStatusBar({
             : "bg-yellow-100 text-yellow-800"
         }`}
       >
-        {status}
+        {status.charAt(0).toUpperCase() + status.slice(1)}
       </span>
 
       <button
@@ -83,6 +84,13 @@ export function PostStatusBar({
             ? "Unpublish"
             : "Publish"}
       </button>
+
+      <Link
+        href={`/admin/blog/${postId}/preview`}
+        className="rounded bg-blue-100 px-4 py-1.5 text-sm font-medium text-blue-700 hover:bg-blue-200"
+      >
+        Preview
+      </Link>
 
       {isPublished && (
         <a

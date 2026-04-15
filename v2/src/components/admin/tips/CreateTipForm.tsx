@@ -3,6 +3,8 @@
 import { useState, useTransition } from "react";
 import { createTip } from "@/server/actions/tips";
 import { US_STATES } from "@/lib/constants/us-states";
+import { getCountryCode } from "@/lib/country-codes";
+import { slugify } from "@/lib/slugify";
 
 export function CreateTipForm() {
   const [isPending, startTransition] = useTransition();
@@ -48,7 +50,7 @@ export function CreateTipForm() {
 
       {/* Slug */}
       <label className="block">
-        <span className="mb-1 block text-sm font-medium">Slug *</span>
+        <span className="mb-1 block text-sm font-medium">URL Path <span className="text-red-500">*</span></span>
         <input
           type="text"
           value={slug}
@@ -58,18 +60,24 @@ export function CreateTipForm() {
           placeholder="e.g. trinidad-and-tobago"
         />
         <span className="mt-1 block text-xs text-gray-400">
-          Lowercase with hyphens. Used in URL: /tips/{slug || "..."}
+          Lowercase with hyphens. This becomes the web address: /tips/{slug || "your-path"}
         </span>
       </label>
 
       {/* Country + Country Code */}
       <div className="grid grid-cols-2 gap-4">
         <label className="block">
-          <span className="mb-1 block text-sm font-medium">Country *</span>
+          <span className="mb-1 block text-sm font-medium">Country <span className="text-red-500">*</span></span>
           <input
             type="text"
             value={country}
             onChange={(e) => setCountry(e.target.value)}
+            onBlur={() => {
+              if (country && !countryCode) {
+                const code = getCountryCode(country);
+                if (code) setCountryCode(code);
+              }
+            }}
             required
             className="w-full rounded border px-3 py-2 text-sm"
             placeholder="e.g. Trinidad and Tobago"
@@ -77,7 +85,7 @@ export function CreateTipForm() {
         </label>
         <label className="block">
           <span className="mb-1 block text-sm font-medium">
-            Country Code *
+            Country Code (e.g. IL, US) <span className="text-red-500">*</span>
           </span>
           <input
             type="text"
@@ -112,11 +120,16 @@ export function CreateTipForm() {
 
       {/* Title */}
       <label className="block">
-        <span className="mb-1 block text-sm font-medium">Title *</span>
+        <span className="mb-1 block text-sm font-medium">Title <span className="text-red-500">*</span></span>
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          onBlur={() => {
+            if (title && !slug) {
+              setSlug(slugify(title));
+            }
+          }}
           required
           className="w-full rounded border px-3 py-2 text-sm"
         />

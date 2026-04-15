@@ -90,7 +90,7 @@ export function TipMetadataForm({ tip }: TipMetadataFormProps) {
       </div>
 
       <label className="block">
-        <span className="mb-1 block text-sm font-medium">Title *</span>
+        <span className="mb-1 block text-sm font-medium">Title <span className="text-red-500">*</span></span>
         <input
           type="text"
           value={title}
@@ -101,7 +101,7 @@ export function TipMetadataForm({ tip }: TipMetadataFormProps) {
       </label>
 
       <label className="block">
-        <span className="mb-1 block text-sm font-medium">Slug</span>
+        <span className="mb-1 block text-sm font-medium">URL Path</span>
         <input
           type="text"
           value={slug}
@@ -109,7 +109,7 @@ export function TipMetadataForm({ tip }: TipMetadataFormProps) {
           className="w-full rounded border px-3 py-2 text-sm"
         />
         <span className="mt-1 block text-xs text-gray-400">
-          Public URL: /tips/{slug}
+          Web address: /tips/{slug}
         </span>
       </label>
 

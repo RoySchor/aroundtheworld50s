@@ -75,7 +75,7 @@ export function ItinerariesSection({
   }
 
   function handleDeleteItinerary(id: string) {
-    if (!confirm("Delete this itinerary and all its items?")) return;
+    if (!confirm("Remove this itinerary? All its items will also be deleted.")) return;
     startTransition(async () => {
       await deleteBlogItinerary(id);
       refresh();
@@ -109,7 +109,7 @@ export function ItinerariesSection({
   }
 
   function handleDeleteItem(id: string) {
-    if (!confirm("Delete this item?")) return;
+    if (!confirm("Remove this item?")) return;
     startTransition(async () => {
       await deleteBlogItineraryItem(id);
       refresh();
@@ -346,7 +346,7 @@ export function ItinerariesSection({
       {showAdd ? (
         <form onSubmit={handleAddItinerary} className="mt-4 space-y-3 rounded border bg-white p-4">
           <label className="block">
-            <span className="mb-1 block text-sm font-medium">Title *</span>
+            <span className="mb-1 block text-sm font-medium">Title <span className="text-red-500">*</span></span>
             <input
               type="text"
               value={newTitle}
@@ -356,7 +356,7 @@ export function ItinerariesSection({
             />
           </label>
           <label className="block">
-            <span className="mb-1 block text-sm font-medium">Map Embed URL</span>
+            <span className="mb-1 block text-sm font-medium">Google Maps Link</span>
             <input
               type="url"
               value={newMapUrl}
@@ -364,6 +364,9 @@ export function ItinerariesSection({
               className="w-full rounded border px-3 py-2 text-sm"
               placeholder="https://www.google.com/maps/embed?..."
             />
+            <span className="mt-1 block text-xs text-gray-400">
+              Google Maps &rarr; Share &rarr; Embed a map &rarr; copy the src URL
+            </span>
           </label>
           <div className="flex gap-3">
             <button
