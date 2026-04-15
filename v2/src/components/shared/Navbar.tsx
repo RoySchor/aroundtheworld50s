@@ -55,7 +55,7 @@ export function Navbar({ isAdmin }: { isAdmin: boolean }) {
       }`}
     >
       {/* Desktop Nav */}
-      <div className="hidden lg:grid grid-cols-[1fr_auto_1fr] items-center py-2">
+      <div className={`hidden lg:grid grid-cols-[1fr_auto_1fr] items-center py-2 ${!isAdmin ? "translate-x-10" : ""}`}>
         <div className="flex items-center justify-end space-x-6">
           {NAV_LINKS_LEFT.map((link) => (
             <Link
@@ -79,7 +79,7 @@ export function Navbar({ isAdmin }: { isAdmin: boolean }) {
           />
         </Link>
 
-        <div className="flex items-center space-x-6">
+        <div className={`flex items-center ${isAdmin ? "space-x-6" : "space-x-10"}`}>
           {NAV_LINKS_RIGHT.map((link) => (
             <Link
               key={link.href}
