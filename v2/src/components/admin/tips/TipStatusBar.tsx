@@ -58,7 +58,7 @@ export function TipStatusBar({ tipId, status, slug }: TipStatusBarProps) {
             : "bg-yellow-100 text-yellow-800"
         }`}
       >
-        {status}
+        {status.charAt(0).toUpperCase() + status.slice(1)}
       </span>
 
       <button

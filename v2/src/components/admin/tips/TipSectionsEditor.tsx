@@ -107,7 +107,7 @@ export function TipSectionsEditor({ sections }: TipSectionsEditorProps) {
                     : "bg-gray-100 text-gray-500"
                 }`}
               >
-                {section.enabled ? "on" : "off"}
+                {section.enabled ? "Enabled" : "Disabled"}
               </span>
 
               <div className="ml-auto flex items-center gap-2">
@@ -161,7 +161,7 @@ export function TipSectionsEditor({ sections }: TipSectionsEditorProps) {
               <div className="border-t px-4 py-4">
                 <label className="block">
                   <span className="mb-1 block text-sm font-medium">
-                    Content (HTML)
+                    Content
                   </span>
                   <textarea
                     value={getDraft(section)}

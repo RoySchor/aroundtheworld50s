@@ -115,7 +115,7 @@ export function BlockForm({
       {/* Text block */}
       {type === "text" && (
         <label className="block">
-          <span className="mb-1 block text-sm font-medium">HTML Content</span>
+          <span className="mb-1 block text-sm font-medium">Content</span>
           <textarea
             value={html}
             onChange={(e) => setHtml(e.target.value)}
@@ -201,7 +201,7 @@ export function BlockForm({
           )}
 
           <label className="block">
-            <span className="mb-1 block text-sm font-medium">Text Content (HTML)</span>
+            <span className="mb-1 block text-sm font-medium">Text Content</span>
             <textarea
               value={html}
               onChange={(e) => setHtml(e.target.value)}

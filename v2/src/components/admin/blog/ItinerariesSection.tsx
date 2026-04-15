@@ -356,7 +356,7 @@ export function ItinerariesSection({
             />
           </label>
           <label className="block">
-            <span className="mb-1 block text-sm font-medium">Map Embed URL</span>
+            <span className="mb-1 block text-sm font-medium">Google Maps Link</span>
             <input
               type="url"
               value={newMapUrl}

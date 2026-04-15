@@ -132,7 +132,7 @@ export function PostMetadataForm({ post }: PostMetadataFormProps) {
       </label>
 
       <label className="block">
-        <span className="mb-1 block text-sm font-medium">Excerpt</span>
+        <span className="mb-1 block text-sm font-medium">Preview Text</span>
         <textarea
           value={excerpt}
           onChange={(e) => setExcerpt(e.target.value)}
@@ -142,7 +142,7 @@ export function PostMetadataForm({ post }: PostMetadataFormProps) {
       </label>
 
       <label className="block">
-        <span className="mb-1 block text-sm font-medium">Description (HTML)</span>
+        <span className="mb-1 block text-sm font-medium">Full Description</span>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -177,7 +177,7 @@ export function PostMetadataForm({ post }: PostMetadataFormProps) {
 
       <div className="grid grid-cols-2 gap-4">
         <label className="block">
-          <span className="mb-1 block text-sm font-medium">Tips CTA Copy</span>
+          <span className="mb-1 block text-sm font-medium">Tips Link Text</span>
           <input
             type="text"
             value={tipsCtaCopy}
@@ -186,7 +186,7 @@ export function PostMetadataForm({ post }: PostMetadataFormProps) {
           />
         </label>
         <label className="block">
-          <span className="mb-1 block text-sm font-medium">Tips Slug</span>
+          <span className="mb-1 block text-sm font-medium">Tips URL Path</span>
           <input
             type="text"
             value={tipsSlug}

@@ -60,7 +60,7 @@ export function CreatePostForm() {
       {/* Country + Country Code */}
       <div className="grid grid-cols-2 gap-4">
         <label className="block">
-          <span className="mb-1 block text-sm font-medium">Country *</span>
+          <span className="mb-1 block text-sm font-medium">Country <span className="text-red-500">*</span></span>
           <input
             type="text"
             value={country}
@@ -71,7 +71,7 @@ export function CreatePostForm() {
           />
         </label>
         <label className="block">
-          <span className="mb-1 block text-sm font-medium">Country Code *</span>
+          <span className="mb-1 block text-sm font-medium">Country Code (e.g. IL, US) <span className="text-red-500">*</span></span>
           <input
             type="text"
             value={countryCode}
@@ -105,7 +105,7 @@ export function CreatePostForm() {
 
       {/* Title */}
       <label className="block">
-        <span className="mb-1 block text-sm font-medium">Title *</span>
+        <span className="mb-1 block text-sm font-medium">Title <span className="text-red-500">*</span></span>
         <input
           type="text"
           value={title}
@@ -140,7 +140,7 @@ export function CreatePostForm() {
 
       {/* Excerpt */}
       <label className="block">
-        <span className="mb-1 block text-sm font-medium">Excerpt</span>
+        <span className="mb-1 block text-sm font-medium">Preview Text</span>
         <textarea
           value={excerpt}
           onChange={(e) => setExcerpt(e.target.value)}
@@ -152,7 +152,7 @@ export function CreatePostForm() {
 
       {/* Description (HTML) */}
       <label className="block">
-        <span className="mb-1 block text-sm font-medium">Description (HTML)</span>
+        <span className="mb-1 block text-sm font-medium">Full Description</span>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -187,7 +187,7 @@ export function CreatePostForm() {
       {/* Tips CTA */}
       <div className="grid grid-cols-2 gap-4">
         <label className="block">
-          <span className="mb-1 block text-sm font-medium">Tips CTA Copy</span>
+          <span className="mb-1 block text-sm font-medium">Tips Link Text</span>
           <input
             type="text"
             value={tipsCtaCopy}
@@ -196,7 +196,7 @@ export function CreatePostForm() {
           />
         </label>
         <label className="block">
-          <span className="mb-1 block text-sm font-medium">Tips Slug</span>
+          <span className="mb-1 block text-sm font-medium">Tips URL Path</span>
           <input
             type="text"
             value={tipsSlug}

@@ -64,7 +64,7 @@ export function PostStatusBar({
             : "bg-yellow-100 text-yellow-800"
         }`}
       >
-        {status}
+        {status.charAt(0).toUpperCase() + status.slice(1)}
       </span>
 
       <button
