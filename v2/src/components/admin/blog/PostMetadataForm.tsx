@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { updateBlogPost } from "@/server/actions/blog-posts";
 import { US_STATES } from "@/lib/constants/us-states";
 import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
-import { HtmlHelperText } from "@/components/admin/HtmlHelperText";
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
+import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
 import type { BlogPost } from "@/server/db/schema";
 
 interface PostMetadataFormProps {
@@ -31,6 +32,19 @@ export function PostMetadataForm({ post }: PostMetadataFormProps) {
   const [state, setState] = useState(post.state ?? "");
 
   const isUS = post.countryCode.toUpperCase() === "US";
+
+  const isDirty =
+    title !== post.title ||
+    subtitle !== (post.subtitle ?? "") ||
+    header !== (post.header ?? "") ||
+    description !== (post.description ?? "") ||
+    excerpt !== (post.excerpt ?? "") ||
+    backgroundImage !== (post.backgroundImage ?? "") ||
+    tipsCtaCopy !== (post.tipsCtaCopy ?? "") ||
+    tipsSlug !== (post.tipsSlug ?? "") ||
+    state !== (post.state ?? "");
+
+  useUnsavedChanges(isDirty);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -142,16 +156,10 @@ export function PostMetadataForm({ post }: PostMetadataFormProps) {
         />
       </label>
 
-      <label className="block">
+      <div>
         <span className="mb-1 block text-sm font-medium">Full Description</span>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          rows={4}
-          className="w-full rounded border px-3 py-2 font-mono text-sm"
-        />
-      </label>
-      <HtmlHelperText />
+        <RichTextEditor value={description} onChange={setDescription} />
+      </div>
 
       {/* Background Image */}
       <div>

@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { createBlogBlock, updateBlogBlock } from "@/server/actions/blog-blocks";
 import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
-import { HtmlHelperText } from "@/components/admin/HtmlHelperText";
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import type { BlogBlock, BlogItinerary, BlogItineraryItem } from "@/server/db/schema";
 import type { BlockType } from "@/server/validators/blog";
 
@@ -115,19 +115,10 @@ export function BlockForm({
 
       {/* Text block */}
       {type === "text" && (
-        <>
-          <label className="block">
-            <span className="mb-1 block text-sm font-medium">Content</span>
-            <textarea
-              value={html}
-              onChange={(e) => setHtml(e.target.value)}
-              rows={6}
-              className="w-full rounded border px-3 py-2 font-mono text-sm"
-              required
-            />
-          </label>
-          <HtmlHelperText />
-        </>
+        <div>
+          <span className="mb-1 block text-sm font-medium">Content</span>
+          <RichTextEditor value={html} onChange={setHtml} />
+        </div>
       )}
 
       {/* Two-column block */}
@@ -204,17 +195,10 @@ export function BlockForm({
             </div>
           )}
 
-          <label className="block">
+          <div>
             <span className="mb-1 block text-sm font-medium">Text Content</span>
-            <textarea
-              value={html}
-              onChange={(e) => setHtml(e.target.value)}
-              rows={4}
-              className="w-full rounded border px-3 py-2 font-mono text-sm"
-              required
-            />
-          </label>
-          <HtmlHelperText />
+            <RichTextEditor value={html} onChange={setHtml} />
+          </div>
         </>
       )}
 

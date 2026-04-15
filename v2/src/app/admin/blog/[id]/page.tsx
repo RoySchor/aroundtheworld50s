@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { getPostById } from "@/server/repositories/admin-blog";
 import { PostStatusBar } from "@/components/admin/blog/PostStatusBar";
 import { PostMetadataForm } from "@/components/admin/blog/PostMetadataForm";
@@ -24,6 +26,14 @@ export default async function EditBlogPostPage({
 
   return (
     <div className="space-y-8">
+      <Link
+        href="/admin/blog"
+        className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700"
+      >
+        <ArrowLeft size={16} />
+        Back to Blog Posts
+      </Link>
+
       <div>
         <h1 className="text-2xl font-bold">Edit Post</h1>
         <p className="mt-1 text-sm text-gray-500">
@@ -33,12 +43,14 @@ export default async function EditBlogPostPage({
         </p>
       </div>
 
-      <PostStatusBar
-        postId={post.id}
-        status={post.status}
-        countrySlug={post.countrySlug}
-        postIndex={post.postIndex}
-      />
+      <div className="sticky top-0 z-10 -mx-8 bg-white px-8 pb-4 pt-8 shadow-sm">
+        <PostStatusBar
+          postId={post.id}
+          status={post.status}
+          countrySlug={post.countrySlug}
+          postIndex={post.postIndex}
+        />
+      </div>
 
       <PostMetadataForm post={post} />
 

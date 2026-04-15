@@ -21,6 +21,7 @@ const SANITIZE_OPTIONS: sanitize.IOptions = {
     "h5",
     "h6",
     "blockquote",
+    "u",
     "img",
   ],
   allowedAttributes: {

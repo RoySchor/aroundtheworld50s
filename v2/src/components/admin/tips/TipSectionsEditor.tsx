@@ -7,7 +7,8 @@ import {
   reorderTipSection,
 } from "@/server/actions/tips";
 import { TIP_SECTION_LABELS } from "@/lib/constants/tip-sections";
-import { HtmlHelperText } from "@/components/admin/HtmlHelperText";
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
+import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
 import type { TipSection } from "@/server/db/schema";
 
 interface TipSectionsEditorProps {
@@ -20,6 +21,8 @@ export function TipSectionsEditor({ sections }: TipSectionsEditorProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [drafts, setDrafts] = useState<Record<string, string>>({});
   const [error, setError] = useState<string | null>(null);
+
+  useUnsavedChanges(Object.keys(drafts).length > 0);
 
   function toggleExpand(id: string) {
     setExpandedId((prev) => (prev === id ? null : id));
@@ -54,6 +57,11 @@ export function TipSectionsEditor({ sections }: TipSectionsEditorProps) {
     startTransition(async () => {
       const result = await updateTipSection(sectionId, { content });
       if (result.success) {
+        setDrafts((prev) => {
+          const next = { ...prev };
+          delete next[sectionId];
+          return next;
+        });
         router.refresh();
       } else {
         setError(result.error);
@@ -160,18 +168,15 @@ export function TipSectionsEditor({ sections }: TipSectionsEditorProps) {
             {/* Body */}
             {isExpanded && (
               <div className="border-t px-4 py-4">
-                <label className="block">
+                <div>
                   <span className="mb-1 block text-sm font-medium">
                     Content
                   </span>
-                  <textarea
+                  <RichTextEditor
                     value={getDraft(section)}
-                    onChange={(e) => setDraft(section.id, e.target.value)}
-                    rows={10}
-                    className="w-full rounded border px-3 py-2 font-mono text-sm"
+                    onChange={(v) => setDraft(section.id, v)}
                   />
-                </label>
-                <HtmlHelperText />
+                </div>
                 <button
                   type="button"
                   onClick={() => handleSaveContent(section.id)}
