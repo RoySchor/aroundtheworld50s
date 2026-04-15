@@ -5,6 +5,7 @@ import { createTip } from "@/server/actions/tips";
 import { US_STATES } from "@/lib/constants/us-states";
 import { getCountryCode } from "@/lib/country-codes";
 import { slugify } from "@/lib/slugify";
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
 
 export function CreateTipForm() {
   const [isPending, startTransition] = useTransition();
@@ -136,16 +137,14 @@ export function CreateTipForm() {
       </label>
 
       {/* Description */}
-      <label className="block">
+      <div>
         <span className="mb-1 block text-sm font-medium">Description</span>
-        <textarea
+        <RichTextEditor
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          rows={3}
-          className="w-full rounded border px-3 py-2 text-sm"
+          onChange={setDescription}
           placeholder="Short description for the tips page"
         />
-      </label>
+      </div>
 
       <button
         type="submit"
@@ -154,6 +153,11 @@ export function CreateTipForm() {
       >
         {isPending ? "Creating..." : "Create Tip"}
       </button>
+
+      <p className="mt-3 text-sm text-gray-500">
+        After creating, you&apos;ll be taken to the editor where you can add
+        sections and content.
+      </p>
     </form>
   );
 }

@@ -4,6 +4,8 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { updateTip } from "@/server/actions/tips";
 import { US_STATES } from "@/lib/constants/us-states";
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
+import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
 import type { Tip } from "@/server/db/schema";
 
 interface TipMetadataFormProps {
@@ -22,6 +24,14 @@ export function TipMetadataForm({ tip }: TipMetadataFormProps) {
   const [state, setState] = useState(tip.state ?? "");
 
   const isUS = tip.countryCode.toUpperCase() === "US";
+
+  const isDirty =
+    title !== tip.title ||
+    slug !== tip.slug ||
+    description !== (tip.description ?? "") ||
+    state !== (tip.state ?? "");
+
+  useUnsavedChanges(isDirty);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -113,15 +123,10 @@ export function TipMetadataForm({ tip }: TipMetadataFormProps) {
         </span>
       </label>
 
-      <label className="block">
+      <div>
         <span className="mb-1 block text-sm font-medium">Description</span>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          rows={3}
-          className="w-full rounded border px-3 py-2 text-sm"
-        />
-      </label>
+        <RichTextEditor value={description} onChange={setDescription} />
+      </div>
 
       <button
         type="submit"

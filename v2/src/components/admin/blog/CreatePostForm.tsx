@@ -5,7 +5,7 @@ import { createBlogPost } from "@/server/actions/blog-posts";
 import { US_STATES } from "@/lib/constants/us-states";
 import { getCountryCode } from "@/lib/country-codes";
 import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
-import { HtmlHelperText } from "@/components/admin/HtmlHelperText";
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
 
 export function CreatePostForm() {
   const [isPending, startTransition] = useTransition();
@@ -158,18 +158,15 @@ export function CreatePostForm() {
         />
       </label>
 
-      {/* Description (HTML) */}
-      <label className="block">
+      {/* Full Description */}
+      <div>
         <span className="mb-1 block text-sm font-medium">Full Description</span>
-        <textarea
+        <RichTextEditor
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          rows={4}
-          className="w-full rounded border px-3 py-2 font-mono text-sm"
-          placeholder="Long HTML body for post detail page"
+          onChange={setDescription}
+          placeholder="Full description for the post detail page"
         />
-      </label>
-      <HtmlHelperText />
+      </div>
 
       {/* Background Image */}
       <div>
@@ -223,6 +220,11 @@ export function CreatePostForm() {
       >
         {isPending ? "Creating..." : "Create Post"}
       </button>
+
+      <p className="mt-3 text-sm text-gray-500">
+        After creating, you&apos;ll be taken to the editor where you can add
+        content blocks, images, and itineraries.
+      </p>
     </form>
   );
 }
