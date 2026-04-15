@@ -38,7 +38,7 @@ function SocialIcons({ className }: { className?: string }) {
   );
 }
 
-export function Navbar({ isAdmin }: { isAdmin: boolean }) {
+export function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -55,7 +55,7 @@ export function Navbar({ isAdmin }: { isAdmin: boolean }) {
       }`}
     >
       {/* Desktop Nav */}
-      <div className={`hidden lg:grid grid-cols-[1fr_auto_1fr] items-center py-2 ${!isAdmin ? "translate-x-10" : ""}`}>
+      <div className="hidden lg:grid grid-cols-[1fr_auto_1fr] items-center py-2">
         <div className="flex items-center justify-end space-x-6">
           {NAV_LINKS_LEFT.map((link) => (
             <Link
@@ -79,7 +79,7 @@ export function Navbar({ isAdmin }: { isAdmin: boolean }) {
           />
         </Link>
 
-        <div className={`flex items-center ${isAdmin ? "space-x-6" : "space-x-10"}`}>
+        <div className="flex items-center space-x-6">
           {NAV_LINKS_RIGHT.map((link) => (
             <Link
               key={link.href}
@@ -89,14 +89,12 @@ export function Navbar({ isAdmin }: { isAdmin: boolean }) {
               {link.label}
             </Link>
           ))}
-          {isAdmin && (
-            <Link
-              href="/admin"
-              className="nav-link"
-            >
-              ADMIN
-            </Link>
-          )}
+          <Link
+            href="/admin"
+            className="nav-link"
+          >
+            ADMIN
+          </Link>
           <SocialIcons />
         </div>
       </div>
@@ -143,15 +141,13 @@ export function Navbar({ isAdmin }: { isAdmin: boolean }) {
               {link.label}
             </Link>
           ))}
-          {isAdmin && (
-            <Link
-              href="/admin"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block text-center py-2 nav-link"
-            >
-              ADMIN
-            </Link>
-          )}
+          <Link
+            href="/admin"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block text-center py-2 nav-link"
+          >
+            ADMIN
+          </Link>
         </div>
       )}
     </nav>

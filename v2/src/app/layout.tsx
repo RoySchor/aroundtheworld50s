@@ -4,7 +4,6 @@ import { Navbar } from "@/components/shared/Navbar";
 import { Footer } from "@/components/shared/Footer";
 import { HashRedirect } from "@/components/shared/HashRedirect";
 import { Analytics } from "@vercel/analytics/next";
-import { getAdminProfileIfAuthenticated } from "@/server/auth";
 import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants";
 import { SITE_URL, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import "./globals.css";
@@ -29,13 +28,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const adminProfile = await getAdminProfileIfAuthenticated();
-
   return (
     <html lang="en">
       <body className="min-h-screen flex flex-col">
@@ -52,7 +49,7 @@ export default async function RootLayout({
           `}
         </Script>
         <HashRedirect />
-        <Navbar isAdmin={!!adminProfile} />
+        <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
         <Analytics />
