@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { createBlogPost } from "@/server/actions/blog-posts";
 import { US_STATES } from "@/lib/constants/us-states";
+import { getCountryCode } from "@/lib/country-codes";
 import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
 
 export function CreatePostForm() {
@@ -65,6 +66,12 @@ export function CreatePostForm() {
             type="text"
             value={country}
             onChange={(e) => setCountry(e.target.value)}
+            onBlur={() => {
+              if (country && !countryCode) {
+                const code = getCountryCode(country);
+                if (code) setCountryCode(code);
+              }
+            }}
             required
             className="w-full rounded border px-3 py-2 text-sm"
             placeholder="e.g. Trinidad and Tobago"

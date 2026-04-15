@@ -3,6 +3,8 @@
 import { useState, useTransition } from "react";
 import { createTip } from "@/server/actions/tips";
 import { US_STATES } from "@/lib/constants/us-states";
+import { getCountryCode } from "@/lib/country-codes";
+import { slugify } from "@/lib/slugify";
 
 export function CreateTipForm() {
   const [isPending, startTransition] = useTransition();
@@ -70,6 +72,12 @@ export function CreateTipForm() {
             type="text"
             value={country}
             onChange={(e) => setCountry(e.target.value)}
+            onBlur={() => {
+              if (country && !countryCode) {
+                const code = getCountryCode(country);
+                if (code) setCountryCode(code);
+              }
+            }}
             required
             className="w-full rounded border px-3 py-2 text-sm"
             placeholder="e.g. Trinidad and Tobago"
@@ -117,6 +125,11 @@ export function CreateTipForm() {
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          onBlur={() => {
+            if (title && !slug) {
+              setSlug(slugify(title));
+            }
+          }}
           required
           className="w-full rounded border px-3 py-2 text-sm"
         />
