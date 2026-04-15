@@ -17,8 +17,10 @@ export function AdminSidebar({ displayName }: { displayName: string }) {
   return (
     <aside className="w-64 bg-gray-900 text-white flex flex-col">
       <div className="p-4 border-b border-gray-700">
-        <h2 className="text-lg font-bold">Admin Panel</h2>
-        <p className="text-sm text-gray-400 truncate">{displayName}</p>
+        <h2 className="text-xl font-bold">Admin Panel</h2>
+        <p className="text-base font-semibold text-gray-300 truncate">
+          {displayName}
+        </p>
       </div>
       <nav className="flex-1 p-4 space-y-1">
         {ADMIN_NAV.map((link) => {
@@ -29,7 +31,7 @@ export function AdminSidebar({ displayName }: { displayName: string }) {
             <Link
               key={link.href}
               href={link.href}
-              className={`block px-3 py-2 rounded text-sm ${
+              className={`block px-3 py-2 rounded text-base ${
                 isActive
                   ? "bg-gray-700 text-white"
                   : "text-gray-300 hover:bg-gray-800 hover:text-white"
@@ -40,11 +42,17 @@ export function AdminSidebar({ displayName }: { displayName: string }) {
           );
         })}
       </nav>
-      <div className="p-4 border-t border-gray-700">
+      <div className="p-4 border-t border-gray-700 space-y-1">
+        <Link
+          href="/"
+          className="block px-3 py-2 text-base text-gray-300 hover:bg-gray-800 hover:text-white rounded"
+        >
+          &larr; Back to Site
+        </Link>
         <form action={signOut}>
           <button
             type="submit"
-            className="w-full text-left px-3 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white rounded"
+            className="w-full text-left px-3 py-2 text-base text-gray-300 hover:bg-gray-800 hover:text-white rounded"
           >
             Sign Out
           </button>
