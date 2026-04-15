@@ -32,20 +32,20 @@ export default function AdminDashboardPage() {
     <div className="flex items-center justify-center min-h-[60vh]">
       <div
         dir="rtl"
-        className="max-w-xl bg-white rounded-2xl shadow-md p-8 text-right text-gray-700 leading-relaxed"
+        className="max-w-2xl bg-white rounded-2xl shadow-md p-10 text-right text-gray-700 leading-loose text-lg"
       >
-        <p className="text-xl font-semibold mb-4">שלום אמא,</p>
+        <p className="text-3xl font-semibold mb-5">שלום אמא,</p>
 
-        <p className="mb-4">
+        <p className="text-xl mb-5">
           שימי לב כשאת עורכת כאן — את עורכת ישירות את מסד הנתונים (backend). אין
           לי טבלאות גרסאות, כך שכל שינוי או מחיקה אינם נשמרים כהיסטוריה. ברגע
           ששומרים את העריכות, הן סופיות ולא ניתן לשחזר את המצב הקודם.
         </p>
 
-        <p className="mb-6">תהני מהאתר, ועדכני אותי אם את נתקלת בבאגים.</p>
+        <p className="text-xl mb-8">תהני מהאתר, ועדכני אותי אם את נתקלת בבאגים.</p>
 
-        <p className="font-semibold mb-3">קישורים שימושיים:</p>
-        <ul className="space-y-2">
+        <p className="text-2xl font-semibold mb-4">קישורים שימושיים:</p>
+        <ul className="list-disc pr-6 space-y-3">
           {HELPFUL_LINKS.map((link) => (
             <li key={link.url}>
               <a
@@ -56,7 +56,9 @@ export default function AdminDashboardPage() {
               >
                 {link.label}
               </a>
-              <span className="text-gray-500 mr-2">— {link.description}</span>
+              <ul className="list-disc pr-6 mt-1 font-medium">
+                <li className="text-gray-500 text-base">{link.description}</li>
+              </ul>
             </li>
           ))}
         </ul>
