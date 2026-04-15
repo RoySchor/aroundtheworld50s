@@ -1,23 +1,16 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import {
-  getPublishedPosts,
-  getPostsByCountrySlug,
-} from "@/server/repositories/blog";
+import { getPostsByCountrySlug } from "@/server/repositories/blog";
 import { formatLocation } from "@/lib/format";
 import { SITE_NAME } from "@/lib/constants";
 import { getOgImageUrl } from "@/lib/seo";
 import { ParallaxHero } from "@/components/blog/ParallaxHero";
 import { BlogGrid } from "@/components/blog/BlogGrid";
 
+export const dynamic = "force-dynamic";
+
 interface PageProps {
   params: Promise<{ countrySlug: string }>;
-}
-
-export async function generateStaticParams() {
-  const posts = await getPublishedPosts();
-  const slugs = [...new Set(posts.map((p) => p.countrySlug))];
-  return slugs.map((countrySlug) => ({ countrySlug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

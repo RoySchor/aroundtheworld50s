@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { getPublishedTips } from "@/server/repositories/tips";
+
+export const dynamic = "force-dynamic";
 import { TipCard } from "@/components/tips/TipCard";
 
 export const metadata: Metadata = {

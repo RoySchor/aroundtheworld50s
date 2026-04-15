@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { getPublishedPosts } from "@/server/repositories/blog";
+
+export const dynamic = "force-dynamic";
 import { BlogGrid } from "@/components/blog/BlogGrid";
 
 export const metadata: Metadata = {

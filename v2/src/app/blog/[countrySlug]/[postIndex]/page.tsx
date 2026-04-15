@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import {
-  getPublishedPosts,
-  getPostBySlugAndIndex,
-} from "@/server/repositories/blog";
+import { getPostBySlugAndIndex } from "@/server/repositories/blog";
 import { sanitizeHtml } from "@/lib/sanitize";
 import { SITE_NAME } from "@/lib/constants";
 import { getOgImageUrl } from "@/lib/seo";
@@ -11,16 +8,10 @@ import { ParallaxHero } from "@/components/blog/ParallaxHero";
 import { BlockRenderer } from "@/components/blog/BlockRenderer";
 import { TipsCta } from "@/components/blog/TipsCta";
 
+export const dynamic = "force-dynamic";
+
 interface PageProps {
   params: Promise<{ countrySlug: string; postIndex: string }>;
-}
-
-export async function generateStaticParams() {
-  const posts = await getPublishedPosts();
-  return posts.map((p) => ({
-    countrySlug: p.countrySlug,
-    postIndex: String(p.postIndex),
-  }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

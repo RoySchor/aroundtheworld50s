@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
-import {
-  getPublishedTips,
-  getTipBySlug,
-} from "@/server/repositories/tips";
+import { getTipBySlug } from "@/server/repositories/tips";
 import { formatLocation } from "@/lib/format";
 import { TipSection } from "@/components/tips/TipSection";
 
@@ -10,10 +7,7 @@ interface TipDetailPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateStaticParams() {
-  const tips = await getPublishedTips();
-  return tips.map((tip) => ({ slug: tip.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,

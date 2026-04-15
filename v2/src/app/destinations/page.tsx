@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { getPublishedPosts } from "@/server/repositories/blog";
+
+export const dynamic = "force-dynamic";
 import { buildCloudinaryUrl, STATIC_ASSETS } from "@/lib/cloudinary";
 import { SITE_NAME } from "@/lib/constants";
 import { getOgImageUrl } from "@/lib/seo";
