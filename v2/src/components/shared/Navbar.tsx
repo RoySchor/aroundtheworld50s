@@ -55,13 +55,13 @@ export function Navbar({ isAdmin }: { isAdmin: boolean }) {
       }`}
     >
       {/* Desktop Nav */}
-      <div className="hidden lg:flex items-center justify-center py-2">
-        <div className="flex items-center space-x-6">
+      <div className="hidden lg:grid grid-cols-[1fr_auto_1fr] items-center py-2">
+        <div className="flex items-center justify-end space-x-6">
           {NAV_LINKS_LEFT.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="nav-link text-white text-xl font-bold transition-colors"
+              className="nav-link"
             >
               {link.label}
             </Link>
@@ -84,7 +84,7 @@ export function Navbar({ isAdmin }: { isAdmin: boolean }) {
             <Link
               key={link.href}
               href={link.href}
-              className="nav-link text-white text-xl font-bold transition-colors"
+              className="nav-link"
             >
               {link.label}
             </Link>
@@ -92,7 +92,7 @@ export function Navbar({ isAdmin }: { isAdmin: boolean }) {
           {isAdmin && (
             <Link
               href="/admin"
-              className="nav-link text-white text-xl font-bold transition-colors"
+              className="nav-link"
             >
               ADMIN
             </Link>
@@ -138,7 +138,7 @@ export function Navbar({ isAdmin }: { isAdmin: boolean }) {
               key={link.href}
               href={link.href}
               onClick={() => setMobileMenuOpen(false)}
-              className="block text-center text-white text-xl font-bold py-2 nav-link"
+              className="block text-center py-2 nav-link"
             >
               {link.label}
             </Link>
@@ -147,7 +147,7 @@ export function Navbar({ isAdmin }: { isAdmin: boolean }) {
             <Link
               href="/admin"
               onClick={() => setMobileMenuOpen(false)}
-              className="block text-center text-white text-xl font-bold py-2 nav-link"
+              className="block text-center py-2 nav-link"
             >
               ADMIN
             </Link>

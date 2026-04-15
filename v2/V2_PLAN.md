@@ -32,9 +32,17 @@ v2 has **Phases 0-1 (foundation + public read path) and Phase 2.1-2.5 (auth + ad
 - Loading skeletons for blog, tips, and admin routes — matched to actual page layouts (Phase 3.4)
 - v1 hash router redirect (`HashRedirect` client component in root layout) for `/#/...` bookmarks (Phase 3.5)
 - Vercel Analytics via `@vercel/analytics/next` (Phase 3.6)
+- `force-dynamic` on admin layout and login page to prevent Vercel build timeouts (Phase 3.8)
+- Google Analytics (gtag.js `G-ZMPS9V91QZ`) via `next/script` alongside Vercel Analytics (Phase 3.9)
+- Font fix: replaced Scope_One with Dosis to match v1's actual `font-scope` mapping (Phase 3.10)
+- Navbar logo centering: `flex-1` on both left/right link containers so logo stays centered when ADMIN is hidden (Phase 3.11)
+- BlogCard visual parity: border `0.5em` (was `0.75em`), responsive image height `200px`/`275px` (was fixed `400x400`), smaller mobile title (Phase 3.12)
+- Tips grid: `minmax(250px, 1fr)` for 4 columns at standard desktop widths (was `300px`) (Phase 3.13)
+- Gallery data migration: imported 20 Cloudinary `homePageGallery` images into DB (Phase 3.14)
 
 **Not done:**
-- Vercel deployment + DNS cutover (Phase 3.2 — ops/manual)
+- Gallery SQL needs to be run against Supabase DB (Phase 3.14 — pending execution)
+- DNS cutover (Phase 3.2 — ops/manual)
 - Instagram embed block type (Phase 3.7 — deferred)
 
 ---

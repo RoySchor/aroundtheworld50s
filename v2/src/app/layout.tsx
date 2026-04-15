@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Caveat, Scope_One, Grandstander } from "next/font/google";
+import Script from "next/script";
 import { Navbar } from "@/components/shared/Navbar";
 import { Footer } from "@/components/shared/Footer";
 import { HashRedirect } from "@/components/shared/HashRedirect";
@@ -8,27 +8,6 @@ import { getAdminProfileIfAuthenticated } from "@/server/auth";
 import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants";
 import { SITE_URL, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import "./globals.css";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
-
-const caveat = Caveat({
-  subsets: ["latin"],
-  variable: "--font-caveat-var",
-});
-
-const scopeOne = Scope_One({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-scope-one-var",
-});
-
-const grandstander = Grandstander({
-  subsets: ["latin"],
-  variable: "--font-grandstander-var",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -58,11 +37,20 @@ export default async function RootLayout({
   const adminProfile = await getAdminProfileIfAuthenticated();
 
   return (
-    <html
-      lang="en"
-      className={`${inter.variable} ${caveat.variable} ${scopeOne.variable} ${grandstander.variable}`}
-    >
+    <html lang="en">
       <body className="min-h-screen flex flex-col">
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-ZMPS9V91QZ"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-ZMPS9V91QZ');
+          `}
+        </Script>
         <HashRedirect />
         <Navbar isAdmin={!!adminProfile} />
         <main className="flex-1">{children}</main>
