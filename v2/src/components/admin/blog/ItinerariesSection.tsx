@@ -364,6 +364,9 @@ export function ItinerariesSection({
               className="w-full rounded border px-3 py-2 text-sm"
               placeholder="https://www.google.com/maps/embed?..."
             />
+            <span className="mt-1 block text-xs text-gray-400">
+              Google Maps &rarr; Share &rarr; Embed a map &rarr; copy the src URL
+            </span>
           </label>
           <div className="flex gap-3">
             <button

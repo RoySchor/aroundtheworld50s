@@ -7,6 +7,7 @@ import {
   reorderTipSection,
 } from "@/server/actions/tips";
 import { TIP_SECTION_LABELS } from "@/lib/constants/tip-sections";
+import { HtmlHelperText } from "@/components/admin/HtmlHelperText";
 import type { TipSection } from "@/server/db/schema";
 
 interface TipSectionsEditorProps {
@@ -170,6 +171,7 @@ export function TipSectionsEditor({ sections }: TipSectionsEditorProps) {
                     className="w-full rounded border px-3 py-2 font-mono text-sm"
                   />
                 </label>
+                <HtmlHelperText />
                 <button
                   type="button"
                   onClick={() => handleSaveContent(section.id)}

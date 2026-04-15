@@ -5,6 +5,7 @@ import { createBlogPost } from "@/server/actions/blog-posts";
 import { US_STATES } from "@/lib/constants/us-states";
 import { getCountryCode } from "@/lib/country-codes";
 import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
+import { HtmlHelperText } from "@/components/admin/HtmlHelperText";
 
 export function CreatePostForm() {
   const [isPending, startTransition] = useTransition();
@@ -168,6 +169,7 @@ export function CreatePostForm() {
           placeholder="Long HTML body for post detail page"
         />
       </label>
+      <HtmlHelperText />
 
       {/* Background Image */}
       <div>

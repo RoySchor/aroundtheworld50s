@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { updateBlogPost } from "@/server/actions/blog-posts";
 import { US_STATES } from "@/lib/constants/us-states";
 import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
+import { HtmlHelperText } from "@/components/admin/HtmlHelperText";
 import type { BlogPost } from "@/server/db/schema";
 
 interface PostMetadataFormProps {
@@ -150,6 +151,7 @@ export function PostMetadataForm({ post }: PostMetadataFormProps) {
           className="w-full rounded border px-3 py-2 font-mono text-sm"
         />
       </label>
+      <HtmlHelperText />
 
       {/* Background Image */}
       <div>
