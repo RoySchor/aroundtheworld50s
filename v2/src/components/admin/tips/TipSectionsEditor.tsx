@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
   updateTipSection,
@@ -13,9 +13,10 @@ import type { TipSection } from "@/server/db/schema";
 
 interface TipSectionsEditorProps {
   sections: TipSection[];
+  onDraftsChange?: (drafts: Record<string, string>) => void;
 }
 
-export function TipSectionsEditor({ sections }: TipSectionsEditorProps) {
+export function TipSectionsEditor({ sections, onDraftsChange }: TipSectionsEditorProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -23,6 +24,10 @@ export function TipSectionsEditor({ sections }: TipSectionsEditorProps) {
   const [error, setError] = useState<string | null>(null);
 
   useUnsavedChanges(Object.keys(drafts).length > 0);
+
+  useEffect(() => {
+    onDraftsChange?.(drafts);
+  }, [drafts, onDraftsChange]);
 
   function toggleExpand(id: string) {
     setExpandedId((prev) => (prev === id ? null : id));

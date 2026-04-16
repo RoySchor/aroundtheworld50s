@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { publishTip, unpublishTip, deleteTip } from "@/server/actions/tips";
 
@@ -9,9 +8,10 @@ interface TipStatusBarProps {
   tipId: string;
   status: string;
   slug: string;
+  onPreview?: () => void;
 }
 
-export function TipStatusBar({ tipId, status, slug }: TipStatusBarProps) {
+export function TipStatusBar({ tipId, status, slug, onPreview }: TipStatusBarProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -83,12 +83,13 @@ export function TipStatusBar({ tipId, status, slug }: TipStatusBarProps) {
         Save Tip Changes
       </button>
 
-      <Link
-        href={`/admin/tips/${tipId}/preview`}
+      <button
+        type="button"
+        onClick={onPreview}
         className="rounded bg-blue-100 px-4 py-1.5 text-sm font-medium text-blue-700 hover:bg-blue-200"
       >
         Preview
-      </Link>
+      </button>
 
       {isPublished && (
         <a

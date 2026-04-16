@@ -70,7 +70,9 @@ export async function createTip(
     if (pgErr.code === "23505") {
       return {
         success: false,
-        error: "A tip with this slug already exists",
+        error: data.state
+          ? `A tips page for ${data.state} already exists.`
+          : `A tips page for ${data.country} already exists.`,
       };
     }
 
@@ -124,7 +126,7 @@ export async function updateTip(
     if (pgErr.code === "23505") {
       return {
         success: false,
-        error: "A tip with this slug already exists",
+        error: "A tips page for this country already exists.",
       };
     }
     throw err;

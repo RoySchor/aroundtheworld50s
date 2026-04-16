@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   publishBlogPost,
@@ -14,6 +13,7 @@ interface PostStatusBarProps {
   status: string;
   countrySlug: string;
   postIndex: number;
+  onPreview?: () => void;
 }
 
 export function PostStatusBar({
@@ -21,6 +21,7 @@ export function PostStatusBar({
   status,
   countrySlug,
   postIndex,
+  onPreview,
 }: PostStatusBarProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -93,12 +94,13 @@ export function PostStatusBar({
         Save Blog Changes
       </button>
 
-      <Link
-        href={`/admin/blog/${postId}/preview`}
+      <button
+        type="button"
+        onClick={onPreview}
         className="rounded bg-blue-100 px-4 py-1.5 text-sm font-medium text-blue-700 hover:bg-blue-200"
       >
         Preview
-      </Link>
+      </button>
 
       {isPublished && (
         <a

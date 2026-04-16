@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ConfirmBackLink } from "@/components/admin/ConfirmBackLink";
 import { getTipById } from "@/server/repositories/admin-tips";
-import { TipStatusBar } from "@/components/admin/tips/TipStatusBar";
-import { TipMetadataForm } from "@/components/admin/tips/TipMetadataForm";
-import { TipSectionsEditor } from "@/components/admin/tips/TipSectionsEditor";
+import { TipEditClient } from "@/components/admin/tips/TipEditClient";
 
 export const metadata: Metadata = {
   title: "Edit Tip",
@@ -36,15 +34,7 @@ export default async function EditTipPage({
         </p>
       </div>
 
-      <div className="sticky top-0 z-10 -mx-8 bg-gray-50 px-8 pb-4 pt-8 shadow-sm">
-        <TipStatusBar tipId={tip.id} status={tip.status} slug={tip.slug} />
-      </div>
-
-      <TipMetadataForm tip={tip} />
-
-      <hr />
-
-      <TipSectionsEditor sections={tip.sections} />
+      <TipEditClient tip={tip} />
     </div>
   );
 }

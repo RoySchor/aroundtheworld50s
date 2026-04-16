@@ -2,7 +2,7 @@
 
 Senior engineering review and implementation roadmap for the Next.js 16 rewrite of aroundtheworld50s.
 
-Last updated: 2026-04-15
+Last updated: 2026-04-16
 
 ---
 
@@ -41,6 +41,9 @@ v2 has **Phases 0-1 (foundation + public read path) and Phase 2.1-2.5 (auth + ad
 - Gallery data migration: imported 20 Cloudinary `homePageGallery` images into DB (Phase 3.14)
 - Admin nav & login redesign: always-visible ADMIN nav link, redesigned login page, admin sidebar improvements (bigger text, centered name, back-to-site link), Hebrew dashboard with helpful links (Phase 3.15)
 - Admin UX parity: plain-language labels (no slugs/CTA/HTML jargon), preview routes for blog posts and tips (overlay with public rendering components), auto-populate country code + tip slug, collapsible formatting help, friendlier confirmations, red asterisks on required fields, auto-dismiss success messages (Phase 3.16)
+- Client-side preview modals: blog + tips edit pages preview unsaved changes without saving to DB, using same public-facing components (ParallaxHero, BlockRenderer, TipsCta, TipSection). Replaced server-rendered preview routes (deleted). Accessible (aria-modal, role="dialog"). (Phase 3.17)
+- Auto-generated tip slugs: removed manual URL Path editing, slugs computed from country name (or state for US), read-only display on edit, user-friendly collision errors. Auto-generated blog tipsSlug from country name. (Phase 3.18)
+- Admin label polish: "Description (SEO)" with helper text on tip forms, "View Tips" Button Text label, "Home Gallery" sidebar label (Phase 3.19)
 
 **Not done:**
 - Gallery SQL needs to be run against Supabase DB (Phase 3.14 — pending execution)
@@ -403,12 +406,7 @@ v2/src/
         page.tsx
         [id]/page.tsx
       gallery/page.tsx
-      blog/[id]/preview/
-        layout.tsx                    # overlay layout for blog preview
-        page.tsx                      # blog post preview using public components
-      tips/[id]/preview/
-        layout.tsx                    # overlay layout for tip preview
-        page.tsx                      # tip preview using public components
+      # Preview routes deleted — replaced by client-side modals (BlogPreviewModal, TipPreviewModal)
   components/
     ui/                               # generic UI primitives
     shared/                           # app-wide shared components
@@ -609,3 +607,6 @@ These were open questions in the first draft. Resolved based on review feedback:
 | Phase 3.14: Gallery data migration | Done | 20 Cloudinary `homePageGallery` images into DB |
 | Phase 3.15: Admin nav & login redesign | Done | PR #17 — always-visible ADMIN link, login redesign, sidebar improvements, Hebrew dashboard |
 | Phase 3.16: Admin UX parity | Done | PR #17 — plain-language labels, preview routes (blog + tips), auto-populate country code + slug, formatting help, friendlier confirmations, red asterisks, auto-dismiss success |
+| Phase 3.17: Client-side preview modals | Done | PR #22 — BlogPreviewModal + TipPreviewModal, BlogEditClient + TipEditClient wrappers, deleted server preview routes, aria-modal accessibility |
+| Phase 3.18: Auto-generated slugs | Done | PR #22 — tip slugs from country/state (read-only on edit), blog tipsSlug from country, user-friendly collision errors |
+| Phase 3.19: Admin label polish | Done | PR #22 — "Description (SEO)" with helper text, "View Tips" Button Text, "Home Gallery" sidebar |

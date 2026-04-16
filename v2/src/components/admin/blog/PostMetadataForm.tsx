@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { updateBlogPost } from "@/server/actions/blog-posts";
@@ -11,11 +11,23 @@ import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
 import { slugify } from "@/lib/slugify";
 import type { BlogPost } from "@/server/db/schema";
 
-interface PostMetadataFormProps {
-  post: BlogPost;
+export interface PostMetadataState {
+  title: string;
+  subtitle: string;
+  header: string;
+  description: string;
+  excerpt: string;
+  backgroundImage: string;
+  tipsCtaCopy: string;
+  state: string;
 }
 
-export function PostMetadataForm({ post }: PostMetadataFormProps) {
+interface PostMetadataFormProps {
+  post: BlogPost;
+  onStateChange?: (state: PostMetadataState) => void;
+}
+
+export function PostMetadataForm({ post, onStateChange }: PostMetadataFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -45,6 +57,19 @@ export function PostMetadataForm({ post }: PostMetadataFormProps) {
     state !== (post.state ?? "");
 
   useUnsavedChanges(isDirty);
+
+  useEffect(() => {
+    onStateChange?.({
+      title,
+      subtitle,
+      header,
+      description,
+      excerpt,
+      backgroundImage,
+      tipsCtaCopy,
+      state,
+    });
+  }, [title, subtitle, header, description, excerpt, backgroundImage, tipsCtaCopy, state, onStateChange]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
