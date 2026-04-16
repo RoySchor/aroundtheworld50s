@@ -2,7 +2,7 @@
 
 Working plan for admin UX improvements. Each phase is a PR-sized chunk of work.
 
-Last updated: 2026-04-15
+Last updated: 2026-04-16
 
 ---
 
@@ -10,20 +10,16 @@ Last updated: 2026-04-15
 
 What works today:
 - Blog + Tips + Gallery CRUD via admin panel
-- Publish/unpublish/delete via status bar
-- Preview routes (overlay with public rendering)
+- Publish/unpublish/delete via status bar (sticky)
+- Client-side preview modals (blog + tips) — preview unsaved changes without saving
+- Rich text toolbar (Tiptap) — no raw HTML needed
 - Plain-language labels, red asterisks, formatting help
+- Back buttons with unsaved-changes warnings on all edit/create pages
+- Auto-generated tip slugs (from country/state), auto-generated blog tipsSlug
+- SEO description labels with helper text on tip forms
 - Creating a post/tip defaults to **draft** (does not auto-publish) — this is correct
-
-What's missing or broken (user feedback):
-- No back button on edit/create pages — only way out is the sidebar
-- No obvious save button (metadata save exists but is below the fold)
-- Status bar scrolls away — not sticky
-- No unsaved-changes warning when navigating away
-- New post page has no way to add blocks or preview — must create first, then edit
-- Raw HTML textareas — user's mother shouldn't write `<ul><li>` tags
-- Formatting help is inline and collapses — should be a sticky sidebar reference
-- No live preview while editing text content
+- User-friendly error messages for slug collisions
+- Accessible preview modals (aria-modal, role="dialog")
 
 ---
 
@@ -190,26 +186,69 @@ The back button on `/admin/blog/new` links to `/admin/blog`, and the unsaved-cha
 
 ---
 
-## Phase 4: Polish
+## Phase 4: Client-Side Preview + UX Polish
 
-*Goal: final UX refinements after the major changes land.*
+*Goal: true live preview (no save required), auto-generated slugs, clearer labels, dead code cleanup.*
 
-### 4.1 Verify preview button visibility
+### 4.1 Client-side preview modals (blog + tips)
 
-Preview button already exists on `PostStatusBar` and `TipStatusBar` (always visible, even for drafts). Confirm it's accessible from the sticky bar after Phase 1.2.
+Replaced the server-rendered preview routes (`/admin/blog/[id]/preview`, `/admin/tips/[id]/preview`) with client-side modals that render unsaved form state using the same presentational components as the public pages.
 
-### 4.2 Consistent save feedback
+**Architecture:**
+- Each edit page now has a **client wrapper** (`BlogEditClient`, `TipEditClient`) that collects state from child form components via `onStateChange` / `onDraftsChange` callbacks
+- Preview modals (`BlogPreviewModal`, `TipPreviewModal`) render a full-screen overlay (z-200, body scroll lock, Escape to close) with the collected state
+- Blog preview shows live metadata + saved blocks/itineraries (blocks save individually, so they're always current)
+- Tips preview shows live metadata + section content drafts (unsaved edits appear in preview)
+- Both modals have `role="dialog"`, `aria-modal="true"`, and `aria-label` for accessibility
 
-After Phase 2 lands, verify that all save operations (metadata, blocks, sections) show clear success/error feedback. The metadata forms already have success banners. Blocks save inline. Ensure nothing regressed.
+**New files:**
+- `components/admin/blog/BlogPreviewModal.tsx`
+- `components/admin/blog/BlogEditClient.tsx`
+- `components/admin/tips/TipPreviewModal.tsx`
+- `components/admin/tips/TipEditClient.tsx`
 
-### 4.3 Mobile admin usability check
+**Modified files:**
+- `PostMetadataForm` — exported `PostMetadataState` interface, added `onStateChange` callback
+- `PostStatusBar` — preview `<Link>` → `<button onClick={onPreview}>`
+- `TipMetadataForm` — exported `TipMetadataState` interface, added `onStateChange` callback
+- `TipSectionsEditor` — added `onDraftsChange` callback
+- `TipStatusBar` — preview `<Link>` → `<button onClick={onPreview}>`
+- `app/admin/blog/[id]/page.tsx` — moved interactive components into `BlogEditClient`
+- `app/admin/tips/[id]/page.tsx` — moved interactive components into `TipEditClient`
 
-The rich text toolbar needs to work on tablet-width screens (the admin is unlikely to be used on phone, but iPad is plausible). Verify toolbar buttons don't overflow.
+**Deleted files (dead preview routes):**
+- `app/admin/blog/[id]/preview/layout.tsx`
+- `app/admin/blog/[id]/preview/page.tsx`
+- `app/admin/tips/[id]/preview/layout.tsx`
+- `app/admin/tips/[id]/preview/page.tsx`
 
-### 4.4 Known gaps to revisit
+### 4.2 Auto-generated tip slugs
+
+Removed manual URL Path editing from tip forms. Slugs are auto-generated and immutable after creation.
+
+- **Create form:** slug computed at submit time — `slugify(country)` for non-US, `slugify(state)` for US tips. Read-only display shows the auto-generated path live as the user selects a country/state.
+- **Edit form:** slug displayed as read-only text (`/tips/{slug}`), passed as `tip.slug` on save (never changes).
+- **Slug collision handling:** `createTip` server action catches unique constraint violations and returns a user-friendly message: "A tips page for {country} already exists." (or state name for US tips).
+
+### 4.3 Auto-generated blog tipsSlug
+
+Removed manual "Tips Link Text" slug input from blog post forms. `tipsSlug` is auto-generated via `slugify(post.country)` — no user input needed.
+
+### 4.4 SEO description label clarity
+
+Tip description fields (create + edit) relabeled from "Description" to "Description (SEO)" with helper text: "Used for search engine meta tags only — not displayed on the page."
+
+### 4.5 Label improvements
+
+- "Tips Link Text" → `"View Tips" Button Text` (on blog create + edit forms) — clearer for non-technical users
+- "Gallery" → "Home Gallery" in admin sidebar
+
+### 4.6 Known gaps to revisit
 
 - **Unsaved-changes: client-side navigation not intercepted.** `useUnsavedChanges` only covers `beforeunload` (browser back/refresh/tab close). Clicking sidebar links or back buttons while a form is dirty silently discards changes. Next.js App Router has no stable `routeChangeStart` event. Consider a lightweight interception wrapper if this causes real data loss.
 - **Link insertion uses `window.prompt`.** Works but looks jarring — native browser dialog doesn't match admin UI. Consider a small inline popover for a more polished experience.
+- **Blog preview doesn't track unsaved block edits.** Metadata is live-previewed, but blocks show saved DB state. Each block type has different data shapes, making draft tracking complex. Not worth it given blocks save individually — but it's a natural future request.
+- **sanitize-html in client bundle.** `BlogPreviewModal` imports `sanitizeHtml` (~50KB) into the admin client bundle. Acceptable for admin-only pages; the public blog sanitizes server-side.
 
 ---
 
@@ -217,21 +256,31 @@ The rich text toolbar needs to work on tablet-width screens (the admin is unlike
 
 | File | Phase | Action |
 |------|-------|--------|
-| `app/admin/blog/[id]/page.tsx` | 1.1, 1.2 | Add back link, sticky status bar wrapper |
+| `app/admin/blog/[id]/page.tsx` | 1.1, 1.2, 4.1 | Add back link, sticky status bar wrapper, use `BlogEditClient` |
 | `app/admin/blog/new/page.tsx` | 1.1 | Add back link |
-| `app/admin/tips/[id]/page.tsx` | 1.1, 1.2 | Add back link, sticky status bar wrapper |
+| `app/admin/tips/[id]/page.tsx` | 1.1, 1.2, 4.1 | Add back link, sticky status bar wrapper, use `TipEditClient` |
 | `app/admin/tips/new/page.tsx` | 1.1 | Add back link |
 | `components/admin/RichTextEditor.tsx` | 2.2 | **NEW** — Tiptap toolbar + editor + raw tab |
+| `components/admin/blog/BlogEditClient.tsx` | 4.1 | **NEW** — client wrapper for blog edit (state collection + preview) |
+| `components/admin/blog/BlogPreviewModal.tsx` | 4.1 | **NEW** — full-screen blog preview modal |
 | `components/admin/blog/BlockForm.tsx` | 2.3 | Replace textareas with RichTextEditor |
-| `components/admin/blog/PostMetadataForm.tsx` | 1.3, 2.3 | Dirty tracking, replace textarea |
-| `components/admin/blog/CreatePostForm.tsx` | 2.3, 3.2 | Replace textarea, add guidance text |
-| `components/admin/tips/TipSectionsEditor.tsx` | 1.3, 2.3 | Dirty tracking, replace textarea |
-| `components/admin/tips/TipMetadataForm.tsx` | 1.3, 2.3 | Dirty tracking, replace textarea |
-| `components/admin/tips/CreateTipForm.tsx` | 2.3, 3.2 | Replace textarea, add guidance text |
+| `components/admin/blog/PostMetadataForm.tsx` | 1.3, 2.3, 4.1, 4.3 | Dirty tracking, replace textarea, `onStateChange` callback, auto tipsSlug |
+| `components/admin/blog/PostStatusBar.tsx` | 4.1 | Preview `<Link>` → `<button onClick={onPreview}>` |
+| `components/admin/blog/CreatePostForm.tsx` | 2.3, 3.2, 4.3, 4.5 | Replace textarea, guidance text, auto tipsSlug, label improvements |
+| `components/admin/tips/TipEditClient.tsx` | 4.1 | **NEW** — client wrapper for tip edit (state + draft collection + preview) |
+| `components/admin/tips/TipPreviewModal.tsx` | 4.1 | **NEW** — full-screen tip preview modal |
+| `components/admin/tips/TipSectionsEditor.tsx` | 1.3, 2.3, 4.1 | Dirty tracking, replace textarea, `onDraftsChange` callback |
+| `components/admin/tips/TipMetadataForm.tsx` | 1.3, 2.3, 4.1, 4.2, 4.4 | Dirty tracking, replace textarea, `onStateChange`, read-only slug, SEO label |
+| `components/admin/tips/TipStatusBar.tsx` | 4.1 | Preview `<Link>` → `<button onClick={onPreview}>` |
+| `components/admin/tips/CreateTipForm.tsx` | 2.3, 3.2, 4.2, 4.4 | Replace textarea, guidance text, auto slug, SEO label |
+| `components/admin/AdminSidebar.tsx` | 4.5 | "Gallery" → "Home Gallery" |
 | `components/admin/HtmlHelperText.tsx` | 2.4 | **DELETE** |
 | `hooks/useUnsavedChanges.ts` | 1.3 | **NEW** — reusable dirty-form hook |
 | `lib/sanitize.ts` | 2.5 | Add `<u>` to allowlist |
+| `server/actions/tips.ts` | 4.2 | User-friendly slug collision error messages |
 | `package.json` | 2.1 | Add tiptap dependencies |
+| `app/admin/blog/[id]/preview/*` | 4.1 | **DELETE** — dead route, replaced by client modal |
+| `app/admin/tips/[id]/preview/*` | 4.1 | **DELETE** — dead route, replaced by client modal |
 
 ---
 
@@ -255,5 +304,5 @@ The rich text toolbar needs to work on tablet-width screens (the admin is unlike
 | Phase 1: Navigation & Sticky Status Bar | Done | admin-nav-and-login-redesign |
 | Phase 2: Rich Text Toolbar | Done | admin-nav-and-login-redesign |
 | Phase 3: Create Post Flow | Done | admin-nav-and-login-redesign |
-| Phase 4: Polish | Pending (verification only) | |
+| Phase 4: Client-Side Preview + UX Polish | Done | fixing-preview (PR #22) |
 | Round 2: Off-white bg, blockquote fix, image grid UX, itinerary cascade | Done | admin-nav-and-login-redesign |
