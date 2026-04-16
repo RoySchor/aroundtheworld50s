@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { updateTip } from "@/server/actions/tips";
 import { US_STATES } from "@/lib/constants/us-states";
@@ -8,11 +8,19 @@ import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
 import type { Tip } from "@/server/db/schema";
 
-interface TipMetadataFormProps {
-  tip: Tip;
+export interface TipMetadataState {
+  title: string;
+  slug: string;
+  description: string;
+  state: string;
 }
 
-export function TipMetadataForm({ tip }: TipMetadataFormProps) {
+interface TipMetadataFormProps {
+  tip: Tip;
+  onStateChange?: (state: TipMetadataState) => void;
+}
+
+export function TipMetadataForm({ tip, onStateChange }: TipMetadataFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -32,6 +40,10 @@ export function TipMetadataForm({ tip }: TipMetadataFormProps) {
     state !== (tip.state ?? "");
 
   useUnsavedChanges(isDirty);
+
+  useEffect(() => {
+    onStateChange?.({ title, slug, description, state });
+  }, [title, slug, description, state, onStateChange]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

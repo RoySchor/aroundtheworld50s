@@ -13,7 +13,6 @@ export function CreateTipForm() {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
-  const [slug, setSlug] = useState("");
   const [country, setCountry] = useState("");
   const [countryCode, setCountryCode] = useState("");
   const [state, setState] = useState("");
