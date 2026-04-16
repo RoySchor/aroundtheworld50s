@@ -177,14 +177,30 @@ export function TipSectionsEditor({ sections }: TipSectionsEditorProps) {
                     onChange={(v) => setDraft(section.id, v)}
                   />
                 </div>
-                <button
-                  type="button"
-                  onClick={() => handleSaveContent(section.id)}
-                  disabled={isPending}
-                  className="mt-3 rounded bg-blue-600 px-5 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-                >
-                  {isPending ? "Saving..." : "Save Content"}
-                </button>
+                <div className="mt-3 flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => handleSaveContent(section.id)}
+                    disabled={isPending}
+                    className="rounded bg-blue-600 px-5 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    {isPending ? "Saving..." : "Save Content"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDrafts((prev) => {
+                        const next = { ...prev };
+                        delete next[section.id];
+                        return next;
+                      });
+                      toggleExpand(section.id);
+                    }}
+                    className="rounded px-3 py-1.5 text-sm text-gray-500 hover:bg-gray-100"
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             )}
           </div>

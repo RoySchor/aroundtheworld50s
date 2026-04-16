@@ -75,6 +75,14 @@ export function TipStatusBar({ tipId, status, slug }: TipStatusBarProps) {
         {isPending ? "..." : isPublished ? "Unpublish" : "Publish"}
       </button>
 
+      <button
+        type="submit"
+        form="tip-metadata-form"
+        className="rounded bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700"
+      >
+        Save Tip Changes
+      </button>
+
       <Link
         href={`/admin/tips/${tipId}/preview`}
         className="rounded bg-blue-100 px-4 py-1.5 text-sm font-medium text-blue-700 hover:bg-blue-200"
