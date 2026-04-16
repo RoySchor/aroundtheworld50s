@@ -168,7 +168,7 @@ export function ItinerariesSection({
                   <button
                     type="button"
                     onClick={() => setEditingItinId(null)}
-                    className="text-xs text-gray-500"
+                    className="rounded px-2 py-1 text-xs text-gray-500 hover:bg-gray-100"
                   >
                     Cancel
                   </button>
@@ -248,7 +248,7 @@ export function ItinerariesSection({
                       <button
                         type="button"
                         onClick={() => setEditingItemId(null)}
-                        className="text-xs text-gray-500"
+                        className="rounded px-1 py-0.5 text-xs text-gray-500 hover:bg-gray-100"
                       >
                         Cancel
                       </button>
@@ -320,7 +320,7 @@ export function ItinerariesSection({
                   <button
                     type="button"
                     onClick={() => setAddingItemItinId(null)}
-                    className="text-xs text-gray-500"
+                    className="rounded px-2 py-1 text-xs text-gray-500 hover:bg-gray-100"
                   >
                     Cancel
                   </button>
@@ -379,7 +379,7 @@ export function ItinerariesSection({
             <button
               type="button"
               onClick={() => setShowAdd(false)}
-              className="text-sm text-gray-500"
+              className="rounded px-3 py-1 text-sm text-gray-500 hover:bg-gray-100"
             >
               Cancel
             </button>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { updateBlogPost } from "@/server/actions/blog-posts";
 import { US_STATES } from "@/lib/constants/us-states";
@@ -166,6 +167,14 @@ export function PostMetadataForm({ post }: PostMetadataFormProps) {
         <span className="mb-1 block text-sm font-medium">Background Image</span>
         {backgroundImage ? (
           <div className="flex items-center gap-3">
+            <Image
+              src={backgroundImage}
+              alt="Background preview"
+              width={64}
+              height={40}
+              className="rounded object-cover"
+              style={{ width: 64, height: "auto" }}
+            />
             <span className="truncate text-sm text-gray-600">
               {backgroundImage}
             </span>

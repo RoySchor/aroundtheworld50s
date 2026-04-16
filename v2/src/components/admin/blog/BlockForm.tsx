@@ -167,6 +167,14 @@ export function BlockForm({
               <span className="mb-1 block text-sm font-medium">Left Image</span>
               {leftImage ? (
                 <div className="flex items-center gap-2">
+                  <Image
+                    src={leftImage}
+                    alt={leftImageAlt || "Left preview"}
+                    width={48}
+                    height={48}
+                    className="rounded object-cover"
+                    style={{ width: 48, height: "auto" }}
+                  />
                   <span className="truncate text-sm text-gray-600">{leftImage}</span>
                   <button type="button" onClick={() => setLeftImage("")} className="text-sm text-red-600">Remove</button>
                 </div>
@@ -188,6 +196,14 @@ export function BlockForm({
               <span className="mb-1 block text-sm font-medium">Right Image</span>
               {rightImage ? (
                 <div className="flex items-center gap-2">
+                  <Image
+                    src={rightImage}
+                    alt={rightImageAlt || "Right preview"}
+                    width={48}
+                    height={48}
+                    className="rounded object-cover"
+                    style={{ width: 48, height: "auto" }}
+                  />
                   <span className="truncate text-sm text-gray-600">{rightImage}</span>
                   <button type="button" onClick={() => setRightImage("")} className="text-sm text-red-600">Remove</button>
                 </div>
@@ -224,6 +240,7 @@ export function BlockForm({
                   width={48}
                   height={48}
                   className="rounded object-cover"
+                  style={{ width: 48, height: "auto" }}
                 />
                 <span className="flex-1 truncate text-sm text-gray-600">
                   {img}
@@ -249,7 +266,7 @@ export function BlockForm({
                 <button
                   type="button"
                   onClick={() => setImages(images.filter((_, i) => i !== idx))}
-                  className="text-sm text-red-600"
+                  className="rounded px-2 py-1 text-xs text-red-600 hover:bg-red-50"
                 >
                   Remove
                 </button>

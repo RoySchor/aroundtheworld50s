@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ConfirmBackLink } from "@/components/admin/ConfirmBackLink";
 import { getTipById } from "@/server/repositories/admin-tips";
 import { TipStatusBar } from "@/components/admin/tips/TipStatusBar";
 import { TipMetadataForm } from "@/components/admin/tips/TipMetadataForm";
@@ -25,13 +24,9 @@ export default async function EditTipPage({
 
   return (
     <div className="space-y-8">
-      <Link
-        href="/admin/tips"
-        className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700"
-      >
-        <ArrowLeft size={16} />
+      <ConfirmBackLink href="/admin/tips">
         Back to Tips
-      </Link>
+      </ConfirmBackLink>
 
       <div>
         <h1 className="text-2xl font-bold">Edit Tip</h1>
