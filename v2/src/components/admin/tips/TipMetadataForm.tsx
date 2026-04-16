@@ -10,7 +10,6 @@ import type { Tip } from "@/server/db/schema";
 
 export interface TipMetadataState {
   title: string;
-  slug: string;
   description: string;
   state: string;
 }
@@ -27,7 +26,6 @@ export function TipMetadataForm({ tip, onStateChange }: TipMetadataFormProps) {
   const [success, setSuccess] = useState(false);
 
   const [title, setTitle] = useState(tip.title);
-  const [slug, setSlug] = useState(tip.slug);
   const [description, setDescription] = useState(tip.description ?? "");
   const [state, setState] = useState(tip.state ?? "");
 
@@ -35,15 +33,14 @@ export function TipMetadataForm({ tip, onStateChange }: TipMetadataFormProps) {
 
   const isDirty =
     title !== tip.title ||
-    slug !== tip.slug ||
     description !== (tip.description ?? "") ||
     state !== (tip.state ?? "");
 
   useUnsavedChanges(isDirty);
 
   useEffect(() => {
-    onStateChange?.({ title, slug, description, state });
-  }, [title, slug, description, state, onStateChange]);
+    onStateChange?.({ title, description, state });
+  }, [title, description, state, onStateChange]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -53,7 +50,7 @@ export function TipMetadataForm({ tip, onStateChange }: TipMetadataFormProps) {
     startTransition(async () => {
       const result = await updateTip(tip.id, {
         title,
-        slug,
+        slug: tip.slug,
         description: description || null,
         state: isUS && state ? state : null,
       });
@@ -122,22 +119,17 @@ export function TipMetadataForm({ tip, onStateChange }: TipMetadataFormProps) {
         />
       </label>
 
-      <label className="block">
-        <span className="mb-1 block text-sm font-medium">URL Path</span>
-        <input
-          type="text"
-          value={slug}
-          onChange={(e) => setSlug(e.target.value)}
-          className="w-full rounded border px-3 py-2 text-sm"
-        />
-        <span className="mt-1 block text-xs text-gray-400">
-          Web address: /tips/{slug}
-        </span>
-      </label>
+      <div>
+        <span className="mb-1 block text-sm font-medium text-gray-500">URL Path (auto-generated)</span>
+        <p className="text-sm text-gray-700">/tips/{tip.slug}</p>
+      </div>
 
       <div>
-        <span className="mb-1 block text-sm font-medium">Description</span>
+        <span className="mb-1 block text-sm font-medium">Description (SEO)</span>
         <RichTextEditor value={description} onChange={setDescription} />
+        <span className="mt-1 block text-xs text-gray-400">
+          Used for search engine meta tags only — not displayed on the page.
+        </span>
       </div>
 
     </form>

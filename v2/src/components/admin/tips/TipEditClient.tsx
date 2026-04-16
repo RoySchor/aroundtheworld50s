@@ -16,7 +16,6 @@ export function TipEditClient({ tip }: TipEditClientProps) {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [metadata, setMetadata] = useState<TipMetadataState>({
     title: tip.title,
-    slug: tip.slug,
     description: tip.description ?? "",
     state: tip.state ?? "",
   });

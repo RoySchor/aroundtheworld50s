@@ -22,7 +22,6 @@ export function CreateTipForm() {
   const isUS = countryCode.toUpperCase() === "US";
 
   const isDirty =
-    slug !== "" ||
     country !== "" ||
     countryCode !== "" ||
     title !== "" ||
@@ -36,7 +35,7 @@ export function CreateTipForm() {
 
     startTransition(async () => {
       const result = await createTip({
-        slug,
+        slug: isUS && state ? slugify(state) : slugify(country),
         country,
         countryCode,
         state: isUS && state ? state : null,
@@ -58,22 +57,6 @@ export function CreateTipForm() {
           {error}
         </div>
       )}
-
-      {/* Slug */}
-      <label className="block">
-        <span className="mb-1 block text-sm font-medium">URL Path <span className="text-red-500">*</span></span>
-        <input
-          type="text"
-          value={slug}
-          onChange={(e) => setSlug(e.target.value)}
-          required
-          className="w-full rounded border px-3 py-2 text-sm"
-          placeholder="e.g. trinidad-and-tobago"
-        />
-        <span className="mt-1 block text-xs text-gray-400">
-          Lowercase with hyphens. This becomes the web address: /tips/{slug || "your-path"}
-        </span>
-      </label>
 
       {/* Country + Country Code */}
       <div className="grid grid-cols-2 gap-4">
@@ -128,6 +111,16 @@ export function CreateTipForm() {
         </label>
       )}
 
+      {/* Auto-generated URL path */}
+      {country && (
+        <div>
+          <span className="mb-1 block text-sm font-medium text-gray-500">URL Path (auto-generated)</span>
+          <p className="text-sm text-gray-700">
+            /tips/{isUS && state ? slugify(state) : slugify(country)}
+          </p>
+        </div>
+      )}
+
       {/* Title */}
       <label className="block">
         <span className="mb-1 block text-sm font-medium">Title <span className="text-red-500">*</span></span>
@@ -135,24 +128,22 @@ export function CreateTipForm() {
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          onBlur={() => {
-            if (title && !slug) {
-              setSlug(slugify(title));
-            }
-          }}
           required
           className="w-full rounded border px-3 py-2 text-sm"
         />
       </label>
 
-      {/* Description */}
+      {/* Description (SEO) */}
       <div>
-        <span className="mb-1 block text-sm font-medium">Description</span>
+        <span className="mb-1 block text-sm font-medium">Description (SEO)</span>
         <RichTextEditor
           value={description}
           onChange={setDescription}
-          placeholder="Short description for the tips page"
+          placeholder="Short description for search engines"
         />
+        <span className="mt-1 block text-xs text-gray-400">
+          Used for search engine meta tags only — not displayed on the page.
+        </span>
       </div>
 
       <button
