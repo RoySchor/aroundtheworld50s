@@ -1,6 +1,6 @@
 /**
- * Static country name → ISO 3166-1 alpha-2 code lookup.
- * Covers countries featured on the blog. Add more as needed.
+ * Static country name → ISO 3166-1 alpha-2 code lookup
+ * Covers countries featured on the blog. Add more as needed
  */
 const COUNTRY_CODES: Record<string, string> = {
   "afghanistan": "AF",
