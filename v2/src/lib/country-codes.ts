@@ -87,3 +87,29 @@ const COUNTRY_CODES: Record<string, string> = {
 export function getCountryCode(countryName: string): string | undefined {
   return COUNTRY_CODES[countryName.toLowerCase().trim()];
 }
+
+/** Aliases to skip when building the canonical COUNTRIES list. */
+const ALIAS_KEYS = new Set([
+  "england",
+  "scotland",
+  "uk",
+  "usa",
+  "uae",
+  "czechia",
+  "turkiye",
+]);
+
+function titleCase(s: string): string {
+  return s.replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+/**
+ * Sorted, deduplicated list of countries for combobox usage.
+ * Each entry has a display label and ISO country code.
+ */
+export const COUNTRIES: { label: string; code: string }[] = Object.entries(
+  COUNTRY_CODES,
+)
+  .filter(([key]) => !ALIAS_KEYS.has(key))
+  .map(([key, code]) => ({ label: titleCase(key), code }))
+  .sort((a, b) => a.label.localeCompare(b.label));
