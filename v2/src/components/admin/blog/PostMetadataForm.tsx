@@ -8,6 +8,7 @@ import { US_STATES } from "@/lib/constants/us-states";
 import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
+import { slugify } from "@/lib/slugify";
 import type { BlogPost } from "@/server/db/schema";
 
 interface PostMetadataFormProps {
@@ -29,7 +30,6 @@ export function PostMetadataForm({ post }: PostMetadataFormProps) {
     post.backgroundImage ?? "",
   );
   const [tipsCtaCopy, setTipsCtaCopy] = useState(post.tipsCtaCopy ?? "");
-  const [tipsSlug, setTipsSlug] = useState(post.tipsSlug ?? "");
   const [state, setState] = useState(post.state ?? "");
 
   const isUS = post.countryCode.toUpperCase() === "US";
@@ -42,7 +42,6 @@ export function PostMetadataForm({ post }: PostMetadataFormProps) {
     excerpt !== (post.excerpt ?? "") ||
     backgroundImage !== (post.backgroundImage ?? "") ||
     tipsCtaCopy !== (post.tipsCtaCopy ?? "") ||
-    tipsSlug !== (post.tipsSlug ?? "") ||
     state !== (post.state ?? "");
 
   useUnsavedChanges(isDirty);
@@ -61,7 +60,7 @@ export function PostMetadataForm({ post }: PostMetadataFormProps) {
         excerpt: excerpt || null,
         backgroundImage: backgroundImage || null,
         tipsCtaCopy: tipsCtaCopy || null,
-        tipsSlug: tipsSlug || null,
+        tipsSlug: slugify(post.country),
         state: isUS && state ? state : null,
       });
 
@@ -194,26 +193,20 @@ export function PostMetadataForm({ post }: PostMetadataFormProps) {
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <label className="block">
-          <span className="mb-1 block text-sm font-medium">Tips Link Text</span>
-          <input
-            type="text"
-            value={tipsCtaCopy}
-            onChange={(e) => setTipsCtaCopy(e.target.value)}
-            className="w-full rounded border px-3 py-2 text-sm"
-          />
-        </label>
-        <label className="block">
-          <span className="mb-1 block text-sm font-medium">Tips URL Path</span>
-          <input
-            type="text"
-            value={tipsSlug}
-            onChange={(e) => setTipsSlug(e.target.value)}
-            className="w-full rounded border px-3 py-2 text-sm"
-          />
-        </label>
-      </div>
+      {/* Tips CTA */}
+      <label className="block">
+        <span className="mb-1 block text-sm font-medium">&ldquo;View Tips&rdquo; Button Text</span>
+        <input
+          type="text"
+          value={tipsCtaCopy}
+          onChange={(e) => setTipsCtaCopy(e.target.value)}
+          className="w-full rounded border px-3 py-2 text-sm"
+          placeholder='e.g. "See our tips for Trinidad"'
+        />
+        <span className="mt-1 block text-xs text-gray-400">
+          Links to: /tips/{slugify(post.country)}
+        </span>
+      </label>
 
     </form>
   );

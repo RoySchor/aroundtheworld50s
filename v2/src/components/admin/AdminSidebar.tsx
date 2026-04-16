@@ -8,7 +8,7 @@ const ADMIN_NAV = [
   { label: "Dashboard", href: "/admin" },
   { label: "Blog Posts", href: "/admin/blog" },
   { label: "Tips", href: "/admin/tips" },
-  { label: "Gallery", href: "/admin/gallery" },
+  { label: "Home Gallery", href: "/admin/gallery" },
 ];
 
 export function AdminSidebar({ displayName }: { displayName: string }) {

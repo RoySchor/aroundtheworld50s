@@ -56,7 +56,7 @@ export function TipMetadataForm({ tip }: TipMetadataFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form id="tip-metadata-form" onSubmit={handleSubmit} className="space-y-5">
       <h2 className="text-lg font-semibold">Tip Metadata</h2>
 
       {error && (
@@ -128,13 +128,6 @@ export function TipMetadataForm({ tip }: TipMetadataFormProps) {
         <RichTextEditor value={description} onChange={setDescription} />
       </div>
 
-      <button
-        type="submit"
-        disabled={isPending}
-        className="rounded bg-blue-600 px-6 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-      >
-        {isPending ? "Saving..." : "Save Metadata"}
-      </button>
     </form>
   );
 }

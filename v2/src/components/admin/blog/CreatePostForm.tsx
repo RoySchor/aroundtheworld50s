@@ -8,6 +8,7 @@ import { CountryCombobox } from "@/components/admin/CountryCombobox";
 import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
+import { slugify } from "@/lib/slugify";
 
 export function CreatePostForm() {
   const [isPending, startTransition] = useTransition();
@@ -23,7 +24,6 @@ export function CreatePostForm() {
   const [description, setDescription] = useState("");
   const [backgroundImage, setBackgroundImage] = useState("");
   const [tipsCtaCopy, setTipsCtaCopy] = useState("");
-  const [tipsSlug, setTipsSlug] = useState("");
 
   const isUS = countryCode.toUpperCase() === "US";
 
@@ -52,7 +52,7 @@ export function CreatePostForm() {
         description: description || null,
         backgroundImage: backgroundImage || null,
         tipsCtaCopy: tipsCtaCopy || null,
-        tipsSlug: tipsSlug || null,
+        tipsSlug: country ? slugify(country) : null,
       });
 
       // createBlogPost redirects on success, so we only get here on error
@@ -201,27 +201,21 @@ export function CreatePostForm() {
       </div>
 
       {/* Tips CTA */}
-      <div className="grid grid-cols-2 gap-4">
-        <label className="block">
-          <span className="mb-1 block text-sm font-medium">Tips Link Text</span>
-          <input
-            type="text"
-            value={tipsCtaCopy}
-            onChange={(e) => setTipsCtaCopy(e.target.value)}
-            className="w-full rounded border px-3 py-2 text-sm"
-          />
-        </label>
-        <label className="block">
-          <span className="mb-1 block text-sm font-medium">Tips URL Path</span>
-          <input
-            type="text"
-            value={tipsSlug}
-            onChange={(e) => setTipsSlug(e.target.value)}
-            className="w-full rounded border px-3 py-2 text-sm"
-            placeholder="e.g. trinidad-and-tobago"
-          />
-        </label>
-      </div>
+      <label className="block">
+        <span className="mb-1 block text-sm font-medium">&ldquo;View Tips&rdquo; Button Text</span>
+        <input
+          type="text"
+          value={tipsCtaCopy}
+          onChange={(e) => setTipsCtaCopy(e.target.value)}
+          className="w-full rounded border px-3 py-2 text-sm"
+          placeholder='e.g. "See our tips for Trinidad"'
+        />
+        {country && (
+          <span className="mt-1 block text-xs text-gray-400">
+            Links to: /tips/{slugify(country)}
+          </span>
+        )}
+      </label>
 
       <button
         type="submit"
