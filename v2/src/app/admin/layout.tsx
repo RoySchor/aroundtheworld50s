@@ -16,7 +16,7 @@ export default async function AdminLayout({
   const profile = await getAuthenticatedAdmin();
 
   return (
-    <div className="fixed inset-0 z-[100] flex bg-white">
+    <div className="fixed inset-0 z-[100] flex bg-gray-50">
       <AdminSidebar displayName={profile.displayName ?? "Admin"} />
       <div className="flex-1 overflow-auto">
         <div className="p-8">{children}</div>

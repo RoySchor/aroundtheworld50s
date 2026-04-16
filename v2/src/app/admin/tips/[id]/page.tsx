@@ -41,7 +41,7 @@ export default async function EditTipPage({
         </p>
       </div>
 
-      <div className="sticky top-0 z-10 -mx-8 bg-white px-8 pb-4 pt-8 shadow-sm">
+      <div className="sticky top-0 z-10 -mx-8 bg-gray-50 px-8 pb-4 pt-8 shadow-sm">
         <TipStatusBar tipId={tip.id} status={tip.status} slug={tip.slug} />
       </div>
 

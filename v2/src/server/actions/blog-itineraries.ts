@@ -3,6 +3,7 @@
 import { and, eq, gt, sql } from "drizzle-orm";
 import { db } from "@/server/db";
 import {
+  blogBlocks,
   blogItineraries,
   blogItineraryItems,
 } from "@/server/db/schema";
@@ -96,6 +97,7 @@ export async function deleteBlogItinerary(id: string): Promise<ActionResult> {
 
     if (!row) return null;
 
+    // Re-number itinerary positions
     await tx
       .update(blogItineraries)
       .set({ position: sql`${blogItineraries.position} - 1` })
@@ -105,6 +107,31 @@ export async function deleteBlogItinerary(id: string): Promise<ActionResult> {
           gt(blogItineraries.position, row.position),
         ),
       );
+
+    // Cascade: delete content blocks that referenced this itinerary
+    const orphanedBlocks = await tx
+      .select({ id: blogBlocks.id, position: blogBlocks.position })
+      .from(blogBlocks)
+      .where(
+        and(
+          eq(blogBlocks.postId, row.postId),
+          eq(blogBlocks.type, "itinerary_with_map"),
+          sql`${blogBlocks.data}->>'itineraryId' = ${id}`,
+        ),
+      );
+
+    for (const orphan of orphanedBlocks) {
+      await tx.delete(blogBlocks).where(eq(blogBlocks.id, orphan.id));
+      await tx
+        .update(blogBlocks)
+        .set({ position: sql`${blogBlocks.position} - 1` })
+        .where(
+          and(
+            eq(blogBlocks.postId, row.postId),
+            gt(blogBlocks.position, orphan.position),
+          ),
+        );
+    }
 
     return row;
   });

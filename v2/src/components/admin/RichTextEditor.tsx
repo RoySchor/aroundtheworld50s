@@ -30,6 +30,7 @@ export function RichTextEditor({
   const [tab, setTab] = useState<"edit" | "raw">("edit");
 
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit.configure({
         heading: { levels: [3] },

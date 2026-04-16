@@ -256,3 +256,4 @@ The rich text toolbar needs to work on tablet-width screens (the admin is unlike
 | Phase 2: Rich Text Toolbar | Done | admin-nav-and-login-redesign |
 | Phase 3: Create Post Flow | Done | admin-nav-and-login-redesign |
 | Phase 4: Polish | Pending (verification only) | |
+| Round 2: Off-white bg, blockquote fix, image grid UX, itinerary cascade | Done | admin-nav-and-login-redesign |

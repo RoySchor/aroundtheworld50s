@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Image from "next/image";
 import { createBlogBlock, updateBlogBlock } from "@/server/actions/blog-blocks";
 import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
@@ -65,6 +66,14 @@ export function BlockForm({
   const [itineraryId, setItineraryId] = useState<string>(
     (data.itineraryId as string) ?? "",
   );
+
+  function moveImage(from: number, direction: "up" | "down") {
+    const to = direction === "up" ? from - 1 : from + 1;
+    if (to < 0 || to >= images.length) return;
+    const next = [...images];
+    [next[from], next[to]] = [next[to], next[from]];
+    setImages(next);
+  }
 
   function buildPayload() {
     switch (type) {
@@ -209,9 +218,34 @@ export function BlockForm({
           <div className="space-y-2">
             {images.map((img, idx) => (
               <div key={idx} className="flex items-center gap-2">
+                <Image
+                  src={img}
+                  alt=""
+                  width={48}
+                  height={48}
+                  className="rounded object-cover"
+                />
                 <span className="flex-1 truncate text-sm text-gray-600">
                   {img}
                 </span>
+                <button
+                  type="button"
+                  onClick={() => moveImage(idx, "up")}
+                  disabled={idx === 0}
+                  className="rounded px-2 py-1 text-xs text-gray-500 hover:bg-gray-100 disabled:opacity-30"
+                  title="Move up"
+                >
+                  &uarr;
+                </button>
+                <button
+                  type="button"
+                  onClick={() => moveImage(idx, "down")}
+                  disabled={idx === images.length - 1}
+                  className="rounded px-2 py-1 text-xs text-gray-500 hover:bg-gray-100 disabled:opacity-30"
+                  title="Move down"
+                >
+                  &darr;
+                </button>
                 <button
                   type="button"
                   onClick={() => setImages(images.filter((_, i) => i !== idx))}
