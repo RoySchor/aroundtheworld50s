@@ -7,6 +7,7 @@ import { getCountryCode } from "@/lib/country-codes";
 import { CountryCombobox } from "@/components/admin/CountryCombobox";
 import { slugify } from "@/lib/slugify";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
+import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
 
 export function CreateTipForm() {
   const [isPending, startTransition] = useTransition();
@@ -20,6 +21,15 @@ export function CreateTipForm() {
   const [description, setDescription] = useState("");
 
   const isUS = countryCode.toUpperCase() === "US";
+
+  const isDirty =
+    slug !== "" ||
+    country !== "" ||
+    countryCode !== "" ||
+    title !== "" ||
+    description !== "";
+
+  useUnsavedChanges(isDirty);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

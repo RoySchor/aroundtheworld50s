@@ -110,7 +110,7 @@ export async function deleteBlogItinerary(id: string): Promise<ActionResult> {
 
     // Cascade: delete content blocks that referenced this itinerary
     const orphanedBlocks = await tx
-      .select({ id: blogBlocks.id, position: blogBlocks.position })
+      .select({ id: blogBlocks.id })
       .from(blogBlocks)
       .where(
         and(
@@ -120,17 +120,23 @@ export async function deleteBlogItinerary(id: string): Promise<ActionResult> {
         ),
       );
 
-    for (const orphan of orphanedBlocks) {
-      await tx.delete(blogBlocks).where(eq(blogBlocks.id, orphan.id));
-      await tx
-        .update(blogBlocks)
-        .set({ position: sql`${blogBlocks.position} - 1` })
-        .where(
-          and(
-            eq(blogBlocks.postId, row.postId),
-            gt(blogBlocks.position, orphan.position),
-          ),
-        );
+    if (orphanedBlocks.length > 0) {
+      // Delete all orphaned blocks first
+      for (const orphan of orphanedBlocks) {
+        await tx.delete(blogBlocks).where(eq(blogBlocks.id, orphan.id));
+      }
+
+      // Single renumbering pass using ROW_NUMBER
+      await tx.execute(sql`
+        UPDATE blog_blocks
+        SET position = sub.new_pos
+        FROM (
+          SELECT id, ROW_NUMBER() OVER (ORDER BY position) - 1 AS new_pos
+          FROM blog_blocks
+          WHERE post_id = ${row.postId}
+        ) sub
+        WHERE blog_blocks.id = sub.id
+      `);
     }
 
     return row;

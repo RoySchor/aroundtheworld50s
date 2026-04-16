@@ -139,8 +139,17 @@ const ALIAS_KEYS = new Set([
   "turkiye",
 ]);
 
+const LOWERCASE_WORDS = new Set(["and", "the", "of", "in"]);
+
 function titleCase(s: string): string {
-  return s.replace(/\b\w/g, (c) => c.toUpperCase());
+  return s
+    .split(" ")
+    .map((word, i) =>
+      i > 0 && LOWERCASE_WORDS.has(word)
+        ? word
+        : word.charAt(0).toUpperCase() + word.slice(1),
+    )
+    .join(" ");
 }
 
 /**

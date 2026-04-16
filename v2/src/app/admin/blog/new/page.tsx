@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ConfirmBackLink } from "@/components/admin/ConfirmBackLink";
 import { CreatePostForm } from "@/components/admin/blog/CreatePostForm";
 
 export const metadata: Metadata = {
@@ -10,13 +9,11 @@ export const metadata: Metadata = {
 export default function NewBlogPostPage() {
   return (
     <div>
-      <Link
-        href="/admin/blog"
-        className="mb-4 inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700"
-      >
-        <ArrowLeft size={16} />
-        Back to Blog Posts
-      </Link>
+      <div className="mb-4">
+        <ConfirmBackLink href="/admin/blog">
+          Back to Blog Posts
+        </ConfirmBackLink>
+      </div>
       <h1 className="mb-6 text-2xl font-bold">Create New Post</h1>
       <CreatePostForm />
     </div>

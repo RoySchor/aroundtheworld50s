@@ -7,6 +7,7 @@ import { getCountryCode } from "@/lib/country-codes";
 import { CountryCombobox } from "@/components/admin/CountryCombobox";
 import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
+import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
 
 export function CreatePostForm() {
   const [isPending, startTransition] = useTransition();
@@ -25,6 +26,15 @@ export function CreatePostForm() {
   const [tipsSlug, setTipsSlug] = useState("");
 
   const isUS = countryCode.toUpperCase() === "US";
+
+  const isDirty =
+    country !== "" ||
+    countryCode !== "" ||
+    title !== "" ||
+    subtitle !== "" ||
+    description !== "";
+
+  useUnsavedChanges(isDirty);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

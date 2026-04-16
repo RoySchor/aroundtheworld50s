@@ -12,7 +12,7 @@ export function ConfirmBackLink({ href, children }: ConfirmBackLinkProps) {
   const router = useRouter();
 
   function handleClick(e: React.MouseEvent) {
-    if (window.__unsavedChanges) {
+    if ((window.__unsavedChangesCount ?? 0) > 0) {
       const ok = window.confirm(
         "You have unsaved changes. Are you sure you want to leave?",
       );
