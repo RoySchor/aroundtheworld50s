@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
-import Link from "@tiptap/extension-link";
 import {
   Bold,
   Italic,
@@ -30,12 +28,12 @@ export function RichTextEditor({
   const [tab, setTab] = useState<"edit" | "raw">("edit");
 
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit.configure({
         heading: { levels: [3] },
+        link: { openOnClick: false },
       }),
-      Underline,
-      Link.configure({ openOnClick: false }),
     ],
     content: value,
     onUpdate: ({ editor }) => {

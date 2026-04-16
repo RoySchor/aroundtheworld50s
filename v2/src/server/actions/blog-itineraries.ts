@@ -3,6 +3,7 @@
 import { and, eq, gt, sql } from "drizzle-orm";
 import { db } from "@/server/db";
 import {
+  blogBlocks,
   blogItineraries,
   blogItineraryItems,
 } from "@/server/db/schema";
@@ -96,6 +97,7 @@ export async function deleteBlogItinerary(id: string): Promise<ActionResult> {
 
     if (!row) return null;
 
+    // Re-number itinerary positions
     await tx
       .update(blogItineraries)
       .set({ position: sql`${blogItineraries.position} - 1` })
@@ -105,6 +107,37 @@ export async function deleteBlogItinerary(id: string): Promise<ActionResult> {
           gt(blogItineraries.position, row.position),
         ),
       );
+
+    // Cascade: delete content blocks that referenced this itinerary
+    const orphanedBlocks = await tx
+      .select({ id: blogBlocks.id })
+      .from(blogBlocks)
+      .where(
+        and(
+          eq(blogBlocks.postId, row.postId),
+          eq(blogBlocks.type, "itinerary_with_map"),
+          sql`${blogBlocks.data}->>'itineraryId' = ${id}`,
+        ),
+      );
+
+    if (orphanedBlocks.length > 0) {
+      // Delete all orphaned blocks first
+      for (const orphan of orphanedBlocks) {
+        await tx.delete(blogBlocks).where(eq(blogBlocks.id, orphan.id));
+      }
+
+      // Single renumbering pass using ROW_NUMBER
+      await tx.execute(sql`
+        UPDATE blog_blocks
+        SET position = sub.new_pos
+        FROM (
+          SELECT id, ROW_NUMBER() OVER (ORDER BY position) - 1 AS new_pos
+          FROM blog_blocks
+          WHERE post_id = ${row.postId}
+        ) sub
+        WHERE blog_blocks.id = sub.id
+      `);
+    }
 
     return row;
   });

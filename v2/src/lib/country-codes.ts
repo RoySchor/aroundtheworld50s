@@ -4,11 +4,22 @@
  */
 const COUNTRY_CODES: Record<string, string> = {
   "afghanistan": "AF",
+  "albania": "AL",
+  "andorra": "AD",
+  "antigua and barbuda": "AG",
   "argentina": "AR",
+  "armenia": "AM",
   "australia": "AU",
   "austria": "AT",
+  "azerbaijan": "AZ",
+  "bahamas": "BS",
+  "barbados": "BB",
+  "belarus": "BY",
   "belgium": "BE",
+  "belize": "BZ",
+  "bosnia and herzegovina": "BA",
   "brazil": "BR",
+  "bulgaria": "BG",
   "cambodia": "KH",
   "canada": "CA",
   "chile": "CL",
@@ -17,20 +28,28 @@ const COUNTRY_CODES: Record<string, string> = {
   "costa rica": "CR",
   "croatia": "HR",
   "cuba": "CU",
+  "cyprus": "CY",
   "czech republic": "CZ",
   "czechia": "CZ",
   "denmark": "DK",
+  "dominica": "DM",
   "dominican republic": "DO",
   "ecuador": "EC",
   "egypt": "EG",
+  "el salvador": "SV",
   "england": "GB",
+  "estonia": "EE",
   "ethiopia": "ET",
   "fiji": "FJ",
   "finland": "FI",
   "france": "FR",
+  "georgia": "GE",
   "germany": "DE",
   "greece": "GR",
+  "grenada": "GD",
   "guatemala": "GT",
+  "haiti": "HT",
+  "honduras": "HN",
   "hungary": "HU",
   "iceland": "IS",
   "india": "IN",
@@ -41,17 +60,28 @@ const COUNTRY_CODES: Record<string, string> = {
   "jamaica": "JM",
   "japan": "JP",
   "jordan": "JO",
+  "kazakhstan": "KZ",
   "kenya": "KE",
+  "kosovo": "XK",
   "laos": "LA",
+  "latvia": "LV",
+  "liechtenstein": "LI",
+  "lithuania": "LT",
+  "luxembourg": "LU",
   "malaysia": "MY",
   "maldives": "MV",
+  "malta": "MT",
   "mexico": "MX",
+  "moldova": "MD",
+  "monaco": "MC",
+  "montenegro": "ME",
   "morocco": "MA",
   "myanmar": "MM",
   "nepal": "NP",
   "netherlands": "NL",
   "new zealand": "NZ",
   "nicaragua": "NI",
+  "north macedonia": "MK",
   "norway": "NO",
   "oman": "OM",
   "panama": "PA",
@@ -60,8 +90,16 @@ const COUNTRY_CODES: Record<string, string> = {
   "poland": "PL",
   "portugal": "PT",
   "romania": "RO",
+  "russia": "RU",
+  "saint kitts and nevis": "KN",
+  "saint lucia": "LC",
+  "saint vincent and the grenadines": "VC",
+  "san marino": "SM",
   "scotland": "GB",
+  "serbia": "RS",
   "singapore": "SG",
+  "slovakia": "SK",
+  "slovenia": "SI",
   "south africa": "ZA",
   "south korea": "KR",
   "spain": "ES",
@@ -74,6 +112,7 @@ const COUNTRY_CODES: Record<string, string> = {
   "trinidad and tobago": "TT",
   "turkey": "TR",
   "turkiye": "TR",
+  "ukraine": "UA",
   "united arab emirates": "AE",
   "uae": "AE",
   "united kingdom": "GB",
@@ -81,9 +120,45 @@ const COUNTRY_CODES: Record<string, string> = {
   "united states": "US",
   "usa": "US",
   "uruguay": "UY",
+  "vatican city": "VA",
   "vietnam": "VN",
 };
 
 export function getCountryCode(countryName: string): string | undefined {
   return COUNTRY_CODES[countryName.toLowerCase().trim()];
 }
+
+/** Aliases to skip when building the canonical COUNTRIES list. */
+const ALIAS_KEYS = new Set([
+  "england",
+  "scotland",
+  "uk",
+  "usa",
+  "uae",
+  "czechia",
+  "turkiye",
+]);
+
+const LOWERCASE_WORDS = new Set(["and", "the", "of", "in"]);
+
+function titleCase(s: string): string {
+  return s
+    .split(" ")
+    .map((word, i) =>
+      i > 0 && LOWERCASE_WORDS.has(word)
+        ? word
+        : word.charAt(0).toUpperCase() + word.slice(1),
+    )
+    .join(" ");
+}
+
+/**
+ * Sorted, deduplicated list of countries for combobox usage.
+ * Each entry has a display label and ISO country code.
+ */
+export const COUNTRIES: { label: string; code: string }[] = Object.entries(
+  COUNTRY_CODES,
+)
+  .filter(([key]) => !ALIAS_KEYS.has(key))
+  .map(([key, code]) => ({ label: titleCase(key), code }))
+  .sort((a, b) => a.label.localeCompare(b.label));

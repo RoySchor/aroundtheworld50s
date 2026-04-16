@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { updateBlogPost } from "@/server/actions/blog-posts";
 import { US_STATES } from "@/lib/constants/us-states";
@@ -74,7 +75,7 @@ export function PostMetadataForm({ post }: PostMetadataFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form id="post-metadata-form" onSubmit={handleSubmit} className="space-y-5">
       <h2 className="text-lg font-semibold">Post Metadata</h2>
 
       {error && (
@@ -166,6 +167,14 @@ export function PostMetadataForm({ post }: PostMetadataFormProps) {
         <span className="mb-1 block text-sm font-medium">Background Image</span>
         {backgroundImage ? (
           <div className="flex items-center gap-3">
+            <Image
+              src={backgroundImage}
+              alt="Background preview"
+              width={64}
+              height={40}
+              className="rounded object-cover"
+              style={{ width: 64, height: "auto" }}
+            />
             <span className="truncate text-sm text-gray-600">
               {backgroundImage}
             </span>
@@ -206,13 +215,6 @@ export function PostMetadataForm({ post }: PostMetadataFormProps) {
         </label>
       </div>
 
-      <button
-        type="submit"
-        disabled={isPending}
-        className="rounded bg-blue-600 px-6 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-      >
-        {isPending ? "Saving..." : "Save Metadata"}
-      </button>
     </form>
   );
 }
