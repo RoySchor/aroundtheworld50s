@@ -26,6 +26,40 @@ function revalidatePublicPaths(countrySlug: string, postIndex: number) {
   revalidatePath(`/blog/${countrySlug}/${postIndex}`);
 }
 
+async function autoUnpublishTipIfEmpty(
+  countrySlug: string,
+  state: string | null,
+) {
+  const stateFilter = state
+    ? eq(blogPosts.state, state)
+    : isNull(blogPosts.state);
+
+  const [remaining] = await db
+    .select({ count: sql<number>`COUNT(*)` })
+    .from(blogPosts)
+    .where(
+      and(
+        eq(blogPosts.countrySlug, countrySlug),
+        stateFilter,
+        eq(blogPosts.status, "published"),
+      ),
+    );
+
+  if (Number(remaining?.count ?? 0) === 0) {
+    const tipSlug = state ? slugify(state) : countrySlug;
+
+    const [tip] = await db
+      .update(tips)
+      .set({ status: "draft", publishedAt: null })
+      .where(and(eq(tips.slug, tipSlug), eq(tips.status, "published")))
+      .returning({ slug: tips.slug });
+
+    if (tip) {
+      revalidatePublicTipPaths(tip.slug);
+    }
+  }
+}
+
 function revalidateAfterDelete(
   countrySlug: string,
   deletedPostIndex: number,
@@ -143,12 +177,14 @@ export async function unpublishBlogPost(id: string): Promise<ActionResult> {
     .returning({
       countrySlug: blogPosts.countrySlug,
       postIndex: blogPosts.postIndex,
+      state: blogPosts.state,
     });
 
   if (!post) {
     return { success: false, error: "Post not found" };
   }
 
+  await autoUnpublishTipIfEmpty(post.countrySlug, post.state);
   revalidatePublicPaths(post.countrySlug, post.postIndex);
   return { success: true, data: undefined };
 }
@@ -189,41 +225,9 @@ export async function deleteBlogPost(id: string): Promise<ActionResult> {
   }
 
   // ---------------------------------------------------------------
-  // 2. Count remaining published posts for this state/country
+  // 2. Auto-unpublish tip if no published posts remain
   // ---------------------------------------------------------------
-  const stateFilter = deleted.state
-    ? eq(blogPosts.state, deleted.state)
-    : isNull(blogPosts.state);
-
-  const [remaining] = await db
-    .select({ count: sql<number>`COUNT(*)` })
-    .from(blogPosts)
-    .where(
-      and(
-        eq(blogPosts.countrySlug, deleted.countrySlug),
-        stateFilter,
-        eq(blogPosts.status, "published"),
-      ),
-    );
-
-  // ---------------------------------------------------------------
-  // 3. Auto-unpublish tip if no published posts remain
-  // ---------------------------------------------------------------
-  if ((remaining?.count ?? 0) === 0) {
-    const tipSlug = deleted.state
-      ? slugify(deleted.state)
-      : deleted.countrySlug;
-
-    const [tip] = await db
-      .update(tips)
-      .set({ status: "draft", publishedAt: null })
-      .where(and(eq(tips.slug, tipSlug), eq(tips.status, "published")))
-      .returning({ slug: tips.slug });
-
-    if (tip) {
-      revalidatePublicTipPaths(tip.slug);
-    }
-  }
+  await autoUnpublishTipIfEmpty(deleted.countrySlug, deleted.state);
 
   // ---------------------------------------------------------------
   // 4. Revalidate affected blog paths
@@ -236,7 +240,7 @@ export async function deleteBlogPost(id: string): Promise<ActionResult> {
   revalidateAfterDelete(
     deleted.countrySlug,
     deleted.postIndex,
-    totalRemaining?.count ?? 0,
+    Number(totalRemaining?.count ?? 0),
   );
 
   // redirect() throws NEXT_REDIRECT — called outside the transaction

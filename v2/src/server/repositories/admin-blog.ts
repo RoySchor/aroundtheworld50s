@@ -40,5 +40,5 @@ export async function getNextPostIndex(
     .from(blogPosts)
     .where(eq(blogPosts.countrySlug, countrySlug));
 
-  return (result[0]?.count ?? 0) + 1;
+  return Number(result[0]?.count ?? 0) + 1;
 }
