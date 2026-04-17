@@ -12,7 +12,7 @@ export function MapEmbed({ title, url }: MapEmbedProps) {
           title={`${title} - Interactive Map`}
           src={url}
           width="100%"
-          height="450"
+          className="h-[250px] sm:h-[350px] md:h-[450px]"
           style={{ border: 0 }}
           allowFullScreen
           loading="lazy"

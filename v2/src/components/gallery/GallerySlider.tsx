@@ -81,7 +81,7 @@ export function GallerySlider({ images }: GallerySliderProps) {
         >
           &#10095;
         </button>
-        <div className="gallery-counter">
+        <div className="gallery-counter hidden sm:block">
           {currentIndex + 1} -{" "}
           {Math.min(currentIndex + IMAGES_PER_SLIDE, totalImages)} /{" "}
           {totalImages}
