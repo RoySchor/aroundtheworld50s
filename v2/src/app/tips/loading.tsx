@@ -1,6 +1,6 @@
 export default function TipsLoading() {
   return (
-    <div className="page-container mt-44">
+    <div className="page-container mt-28 lg:mt-44">
       <div className="container">
         <div className="page-content text-center">
           <div className="mb-4 h-8 w-80 mx-auto animate-pulse rounded bg-gray-200" />

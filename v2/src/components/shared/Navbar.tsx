@@ -180,6 +180,9 @@ export function Navbar() {
 
     {showAdminMobileAlert && (
       <div
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="admin-mobile-title"
         className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50"
         onClick={() => setShowAdminMobileAlert(false)}
       >
@@ -187,7 +190,7 @@ export function Navbar() {
           className="bg-white rounded-2xl shadow-xl mx-6 max-w-sm p-8 text-center"
           onClick={(e) => e.stopPropagation()}
         >
-          <h2 className="text-xl font-bold text-gray-800 mb-4">
+          <h2 id="admin-mobile-title" className="text-xl font-bold text-gray-800 mb-4">
             Desktop Only
           </h2>
           <p className="text-gray-600 mb-6">

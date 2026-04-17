@@ -1,20 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
-
-const MOBILE_BREAKPOINT = 1024;
+import { useMobileCheck } from "@/hooks/useMobileCheck";
 
 export function MobileAdminGuard({ children }: { children: React.ReactNode }) {
-  const [isMobile, setIsMobile] = useState(false);
-  const [checked, setChecked] = useState(false);
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
-    check();
-    setChecked(true);
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
+  const { isMobile, checked } = useMobileCheck();
 
   if (!checked) return null;
 
