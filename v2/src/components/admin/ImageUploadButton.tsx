@@ -24,18 +24,33 @@ export function ImageUploadButton({
 
     setError(null);
 
+    if (!file.type.startsWith("image/")) {
+      setError("Please select an image file.");
+      if (inputRef.current) inputRef.current.value = "";
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      setError("Image must be under 10MB. Please choose a smaller file.");
+      if (inputRef.current) inputRef.current.value = "";
+      return;
+    }
+
     const formData = new FormData();
     formData.set("file", file);
     if (folder) formData.set("folder", folder);
 
     startTransition(async () => {
-      const result = await uploadImage(formData);
-      if (result.success) {
-        onUploaded(result.data.publicId);
-      } else {
-        setError(result.error);
+      try {
+        const result = await uploadImage(formData);
+        if (result.success) {
+          onUploaded(result.data.publicId);
+        } else {
+          setError(result.error);
+        }
+      } catch {
+        setError("Upload failed. The image may be too large — try a smaller file.");
       }
-      // Reset input so the same file can be re-selected
       if (inputRef.current) inputRef.current.value = "";
     });
   }
