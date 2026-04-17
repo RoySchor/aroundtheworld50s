@@ -58,6 +58,7 @@ export const createTipSectionSchema = z.object({
 });
 
 export const updateTipSectionSchema = z.object({
+  title: z.string().nullable().optional(),
   content: z.string().nullable().optional(),
   enabled: z.boolean().optional(),
 });

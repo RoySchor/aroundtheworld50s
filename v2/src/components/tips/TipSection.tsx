@@ -10,7 +10,8 @@ interface TipSectionProps {
 }
 
 export function TipSection({ section }: TipSectionProps) {
-  const label = TIP_SECTION_LABELS[section.sectionKey] ?? section.sectionKey;
+  const label =
+    section.title || TIP_SECTION_LABELS[section.sectionKey] || section.sectionKey;
   const hasContent = section.content && section.content.trim().length > 0;
 
   return (

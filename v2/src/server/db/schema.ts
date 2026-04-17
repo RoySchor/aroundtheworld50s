@@ -408,7 +408,8 @@ export const tipSections = pgTable(
       .notNull()
       .references(() => tips.id, { onDelete: "cascade" }),
     sectionKey: tipSectionKey("section_key").notNull(),
-    content: text("content"), // HTML allowed
+    title: text("title"),
+    content: text("content"),
     enabled: boolean("enabled").notNull().default(true),
     position: integer("position").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })

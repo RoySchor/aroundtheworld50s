@@ -155,8 +155,7 @@ export function CreateTipForm() {
       </button>
 
       <p className="mt-3 text-sm text-gray-500">
-        After creating, you&apos;ll be taken to the editor where you can add
-        sections and content.
+        אחרי שתיצרי, תעברי לעורך שם תוכלי להוסיף בלוקים של מידע, תמונות ותוכניות מסלול
       </p>
     </form>
   );
