@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { publishTip, unpublishTip, deleteTip } from "@/server/actions/tips";
+import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 
 interface TipStatusBarProps {
   tipId: string;
@@ -15,6 +16,7 @@ export function TipStatusBar({ tipId, status, slug, onPreview }: TipStatusBarPro
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const isPublished = status === "published";
 
@@ -32,18 +34,11 @@ export function TipStatusBar({ tipId, status, slug, onPreview }: TipStatusBarPro
     });
   }
 
-  function handleDelete() {
-    if (
-      !confirm(
-        "Delete this tip? All content will be permanently removed.",
-      )
-    ) {
-      return;
-    }
+  function handleConfirmDelete() {
+    setShowConfirm(false);
     setError(null);
     startTransition(async () => {
       const result = await deleteTip(tipId);
-      // deleteTip redirects on success
       if (!result.success) {
         setError(result.error);
       }
@@ -105,7 +100,7 @@ export function TipStatusBar({ tipId, status, slug, onPreview }: TipStatusBarPro
       <div className="ml-auto">
         <button
           type="button"
-          onClick={handleDelete}
+          onClick={() => setShowConfirm(true)}
           disabled={isPending}
           className="rounded px-4 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50 disabled:opacity-50"
         >
@@ -114,6 +109,15 @@ export function TipStatusBar({ tipId, status, slug, onPreview }: TipStatusBarPro
       </div>
 
       {error && <p className="w-full text-sm text-red-600">{error}</p>}
+
+      {showConfirm && (
+        <ConfirmDialog
+          title="Delete Tip"
+          message="All content will be permanently removed."
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
     </div>
   );
 }

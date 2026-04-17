@@ -389,7 +389,7 @@ export function ItinerariesSection({
         <button
           type="button"
           onClick={() => setShowAdd(true)}
-          className="mt-4 rounded border px-3 py-1.5 text-sm hover:bg-gray-50"
+          className="mt-4 rounded border px-3 py-1.5 text-sm transition-colors hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600"
         >
           + Add Itinerary
         </button>
