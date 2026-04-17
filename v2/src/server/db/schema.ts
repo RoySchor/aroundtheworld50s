@@ -46,9 +46,9 @@
  *   otherwise fail mid-statement on a non-deferrable unique. The
  *   constraint still holds at COMMIT, so the invariant is preserved at
  *   rest. Applies to: blog_blocks, blog_itineraries, blog_itinerary_items,
- *   tip_sections, gallery_images. NOT applied to
- *   `blog_posts(country_slug, post_index)` because `post_index` is a stable
- *   identifier, not a reorderable slot.
+ *   tip_sections, gallery_images, and blog_posts(country_slug, post_index)
+ *   (added in migration 0002). post_index is re-indexed on delete to stay
+ *   contiguous within each country.
  *
  * - `instagram` is intentionally NOT in `blogBlockType` — the v1 embed is
  *   broken and porting it is a fast-follow. Adding it later is a one-line
@@ -144,9 +144,10 @@ export const profiles = pgTable("profiles", {
  * One row per blog post. URL shape: `/blog/{countrySlug}/{postIndex}`.
  *
  * `(countrySlug, postIndex)` is unique but NOT the primary key — the
- * surrogate uuid is. That means deleting post #1 and keeping #2 is safe:
- * indexes are stable integers within a country, no renumbering, no
- * dangling FKs in `blog_blocks` / `blog_itineraries`.
+ * surrogate uuid is. Indexes are contiguous integers within a country,
+ * renumbered on delete to close gaps (migration 0002 makes the constraint
+ * deferrable). No dangling FKs — `blog_blocks` / `blog_itineraries`
+ * reference `id`, not `postIndex`.
  *
  * `tipsSlug` is a soft reference (plain text, not a FK) because a post can
  * be authored before its tips page exists. The app resolves it at read time.

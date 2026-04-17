@@ -36,9 +36,9 @@ export async function getNextPostIndex(
   countrySlug: string,
 ): Promise<number> {
   const result = await db
-    .select({ maxIndex: sql<number>`COALESCE(MAX(${blogPosts.postIndex}), 0)` })
+    .select({ count: sql<number>`COUNT(*)` })
     .from(blogPosts)
     .where(eq(blogPosts.countrySlug, countrySlug));
 
-  return (result[0]?.maxIndex ?? 0) + 1;
+  return Number(result[0]?.count ?? 0) + 1;
 }
