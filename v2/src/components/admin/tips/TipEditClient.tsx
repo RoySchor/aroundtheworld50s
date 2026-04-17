@@ -22,6 +22,7 @@ export function TipEditClient({ tip }: TipEditClientProps) {
   const [sectionDrafts, setSectionDrafts] = useState<Record<string, string>>(
     {},
   );
+  const [titleDrafts, setTitleDrafts] = useState<Record<string, string>>({});
 
   const handleMetadataChange = useCallback((state: TipMetadataState) => {
     setMetadata(state);
@@ -34,6 +35,13 @@ export function TipEditClient({ tip }: TipEditClientProps) {
     [],
   );
 
+  const handleTitleDraftsChange = useCallback(
+    (drafts: Record<string, string>) => {
+      setTitleDrafts(drafts);
+    },
+    [],
+  );
+
   const previewTip = {
     title: metadata.title,
     country: tip.country,
@@ -41,6 +49,7 @@ export function TipEditClient({ tip }: TipEditClientProps) {
     sections: tip.sections.map((s) => ({
       ...s,
       content: sectionDrafts[s.id] ?? s.content,
+      title: titleDrafts[s.id] ?? s.title,
     })),
   };
 
@@ -62,6 +71,7 @@ export function TipEditClient({ tip }: TipEditClientProps) {
       <TipSectionsEditor
         sections={tip.sections}
         onDraftsChange={handleDraftsChange}
+        onTitleDraftsChange={handleTitleDraftsChange}
       />
 
       {previewOpen && (

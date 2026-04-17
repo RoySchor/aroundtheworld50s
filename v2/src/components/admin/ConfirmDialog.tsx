@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 
 interface ConfirmDialogProps {
   title: string;
@@ -19,6 +19,7 @@ export function ConfirmDialog({
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
+  const id = useId();
   const cancelRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -44,18 +45,18 @@ export function ConfirmDialog({
     <div
       role="alertdialog"
       aria-modal="true"
-      aria-labelledby="confirm-title"
-      aria-describedby="confirm-message"
+      aria-labelledby={`${id}-title`}
+      aria-describedby={`${id}-message`}
       className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50"
       onClick={(e) => {
         if (e.target === e.currentTarget) onCancel();
       }}
     >
       <div className="mx-4 w-full max-w-sm rounded-lg border bg-white p-6 shadow-lg">
-        <h2 id="confirm-title" className="text-lg font-semibold text-gray-900">
+        <h2 id={`${id}-title`} className="text-lg font-semibold text-gray-900">
           {title}
         </h2>
-        <p id="confirm-message" className="mt-2 text-sm text-gray-600">
+        <p id={`${id}-message`} className="mt-2 text-sm text-gray-600">
           {message}
         </p>
         <div className="mt-6 flex justify-end gap-3">

@@ -172,7 +172,7 @@ This already works — `createBlogPost` redirects to `/admin/blog/[id]` on succe
 
 After the "Create Post" submit button, add a note:
 
-> אחרי שתיצרי, תעברי לעורך שם תוכלי להוסיף בלוקים של מידע, תמונות ותוכניות מסלול"
+> אחרי שתפרסמי, תעברי לעורך שם תוכלי להוסיף בלוקים של מידע, תמונות ותוכניות מסלול"
 
 This sets expectations that creation is step 1, editing is step 2.
 

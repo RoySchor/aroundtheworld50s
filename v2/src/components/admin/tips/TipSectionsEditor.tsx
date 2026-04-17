@@ -14,9 +14,10 @@ import type { TipSection } from "@/server/db/schema";
 interface TipSectionsEditorProps {
   sections: TipSection[];
   onDraftsChange?: (drafts: Record<string, string>) => void;
+  onTitleDraftsChange?: (drafts: Record<string, string>) => void;
 }
 
-export function TipSectionsEditor({ sections, onDraftsChange }: TipSectionsEditorProps) {
+export function TipSectionsEditor({ sections, onDraftsChange, onTitleDraftsChange }: TipSectionsEditorProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -31,6 +32,10 @@ export function TipSectionsEditor({ sections, onDraftsChange }: TipSectionsEdito
   useEffect(() => {
     onDraftsChange?.(drafts);
   }, [drafts, onDraftsChange]);
+
+  useEffect(() => {
+    onTitleDraftsChange?.(titleDrafts);
+  }, [titleDrafts, onTitleDraftsChange]);
 
   function toggleExpand(id: string) {
     setExpandedId((prev) => (prev === id ? null : id));
