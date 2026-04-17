@@ -6,7 +6,7 @@ Blog post URLs are index-based: `/blog/new-york/1`, `/blog/new-york/2`. Currentl
 
 **Goal:** Make `postIndex` contiguous (gap-closing on delete) and auto-unpublish the matching tips page when the last **published** blog post for a country/state is removed. The destinations page (map flags, dropdown) already handles this correctly since it's 100% DB-driven.
 
-**Key data model nuance — US states:** All US blog posts share `countrySlug = "united-states"` (derived from `slugify("United States")`), but they have distinct `state` values ("Massachusetts", "New York", etc.). Tips for US states use `slug = slugify(state)` (e.g., `"massachusetts"`), NOT `slugify(country)`. This means the remaining-count query and tip-matching query must be **state-aware** for US posts, otherwise deleting the last Massachusetts blog would silently fail to unpublish the Massachusetts tip.
+**Key data model nuance — US states:** All US blog posts share `countrySlug = "united-states"` (derived from `slugify("United States")`), but they have distinct `state` values ("Massachusetts", "New York", etc.). Tips for US states use `slug = slugify(state)` (e.g., `"massachusetts"`), NOT `slugify(country)`. This means the remaining-count query and tip-matching query must be **state-aware** for US posts, otherwise deleting the last Massachusetts blog would silently fail to unpublish the Massachusetts tip
 
 ---
 
