@@ -151,6 +151,64 @@ These differ for US states and when drafts exist. The revalidation loop needs th
 
 ---
 
+## 5. Update `unpublishBlogPost` — Shared Auto-unpublish Helper
+
+**File:** `src/server/actions/blog-posts.ts`
+
+The underlying requirement is "auto-unpublish tip when no published blog content backs it" — and unpublishing the last published post creates the same state as deleting it. Without this, the scenario is:
+
+1. Spain has 2 published blog posts + 1 published tip
+2. Delete post 1 → 1 published post remains → tip stays published
+3. Unpublish post 2 → 0 published posts remain → tip stays published (bug)
+
+The destinations page now shows no Spain flag (it only reads published posts), but `/tips/spain` is still live.
+
+**Fix:** Extract the state-aware count + tip unpublish logic into a shared helper `autoUnpublishTipIfEmpty(countrySlug, state)`, called from both `deleteBlogPost` and `unpublishBlogPost`.
+
+```typescript
+async function autoUnpublishTipIfEmpty(
+  countrySlug: string,
+  state: string | null,
+) {
+  const stateFilter = state
+    ? eq(blogPosts.state, state)
+    : isNull(blogPosts.state);
+
+  const [remaining] = await db
+    .select({ count: sql<number>`COUNT(*)` })
+    .from(blogPosts)
+    .where(
+      and(
+        eq(blogPosts.countrySlug, countrySlug),
+        stateFilter,
+        eq(blogPosts.status, "published"),
+      ),
+    );
+
+  if (Number(remaining?.count ?? 0) === 0) {
+    const tipSlug = state ? slugify(state) : countrySlug;
+
+    const [tip] = await db
+      .update(tips)
+      .set({ status: "draft", publishedAt: null })
+      .where(and(eq(tips.slug, tipSlug), eq(tips.status, "published")))
+      .returning({ slug: tips.slug });
+
+    if (tip) {
+      revalidatePublicTipPaths(tip.slug);
+    }
+  }
+}
+```
+
+**Changes to `unpublishBlogPost`:**
+- Add `state: blogPosts.state` to the RETURNING clause
+- Call `await autoUnpublishTipIfEmpty(post.countrySlug, post.state)` after the UPDATE
+
+**Safety note:** `autoUnpublishTipIfEmpty` is called outside the transaction in both paths. In `unpublishBlogPost`, the single-statement UPDATE auto-commits before the count query runs, so the now-draft post is correctly excluded from the published count.
+
+---
+
 ## Files Summary
 
 | File | Change |
@@ -159,7 +217,7 @@ These differ for US states and when drafts exist. The revalidation loop needs th
 | `src/server/db/migrations/meta/_journal.json` | Add migration entry (idx 1) |
 | `src/server/db/schema.ts` | Update 2 comments (lines 48-51, 146-149) |
 | `src/server/repositories/admin-blog.ts` | `getNextPostIndex`: MAX → COUNT |
-| `src/server/actions/blog-posts.ts` | Rewrite `deleteBlogPost` + add `revalidateAfterDelete` |
+| `src/server/actions/blog-posts.ts` | Rewrite `deleteBlogPost` + add `revalidateAfterDelete` + add `autoUnpublishTipIfEmpty` shared helper + update `unpublishBlogPost` to trigger tip auto-unpublish |
 
 ---
 
@@ -169,6 +227,7 @@ These differ for US states and when drafts exist. The revalidation loop needs th
 - **Blog creation** — `getNextPostIndex` with COUNT+1 handles everything correctly.
 - **Blog update** — `updateBlogPost` cannot change postIndex or countrySlug, no changes needed.
 - **Tips deletion** — remains independent; this feature only auto-*unpublishes*, never deletes tips.
+- **`publishBlogPost`** — deliberately does NOT auto-re-publish tips. If the last published post is unpublished (tip auto-unpublishes) and then re-published, the tip stays draft. Auto-re-publishing would be surprising since the admin may have unpublished the tip intentionally. The admin handles tip re-publishing manually.
 - **Sitemap** — `src/app/sitemap.ts` uses `dynamic = "force-dynamic"` and queries `getPublishedPosts()` + `getPublishedTips()`. Automatically correct after changes — no revalidation needed.
 - **Admin blog list** — parent layout (`src/app/admin/layout.tsx:5`) sets `dynamic = "force-dynamic"`. The redirect to `/admin/blog` triggers a fresh DB query showing updated indexes. No stale data risk.
 
@@ -207,3 +266,6 @@ These differ for US states and when drafts exist. The revalidation loop needs th
 13. **Draft-post re-indexing:** Create posts 1 (published), 2 (draft), 3 (published) → delete post 1 → verify indexes are now 1 (was-draft), 2 (was-published). Verify `/blog/{slug}/1` returns 404 (draft post, not publicly accessible), `/blog/{slug}/2` shows the published post.
 14. **Published-only tip trigger:** Spain has 2 published + 1 draft blog → delete both published → tip unpublishes (only drafts remain, no public content backing the tip)
 15. **US state cross-state re-indexing:** Massachusetts post at index 1, New York post at index 2 (both under "united-states") → delete Massachusetts (index 1) → New York becomes index 1 → New York tip unaffected → Massachusetts tip unpublishes only if no other Massachusetts posts remain
+16. **Tips auto-unpublish via unpublish (non-US):** Spain has 2 published posts + 1 published tip → unpublish post 1 → tip stays published → unpublish post 2 → 0 published posts remain → tip becomes draft, `/tips/spain` 404s
+17. **Tips auto-unpublish via unpublish (US state):** Massachusetts has 2 published posts + 1 published tip, New York also has posts → unpublish both Massachusetts posts → Massachusetts tip becomes draft → New York tip unaffected
+18. **Unpublish with other published posts remaining:** Spain has 3 published posts → unpublish one → 2 remain → tip stays published

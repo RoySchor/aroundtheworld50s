@@ -230,7 +230,7 @@ export async function deleteBlogPost(id: string): Promise<ActionResult> {
   await autoUnpublishTipIfEmpty(deleted.countrySlug, deleted.state);
 
   // ---------------------------------------------------------------
-  // 4. Revalidate affected blog paths
+  // 3. Revalidate affected blog paths
   // ---------------------------------------------------------------
   const [totalRemaining] = await db
     .select({ count: sql<number>`COUNT(*)` })
