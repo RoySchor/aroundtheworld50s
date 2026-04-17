@@ -15,6 +15,13 @@
       "when": 1776624000000,
       "tag": "0002_deferrable_post_index",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1776672000000,
+      "tag": "0003_tip_section_title",
+      "breakpoints": true
     }
   ]
 }

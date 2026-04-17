@@ -11,6 +11,7 @@ import {
   reorderGalleryImage,
 } from "@/server/actions/gallery";
 import type { GalleryImage } from "@/server/db/schema";
+import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 
 interface GalleryAdminProps {
   images: GalleryImage[];
@@ -32,6 +33,8 @@ export function GalleryAdmin({ images }: GalleryAdminProps) {
   // Upload state
   const fileRef = useRef<HTMLInputElement>(null);
   const [caption, setCaption] = useState("");
+
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   // Inline caption editing
   const [captions, setCaptions] = useState<Record<string, string>>({});
@@ -96,10 +99,10 @@ export function GalleryAdmin({ images }: GalleryAdminProps) {
     });
   }
 
-  function handleDelete(id: string) {
-    if (!confirm("Remove this image? It will be permanently deleted.")) {
-      return;
-    }
+  function handleConfirmDelete() {
+    if (!deleteId) return;
+    const id = deleteId;
+    setDeleteId(null);
     setError(null);
     setSuccess(null);
     startTransition(async () => {
@@ -237,7 +240,7 @@ export function GalleryAdmin({ images }: GalleryAdminProps) {
                   </button>
                   <button
                     type="button"
-                    onClick={() => handleDelete(img.id)}
+                    onClick={() => setDeleteId(img.id)}
                     disabled={isPending}
                     className="ml-auto rounded px-3 py-1 text-xs font-medium text-red-600 hover:bg-red-50 disabled:opacity-50"
                   >
@@ -248,6 +251,15 @@ export function GalleryAdmin({ images }: GalleryAdminProps) {
             </div>
           ))}
         </div>
+      )}
+
+      {deleteId && (
+        <ConfirmDialog
+          title="Delete Image"
+          message="This image will be permanently removed."
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setDeleteId(null)}
+        />
       )}
     </div>
   );

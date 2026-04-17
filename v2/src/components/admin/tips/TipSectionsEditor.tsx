@@ -14,20 +14,28 @@ import type { TipSection } from "@/server/db/schema";
 interface TipSectionsEditorProps {
   sections: TipSection[];
   onDraftsChange?: (drafts: Record<string, string>) => void;
+  onTitleDraftsChange?: (drafts: Record<string, string>) => void;
 }
 
-export function TipSectionsEditor({ sections, onDraftsChange }: TipSectionsEditorProps) {
+export function TipSectionsEditor({ sections, onDraftsChange, onTitleDraftsChange }: TipSectionsEditorProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [drafts, setDrafts] = useState<Record<string, string>>({});
+  const [titleDrafts, setTitleDrafts] = useState<Record<string, string>>({});
   const [error, setError] = useState<string | null>(null);
 
-  useUnsavedChanges(Object.keys(drafts).length > 0);
+  const hasDrafts =
+    Object.keys(drafts).length > 0 || Object.keys(titleDrafts).length > 0;
+  useUnsavedChanges(hasDrafts);
 
   useEffect(() => {
     onDraftsChange?.(drafts);
   }, [drafts, onDraftsChange]);
+
+  useEffect(() => {
+    onTitleDraftsChange?.(titleDrafts);
+  }, [titleDrafts, onTitleDraftsChange]);
 
   function toggleExpand(id: string) {
     setExpandedId((prev) => (prev === id ? null : id));
@@ -39,6 +47,14 @@ export function TipSectionsEditor({ sections, onDraftsChange }: TipSectionsEdito
 
   function setDraft(id: string, value: string) {
     setDrafts((prev) => ({ ...prev, [id]: value }));
+  }
+
+  function getTitleDraft(section: TipSection) {
+    return titleDrafts[section.id] ?? section.title ?? "";
+  }
+
+  function setTitleDraft(id: string, value: string) {
+    setTitleDrafts((prev) => ({ ...prev, [id]: value }));
   }
 
   function handleToggleEnabled(section: TipSection) {
@@ -59,10 +75,19 @@ export function TipSectionsEditor({ sections, onDraftsChange }: TipSectionsEdito
     setError(null);
     const section = sections.find((s) => s.id === sectionId);
     const content = drafts[sectionId] ?? section?.content ?? null;
+    const title = titleDrafts[sectionId] ?? section?.title ?? null;
     startTransition(async () => {
-      const result = await updateTipSection(sectionId, { content });
+      const result = await updateTipSection(sectionId, {
+        content,
+        title: title || null,
+      });
       if (result.success) {
         setDrafts((prev) => {
+          const next = { ...prev };
+          delete next[sectionId];
+          return next;
+        });
+        setTitleDrafts((prev) => {
           const next = { ...prev };
           delete next[sectionId];
           return next;
@@ -98,8 +123,9 @@ export function TipSectionsEditor({ sections, onDraftsChange }: TipSectionsEdito
 
       {sections.map((section, idx) => {
         const isExpanded = expandedId === section.id;
-        const label =
+        const defaultLabel =
           TIP_SECTION_LABELS[section.sectionKey] ?? section.sectionKey;
+        const label = section.title || defaultLabel;
 
         return (
           <div
@@ -172,7 +198,22 @@ export function TipSectionsEditor({ sections, onDraftsChange }: TipSectionsEdito
 
             {/* Body */}
             {isExpanded && (
-              <div className="border-t px-4 py-4">
+              <div className="border-t px-4 py-4 space-y-4">
+                <div>
+                  <label className="mb-1 block text-sm font-medium">
+                    Section Title
+                  </label>
+                  <input
+                    type="text"
+                    value={getTitleDraft(section)}
+                    onChange={(e) => setTitleDraft(section.id, e.target.value)}
+                    placeholder={defaultLabel}
+                    className="w-full rounded border px-3 py-2 text-sm"
+                  />
+                  <p className="mt-1 text-xs text-gray-400">
+                    Leave blank to use the default: {defaultLabel}
+                  </p>
+                </div>
                 <div>
                   <span className="mb-1 block text-sm font-medium">
                     Content
@@ -189,12 +230,17 @@ export function TipSectionsEditor({ sections, onDraftsChange }: TipSectionsEdito
                     disabled={isPending}
                     className="rounded bg-blue-600 px-5 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
                   >
-                    {isPending ? "Saving..." : "Save Content"}
+                    {isPending ? "Saving..." : "Save Section"}
                   </button>
                   <button
                     type="button"
                     onClick={() => {
                       setDrafts((prev) => {
+                        const next = { ...prev };
+                        delete next[section.id];
+                        return next;
+                      });
+                      setTitleDrafts((prev) => {
                         const next = { ...prev };
                         delete next[section.id];
                         return next;

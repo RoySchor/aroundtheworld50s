@@ -7,6 +7,7 @@ import {
   unpublishBlogPost,
   deleteBlogPost,
 } from "@/server/actions/blog-posts";
+import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 
 interface PostStatusBarProps {
   postId: string;
@@ -26,6 +27,7 @@ export function PostStatusBar({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const isPublished = status === "published";
 
@@ -43,14 +45,11 @@ export function PostStatusBar({
     });
   }
 
-  function handleDelete() {
-    if (!confirm("Delete this post? All content will be permanently removed.")) {
-      return;
-    }
+  function handleConfirmDelete() {
+    setShowConfirm(false);
     setError(null);
     startTransition(async () => {
       const result = await deleteBlogPost(postId);
-      // deleteBlogPost redirects on success
       if (!result.success) {
         setError(result.error);
       }
@@ -116,7 +115,7 @@ export function PostStatusBar({
       <div className="ml-auto">
         <button
           type="button"
-          onClick={handleDelete}
+          onClick={() => setShowConfirm(true)}
           disabled={isPending}
           className="rounded px-4 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50 disabled:opacity-50"
         >
@@ -125,6 +124,15 @@ export function PostStatusBar({
       </div>
 
       {error && <p className="w-full text-sm text-red-600">{error}</p>}
+
+      {showConfirm && (
+        <ConfirmDialog
+          title="Delete Post"
+          message="All content will be permanently removed."
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
     </div>
   );
 }

@@ -149,7 +149,7 @@ export function BlocksSection({ postId, blocks, itineraries }: BlocksSectionProp
               key={type}
               type="button"
               onClick={() => setAddingType(type)}
-              className="rounded border px-3 py-1.5 text-sm hover:bg-gray-50"
+              className="rounded border px-3 py-1.5 text-sm transition-colors hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600"
             >
               + {BLOCK_TYPE_LABELS[type]}
             </button>
