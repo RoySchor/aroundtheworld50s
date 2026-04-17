@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { useMobileCheck } from "@/hooks/useMobileCheck";
 
 export function LoginForm() {
   const router = useRouter();
@@ -10,6 +11,7 @@ export function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { isMobile } = useMobileCheck();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,11 +71,17 @@ export function LoginForm() {
       </div>
       <button
         type="submit"
-        disabled={isSubmitting}
+        disabled={isSubmitting || isMobile}
         className="w-full bg-teal-accent text-white py-2.5 rounded-lg font-semibold hover:brightness-110 disabled:opacity-50 transition-all"
       >
         {isSubmitting ? "Signing in\u2026" : "Sign In"}
       </button>
+      {isMobile && (
+        <p className="text-sm text-gray-500 text-center mt-2">
+          Admin is only available on laptops. Please switch to a laptop to sign
+          in.
+        </p>
+      )}
     </form>
   );
 }

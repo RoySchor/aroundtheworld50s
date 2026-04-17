@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="page-container mt-44">
+    <div className="page-container mt-28 lg:mt-44">
       <div className="about-me-section-container">
         <div className="about-me-top-section-container">
           <Image

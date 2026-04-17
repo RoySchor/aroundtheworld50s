@@ -14,7 +14,7 @@ export default async function TipsListingPage() {
   const tips = await getPublishedTips();
 
   return (
-    <div className="page-container mt-44">
+    <div className="page-container mt-28 lg:mt-44">
       <div className="container">
         <div className="page-content text-center">
           <h1 className="page-title">Travel Tips by Destination</h1>

@@ -17,7 +17,7 @@ export default async function LoginPage() {
   if (profile) redirect("/admin");
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 pt-32 lg:pt-48">
       <div className="w-full max-w-sm bg-white rounded-2xl shadow-lg p-8">
         <div className="flex justify-center mb-6">
           <Image

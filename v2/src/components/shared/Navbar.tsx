@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -41,6 +41,27 @@ function SocialIcons({ className }: { className?: string }) {
 export function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showAdminMobileAlert, setShowAdminMobileAlert] = useState(false);
+
+  const handleAdminClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>) => {
+      if (window.innerWidth < 1024) {
+        e.preventDefault();
+        setMobileMenuOpen(false);
+        setShowAdminMobileAlert(true);
+      }
+    },
+    [],
+  );
+
+  useEffect(() => {
+    if (!showAdminMobileAlert) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setShowAdminMobileAlert(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [showAdminMobileAlert]);
 
   const isTransparent =
     TRANSPARENT_NAVBAR_PATHS.includes(pathname) ||
@@ -49,6 +70,7 @@ export function Navbar() {
   const logoSrc = STATIC_ASSETS.logo;
 
   return (
+    <>
     <nav
       className={`absolute top-0 left-0 w-full z-50 transition-colors ${
         isTransparent ? "bg-transparent" : "bg-gray-600 shadow-md"
@@ -91,6 +113,7 @@ export function Navbar() {
           ))}
           <Link
             href="/admin"
+            onClick={handleAdminClick}
             className="nav-link"
           >
             ADMIN
@@ -143,7 +166,10 @@ export function Navbar() {
           ))}
           <Link
             href="/admin"
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={(e) => {
+              handleAdminClick(e);
+              setMobileMenuOpen(false);
+            }}
             className="block text-center py-2 nav-link"
           >
             ADMIN
@@ -151,5 +177,35 @@ export function Navbar() {
         </div>
       )}
     </nav>
+
+    {showAdminMobileAlert && (
+      <div
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="admin-mobile-title"
+        className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50"
+        onClick={() => setShowAdminMobileAlert(false)}
+      >
+        <div
+          className="bg-white rounded-2xl shadow-xl mx-6 max-w-sm p-8 text-center"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <h2 id="admin-mobile-title" className="text-xl font-bold text-gray-800 mb-4">
+            Desktop Only
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Admin is only available on laptops. Please switch to a laptop to
+            manage the website.
+          </p>
+          <button
+            onClick={() => setShowAdminMobileAlert(false)}
+            className="px-6 py-2 bg-gray-800 text-white rounded-full font-semibold hover:bg-gray-700 transition-colors"
+          >
+            Got it
+          </button>
+        </div>
+      </div>
+    )}
+    </>
   );
 }

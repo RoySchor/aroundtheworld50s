@@ -29,7 +29,7 @@ export default async function TipDetailPage({ params }: TipDetailPageProps) {
 
   if (!tip) {
     return (
-      <div className="page-container mt-44">
+      <div className="page-container mt-28 lg:mt-44">
         <div className="container">
           <div className="tip-not-found">
             <h1>Tips Not Found</h1>
@@ -47,7 +47,7 @@ export default async function TipDetailPage({ params }: TipDetailPageProps) {
   // sections simply won't render — no placeholder appears. Phase 2 admin will
   // ensure all 6 rows are created on tip creation.
   return (
-    <div className="page-container mt-44">
+    <div className="page-container mt-28 lg:mt-44">
       <div className="container">
         <div className="page-content">
           <div className="tip-detail-header">
