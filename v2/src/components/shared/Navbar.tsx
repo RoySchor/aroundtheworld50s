@@ -164,7 +164,7 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
-          <a
+          <Link
             href="/admin"
             onClick={(e) => {
               handleAdminClick(e);
@@ -173,7 +173,7 @@ export function Navbar() {
             className="block text-center py-2 nav-link"
           >
             ADMIN
-          </a>
+          </Link>
         </div>
       )}
     </nav>

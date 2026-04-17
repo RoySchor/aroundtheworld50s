@@ -9,11 +9,12 @@ export function useMobileCheck(breakpoint = DEFAULT_BREAKPOINT) {
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < breakpoint);
-    check();
+    const mql = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
+    setIsMobile(mql.matches);
     setChecked(true);
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
   }, [breakpoint]);
 
   return { isMobile, checked };
