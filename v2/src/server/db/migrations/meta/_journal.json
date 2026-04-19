@@ -22,6 +22,20 @@
       "when": 1776672000000,
       "tag": "0003_tip_section_title",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1776758400000,
+      "tag": "0004_two_column_images_array",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1776844800000,
+      "tag": "0005_add_image_carousel_type",
+      "breakpoints": true
     }
   ]
 }

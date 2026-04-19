@@ -94,6 +94,7 @@ export const blogBlockType = pgEnum("blog_block_type", [
   "two_column",
   "image_grid",
   "itinerary_with_map",
+  "image_carousel",
 ]);
 
 /**
@@ -309,15 +310,17 @@ export const blogItineraryItems = pgTable(
  *   two_column: {
  *     leftType: "image" | "text",
  *     rightType: "image" | "text",
- *     leftImage?: string,        // Cloudinary public_id
- *     leftImageAlt?: string,
- *     rightImage?: string,       // Cloudinary public_id
- *     rightImageAlt?: string,
+ *     leftImages?: Array<{ publicId: string, alt?: string }>,
+ *     rightImages?: Array<{ publicId: string, alt?: string }>,
  *     html: string
  *   }
  *
  *   image_grid: {
  *     images: string[]           // Cloudinary public_ids
+ *   }
+ *
+ *   image_carousel: {
+ *     images: Array<{ publicId: string, caption?: string }>
  *   }
  *
  *   itinerary_with_map: {

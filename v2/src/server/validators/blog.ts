@@ -15,18 +15,28 @@ const textBlockFields = {
   html: z.string().min(1, "Text block content is required"),
 };
 
+const twoColumnImageSchema = z.object({
+  publicId: z.string().min(1),
+  alt: z.string().optional(),
+});
+
 const twoColumnBlockFields = {
   leftType: z.enum(["image", "text"]),
   rightType: z.enum(["image", "text"]),
-  leftImage: z.string().optional(),
-  leftImageAlt: z.string().optional(),
-  rightImage: z.string().optional(),
-  rightImageAlt: z.string().optional(),
+  leftImages: z.array(twoColumnImageSchema).optional(),
+  rightImages: z.array(twoColumnImageSchema).optional(),
   html: z.string().min(1, "Two-column text content is required"),
 };
 
 const imageGridBlockFields = {
   images: z.array(z.string().min(1)).min(1, "At least one image is required"),
+};
+
+const imageCarouselBlockFields = {
+  images: z.array(z.object({
+    publicId: z.string().min(1),
+    caption: z.string().optional(),
+  })).min(2, "Carousel needs at least 2 images"),
 };
 
 const itineraryWithMapBlockFields = {
@@ -37,6 +47,7 @@ const itineraryWithMapBlockFields = {
 type TextBlockDataShape = z.ZodObject<typeof textBlockFields>;
 type TwoColumnBlockDataShape = z.ZodObject<typeof twoColumnBlockFields>;
 type ImageGridBlockDataShape = z.ZodObject<typeof imageGridBlockFields>;
+type ImageCarouselBlockDataShape = z.ZodObject<typeof imageCarouselBlockFields>;
 type ItineraryWithMapBlockDataShape = z.ZodObject<
   typeof itineraryWithMapBlockFields
 >;
@@ -55,6 +66,7 @@ export const blogBlockDataSchema = z
     z.object({ type: z.literal("text"), ...textBlockFields }),
     z.object({ type: z.literal("two_column"), ...twoColumnBlockFields }),
     z.object({ type: z.literal("image_grid"), ...imageGridBlockFields }),
+    z.object({ type: z.literal("image_carousel"), ...imageCarouselBlockFields }),
     z.object({
       type: z.literal("itinerary_with_map"),
       ...itineraryWithMapBlockFields,
@@ -77,20 +89,20 @@ export const blogBlockDataSchema = z
     }
     if (
       data.leftType === "image" &&
-      (!data.leftImage || data.leftImage.length === 0)
+      (!data.leftImages || data.leftImages.length === 0)
     ) {
       ctx.addIssue({
         code: "custom",
-        message: "Left image is required when left side is image",
+        message: "Left images required when left side is image",
       });
     }
     if (
       data.rightType === "image" &&
-      (!data.rightImage || data.rightImage.length === 0)
+      (!data.rightImages || data.rightImages.length === 0)
     ) {
       ctx.addIssue({
         code: "custom",
-        message: "Right image is required when right side is image",
+        message: "Right images required when right side is image",
       });
     }
   });
@@ -165,10 +177,11 @@ export { slugify } from "@/lib/slugify";
 export type TextBlockData = z.infer<TextBlockDataShape>;
 export type TwoColumnBlockData = z.infer<TwoColumnBlockDataShape>;
 export type ImageGridBlockData = z.infer<ImageGridBlockDataShape>;
+export type ImageCarouselBlockData = z.infer<ImageCarouselBlockDataShape>;
 export type ItineraryWithMapBlockData = z.infer<ItineraryWithMapBlockDataShape>;
 
 // Block type union — single source of truth for admin components
-export type BlockType = "text" | "two_column" | "image_grid" | "itinerary_with_map";
+export type BlockType = "text" | "two_column" | "image_grid" | "image_carousel" | "itinerary_with_map";
 
 // Server action input types
 export type BlogBlockInput = z.infer<typeof blogBlockDataSchema>;

@@ -61,7 +61,7 @@ export function GallerySlider({ images }: GallerySliderProps) {
                 src={image.cloudinaryPublicId}
                 alt={image.caption ?? `Gallery ${currentIndex + index + 1}`}
                 fill
-                className="object-cover"
+                className="object-contain"
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
             </div>
