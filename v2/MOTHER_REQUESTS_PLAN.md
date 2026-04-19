@@ -14,7 +14,7 @@ Last updated: 2026-04-19
 
 **Image grid is the exception** — uses `object-cover` with a portrait-friendly aspect ratio (`3/4`) because grid uniformity requires all cells to be the same size. The taller ratio minimizes cropping of portraits without breaking the grid layout.
 
-**Orphaned Cloudinary images:** When blocks containing images are deleted, the Cloudinary files remain. This is a pre-existing issue (affects `image_grid` today). It is not addressed in this plan — tracked as a separate follow-up. Not blocking for these features.
+**Orphaned Cloudinary images:** When blocks containing images are deleted, the Cloudinary files remain. This is a pre-existing issue (affects `image_grid` today). It is not addressed in this plan — tracked as a separate follow-up. Not blocking for these features
 
 ---
 
