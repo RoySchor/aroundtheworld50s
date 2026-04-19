@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { InstagramIcon } from "@/components/icons/InstagramIcon";
 import { TikTokIcon } from "@/components/icons/TikTokIcon";
 import { SOCIAL_LINKS } from "@/lib/constants/social-links";
@@ -28,6 +29,12 @@ export function Footer() {
           &copy; {new Date().getFullYear()} Around the World 50s. All rights
           reserved.
         </p>
+        <Link
+          href="/admin"
+          className="text-xs text-gray-500 hover:text-gray-300 transition-colors"
+        >
+          Admin
+        </Link>
       </div>
     </footer>
   );
