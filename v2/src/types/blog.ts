@@ -12,6 +12,7 @@ export type {
   TextBlockData,
   TwoColumnBlockData,
   ImageGridBlockData,
+  ImageCarouselBlockData,
   ItineraryWithMapBlockData,
 } from "@/server/validators/blog";
 

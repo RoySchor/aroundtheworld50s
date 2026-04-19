@@ -14,6 +14,7 @@ const BLOCK_TYPE_LABELS: Record<BlockType, string> = {
   text: "Text",
   two_column: "Two Column",
   image_grid: "Image Grid",
+  image_carousel: "Image Carousel",
   itinerary_with_map: "Itinerary + Map",
 };
 

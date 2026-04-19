@@ -44,22 +44,21 @@ export function BlockForm({
   const [rightType, setRightType] = useState<"image" | "text">(
     (data.rightType as "image" | "text") ?? "text",
   );
-  const [leftImage, setLeftImage] = useState<string>(
-    (data.leftImage as string) ?? "",
+  const [leftImages, setLeftImages] = useState<Array<{ publicId: string; alt?: string }>>(
+    (data.leftImages as Array<{ publicId: string; alt?: string }>) ?? [],
   );
-  const [leftImageAlt, setLeftImageAlt] = useState<string>(
-    (data.leftImageAlt as string) ?? "",
-  );
-  const [rightImage, setRightImage] = useState<string>(
-    (data.rightImage as string) ?? "",
-  );
-  const [rightImageAlt, setRightImageAlt] = useState<string>(
-    (data.rightImageAlt as string) ?? "",
+  const [rightImages, setRightImages] = useState<Array<{ publicId: string; alt?: string }>>(
+    (data.rightImages as Array<{ publicId: string; alt?: string }>) ?? [],
   );
 
   // Image grid state
   const [images, setImages] = useState<string[]>(
     (data.images as string[]) ?? [],
+  );
+
+  // Image carousel state
+  const [carouselImages, setCarouselImages] = useState<Array<{ publicId: string; caption?: string }>>(
+    (data.images as Array<{ publicId: string; caption?: string }>) ?? [],
   );
 
   // Itinerary+map state
@@ -75,6 +74,28 @@ export function BlockForm({
     setImages(next);
   }
 
+  function moveSideImage(
+    side: "left" | "right",
+    from: number,
+    direction: "up" | "down",
+  ) {
+    const setter = side === "left" ? setLeftImages : setRightImages;
+    const arr = side === "left" ? leftImages : rightImages;
+    const to = direction === "up" ? from - 1 : from + 1;
+    if (to < 0 || to >= arr.length) return;
+    const next = [...arr];
+    [next[from], next[to]] = [next[to], next[from]];
+    setter(next);
+  }
+
+  function moveCarouselImage(from: number, direction: "up" | "down") {
+    const to = direction === "up" ? from - 1 : from + 1;
+    if (to < 0 || to >= carouselImages.length) return;
+    const next = [...carouselImages];
+    [next[from], next[to]] = [next[to], next[from]];
+    setCarouselImages(next);
+  }
+
   function buildPayload() {
     switch (type) {
       case "text":
@@ -84,14 +105,14 @@ export function BlockForm({
           type: "two_column" as const,
           leftType,
           rightType,
-          leftImage: leftImage || undefined,
-          leftImageAlt: leftImageAlt || undefined,
-          rightImage: rightImage || undefined,
-          rightImageAlt: rightImageAlt || undefined,
+          leftImages: leftImages.length > 0 ? leftImages : undefined,
+          rightImages: rightImages.length > 0 ? rightImages : undefined,
           html,
         };
       case "image_grid":
         return { type: "image_grid" as const, images };
+      case "image_carousel":
+        return { type: "image_carousel" as const, images: carouselImages };
       case "itinerary_with_map":
         return { type: "itinerary_with_map" as const, itineraryId };
     }
@@ -164,59 +185,121 @@ export function BlockForm({
 
           {leftType === "image" && (
             <div>
-              <span className="mb-1 block text-sm font-medium">Left Image</span>
-              {leftImage ? (
-                <div className="flex items-center gap-2">
-                  <Image
-                    src={leftImage}
-                    alt={leftImageAlt || "Left preview"}
-                    width={48}
-                    height={48}
-                    className="rounded object-cover"
-                    style={{ width: 48, height: "auto" }}
-                  />
-                  <span className="truncate text-sm text-gray-600">{leftImage}</span>
-                  <button type="button" onClick={() => setLeftImage("")} className="text-sm text-red-600">Remove</button>
-                </div>
-              ) : (
-                <ImageUploadButton onUploaded={setLeftImage} folder="aroundtheworld50s/blog" />
-              )}
-              <input
-                type="text"
-                value={leftImageAlt}
-                onChange={(e) => setLeftImageAlt(e.target.value)}
-                placeholder="Alt text"
-                className="mt-2 w-full rounded border px-3 py-2 text-sm"
-              />
+              <span className="mb-1 block text-sm font-medium">Left Images</span>
+              <div className="space-y-2">
+                {leftImages.map((img, idx) => (
+                  <div key={img.publicId} className="flex items-center gap-2">
+                    <Image
+                      src={img.publicId}
+                      alt={img.alt || "Left preview"}
+                      width={48}
+                      height={48}
+                      className="rounded object-cover"
+                      style={{ width: 48, height: "auto" }}
+                    />
+                    <input
+                      type="text"
+                      value={img.alt ?? ""}
+                      onChange={(e) => {
+                        const next = [...leftImages];
+                        next[idx] = { ...next[idx], alt: e.target.value };
+                        setLeftImages(next);
+                      }}
+                      placeholder="Alt text"
+                      className="flex-1 rounded border px-2 py-1 text-sm"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => moveSideImage("left", idx, "up")}
+                      disabled={idx === 0}
+                      className="rounded px-2 py-1 text-xs text-gray-500 hover:bg-gray-100 disabled:opacity-30"
+                    >
+                      &uarr;
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => moveSideImage("left", idx, "down")}
+                      disabled={idx === leftImages.length - 1}
+                      className="rounded px-2 py-1 text-xs text-gray-500 hover:bg-gray-100 disabled:opacity-30"
+                    >
+                      &darr;
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setLeftImages(leftImages.filter((_, i) => i !== idx))}
+                      className="rounded px-2 py-1 text-xs text-red-600 hover:bg-red-50"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-2">
+                <ImageUploadButton
+                  onUploaded={(publicId) => setLeftImages([...leftImages, { publicId }])}
+                  folder="aroundtheworld50s/blog"
+                />
+              </div>
             </div>
           )}
 
           {rightType === "image" && (
             <div>
-              <span className="mb-1 block text-sm font-medium">Right Image</span>
-              {rightImage ? (
-                <div className="flex items-center gap-2">
-                  <Image
-                    src={rightImage}
-                    alt={rightImageAlt || "Right preview"}
-                    width={48}
-                    height={48}
-                    className="rounded object-cover"
-                    style={{ width: 48, height: "auto" }}
-                  />
-                  <span className="truncate text-sm text-gray-600">{rightImage}</span>
-                  <button type="button" onClick={() => setRightImage("")} className="text-sm text-red-600">Remove</button>
-                </div>
-              ) : (
-                <ImageUploadButton onUploaded={setRightImage} folder="aroundtheworld50s/blog" />
-              )}
-              <input
-                type="text"
-                value={rightImageAlt}
-                onChange={(e) => setRightImageAlt(e.target.value)}
-                placeholder="Alt text"
-                className="mt-2 w-full rounded border px-3 py-2 text-sm"
-              />
+              <span className="mb-1 block text-sm font-medium">Right Images</span>
+              <div className="space-y-2">
+                {rightImages.map((img, idx) => (
+                  <div key={img.publicId} className="flex items-center gap-2">
+                    <Image
+                      src={img.publicId}
+                      alt={img.alt || "Right preview"}
+                      width={48}
+                      height={48}
+                      className="rounded object-cover"
+                      style={{ width: 48, height: "auto" }}
+                    />
+                    <input
+                      type="text"
+                      value={img.alt ?? ""}
+                      onChange={(e) => {
+                        const next = [...rightImages];
+                        next[idx] = { ...next[idx], alt: e.target.value };
+                        setRightImages(next);
+                      }}
+                      placeholder="Alt text"
+                      className="flex-1 rounded border px-2 py-1 text-sm"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => moveSideImage("right", idx, "up")}
+                      disabled={idx === 0}
+                      className="rounded px-2 py-1 text-xs text-gray-500 hover:bg-gray-100 disabled:opacity-30"
+                    >
+                      &uarr;
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => moveSideImage("right", idx, "down")}
+                      disabled={idx === rightImages.length - 1}
+                      className="rounded px-2 py-1 text-xs text-gray-500 hover:bg-gray-100 disabled:opacity-30"
+                    >
+                      &darr;
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setRightImages(rightImages.filter((_, i) => i !== idx))}
+                      className="rounded px-2 py-1 text-xs text-red-600 hover:bg-red-50"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-2">
+                <ImageUploadButton
+                  onUploaded={(publicId) => setRightImages([...rightImages, { publicId }])}
+                  folder="aroundtheworld50s/blog"
+                />
+              </div>
             </div>
           )}
 
@@ -276,6 +359,67 @@ export function BlockForm({
           <div className="mt-2">
             <ImageUploadButton
               onUploaded={(publicId) => setImages([...images, publicId])}
+              folder="aroundtheworld50s/blog"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Image carousel block */}
+      {type === "image_carousel" && (
+        <div>
+          <span className="mb-1 block text-sm font-medium">Carousel Images (min 2)</span>
+          <div className="space-y-2">
+            {carouselImages.map((img, idx) => (
+              <div key={img.publicId} className="flex items-center gap-2">
+                <Image
+                  src={img.publicId}
+                  alt={img.caption || ""}
+                  width={48}
+                  height={48}
+                  className="rounded object-cover"
+                  style={{ width: 48, height: "auto" }}
+                />
+                <input
+                  type="text"
+                  value={img.caption ?? ""}
+                  onChange={(e) => {
+                    const next = [...carouselImages];
+                    next[idx] = { ...next[idx], caption: e.target.value };
+                    setCarouselImages(next);
+                  }}
+                  placeholder="Caption (optional)"
+                  className="flex-1 rounded border px-2 py-1 text-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => moveCarouselImage(idx, "up")}
+                  disabled={idx === 0}
+                  className="rounded px-2 py-1 text-xs text-gray-500 hover:bg-gray-100 disabled:opacity-30"
+                >
+                  &uarr;
+                </button>
+                <button
+                  type="button"
+                  onClick={() => moveCarouselImage(idx, "down")}
+                  disabled={idx === carouselImages.length - 1}
+                  className="rounded px-2 py-1 text-xs text-gray-500 hover:bg-gray-100 disabled:opacity-30"
+                >
+                  &darr;
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCarouselImages(carouselImages.filter((_, i) => i !== idx))}
+                  className="rounded px-2 py-1 text-xs text-red-600 hover:bg-red-50"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+          </div>
+          <div className="mt-2">
+            <ImageUploadButton
+              onUploaded={(publicId) => setCarouselImages([...carouselImages, { publicId }])}
               folder="aroundtheworld50s/blog"
             />
           </div>

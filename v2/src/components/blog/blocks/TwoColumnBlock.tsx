@@ -8,26 +8,44 @@ interface TwoColumnBlockProps {
 
 function Pane({
   type,
-  image,
-  imageAlt,
+  images,
   html,
 }: {
   type: "image" | "text";
-  image?: string;
-  imageAlt?: string;
+  images?: Array<{ publicId: string; alt?: string }>;
   html?: string;
 }) {
-  if (type === "image" && image) {
+  if (type === "image" && images?.length) {
+    if (images.length === 1) {
+      return (
+        <div className="content-pane-image">
+          <div className="single-image-container">
+            <Image
+              src={images[0].publicId}
+              alt={images[0].alt || "Blog image"}
+              fill
+              className="object-contain"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="content-pane-image">
-        <div className="image-container">
-          <Image
-            src={image}
-            alt={imageAlt || "Blog image"}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
+        <div className="stacked-images">
+          {images.map((img, i) => (
+            <div key={img.publicId} className="stacked-image-item">
+              <Image
+                src={img.publicId}
+                alt={img.alt || `Image ${i + 1}`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            </div>
+          ))}
         </div>
       </div>
     );
@@ -45,22 +63,22 @@ function Pane({
   );
 }
 
+// Both panes receive html — only the text-type pane renders it.
+// Validator enforces exactly one side is text, so duplication is unreachable.
 export function TwoColumnBlock({ data }: TwoColumnBlockProps) {
   return (
     <div className="two-column-layout">
       <div className="two-col-column">
         <Pane
           type={data.leftType}
-          image={data.leftImage}
-          imageAlt={data.leftImageAlt}
+          images={data.leftImages}
           html={data.html}
         />
       </div>
       <div className="two-col-column">
         <Pane
           type={data.rightType}
-          image={data.rightImage}
-          imageAlt={data.rightImageAlt}
+          images={data.rightImages}
           html={data.html}
         />
       </div>

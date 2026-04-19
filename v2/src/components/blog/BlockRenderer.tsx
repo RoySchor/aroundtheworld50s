@@ -3,11 +3,13 @@ import type {
   TextBlockData,
   TwoColumnBlockData,
   ImageGridBlockData,
+  ImageCarouselBlockData,
   ItineraryWithMapBlockData,
 } from "@/types/blog";
 import { TextBlock } from "./blocks/TextBlock";
 import { TwoColumnBlock } from "./blocks/TwoColumnBlock";
 import { ImageGridBlock } from "./blocks/ImageGridBlock";
+import { ImageCarouselBlock } from "./blocks/ImageCarouselBlock";
 import { ItineraryWithMapBlock } from "./blocks/ItineraryWithMapBlock";
 
 interface BlockRendererProps {
@@ -23,6 +25,8 @@ export function BlockRenderer({ block, itineraries }: BlockRendererProps) {
       return <TwoColumnBlock data={block.data as TwoColumnBlockData} />;
     case "image_grid":
       return <ImageGridBlock data={block.data as ImageGridBlockData} />;
+    case "image_carousel":
+      return <ImageCarouselBlock data={block.data as ImageCarouselBlockData} />;
     case "itinerary_with_map":
       return (
         <ItineraryWithMapBlock
