@@ -16,6 +16,7 @@ const BLOCK_TYPE_LABELS: Record<BlockType, string> = {
   image_grid: "Image Grid",
   image_carousel: "Image Carousel",
   itinerary_with_map: "Itinerary + Map",
+  social_embed: "Social Embed",
 };
 
 interface BlocksSectionProps {

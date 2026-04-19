@@ -5,6 +5,7 @@ import Image from "next/image";
 import { createBlogBlock, updateBlogBlock } from "@/server/actions/blog-blocks";
 import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
+import { SocialEmbedBlock } from "@/components/blog/blocks/SocialEmbedBlock";
 import type { BlogBlock, BlogItinerary, BlogItineraryItem } from "@/server/db/schema";
 import type { BlockType } from "@/server/validators/blog";
 
@@ -66,6 +67,13 @@ export function BlockForm({
     (data.itineraryId as string) ?? "",
   );
 
+  // Social embed state
+  const [embedPlatform, setEmbedPlatform] = useState<"instagram" | "tiktok">(
+    (data.platform as "instagram" | "tiktok") ?? "instagram",
+  );
+  const [embedUrl, setEmbedUrl] = useState<string>((data.url as string) ?? "");
+  const [showEmbedPreview, setShowEmbedPreview] = useState(false);
+
   function moveImage(from: number, direction: "up" | "down") {
     const to = direction === "up" ? from - 1 : from + 1;
     if (to < 0 || to >= images.length) return;
@@ -115,6 +123,8 @@ export function BlockForm({
         return { type: "image_carousel" as const, images: carouselImages };
       case "itinerary_with_map":
         return { type: "itinerary_with_map" as const, itineraryId };
+      case "social_embed":
+        return { type: "social_embed" as const, platform: embedPlatform, url: embedUrl };
     }
   }
 
@@ -450,6 +460,77 @@ export function BlockForm({
             </select>
           )}
         </label>
+      )}
+
+      {/* Social embed block */}
+      {type === "social_embed" && (
+        <div className="space-y-3">
+          <div>
+            <span className="mb-1 block text-sm font-medium">Platform</span>
+            <div className="flex gap-4">
+              <label className="flex items-center gap-1.5 text-sm">
+                <input
+                  type="radio"
+                  name="embed-platform"
+                  value="instagram"
+                  checked={embedPlatform === "instagram"}
+                  onChange={() => {
+                    setEmbedPlatform("instagram");
+                    setShowEmbedPreview(false);
+                  }}
+                />
+                Instagram
+              </label>
+              <label className="flex items-center gap-1.5 text-sm">
+                <input
+                  type="radio"
+                  name="embed-platform"
+                  value="tiktok"
+                  checked={embedPlatform === "tiktok"}
+                  onChange={() => {
+                    setEmbedPlatform("tiktok");
+                    setShowEmbedPreview(false);
+                  }}
+                />
+                TikTok
+              </label>
+            </div>
+          </div>
+
+          <label className="block">
+            <span className="mb-1 block text-sm font-medium">Post URL</span>
+            <input
+              type="url"
+              value={embedUrl}
+              onChange={(e) => {
+                setEmbedUrl(e.target.value);
+                setShowEmbedPreview(false);
+              }}
+              placeholder={
+                embedPlatform === "instagram"
+                  ? "https://www.instagram.com/p/..."
+                  : "https://www.tiktok.com/@.../video/..."
+              }
+              className="w-full rounded border px-3 py-2 text-sm"
+              required
+            />
+          </label>
+
+          <button
+            type="button"
+            onClick={() => setShowEmbedPreview(true)}
+            disabled={!embedUrl}
+            className="rounded bg-gray-100 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-200 disabled:opacity-50"
+          >
+            Preview Embed
+          </button>
+
+          {showEmbedPreview && embedUrl && (
+            <div className="rounded border p-4 bg-gray-50">
+              <SocialEmbedBlock data={{ platform: embedPlatform, url: embedUrl }} />
+            </div>
+          )}
+        </div>
       )}
 
       {/* Actions */}

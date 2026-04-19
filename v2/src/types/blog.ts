@@ -14,6 +14,7 @@ export type {
   ImageGridBlockData,
   ImageCarouselBlockData,
   ItineraryWithMapBlockData,
+  SocialEmbedBlockData,
 } from "@/server/validators/blog";
 
 // ---------------------------------------------------------------------------

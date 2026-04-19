@@ -5,12 +5,14 @@ import type {
   ImageGridBlockData,
   ImageCarouselBlockData,
   ItineraryWithMapBlockData,
+  SocialEmbedBlockData,
 } from "@/types/blog";
 import { TextBlock } from "./blocks/TextBlock";
 import { TwoColumnBlock } from "./blocks/TwoColumnBlock";
 import { ImageGridBlock } from "./blocks/ImageGridBlock";
 import { ImageCarouselBlock } from "./blocks/ImageCarouselBlock";
 import { ItineraryWithMapBlock } from "./blocks/ItineraryWithMapBlock";
+import { SocialEmbedBlock } from "./blocks/SocialEmbedBlock";
 
 interface BlockRendererProps {
   block: BlogBlock;
@@ -34,6 +36,8 @@ export function BlockRenderer({ block, itineraries }: BlockRendererProps) {
           itineraries={itineraries}
         />
       );
+    case "social_embed":
+      return <SocialEmbedBlock data={block.data as SocialEmbedBlockData} />;
     default:
       return null;
   }
