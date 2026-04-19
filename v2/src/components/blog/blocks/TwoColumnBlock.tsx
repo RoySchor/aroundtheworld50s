@@ -63,6 +63,8 @@ function Pane({
   );
 }
 
+// Both panes receive html — only the text-type pane renders it.
+// Validator enforces exactly one side is text, so duplication is unreachable.
 export function TwoColumnBlock({ data }: TwoColumnBlockProps) {
   return (
     <div className="two-column-layout">

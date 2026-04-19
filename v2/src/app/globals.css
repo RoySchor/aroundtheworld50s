@@ -248,9 +248,7 @@ body {
 
 /* Single image in two-column — full display, no cropping */
 .single-image-container {
-  @apply w-full relative overflow-hidden bg-gray-100 rounded-lg mx-auto;
-  min-height: 200px;
-  max-height: 500px;
+  @apply w-full h-48 sm:h-64 md:h-80 relative overflow-hidden bg-gray-100 rounded-lg mx-auto;
 }
 
 /* Stacked images (two-column blocks with multiple images) */
@@ -266,18 +264,6 @@ body {
   .two-col-column {
     @apply w-full;
     min-height: unset;
-  }
-
-  .single-image-container {
-    min-height: 180px;
-    max-height: 400px;
-  }
-}
-
-@media (max-width: 640px) {
-  .single-image-container {
-    min-height: 150px;
-    max-height: 300px;
   }
 }
 

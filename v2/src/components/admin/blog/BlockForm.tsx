@@ -188,7 +188,7 @@ export function BlockForm({
               <span className="mb-1 block text-sm font-medium">Left Images</span>
               <div className="space-y-2">
                 {leftImages.map((img, idx) => (
-                  <div key={idx} className="flex items-center gap-2">
+                  <div key={img.publicId} className="flex items-center gap-2">
                     <Image
                       src={img.publicId}
                       alt={img.alt || "Left preview"}
@@ -248,7 +248,7 @@ export function BlockForm({
               <span className="mb-1 block text-sm font-medium">Right Images</span>
               <div className="space-y-2">
                 {rightImages.map((img, idx) => (
-                  <div key={idx} className="flex items-center gap-2">
+                  <div key={img.publicId} className="flex items-center gap-2">
                     <Image
                       src={img.publicId}
                       alt={img.alt || "Right preview"}
@@ -371,7 +371,7 @@ export function BlockForm({
           <span className="mb-1 block text-sm font-medium">Carousel Images (min 2)</span>
           <div className="space-y-2">
             {carouselImages.map((img, idx) => (
-              <div key={idx} className="flex items-center gap-2">
+              <div key={img.publicId} className="flex items-center gap-2">
                 <Image
                   src={img.publicId}
                   alt={img.caption || ""}
