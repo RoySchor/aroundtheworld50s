@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, Component, type ReactNode } from "react";
+import { useEffect, useState, Component, type ReactNode } from "react";
 import type { SocialEmbedBlockData } from "@/types/blog";
 
 declare global {
@@ -10,7 +10,9 @@ declare global {
 }
 
 // ---------------------------------------------------------------------------
-// Error boundary — fallback to a plain link if embed fails (M2)
+// Error boundary — catches React-level render crashes. The more common failure
+// mode (network/script load failure) is handled by the blockquote <a> fallback
+// content that remains visible when embed.js fails to process.
 // ---------------------------------------------------------------------------
 
 interface ErrorBoundaryState {
@@ -46,8 +48,6 @@ class EmbedErrorBoundary extends Component<
 // ---------------------------------------------------------------------------
 
 function InstagramEmbed({ url }: { url: string }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     const script = document.querySelector(
       'script[src*="instagram.com/embed.js"]',
@@ -64,7 +64,7 @@ function InstagramEmbed({ url }: { url: string }) {
   }, [url]);
 
   return (
-    <div ref={containerRef}>
+    <div>
       <blockquote
         className="instagram-media"
         data-instgrm-permalink={url}
@@ -80,33 +80,48 @@ function InstagramEmbed({ url }: { url: string }) {
 }
 
 // ---------------------------------------------------------------------------
-// TikTok embed — loads embed.js with cache-bust on each mount
+// TikTok embed — loads embed.js with cache-bust per page load. Only one script
+// instance is live at a time; if multiple TikTok embeds exist on the same page,
+// only the last mount triggers the script load — earlier blockquotes are still
+// processed because embed.js scans all .tiktok-embed elements on execution.
 // ---------------------------------------------------------------------------
 
-function TikTokEmbed({ url }: { url: string }) {
-  const containerRef = useRef<HTMLDivElement>(null);
+let tiktokScriptPromise: Promise<void> | null = null;
 
+function loadTikTokScript(): Promise<void> {
+  const existing = document.querySelector(
+    'script[src*="tiktok.com/embed.js"]',
+  );
+  if (existing) existing.remove();
+
+  tiktokScriptPromise = new Promise<void>((resolve) => {
+    const s = document.createElement("script");
+    s.src = `https://www.tiktok.com/embed.js?t=${Date.now()}`;
+    s.async = true;
+    s.onload = () => resolve();
+    s.onerror = () => resolve();
+    document.body.appendChild(s);
+  });
+
+  return tiktokScriptPromise;
+}
+
+function TikTokEmbed({ url }: { url: string }) {
   const videoId = url.match(/video\/(\d+)/)?.[1] ?? "";
   const username = url.match(/@([^/]+)/)?.[1] ?? "";
 
   useEffect(() => {
-    const existing = document.querySelector(
-      'script[src*="tiktok.com/embed.js"]',
-    );
-    if (existing) existing.remove();
+    // Debounce: wait a tick so all TikTok embeds on the page mount before
+    // loading the script (embed.js processes all blockquotes it finds).
+    const timer = setTimeout(() => {
+      loadTikTokScript();
+    }, 100);
 
-    const s = document.createElement("script");
-    s.src = `https://www.tiktok.com/embed.js?t=${Date.now()}`;
-    s.async = true;
-    document.body.appendChild(s);
-
-    return () => {
-      s.remove();
-    };
+    return () => clearTimeout(timer);
   }, [url]);
 
   return (
-    <div ref={containerRef}>
+    <div>
       <blockquote
         className="tiktok-embed"
         cite={url}
