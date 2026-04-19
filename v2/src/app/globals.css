@@ -234,6 +234,22 @@ body {
 }
 
 /* ------------------------------------------------------------------ */
+/* Social embed block                                                  */
+/* ------------------------------------------------------------------ */
+
+.social-embed-container {
+  @apply w-full flex justify-center my-8;
+}
+
+.social-embed-fallback {
+  @apply w-full max-w-lg mx-auto my-8 p-6 rounded-lg bg-gray-100 text-center;
+}
+
+.social-embed-fallback a {
+  @apply text-blue-600 hover:text-blue-800 underline font-medium;
+}
+
+/* ------------------------------------------------------------------ */
 /* Two-column layout (blog two_column + itinerary_with_map blocks)    */
 /* ------------------------------------------------------------------ */
 

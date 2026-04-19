@@ -85,9 +85,6 @@ export const publishStatus = pgEnum("publish_status", ["draft", "published"]);
 /**
  * Block kinds supported by the blog renderer. Keep in sync with the zod
  * discriminated union that validates `blog_blocks.data` at the API boundary.
- *
- * NOTE: `instagram` is deliberately omitted — the v1 embed is broken. When
- * it's fixed, add it here and ship a migration that extends the enum.
  */
 export const blogBlockType = pgEnum("blog_block_type", [
   "text",
@@ -95,6 +92,7 @@ export const blogBlockType = pgEnum("blog_block_type", [
   "image_grid",
   "itinerary_with_map",
   "image_carousel",
+  "social_embed",
 ]);
 
 /**
@@ -325,6 +323,11 @@ export const blogItineraryItems = pgTable(
  *
  *   itinerary_with_map: {
  *     itineraryId: string        // UUID, FK-by-convention to blog_itineraries.id
+ *   }
+ *
+ *   social_embed: {
+ *     platform: "instagram" | "tiktok",
+ *     url: string
  *   }
  *
  * `data` has no default on purpose: every block type requires shape-

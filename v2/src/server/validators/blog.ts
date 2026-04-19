@@ -43,6 +43,11 @@ const itineraryWithMapBlockFields = {
   itineraryId: z.string().uuid("Must be a valid itinerary UUID"),
 };
 
+const socialEmbedBlockFields = {
+  platform: z.enum(["instagram", "tiktok"]),
+  url: z.string().url("Must be a valid URL"),
+};
+
 // Shape-only schemas (for type inference — no `type` discriminator)
 type TextBlockDataShape = z.ZodObject<typeof textBlockFields>;
 type TwoColumnBlockDataShape = z.ZodObject<typeof twoColumnBlockFields>;
@@ -51,6 +56,7 @@ type ImageCarouselBlockDataShape = z.ZodObject<typeof imageCarouselBlockFields>;
 type ItineraryWithMapBlockDataShape = z.ZodObject<
   typeof itineraryWithMapBlockFields
 >;
+type SocialEmbedBlockDataShape = z.ZodObject<typeof socialEmbedBlockFields>;
 
 // ---------------------------------------------------------------------------
 // Discriminated union (includes `type` for server action validation)
@@ -71,8 +77,27 @@ export const blogBlockDataSchema = z
       type: z.literal("itinerary_with_map"),
       ...itineraryWithMapBlockFields,
     }),
+    z.object({ type: z.literal("social_embed"), ...socialEmbedBlockFields }),
   ])
   .superRefine((data, ctx) => {
+    if (data.type === "social_embed") {
+      const isInstagram = /instagram\.com/.test(data.url);
+      const isTikTok = /tiktok\.com/.test(data.url);
+      if (data.platform === "instagram" && !isInstagram) {
+        ctx.addIssue({
+          code: "custom",
+          message: "URL must be an Instagram link",
+        });
+      }
+      if (data.platform === "tiktok" && !isTikTok) {
+        ctx.addIssue({
+          code: "custom",
+          message: "URL must be a TikTok link",
+        });
+      }
+      return;
+    }
+
     if (data.type !== "two_column") return;
 
     if (data.leftType !== "image" && data.rightType !== "image") {
@@ -179,9 +204,10 @@ export type TwoColumnBlockData = z.infer<TwoColumnBlockDataShape>;
 export type ImageGridBlockData = z.infer<ImageGridBlockDataShape>;
 export type ImageCarouselBlockData = z.infer<ImageCarouselBlockDataShape>;
 export type ItineraryWithMapBlockData = z.infer<ItineraryWithMapBlockDataShape>;
+export type SocialEmbedBlockData = z.infer<SocialEmbedBlockDataShape>;
 
 // Block type union — single source of truth for admin components
-export type BlockType = "text" | "two_column" | "image_grid" | "image_carousel" | "itinerary_with_map";
+export type BlockType = "text" | "two_column" | "image_grid" | "image_carousel" | "itinerary_with_map" | "social_embed";
 
 // Server action input types
 export type BlogBlockInput = z.infer<typeof blogBlockDataSchema>;
