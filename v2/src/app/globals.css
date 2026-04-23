@@ -754,7 +754,7 @@ body {
 }
 
 .country-box-selector {
-  @apply absolute w-2 h-2 sm:w-3 sm:h-3 border-2 border-red-800 cursor-pointer;
+  @apply absolute w-2 h-2 sm:w-1.5 sm:h-1.5 border-2 border-red-800 cursor-pointer;
   transition: all 0.3s ease;
 }
 
