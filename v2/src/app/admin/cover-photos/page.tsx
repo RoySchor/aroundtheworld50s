@@ -13,8 +13,8 @@ export default async function AdminCoverPhotosPage() {
     <div>
       <h1 className="mb-2 text-2xl font-bold">Cover Photos</h1>
       <p className="mb-6 text-gray-500">
-        Set a custom cover photo for each country or state page. If no custom
-        photo is set, the latest blog&apos;s cover photo is used.
+        הגדירי תמונת שער מותאמת אישית לכל עמוד של מדינה או מחוז. אם לא הוגדרה
+        תמונה, תמונת השער של הפוסט האחרון בבלוג תשמש כברירת מחדל
       </p>
       <CoverPhotosAdmin countries={countries} />
     </div>
