@@ -117,7 +117,6 @@ export function CoverPhotosAdmin({ countries }: CoverPhotosAdminProps) {
                       handleUpload(c.countrySlug, publicId)
                     }
                     folder={`aroundtheworld50s/covers/${c.countrySlug}`}
-                    className="rounded bg-blue-600 px-3 py-1.5 text-sm text-white hover:bg-blue-700 disabled:opacity-50"
                   />
                   {isCustom && (
                     <button

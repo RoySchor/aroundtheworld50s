@@ -43,5 +43,6 @@ export async function getAllCountriesWithCovers(): Promise<CountryWithCover[]> {
     LEFT JOIN country_cover_overrides o ON o.country_slug = p.country_slug
     ORDER BY p.country, p.state NULLS FIRST
   `);
+  // Column aliases must match CountryWithCover field names exactly.
   return rows as unknown as CountryWithCover[];
 }

@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { getPublishedPosts } from "@/server/repositories/blog";
-import { getAllCountriesWithCovers } from "@/server/repositories/cover-photos";
+import {
+  getAllCountriesWithCovers,
+  type CountryWithCover,
+} from "@/server/repositories/cover-photos";
 
 export const dynamic = "force-dynamic";
 import { buildCloudinaryUrl, STATIC_ASSETS } from "@/lib/cloudinary";
@@ -36,8 +39,11 @@ export default async function DestinationsPage() {
 
   const overrideMap = new Map(
     countriesWithCovers
-      .filter((c) => c.overrideCover)
-      .map((c) => [c.countrySlug, c.overrideCover!]),
+      .filter(
+        (c): c is CountryWithCover & { overrideCover: string } =>
+          !!c.overrideCover,
+      )
+      .map((c) => [c.countrySlug, c.overrideCover]),
   );
 
   // Derive unique locations from published posts
