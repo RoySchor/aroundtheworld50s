@@ -468,6 +468,32 @@ export const galleryImages = pgTable(
 );
 
 // ---------------------------------------------------------------------------
+// country_cover_overrides
+// ---------------------------------------------------------------------------
+
+/**
+ * Optional per-country cover photo override. When a row exists for a given
+ * `countrySlug`, the country page (`/blog/{countrySlug}`) uses `coverImage`
+ * as its hero instead of the latest post's `backgroundImage`. Absence of a
+ * row means the default behaviour (latest published post's image) applies.
+ *
+ * `countrySlug` is a soft reference to `blog_posts.country_slug` — same
+ * pattern as `tipsSlug` on `blog_posts`. No FK because the slug is a
+ * derived value, not owned by a parent row.
+ */
+export const countryCoverOverrides = pgTable("country_cover_overrides", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  countrySlug: text("country_slug").notNull().unique(),
+  coverImage: text("cover_image").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+// ---------------------------------------------------------------------------
 // Relations — TypeScript-only metadata for Drizzle's relational query API.
 // No SQL generated, no migration needed.
 // ---------------------------------------------------------------------------
@@ -552,3 +578,6 @@ export type NewTipSection = typeof tipSections.$inferInsert;
 
 export type GalleryImage = typeof galleryImages.$inferSelect;
 export type NewGalleryImage = typeof galleryImages.$inferInsert;
+
+export type CountryCoverOverride = typeof countryCoverOverrides.$inferSelect;
+export type NewCountryCoverOverride = typeof countryCoverOverrides.$inferInsert;

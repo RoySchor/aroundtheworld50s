@@ -8,6 +8,7 @@ const ADMIN_NAV = [
   { label: "Dashboard", href: "/admin" },
   { label: "Blog Posts", href: "/admin/blog" },
   { label: "Tips", href: "/admin/tips" },
+  { label: "Cover Photos", href: "/admin/cover-photos" },
   { label: "Home Gallery", href: "/admin/gallery" },
 ];
 

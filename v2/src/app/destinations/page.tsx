@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getPublishedPosts } from "@/server/repositories/blog";
+import { getAllCountriesWithCovers } from "@/server/repositories/cover-photos";
 
 export const dynamic = "force-dynamic";
 import { buildCloudinaryUrl, STATIC_ASSETS } from "@/lib/cloudinary";
@@ -28,7 +29,16 @@ export const metadata: Metadata = {
 };
 
 export default async function DestinationsPage() {
-  const posts = await getPublishedPosts();
+  const [posts, countriesWithCovers] = await Promise.all([
+    getPublishedPosts(),
+    getAllCountriesWithCovers(),
+  ]);
+
+  const overrideMap = new Map(
+    countriesWithCovers
+      .filter((c) => c.overrideCover)
+      .map((c) => [c.countrySlug, c.overrideCover!]),
+  );
 
   // Derive unique locations from published posts
   const seen = new Set<string>();
@@ -47,7 +57,8 @@ export default async function DestinationsPage() {
         : post.country,
       countrySlug: post.countrySlug,
       countryCode: post.countryCode,
-      backgroundImage: post.backgroundImage,
+      backgroundImage:
+        overrideMap.get(post.countrySlug) ?? post.backgroundImage,
     });
   }
   const sortedLocations = mapLocations.sort((a, b) =>
