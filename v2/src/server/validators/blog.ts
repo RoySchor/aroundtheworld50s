@@ -136,23 +136,33 @@ export const blogBlockDataSchema = z
 // Blog post schemas
 // ---------------------------------------------------------------------------
 
-export const createBlogPostSchema = z.object({
-  country: z.string().min(1, "Country is required"),
-  countryCode: z
-    .string()
-    .min(2)
-    .max(3, "Country code must be 2-3 characters"),
-  state: z.string().nullable().optional(),
-  title: z.string().min(1, "Title is required"),
-  subtitle: z.string().nullable().optional(),
-  header: z.string().nullable().optional(),
-  description: z.string().nullable().optional(),
-  excerpt: z.string().nullable().optional(),
-  backgroundImage: z.string().nullable().optional(),
-  tipsCtaCopy: z.string().nullable().optional(),
-  tipsSlug: z.string().nullable().optional(),
-  status: publishStatusSchema.optional().default("draft"),
-});
+export const createBlogPostSchema = z
+  .object({
+    country: z.string().min(1, "Country is required"),
+    countryCode: z
+      .string()
+      .min(2)
+      .max(3, "Country code must be 2-3 characters"),
+    state: z.string().nullable().optional(),
+    title: z.string().min(1, "Title is required"),
+    subtitle: z.string().nullable().optional(),
+    header: z.string().nullable().optional(),
+    description: z.string().nullable().optional(),
+    excerpt: z.string().nullable().optional(),
+    backgroundImage: z.string().nullable().optional(),
+    tipsCtaCopy: z.string().nullable().optional(),
+    tipsSlug: z.string().nullable().optional(),
+    status: publishStatusSchema.optional().default("draft"),
+  })
+  .superRefine((data, ctx) => {
+    if (data.countryCode.toUpperCase() === "US" && !data.state) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["state"],
+        message: "State is required for United States posts",
+      });
+    }
+  });
 
 export const updateBlogPostSchema = z.object({
   title: z.string().min(1, "Title cannot be empty").optional(),
