@@ -1,69 +1,56 @@
 {
-  "name": "around-the-world-50s",
+  "name": "aroundtheworld50s",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://aroundtheworld50s.com",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:seed": "tsx --env-file=.env.local scripts/seed.ts"
+  },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
-    "@fontsource-variable/caveat": "^5.1.1",
-    "@fontsource-variable/dosis": "^5.1.0",
-    "@fontsource-variable/grandstander": "^5.1.2",
-    "@fontsource-variable/inter": "^5.1.1",
-    "@fontsource-variable/playpen-sans": "^5.1.1",
-    "@fontsource/dancing-script": "^5.1.0",
-    "@fontsource/kalam": "^5.1.1",
-    "@fontsource/scope-one": "^5.1.0",
-    "@heroicons/react": "^2.2.0",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^16.0.0",
-    "@testing-library/user-event": "^13.5.0",
-    "ajv": "^8.18.0",
-    "autoprefixer": "^10.4.20",
-    "i18n-iso-countries": "^7.14.0",
-    "jszip": "^3.10.1",
-    "lucide-react": "^0.469.0",
-    "postcss": "^8.4.49",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-icons": "^5.4.0",
-    "react-router-dom": "^7.1.1",
-    "react-scripts": "5.0.1",
+    "@supabase/ssr": "^0.10.2",
+    "@supabase/supabase-js": "^2.103.0",
+    "@tailwindcss/typography": "^0.5.19",
+    "@tiptap/extension-link": "^3.22.3",
+    "@tiptap/extension-underline": "^3.22.3",
+    "@tiptap/pm": "^3.22.3",
+    "@tiptap/react": "^3.22.3",
+    "@tiptap/starter-kit": "^3.22.3",
+    "@vercel/analytics": "^2.0.1",
+    "cloudinary": "^2.9.0",
+    "drizzle-orm": "^0.45.2",
+    "lucide-react": "^1.8.0",
+    "next": "16.2.3",
+    "postgres": "^3.4.9",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
     "react-world-flags": "^1.6.0",
-    "tailwindcss": "^3.4.17",
-    "web-vitals": "^2.1.4"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint 'src/**/*.{js,jsx}'",
-    "lint:fix": "eslint 'src/**/*.{js,jsx}' --fix",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build --cname www.aroundtheworld50s.com"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "sanitize-html": "^2.17.2",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "gh-pages": "^6.3.0",
-    "prettier": "^3.4.2",
-    "typescript": "^5.8.3"
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/react-world-flags": "^1.6.0",
+    "@types/sanitize-html": "^2.16.1",
+    "drizzle-kit": "^0.31.10",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.3",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.8.2",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }

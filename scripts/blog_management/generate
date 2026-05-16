@@ -1,3 +1,0 @@
-#!/bin/bash
-# Simple alias for auto blog generation
-exec bash "$(dirname "$0")/auto_generate_blog.sh" "$@"
