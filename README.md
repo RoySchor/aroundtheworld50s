@@ -71,6 +71,17 @@ npm run dev
 
 Requires `.env.local` — see `.env.example` for required variables.
 
+## Admin Page 
+Since you have to be an admin to view, here's a glimpse at its glory.
+
+<img width="1716" height="874" alt="image" src="https://github.com/user-attachments/assets/3d624eb5-438d-4b03-a309-e9ab2897c199" />
+
+<img width="1467" height="786" alt="image" src="https://github.com/user-attachments/assets/f3ac0f55-addd-400c-b79e-5cac35e32abc" />
+
+<img width="1459" height="705" alt="image" src="https://github.com/user-attachments/assets/2eb8c219-cfe4-4e79-bab2-5d3229d3492a" />
+
+
+
 ---
 
 Built with ❤️ for my mother, making her travel stories accessible to the world.
