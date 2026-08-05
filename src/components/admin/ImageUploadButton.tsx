@@ -9,11 +9,7 @@ interface ImageUploadButtonProps {
   className?: string;
 }
 
-export function ImageUploadButton({
-  onUploaded,
-  folder,
-  className,
-}: ImageUploadButtonProps) {
+export function ImageUploadButton({ onUploaded, folder, className }: ImageUploadButtonProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);

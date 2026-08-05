@@ -22,21 +22,16 @@ export async function setCoverOverride(
     return { success: false, error: "Country slug and image are required" };
   }
 
-  await db
-    .insert(countryCoverOverrides)
-    .values({ countrySlug, coverImage })
-    .onConflictDoUpdate({
-      target: countryCoverOverrides.countrySlug,
-      set: { coverImage },
-    });
+  await db.insert(countryCoverOverrides).values({ countrySlug, coverImage }).onConflictDoUpdate({
+    target: countryCoverOverrides.countrySlug,
+    set: { coverImage },
+  });
 
   revalidateCoverPaths(countrySlug);
   return { success: true, data: undefined };
 }
 
-export async function removeCoverOverride(
-  countrySlug: string,
-): Promise<ActionResult> {
+export async function removeCoverOverride(countrySlug: string): Promise<ActionResult> {
   await getAuthenticatedAdmin();
 
   if (!countrySlug) {

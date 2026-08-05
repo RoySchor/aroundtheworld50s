@@ -28,9 +28,7 @@ export default async function LoginPage() {
             className="h-28 w-28"
           />
         </div>
-        <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">
-          Admin Login
-        </h1>
+        <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">Admin Login</h1>
         <LoginForm />
       </div>
     </div>

@@ -21,11 +21,7 @@ export const getAdminProfileIfAuthenticated = cache(async () => {
 
   if (!user) return null;
 
-  const [profile] = await db
-    .select()
-    .from(profiles)
-    .where(eq(profiles.id, user.id))
-    .limit(1);
+  const [profile] = await db.select().from(profiles).where(eq(profiles.id, user.id)).limit(1);
 
   if (!profile || profile.role !== "admin") return null;
 

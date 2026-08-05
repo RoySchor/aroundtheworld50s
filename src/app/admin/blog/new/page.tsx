@@ -10,9 +10,7 @@ export default function NewBlogPostPage() {
   return (
     <div>
       <div className="mb-4">
-        <ConfirmBackLink href="/admin/blog">
-          Back to Blog Posts
-        </ConfirmBackLink>
+        <ConfirmBackLink href="/admin/blog">Back to Blog Posts</ConfirmBackLink>
       </div>
       <h1 className="mb-6 text-2xl font-bold">Create New Post</h1>
       <CreatePostForm />

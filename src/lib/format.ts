@@ -14,10 +14,7 @@ export function formatBlogDate(date: Date | string): string {
 }
 
 /** "Massachusetts, United States" or just "United States". Used on tips + blog country pages. */
-export function formatLocation(item: {
-  state: string | null;
-  country: string;
-}) {
+export function formatLocation(item: { state: string | null; country: string }) {
   return item.state ? `${item.state}, ${item.country}` : item.country;
 }
 

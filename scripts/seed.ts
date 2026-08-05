@@ -93,11 +93,10 @@ function tipsLinkToSlug(link: string | undefined | null): string | null {
  * side is ever an image. v2's block data models alt text per side so the
  * admin can (eventually) ship two-image layouts.
  */
-function splitImageAlt(layout: {
-  leftType?: string;
-  rightType?: string;
-  imageAlt?: string;
-}): { leftImageAlt?: string; rightImageAlt?: string } {
+function splitImageAlt(layout: { leftType?: string; rightType?: string; imageAlt?: string }): {
+  leftImageAlt?: string;
+  rightImageAlt?: string;
+} {
   if (!layout.imageAlt) return {};
   if (layout.leftType === "image") return { leftImageAlt: layout.imageAlt };
   if (layout.rightType === "image") return { rightImageAlt: layout.imageAlt };
@@ -147,10 +146,7 @@ async function findConstantsFile(folder: string): Promise<string> {
 
 async function loadV1BlogContent(folder: string): Promise<V1BlogPostContent> {
   const filePath = await findConstantsFile(folder);
-  const mod = (await import(pathToFileURL(filePath).href)) as Record<
-    string,
-    unknown
-  >;
+  const mod = (await import(pathToFileURL(filePath).href)) as Record<string, unknown>;
   for (const value of Object.values(mod)) {
     if (
       value &&
@@ -182,9 +178,9 @@ type V1BlogMeta = {
 };
 
 async function loadV1BlogMetas(): Promise<V1BlogMeta[]> {
-  const mod = (await import(
-    pathToFileURL(path.join(V1_DATA_DIR, "blogs.js")).href
-  )) as { default: Array<Record<string, string>> };
+  const mod = (await import(pathToFileURL(path.join(V1_DATA_DIR, "blogs.js")).href)) as {
+    default: Array<Record<string, string>>;
+  };
   return mod.default.map((entry) => ({
     folder: entry.folder,
     country: entry.country,
@@ -275,10 +271,7 @@ type V1TipsContent = {
     title: string;
     description?: string;
   };
-  content: Record<
-    string,
-    string | { content: string; enabled: boolean } | null | undefined
-  >;
+  content: Record<string, string | { content: string; enabled: boolean } | null | undefined>;
 };
 
 async function loadV1Tips(slug: string): Promise<V1TipsContent> {
@@ -368,10 +361,7 @@ function insertRows(table: string, rows: SqlRow[]): string {
   const columns = Object.keys(rows[0]);
   const quotedCols = columns.map((c) => `"${c}"`).join(", ");
   const valueTuples = rows
-    .map(
-      (row) =>
-        `  (${columns.map((c) => sqlLiteral(row[c])).join(", ")})`,
-    )
+    .map((row) => `  (${columns.map((c) => sqlLiteral(row[c])).join(", ")})`)
     .join(",\n");
   return `INSERT INTO "${table}" (${quotedCols}) VALUES\n${valueTuples};`;
 }
@@ -409,8 +399,7 @@ function blogPostRow(row: Required<Pick<NewBlogPost, "id">> & NewBlogPost): SqlR
 }
 
 function blogItineraryRow(
-  row: Required<Pick<NewBlogItinerary, "id" | "postId" | "position" | "title">> &
-    NewBlogItinerary,
+  row: Required<Pick<NewBlogItinerary, "id" | "postId" | "position" | "title">> & NewBlogItinerary,
 ): SqlRow {
   return {
     id: row.id,
@@ -422,9 +411,7 @@ function blogItineraryRow(
 }
 
 function blogItineraryItemRow(
-  row: Required<
-    Pick<NewBlogItineraryItem, "itineraryId" | "position" | "content">
-  > &
+  row: Required<Pick<NewBlogItineraryItem, "itineraryId" | "position" | "content">> &
     NewBlogItineraryItem,
 ): SqlRow {
   return {
@@ -435,8 +422,7 @@ function blogItineraryItemRow(
 }
 
 function blogBlockRow(
-  row: Required<Pick<NewBlogBlock, "postId" | "position" | "type" | "data">> &
-    NewBlogBlock,
+  row: Required<Pick<NewBlogBlock, "postId" | "position" | "type" | "data">> & NewBlogBlock,
 ): SqlRow {
   return {
     post_id: row.postId,
@@ -461,9 +447,7 @@ function tipRow(row: Required<Pick<NewTip, "id">> & NewTip): SqlRow {
 }
 
 function tipSectionRow(
-  row: Required<
-    Pick<NewTipSection, "tipId" | "sectionKey" | "position" | "enabled">
-  > &
+  row: Required<Pick<NewTipSection, "tipId" | "sectionKey" | "position" | "enabled">> &
     NewTipSection,
 ): SqlRow {
   return {
@@ -476,8 +460,7 @@ function tipSectionRow(
 }
 
 function galleryImageRow(
-  row: Required<Pick<NewGalleryImage, "cloudinaryPublicId" | "position">> &
-    NewGalleryImage,
+  row: Required<Pick<NewGalleryImage, "cloudinaryPublicId" | "position">> & NewGalleryImage,
 ): SqlRow {
   return {
     cloudinary_public_id: row.cloudinaryPublicId,
@@ -542,9 +525,7 @@ function toBlockRow(args: InsertBlockArgs): NewBlogBlock | null {
         position,
         type: "image_grid",
         data: {
-          images: (section.images ?? []).map((f) =>
-            toBlogImagePublicId(folder, f),
-          ),
+          images: (section.images ?? []).map((f) => toBlogImagePublicId(folder, f)),
         },
       };
 
@@ -639,9 +620,7 @@ async function build(): Promise<{ full: string; chunks: SqlChunk[] }> {
       title: meta.title,
       subtitle: v1Content.subtitle ?? null,
       header: v1Content.header ?? null,
-      description: v1Content.description
-        ? rewriteInternalLinks(v1Content.description)
-        : null,
+      description: v1Content.description ? rewriteInternalLinks(v1Content.description) : null,
       excerpt: meta.excerpt ?? null,
       backgroundImage: meta.backgroundImage
         ? toBlogImagePublicId(meta.folder, meta.backgroundImage)
@@ -810,9 +789,7 @@ async function build(): Promise<{ full: string; chunks: SqlChunk[] }> {
   pushChunk("tips", tipsChunkLines);
 
   // --- Gallery --------------------------------------------------------------
-  const galleryPublicIds = GALLERY_FALLBACK_NAMES.map(
-    (n) => `${GALLERY_FOLDER}/${n}`,
-  );
+  const galleryPublicIds = GALLERY_FALLBACK_NAMES.map((n) => `${GALLERY_FOLDER}/${n}`);
   const galleryInsert = insertRows(
     "gallery_images",
     galleryPublicIds.map((publicId, index) =>
@@ -848,18 +825,13 @@ async function main() {
   await Promise.all(
     chunks.map((chunk, index) =>
       fs.writeFile(
-        path.join(
-          OUTPUT_CHUNKS_DIR,
-          `${String(index).padStart(2, "0")}_${chunk.name}.sql`,
-        ),
+        path.join(OUTPUT_CHUNKS_DIR, `${String(index).padStart(2, "0")}_${chunk.name}.sql`),
         chunk.sql,
         "utf8",
       ),
     ),
   );
-  console.log(
-    `[seed] wrote ${chunks.length} chunk files to ${OUTPUT_CHUNKS_DIR}`,
-  );
+  console.log(`[seed] wrote ${chunks.length} chunk files to ${OUTPUT_CHUNKS_DIR}`);
   console.log(
     "[seed] apply via Supabase MCP execute_sql (the direct DB host is not reachable from this network).",
   );

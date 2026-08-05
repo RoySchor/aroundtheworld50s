@@ -8,10 +8,7 @@ interface ItineraryWithMapBlockProps {
   itineraries: (BlogItinerary & { items: BlogItineraryItem[] })[];
 }
 
-export function ItineraryWithMapBlock({
-  data,
-  itineraries,
-}: ItineraryWithMapBlockProps) {
+export function ItineraryWithMapBlock({ data, itineraries }: ItineraryWithMapBlockProps) {
   const itinerary = itineraries.find((it) => it.id === data.itineraryId);
   if (!itinerary) return null;
 

@@ -13,9 +13,7 @@ export function ConfirmBackLink({ href, children }: ConfirmBackLinkProps) {
 
   function handleClick(e: React.MouseEvent) {
     if ((window.__unsavedChangesCount ?? 0) > 0) {
-      const ok = window.confirm(
-        "You have unsaved changes. Are you sure you want to leave?",
-      );
+      const ok = window.confirm("You have unsaved changes. Are you sure you want to leave?");
       if (!ok) {
         e.preventDefault();
         return;

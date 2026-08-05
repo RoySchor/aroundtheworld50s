@@ -59,25 +59,13 @@ export function BlogEditClient({ post }: BlogEditClientProps) {
 
       <hr />
 
-      <BlocksSection
-        postId={post.id}
-        blocks={post.blocks}
-        itineraries={post.itineraries}
-      />
+      <BlocksSection postId={post.id} blocks={post.blocks} itineraries={post.itineraries} />
 
       <hr />
 
-      <ItinerariesSection
-        postId={post.id}
-        itineraries={post.itineraries}
-      />
+      <ItinerariesSection postId={post.id} itineraries={post.itineraries} />
 
-      {previewOpen && (
-        <BlogPreviewModal
-          post={previewPost}
-          onClose={() => setPreviewOpen(false)}
-        />
-      )}
+      {previewOpen && <BlogPreviewModal post={previewPost} onClose={() => setPreviewOpen(false)} />}
     </>
   );
 }

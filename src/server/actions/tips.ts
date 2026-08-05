@@ -5,11 +5,7 @@ import { redirect } from "next/navigation";
 import { db } from "@/server/db";
 import { tips, tipSections } from "@/server/db/schema";
 import { getAuthenticatedAdmin } from "@/server/auth";
-import {
-  createTipSchema,
-  updateTipSchema,
-  updateTipSectionSchema,
-} from "@/server/validators/tips";
+import { createTipSchema, updateTipSchema, updateTipSectionSchema } from "@/server/validators/tips";
 import { TIP_SECTIONS } from "@/lib/constants/tip-sections";
 import type { ActionResult } from "./types";
 import { revalidateTipPaths, revalidatePublicTipPaths } from "./helpers";
@@ -18,9 +14,7 @@ import { revalidateTipPaths, revalidatePublicTipPaths } from "./helpers";
 // Tip CRUD
 // ---------------------------------------------------------------------------
 
-export async function createTip(
-  input: unknown,
-): Promise<ActionResult<{ id: string }>> {
+export async function createTip(input: unknown): Promise<ActionResult<{ id: string }>> {
   await getAuthenticatedAdmin();
 
   const parsed = createTipSchema.safeParse(input);
@@ -83,10 +77,7 @@ export async function createTip(
   redirect(`/admin/tips/${tipId}`);
 }
 
-export async function updateTip(
-  id: string,
-  input: unknown,
-): Promise<ActionResult> {
+export async function updateTip(id: string, input: unknown): Promise<ActionResult> {
   await getAuthenticatedAdmin();
 
   const parsed = updateTipSchema.safeParse(input);
@@ -113,14 +104,10 @@ export async function updateTip(
 
   let tip: { slug: string; status: string } | undefined;
   try {
-    [tip] = await db
-      .update(tips)
-      .set(data)
-      .where(eq(tips.id, id))
-      .returning({
-        slug: tips.slug,
-        status: tips.status,
-      });
+    [tip] = await db.update(tips).set(data).where(eq(tips.id, id)).returning({
+      slug: tips.slug,
+      status: tips.status,
+    });
   } catch (err) {
     const pgErr = err as { code?: string };
     if (pgErr.code === "23505") {
@@ -179,10 +166,7 @@ export async function unpublishTip(id: string): Promise<ActionResult> {
 export async function deleteTip(id: string): Promise<ActionResult> {
   await getAuthenticatedAdmin();
 
-  const [tip] = await db
-    .delete(tips)
-    .where(eq(tips.id, id))
-    .returning({ slug: tips.slug });
+  const [tip] = await db.delete(tips).where(eq(tips.id, id)).returning({ slug: tips.slug });
 
   if (!tip) {
     return { success: false, error: "Tip not found" };
@@ -197,10 +181,7 @@ export async function deleteTip(id: string): Promise<ActionResult> {
 // Section actions
 // ---------------------------------------------------------------------------
 
-export async function updateTipSection(
-  id: string,
-  input: unknown,
-): Promise<ActionResult> {
+export async function updateTipSection(id: string, input: unknown): Promise<ActionResult> {
   await getAuthenticatedAdmin();
 
   const parsed = updateTipSectionSchema.safeParse(input);
@@ -251,9 +232,7 @@ export async function reorderTipSection(
   }
 
   await db.transaction(async (tx) => {
-    await tx.execute(
-      sql`SET CONSTRAINTS tip_sections_tip_id_position_unique DEFERRED`,
-    );
+    await tx.execute(sql`SET CONSTRAINTS tip_sections_tip_id_position_unique DEFERRED`);
     await tx
       .update(tipSections)
       .set({ position: adjacent.position })

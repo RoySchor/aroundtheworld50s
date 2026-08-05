@@ -5,11 +5,7 @@ import { sanitizeHtml } from "@/lib/sanitize";
 import { ParallaxHero } from "@/components/blog/ParallaxHero";
 import { BlockRenderer } from "@/components/blog/BlockRenderer";
 import { TipsCta } from "@/components/blog/TipsCta";
-import type {
-  BlogBlock,
-  BlogItinerary,
-  BlogItineraryItem,
-} from "@/server/db/schema";
+import type { BlogBlock, BlogItinerary, BlogItineraryItem } from "@/server/db/schema";
 
 interface BlogPreviewModalProps {
   post: {
@@ -43,7 +39,12 @@ export function BlogPreviewModal({ post, onClose }: BlogPreviewModalProps) {
   }, [onClose]);
 
   return (
-    <div role="dialog" aria-modal="true" aria-label="Blog post preview" className="fixed inset-0 z-[200] overflow-y-auto bg-white">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Blog post preview"
+      className="fixed inset-0 z-[200] overflow-y-auto bg-white"
+    >
       <div className="sticky top-0 z-10 flex items-center justify-between bg-gray-900 px-4 py-2 text-white">
         <span className="text-sm font-medium">Preview Mode</span>
         <button
@@ -57,19 +58,14 @@ export function BlogPreviewModal({ post, onClose }: BlogPreviewModalProps) {
 
       <div className="page-container">
         {post.backgroundImage && post.header && (
-          <ParallaxHero
-            imagePublicId={post.backgroundImage}
-            title={post.header}
-          />
+          <ParallaxHero imagePublicId={post.backgroundImage} title={post.header} />
         )}
 
         <div className="container">
           <div className="page-content text-center">
             <h2 className="post-title">{post.title}</h2>
 
-            {post.subtitle && (
-              <h3 className="post-subtitle">{post.subtitle}</h3>
-            )}
+            {post.subtitle && <h3 className="post-subtitle">{post.subtitle}</h3>}
 
             {post.description && (
               <div
@@ -81,18 +77,12 @@ export function BlogPreviewModal({ post, onClose }: BlogPreviewModalProps) {
             )}
 
             {post.tipsCtaCopy && post.tipsSlug && (
-              <TipsCta
-                ctaCopy={post.tipsCtaCopy}
-                tipsSlug={post.tipsSlug}
-              />
+              <TipsCta ctaCopy={post.tipsCtaCopy} tipsSlug={post.tipsSlug} />
             )}
 
             {post.blocks.map((block) => (
               <div key={block.id}>
-                <BlockRenderer
-                  block={block}
-                  itineraries={post.itineraries}
-                />
+                <BlockRenderer block={block} itineraries={post.itineraries} />
               </div>
             ))}
           </div>

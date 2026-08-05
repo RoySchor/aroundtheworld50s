@@ -9,9 +9,7 @@ interface TipDetailPageProps {
 
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata({
-  params,
-}: TipDetailPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: TipDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
   const tip = await getTipBySlug(slug);
 
@@ -33,9 +31,7 @@ export default async function TipDetailPage({ params }: TipDetailPageProps) {
         <div className="container">
           <div className="tip-not-found">
             <h1>Tips Not Found</h1>
-            <p>
-              The tips page for &ldquo;{slug}&rdquo; doesn&apos;t exist yet.
-            </p>
+            <p>The tips page for &ldquo;{slug}&rdquo; doesn&apos;t exist yet.</p>
           </div>
         </div>
       </div>

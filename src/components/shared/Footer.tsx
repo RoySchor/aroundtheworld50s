@@ -26,13 +26,9 @@ export function Footer() {
           ))}
         </div>
         <p className="text-sm text-gray-400">
-          &copy; {new Date().getFullYear()} Around the World 50s. All rights
-          reserved.
+          &copy; {new Date().getFullYear()} Around the World 50s. All rights reserved.
         </p>
-        <Link
-          href="/admin"
-          className="text-xs text-gray-500 hover:text-gray-300 transition-colors"
-        >
+        <Link href="/admin" className="text-xs text-gray-500 hover:text-gray-300 transition-colors">
           Admin
         </Link>
       </div>

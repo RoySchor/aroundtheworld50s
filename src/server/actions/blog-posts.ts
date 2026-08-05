@@ -6,11 +6,7 @@ import { redirect } from "next/navigation";
 import { db } from "@/server/db";
 import { blogPosts, tips } from "@/server/db/schema";
 import { getAuthenticatedAdmin } from "@/server/auth";
-import {
-  createBlogPostSchema,
-  updateBlogPostSchema,
-  slugify,
-} from "@/server/validators/blog";
+import { createBlogPostSchema, updateBlogPostSchema, slugify } from "@/server/validators/blog";
 import { getNextPostIndex } from "@/server/repositories/admin-blog";
 import { revalidatePublicTipPaths } from "./helpers";
 import type { ActionResult } from "./types";
@@ -26,23 +22,14 @@ function revalidatePublicPaths(countrySlug: string, postIndex: number) {
   revalidatePath(`/blog/${countrySlug}/${postIndex}`);
 }
 
-async function autoUnpublishTipIfEmpty(
-  countrySlug: string,
-  state: string | null,
-) {
-  const stateFilter = state
-    ? eq(blogPosts.state, state)
-    : isNull(blogPosts.state);
+async function autoUnpublishTipIfEmpty(countrySlug: string, state: string | null) {
+  const stateFilter = state ? eq(blogPosts.state, state) : isNull(blogPosts.state);
 
   const [remaining] = await db
     .select({ count: sql<number>`COUNT(*)` })
     .from(blogPosts)
     .where(
-      and(
-        eq(blogPosts.countrySlug, countrySlug),
-        stateFilter,
-        eq(blogPosts.status, "published"),
-      ),
+      and(eq(blogPosts.countrySlug, countrySlug), stateFilter, eq(blogPosts.status, "published")),
     );
 
   if (Number(remaining?.count ?? 0) === 0) {
@@ -77,9 +64,7 @@ function revalidateAfterDelete(
 // Actions
 // ---------------------------------------------------------------------------
 
-export async function createBlogPost(
-  input: unknown,
-): Promise<ActionResult<{ id: string }>> {
+export async function createBlogPost(input: unknown): Promise<ActionResult<{ id: string }>> {
   const profile = await getAuthenticatedAdmin();
 
   const parsed = createBlogPostSchema.safeParse(input);
@@ -117,10 +102,7 @@ export async function createBlogPost(
   redirect(`/admin/blog/${post.id}`);
 }
 
-export async function updateBlogPost(
-  id: string,
-  input: unknown,
-): Promise<ActionResult> {
+export async function updateBlogPost(id: string, input: unknown): Promise<ActionResult> {
   await getAuthenticatedAdmin();
 
   const parsed = updateBlogPostSchema.safeParse(input);
@@ -130,15 +112,11 @@ export async function updateBlogPost(
 
   const data = parsed.data;
 
-  const [post] = await db
-    .update(blogPosts)
-    .set(data)
-    .where(eq(blogPosts.id, id))
-    .returning({
-      countrySlug: blogPosts.countrySlug,
-      postIndex: blogPosts.postIndex,
-      status: blogPosts.status,
-    });
+  const [post] = await db.update(blogPosts).set(data).where(eq(blogPosts.id, id)).returning({
+    countrySlug: blogPosts.countrySlug,
+    postIndex: blogPosts.postIndex,
+    status: blogPosts.status,
+  });
 
   if (post?.status === "published") {
     revalidatePublicPaths(post.countrySlug, post.postIndex);
@@ -196,14 +174,11 @@ export async function deleteBlogPost(id: string): Promise<ActionResult> {
   // 1. Delete + re-index in one transaction
   // ---------------------------------------------------------------
   const deleted = await db.transaction(async (tx) => {
-    const [row] = await tx
-      .delete(blogPosts)
-      .where(eq(blogPosts.id, id))
-      .returning({
-        countrySlug: blogPosts.countrySlug,
-        postIndex: blogPosts.postIndex,
-        state: blogPosts.state,
-      });
+    const [row] = await tx.delete(blogPosts).where(eq(blogPosts.id, id)).returning({
+      countrySlug: blogPosts.countrySlug,
+      postIndex: blogPosts.postIndex,
+      state: blogPosts.state,
+    });
 
     if (!row) return null;
 
@@ -211,10 +186,7 @@ export async function deleteBlogPost(id: string): Promise<ActionResult> {
       .update(blogPosts)
       .set({ postIndex: sql`${blogPosts.postIndex} - 1` })
       .where(
-        and(
-          eq(blogPosts.countrySlug, row.countrySlug),
-          gt(blogPosts.postIndex, row.postIndex),
-        ),
+        and(eq(blogPosts.countrySlug, row.countrySlug), gt(blogPosts.postIndex, row.postIndex)),
       );
 
     return row;
@@ -237,11 +209,7 @@ export async function deleteBlogPost(id: string): Promise<ActionResult> {
     .from(blogPosts)
     .where(eq(blogPosts.countrySlug, deleted.countrySlug));
 
-  revalidateAfterDelete(
-    deleted.countrySlug,
-    deleted.postIndex,
-    Number(totalRemaining?.count ?? 0),
-  );
+  revalidateAfterDelete(deleted.countrySlug, deleted.postIndex, Number(totalRemaining?.count ?? 0));
 
   // redirect() throws NEXT_REDIRECT — called outside the transaction
   redirect("/admin/blog");

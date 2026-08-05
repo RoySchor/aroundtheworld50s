@@ -1,8 +1,5 @@
 import { sanitizeHtml } from "@/lib/sanitize";
-import {
-  TIP_SECTION_LABELS,
-  TIP_EMPTY_PLACEHOLDER,
-} from "@/lib/constants/tip-sections";
+import { TIP_SECTION_LABELS, TIP_EMPTY_PLACEHOLDER } from "@/lib/constants/tip-sections";
 import type { TipSection as TipSectionType } from "@/server/db/schema";
 
 interface TipSectionProps {
@@ -10,8 +7,7 @@ interface TipSectionProps {
 }
 
 export function TipSection({ section }: TipSectionProps) {
-  const label =
-    section.title || TIP_SECTION_LABELS[section.sectionKey] || section.sectionKey;
+  const label = section.title || TIP_SECTION_LABELS[section.sectionKey] || section.sectionKey;
   const hasContent = section.content && section.content.trim().length > 0;
 
   return (

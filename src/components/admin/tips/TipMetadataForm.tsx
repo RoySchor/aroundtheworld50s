@@ -32,9 +32,7 @@ export function TipMetadataForm({ tip, onStateChange }: TipMetadataFormProps) {
   const isUS = tip.countryCode.toUpperCase() === "US";
 
   const isDirty =
-    title !== tip.title ||
-    description !== (tip.description ?? "") ||
-    state !== (tip.state ?? "");
+    title !== tip.title || description !== (tip.description ?? "") || state !== (tip.state ?? "");
 
   useUnsavedChanges(isDirty);
 
@@ -82,9 +80,7 @@ export function TipMetadataForm({ tip, onStateChange }: TipMetadataFormProps) {
       {/* Read-only country info */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <span className="mb-1 block text-sm font-medium text-gray-500">
-            Country (read-only)
-          </span>
+          <span className="mb-1 block text-sm font-medium text-gray-500">Country (read-only)</span>
           <p className="text-sm">
             {tip.country} ({tip.countryCode})
           </p>
@@ -109,7 +105,9 @@ export function TipMetadataForm({ tip, onStateChange }: TipMetadataFormProps) {
       </div>
 
       <label className="block">
-        <span className="mb-1 block text-sm font-medium">Title <span className="text-red-500">*</span></span>
+        <span className="mb-1 block text-sm font-medium">
+          Title <span className="text-red-500">*</span>
+        </span>
         <input
           type="text"
           value={title}
@@ -120,7 +118,9 @@ export function TipMetadataForm({ tip, onStateChange }: TipMetadataFormProps) {
       </label>
 
       <div>
-        <span className="mb-1 block text-sm font-medium text-gray-500">URL Path (auto-generated)</span>
+        <span className="mb-1 block text-sm font-medium text-gray-500">
+          URL Path (auto-generated)
+        </span>
         <p className="text-sm text-gray-700">/tips/{tip.slug}</p>
       </div>
 
@@ -131,7 +131,6 @@ export function TipMetadataForm({ tip, onStateChange }: TipMetadataFormProps) {
           Used for search engine meta tags only — not displayed on the page.
         </span>
       </div>
-
     </form>
   );
 }

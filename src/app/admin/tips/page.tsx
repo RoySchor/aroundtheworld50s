@@ -44,9 +44,7 @@ export default async function AdminTipsPage() {
                     {tip.country}
                     {tip.state ? ` (${tip.state})` : ""}
                   </td>
-                  <td className="px-4 py-3 font-mono text-xs text-gray-500">
-                    {tip.slug}
-                  </td>
+                  <td className="px-4 py-3 font-mono text-xs text-gray-500">{tip.slug}</td>
                   <td className="px-4 py-3">
                     <span
                       className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${
@@ -58,14 +56,9 @@ export default async function AdminTipsPage() {
                       {tip.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-gray-500">
-                    {tip.updatedAt.toLocaleDateString()}
-                  </td>
+                  <td className="px-4 py-3 text-gray-500">{tip.updatedAt.toLocaleDateString()}</td>
                   <td className="px-4 py-3">
-                    <Link
-                      href={`/admin/tips/${tip.id}`}
-                      className="text-blue-600 hover:underline"
-                    >
+                    <Link href={`/admin/tips/${tip.id}`} className="text-blue-600 hover:underline">
                       Edit
                     </Link>
                   </td>

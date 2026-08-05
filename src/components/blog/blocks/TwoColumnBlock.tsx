@@ -55,10 +55,7 @@ function Pane({
 
   return (
     <div className="content-pane-text">
-      <div
-        className="post-description"
-        dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }}
-      />
+      <div className="post-description" dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }} />
     </div>
   );
 }
@@ -69,18 +66,10 @@ export function TwoColumnBlock({ data }: TwoColumnBlockProps) {
   return (
     <div className="two-column-layout">
       <div className="two-col-column">
-        <Pane
-          type={data.leftType}
-          images={data.leftImages}
-          html={data.html}
-        />
+        <Pane type={data.leftType} images={data.leftImages} html={data.html} />
       </div>
       <div className="two-col-column">
-        <Pane
-          type={data.rightType}
-          images={data.rightImages}
-          html={data.html}
-        />
+        <Pane type={data.rightType} images={data.rightImages} html={data.html} />
       </div>
     </div>
   );

@@ -1,8 +1,6 @@
 "use client";
 
-import {
-  CLOUDINARY_BASE_URL,
-} from "@/lib/constants";
+import { CLOUDINARY_BASE_URL } from "@/lib/constants";
 
 export default function cloudinaryLoader({
   src,
@@ -13,8 +11,6 @@ export default function cloudinaryLoader({
   width: number;
   quality?: number;
 }): string {
-  const transforms = quality
-    ? `f_auto,w_${width},q_${quality}`
-    : `f_auto,q_auto,w_${width}`;
+  const transforms = quality ? `f_auto,w_${width},q_${quality}` : `f_auto,q_auto,w_${width}`;
   return `${CLOUDINARY_BASE_URL}/${transforms}/${src}`;
 }

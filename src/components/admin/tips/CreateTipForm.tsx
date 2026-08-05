@@ -21,11 +21,7 @@ export function CreateTipForm() {
 
   const isUS = countryCode.toUpperCase() === "US";
 
-  const isDirty =
-    country !== "" ||
-    countryCode !== "" ||
-    title !== "" ||
-    description !== "";
+  const isDirty = country !== "" || countryCode !== "" || title !== "" || description !== "";
 
   useUnsavedChanges(isDirty);
 
@@ -61,7 +57,9 @@ export function CreateTipForm() {
       {/* Country + Country Code */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <span className="mb-1 block text-sm font-medium">Country <span className="text-red-500">*</span></span>
+          <span className="mb-1 block text-sm font-medium">
+            Country <span className="text-red-500">*</span>
+          </span>
           <CountryCombobox
             value={country}
             onChange={(val) => {
@@ -114,7 +112,9 @@ export function CreateTipForm() {
       {/* Auto-generated URL path */}
       {country && (
         <div>
-          <span className="mb-1 block text-sm font-medium text-gray-500">URL Path (auto-generated)</span>
+          <span className="mb-1 block text-sm font-medium text-gray-500">
+            URL Path (auto-generated)
+          </span>
           <p className="text-sm text-gray-700">
             /tips/{isUS && state ? slugify(state) : slugify(country)}
           </p>
@@ -123,7 +123,9 @@ export function CreateTipForm() {
 
       {/* Title */}
       <label className="block">
-        <span className="mb-1 block text-sm font-medium">Title <span className="text-red-500">*</span></span>
+        <span className="mb-1 block text-sm font-medium">
+          Title <span className="text-red-500">*</span>
+        </span>
         <input
           type="text"
           value={title}

@@ -54,14 +54,9 @@ export default async function AdminBlogPage() {
                       {post.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-gray-500">
-                    {post.updatedAt.toLocaleDateString()}
-                  </td>
+                  <td className="px-4 py-3 text-gray-500">{post.updatedAt.toLocaleDateString()}</td>
                   <td className="px-4 py-3">
-                    <Link
-                      href={`/admin/blog/${post.id}`}
-                      className="text-blue-600 hover:underline"
-                    >
+                    <Link href={`/admin/blog/${post.id}`} className="text-blue-600 hover:underline">
                       Edit
                     </Link>
                   </td>

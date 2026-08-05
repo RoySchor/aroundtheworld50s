@@ -1,6 +1,5 @@
 export const SITE_NAME = "Around the World 50s";
-export const SITE_DESCRIPTION =
-  "A travel blog exploring the world one destination at a time";
+export const SITE_DESCRIPTION = "A travel blog exploring the world one destination at a time";
 
 export const CLOUDINARY_CLOUD_NAME = "dgfx5h5jl";
 export const CLOUDINARY_ASSET_PREFIX = "aroundtheworld50s";

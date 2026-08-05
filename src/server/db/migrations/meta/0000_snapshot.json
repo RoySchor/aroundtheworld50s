@@ -61,12 +61,8 @@
           "name": "blog_blocks_post_id_blog_posts_id_fk",
           "tableFrom": "blog_blocks",
           "tableTo": "blog_posts",
-          "columnsFrom": [
-            "post_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["post_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -76,10 +72,7 @@
         "blog_blocks_post_position_unique": {
           "name": "blog_blocks_post_position_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "post_id",
-            "position"
-          ]
+          "columns": ["post_id", "position"]
         }
       },
       "policies": {},
@@ -147,12 +140,8 @@
           "name": "blog_itineraries_post_id_blog_posts_id_fk",
           "tableFrom": "blog_itineraries",
           "tableTo": "blog_posts",
-          "columnsFrom": [
-            "post_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["post_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -162,10 +151,7 @@
         "blog_itineraries_post_position_unique": {
           "name": "blog_itineraries_post_position_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "post_id",
-            "position"
-          ]
+          "columns": ["post_id", "position"]
         }
       },
       "policies": {},
@@ -222,12 +208,8 @@
           "name": "blog_itinerary_items_itinerary_id_blog_itineraries_id_fk",
           "tableFrom": "blog_itinerary_items",
           "tableTo": "blog_itineraries",
-          "columnsFrom": [
-            "itinerary_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["itinerary_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -237,10 +219,7 @@
         "blog_itinerary_items_itinerary_position_unique": {
           "name": "blog_itinerary_items_itinerary_position_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "itinerary_id",
-            "position"
-          ]
+          "columns": ["itinerary_id", "position"]
         }
       },
       "policies": {},
@@ -377,12 +356,8 @@
           "name": "blog_posts_author_id_profiles_id_fk",
           "tableFrom": "blog_posts",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "author_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["author_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -392,10 +367,7 @@
         "blog_posts_country_slug_post_index_unique": {
           "name": "blog_posts_country_slug_post_index_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "country_slug",
-            "post_index"
-          ]
+          "columns": ["country_slug", "post_index"]
         }
       },
       "policies": {},
@@ -458,16 +430,12 @@
         "gallery_images_cloudinary_public_id_unique": {
           "name": "gallery_images_cloudinary_public_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "cloudinary_public_id"
-          ]
+          "columns": ["cloudinary_public_id"]
         },
         "gallery_images_position_unique": {
           "name": "gallery_images_position_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "position"
-          ]
+          "columns": ["position"]
         }
       },
       "policies": {},
@@ -585,12 +553,8 @@
           "name": "tip_sections_tip_id_tips_id_fk",
           "tableFrom": "tip_sections",
           "tableTo": "tips",
-          "columnsFrom": [
-            "tip_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["tip_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -600,18 +564,12 @@
         "tip_sections_tip_id_section_key_unique": {
           "name": "tip_sections_tip_id_section_key_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "tip_id",
-            "section_key"
-          ]
+          "columns": ["tip_id", "section_key"]
         },
         "tip_sections_tip_id_position_unique": {
           "name": "tip_sections_tip_id_position_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "tip_id",
-            "position"
-          ]
+          "columns": ["tip_id", "position"]
         }
       },
       "policies": {},
@@ -717,9 +675,7 @@
         "tips_slug_unique": {
           "name": "tips_slug_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "slug"
-          ]
+          "columns": ["slug"]
         }
       },
       "policies": {},
@@ -736,20 +692,12 @@
     "public.blog_block_type": {
       "name": "blog_block_type",
       "schema": "public",
-      "values": [
-        "text",
-        "two_column",
-        "image_grid",
-        "itinerary_with_map"
-      ]
+      "values": ["text", "two_column", "image_grid", "itinerary_with_map"]
     },
     "public.publish_status": {
       "name": "publish_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "published"
-      ]
+      "values": ["draft", "published"]
     },
     "public.tip_section_key": {
       "name": "tip_section_key",
@@ -766,10 +714,7 @@
     "public.user_role": {
       "name": "user_role",
       "schema": "public",
-      "values": [
-        "admin",
-        "reader"
-      ]
+      "values": ["admin", "reader"]
     }
   },
   "schemas": {},

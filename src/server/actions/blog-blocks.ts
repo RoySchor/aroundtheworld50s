@@ -53,10 +53,7 @@ export async function createBlogBlock(
   return { success: true, data: { id: block.id } };
 }
 
-export async function updateBlogBlock(
-  id: string,
-  input: unknown,
-): Promise<ActionResult> {
+export async function updateBlogBlock(id: string, input: unknown): Promise<ActionResult> {
   await getAuthenticatedAdmin();
 
   const parsed = blogBlockDataSchema.safeParse(input);
@@ -83,13 +80,10 @@ export async function deleteBlogBlock(id: string): Promise<ActionResult> {
   await getAuthenticatedAdmin();
 
   const deleted = await db.transaction(async (tx) => {
-    const [row] = await tx
-      .delete(blogBlocks)
-      .where(eq(blogBlocks.id, id))
-      .returning({
-        postId: blogBlocks.postId,
-        position: blogBlocks.position,
-      });
+    const [row] = await tx.delete(blogBlocks).where(eq(blogBlocks.id, id)).returning({
+      postId: blogBlocks.postId,
+      position: blogBlocks.position,
+    });
 
     if (!row) return null;
 
@@ -97,12 +91,7 @@ export async function deleteBlogBlock(id: string): Promise<ActionResult> {
     await tx
       .update(blogBlocks)
       .set({ position: sql`${blogBlocks.position} - 1` })
-      .where(
-        and(
-          eq(blogBlocks.postId, row.postId),
-          gt(blogBlocks.position, row.position),
-        ),
-      );
+      .where(and(eq(blogBlocks.postId, row.postId), gt(blogBlocks.position, row.position)));
 
     return row;
   });

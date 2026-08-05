@@ -12,12 +12,7 @@ interface CountryComboboxProps {
 
 const MAX_VISIBLE = 8;
 
-export function CountryCombobox({
-  value,
-  onChange,
-  onSelect,
-  placeholder,
-}: CountryComboboxProps) {
+export function CountryCombobox({ value, onChange, onSelect, placeholder }: CountryComboboxProps) {
   const [open, setOpen] = useState(false);
   const [highlightIndex, setHighlightIndex] = useState(-1);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -28,9 +23,7 @@ export function CountryCombobox({
   // Filter: prefer "starts with", fall back to "contains"
   let filtered: { label: string; code: string }[] = [];
   if (query) {
-    const startsWith = COUNTRIES.filter((c) =>
-      c.label.toLowerCase().startsWith(query),
-    );
+    const startsWith = COUNTRIES.filter((c) => c.label.toLowerCase().startsWith(query));
     filtered =
       startsWith.length > 0
         ? startsWith
@@ -69,14 +62,10 @@ export function CountryCombobox({
 
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      setHighlightIndex((prev) =>
-        prev < visibleItems.length - 1 ? prev + 1 : 0,
-      );
+      setHighlightIndex((prev) => (prev < visibleItems.length - 1 ? prev + 1 : 0));
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      setHighlightIndex((prev) =>
-        prev > 0 ? prev - 1 : visibleItems.length - 1,
-      );
+      setHighlightIndex((prev) => (prev > 0 ? prev - 1 : visibleItems.length - 1));
     } else if (e.key === "Enter" && highlightIndex >= 0) {
       e.preventDefault();
       handleSelect(visibleItems[highlightIndex]);
@@ -135,8 +124,7 @@ export function CountryCombobox({
                 i === highlightIndex ? "bg-gray-100" : ""
               }`}
             >
-              {c.label}{" "}
-              <span className="text-gray-400">({c.code})</span>
+              {c.label} <span className="text-gray-400">({c.code})</span>
             </li>
           ))}
           {filtered.length > MAX_VISIBLE && (

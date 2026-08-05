@@ -53,19 +53,15 @@ export function BlockForm({
   );
 
   // Image grid state
-  const [images, setImages] = useState<string[]>(
-    (data.images as string[]) ?? [],
-  );
+  const [images, setImages] = useState<string[]>((data.images as string[]) ?? []);
 
   // Image carousel state
-  const [carouselImages, setCarouselImages] = useState<Array<{ publicId: string; caption?: string }>>(
-    (data.images as Array<{ publicId: string; caption?: string }>) ?? [],
-  );
+  const [carouselImages, setCarouselImages] = useState<
+    Array<{ publicId: string; caption?: string }>
+  >((data.images as Array<{ publicId: string; caption?: string }>) ?? []);
 
   // Itinerary+map state
-  const [itineraryId, setItineraryId] = useState<string>(
-    (data.itineraryId as string) ?? "",
-  );
+  const [itineraryId, setItineraryId] = useState<string>((data.itineraryId as string) ?? "");
 
   // Social embed state
   const [embedPlatform, setEmbedPlatform] = useState<"instagram" | "tiktok">(
@@ -82,11 +78,7 @@ export function BlockForm({
     setImages(next);
   }
 
-  function moveSideImage(
-    side: "left" | "right",
-    from: number,
-    direction: "up" | "down",
-  ) {
+  function moveSideImage(side: "left" | "right", from: number, direction: "up" | "down") {
     const setter = side === "left" ? setLeftImages : setRightImages;
     const arr = side === "left" ? leftImages : rightImages;
     const to = direction === "up" ? from - 1 : from + 1;
@@ -149,9 +141,7 @@ export function BlockForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {error && (
-        <p className="text-sm text-red-600">{error}</p>
-      )}
+      {error && <p className="text-sm text-red-600">{error}</p>}
 
       {/* Text block */}
       {type === "text" && (
@@ -169,9 +159,7 @@ export function BlockForm({
               <span className="mb-1 block text-sm font-medium">Left Side</span>
               <select
                 value={leftType}
-                onChange={(e) =>
-                  setLeftType(e.target.value as "image" | "text")
-                }
+                onChange={(e) => setLeftType(e.target.value as "image" | "text")}
                 className="w-full rounded border px-3 py-2 text-sm"
               >
                 <option value="image">Image</option>
@@ -182,9 +170,7 @@ export function BlockForm({
               <span className="mb-1 block text-sm font-medium">Right Side</span>
               <select
                 value={rightType}
-                onChange={(e) =>
-                  setRightType(e.target.value as "image" | "text")
-                }
+                onChange={(e) => setRightType(e.target.value as "image" | "text")}
                 className="w-full rounded border px-3 py-2 text-sm"
               >
                 <option value="image">Image</option>
@@ -335,9 +321,7 @@ export function BlockForm({
                   className="rounded object-cover"
                   style={{ width: 48, height: "auto" }}
                 />
-                <span className="flex-1 truncate text-sm text-gray-600">
-                  {img}
-                </span>
+                <span className="flex-1 truncate text-sm text-gray-600">{img}</span>
                 <button
                   type="button"
                   onClick={() => moveImage(idx, "up")}

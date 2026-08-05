@@ -147,13 +147,10 @@ export function GalleryAdmin({ images }: GalleryAdminProps) {
         <h2 className="mb-4 text-lg font-semibold">Add Image</h2>
         <div className="flex flex-wrap items-end gap-4">
           <label className="block">
-            <span className="mb-1 block text-sm font-medium">Image <span className="text-red-500">*</span></span>
-            <input
-              ref={fileRef}
-              type="file"
-              accept="image/*"
-              className="text-sm"
-            />
+            <span className="mb-1 block text-sm font-medium">
+              Image <span className="text-red-500">*</span>
+            </span>
+            <input ref={fileRef} type="file" accept="image/*" className="text-sm" />
           </label>
           <label className="block flex-1">
             <span className="mb-1 block text-sm font-medium">Caption</span>

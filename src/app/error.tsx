@@ -24,9 +24,7 @@ export default function ErrorPage({
         height={128}
         className="mb-8 animate-bounce"
       />
-      <h1 className="text-4xl font-bold text-gray-800 mb-4">
-        Something went wrong!
-      </h1>
+      <h1 className="text-4xl font-bold text-gray-800 mb-4">Something went wrong!</h1>
       <p className="text-xl text-gray-600 mb-8 text-center">
         Don&apos;t worry, even the best travelers hit a detour sometimes.
       </p>

@@ -46,9 +46,7 @@ export default async function PostDetailPage({ params }: PageProps) {
     "@type": "Article",
     headline: post.title,
     description: post.excerpt,
-    image: post.backgroundImage
-      ? getOgImageUrl(post.backgroundImage)
-      : undefined,
+    image: post.backgroundImage ? getOgImageUrl(post.backgroundImage) : undefined,
     datePublished: post.publishedAt?.toISOString(),
     author: { "@type": "Person", name: "Around the World 50s" },
   };
@@ -59,46 +57,38 @@ export default async function PostDetailPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-    <div className="page-container">
-      {post.backgroundImage && post.header && (
-        <ParallaxHero
-          imagePublicId={post.backgroundImage}
-          title={post.header}
-        />
-      )}
+      <div className="page-container">
+        {post.backgroundImage && post.header && (
+          <ParallaxHero imagePublicId={post.backgroundImage} title={post.header} />
+        )}
 
-      <div className="container">
-        <div className="page-content text-center">
-          <h2 className="post-title">{post.title}</h2>
+        <div className="container">
+          <div className="page-content text-center">
+            <h2 className="post-title">{post.title}</h2>
 
-          {post.subtitle && (
-            <h3 className="post-subtitle">{post.subtitle}</h3>
-          )}
+            {post.subtitle && <h3 className="post-subtitle">{post.subtitle}</h3>}
 
-          {post.description && (
-            <div
-              className="post-description"
-              dangerouslySetInnerHTML={{
-                __html: sanitizeHtml(post.description),
-              }}
-            />
-          )}
-
-          {post.tipsCtaCopy && post.tipsSlug && (
-            <TipsCta ctaCopy={post.tipsCtaCopy} tipsSlug={post.tipsSlug} />
-          )}
-
-          {post.blocks.map((block) => (
-            <div key={block.id}>
-              <BlockRenderer
-                block={block}
-                itineraries={post.itineraries}
+            {post.description && (
+              <div
+                className="post-description"
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeHtml(post.description),
+                }}
               />
-            </div>
-          ))}
+            )}
+
+            {post.tipsCtaCopy && post.tipsSlug && (
+              <TipsCta ctaCopy={post.tipsCtaCopy} tipsSlug={post.tipsSlug} />
+            )}
+
+            {post.blocks.map((block) => (
+              <div key={block.id}>
+                <BlockRenderer block={block} itineraries={post.itineraries} />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
     </>
   );
 }

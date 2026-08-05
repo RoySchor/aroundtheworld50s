@@ -41,17 +41,12 @@ export function GallerySlider({ images }: GallerySliderProps) {
 
   if (totalImages === 0) return null;
 
-  const currentImages = images.slice(
-    currentIndex,
-    currentIndex + IMAGES_PER_SLIDE,
-  );
+  const currentImages = images.slice(currentIndex, currentIndex + IMAGES_PER_SLIDE);
 
   return (
     <div className="gallery-container">
       <div className="max-w-3xl mx-auto text-center">
-        <h2 className="gallery-title">
-          Discover. Wonder. Experience. Live.
-        </h2>
+        <h2 className="gallery-title">Discover. Wonder. Experience. Live.</h2>
       </div>
       <div className="gallery-slider-container">
         <div className="gallery-image-row">
@@ -74,16 +69,11 @@ export function GallerySlider({ images }: GallerySliderProps) {
         >
           &#10094;
         </button>
-        <button
-          onClick={nextSlide}
-          className="gallery-nav-button right-4"
-          aria-label="Next images"
-        >
+        <button onClick={nextSlide} className="gallery-nav-button right-4" aria-label="Next images">
           &#10095;
         </button>
         <div className="gallery-counter hidden sm:block">
-          {currentIndex + 1} -{" "}
-          {Math.min(currentIndex + IMAGES_PER_SLIDE, totalImages)} /{" "}
+          {currentIndex + 1} - {Math.min(currentIndex + IMAGES_PER_SLIDE, totalImages)} /{" "}
           {totalImages}
         </div>
       </div>

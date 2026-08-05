@@ -6,8 +6,7 @@ import { TipCard } from "@/components/tips/TipCard";
 
 export const metadata: Metadata = {
   title: "Tips",
-  description:
-    "Practical travel tips and advice from our experiences around the world.",
+  description: "Practical travel tips and advice from our experiences around the world.",
 };
 
 export default async function TipsListingPage() {
@@ -19,8 +18,7 @@ export default async function TipsListingPage() {
         <div className="page-content text-center">
           <h1 className="page-title">Travel Tips by Destination</h1>
           <p className="tips-page-subtitle">
-            Discover insider tips and essential information for your next
-            adventure
+            Discover insider tips and essential information for your next adventure
           </p>
           <div className="tips-grid">
             {tips.map((tip) => (

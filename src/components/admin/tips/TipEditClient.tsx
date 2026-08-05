@@ -19,28 +19,20 @@ export function TipEditClient({ tip }: TipEditClientProps) {
     description: tip.description ?? "",
     state: tip.state ?? "",
   });
-  const [sectionDrafts, setSectionDrafts] = useState<Record<string, string>>(
-    {},
-  );
+  const [sectionDrafts, setSectionDrafts] = useState<Record<string, string>>({});
   const [titleDrafts, setTitleDrafts] = useState<Record<string, string>>({});
 
   const handleMetadataChange = useCallback((state: TipMetadataState) => {
     setMetadata(state);
   }, []);
 
-  const handleDraftsChange = useCallback(
-    (drafts: Record<string, string>) => {
-      setSectionDrafts(drafts);
-    },
-    [],
-  );
+  const handleDraftsChange = useCallback((drafts: Record<string, string>) => {
+    setSectionDrafts(drafts);
+  }, []);
 
-  const handleTitleDraftsChange = useCallback(
-    (drafts: Record<string, string>) => {
-      setTitleDrafts(drafts);
-    },
-    [],
-  );
+  const handleTitleDraftsChange = useCallback((drafts: Record<string, string>) => {
+    setTitleDrafts(drafts);
+  }, []);
 
   const previewTip = {
     title: metadata.title,
@@ -74,12 +66,7 @@ export function TipEditClient({ tip }: TipEditClientProps) {
         onTitleDraftsChange={handleTitleDraftsChange}
       />
 
-      {previewOpen && (
-        <TipPreviewModal
-          tip={previewTip}
-          onClose={() => setPreviewOpen(false)}
-        />
-      )}
+      {previewOpen && <TipPreviewModal tip={previewTip} onClose={() => setPreviewOpen(false)} />}
     </>
   );
 }

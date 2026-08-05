@@ -8,11 +8,7 @@ export const metadata: Metadata = {
   title: "Edit Blog Post",
 };
 
-export default async function EditBlogPostPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function EditBlogPostPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const post = await getPostById(id);
 
@@ -22,16 +18,13 @@ export default async function EditBlogPostPage({
 
   return (
     <div className="space-y-8">
-      <ConfirmBackLink href="/admin/blog">
-        Back to Blog Posts
-      </ConfirmBackLink>
+      <ConfirmBackLink href="/admin/blog">Back to Blog Posts</ConfirmBackLink>
 
       <div>
         <h1 className="text-2xl font-bold">Edit Post</h1>
         <p className="mt-1 text-sm text-gray-500">
           {post.country}
-          {post.state ? ` (${post.state})` : ""} &mdash;{" "}
-          /blog/{post.countrySlug}/{post.postIndex}
+          {post.state ? ` (${post.state})` : ""} &mdash; /blog/{post.countrySlug}/{post.postIndex}
         </p>
       </div>
 

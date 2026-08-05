@@ -10,27 +10,18 @@ interface BlogCardProps {
 
 export function BlogCard({ post, showYear = false }: BlogCardProps) {
   const dateStr = post.publishedAt ?? post.createdAt;
-  const formattedDate = showYear
-    ? formatBlogDateWithYear(dateStr)
-    : formatBlogDate(dateStr);
+  const formattedDate = showYear ? formatBlogDateWithYear(dateStr) : formatBlogDate(dateStr);
 
   return (
     <div className="flex justify-center">
-      <Link
-        href={`/blog/${post.countrySlug}/${post.postIndex}`}
-        className="group block w-full"
-      >
+      <Link href={`/blog/${post.countrySlug}/${post.postIndex}`} className="group block w-full">
         {/* Outer wrapper — matches v1 .blog-item (transparent border = spacing) */}
         <div className="border-[0.5em] border-transparent overflow-hidden w-full">
           {/* Inner wrapper — matches v1 .blog-image-wrapper (border turns teal on hover) */}
           <div className="p-[0.5em] border-[0.5em] border-transparent group-hover:border-teal-accent transition-colors duration-300 w-full">
-            <div className="text-sm sm:text-base font-bold mb-2 text-center">
-              {post.title}
-            </div>
+            <div className="text-sm sm:text-base font-bold mb-2 text-center">{post.title}</div>
             {showYear && (
-              <div className="text-base text-gray-500 mb-2 text-center">
-                {formattedDate}
-              </div>
+              <div className="text-base text-gray-500 mb-2 text-center">{formattedDate}</div>
             )}
             <div className="relative w-full h-[200px] sm:h-[275px] overflow-hidden">
               {post.backgroundImage && (
@@ -52,9 +43,7 @@ export function BlogCard({ post, showYear = false }: BlogCardProps) {
         </div>
         {/* Date below the bordered area — matches v1 .blog-date position */}
         {!showYear && (
-          <div className="text-base text-gray-500 mt-1 text-center">
-            {formattedDate}
-          </div>
+          <div className="text-base text-gray-500 mt-1 text-center">{formattedDate}</div>
         )}
       </Link>
     </div>

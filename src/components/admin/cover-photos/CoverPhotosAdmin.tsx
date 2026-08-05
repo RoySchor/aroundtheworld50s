@@ -5,10 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
-import {
-  setCoverOverride,
-  removeCoverOverride,
-} from "@/server/actions/cover-photos";
+import { setCoverOverride, removeCoverOverride } from "@/server/actions/cover-photos";
 import type { CountryWithCover } from "@/server/repositories/cover-photos";
 
 interface CoverPhotosAdminProps {
@@ -57,20 +54,12 @@ export function CoverPhotosAdmin({ countries }: CoverPhotosAdminProps) {
   }
 
   if (countries.length === 0) {
-    return (
-      <p className="text-gray-500">
-        No countries with published blogs yet.
-      </p>
-    );
+    return <p className="text-gray-500">No countries with published blogs yet.</p>;
   }
 
   return (
     <>
-      {error && (
-        <div className="mb-4 rounded bg-red-50 p-3 text-sm text-red-700">
-          {error}
-        </div>
-      )}
+      {error && <div className="mb-4 rounded bg-red-50 p-3 text-sm text-red-700">{error}</div>}
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {countries.map((c) => {
@@ -98,9 +87,7 @@ export function CoverPhotosAdmin({ countries }: CoverPhotosAdminProps) {
                 )}
                 <span
                   className={`absolute top-2 right-2 rounded-full px-2 py-0.5 text-xs font-medium ${
-                    isCustom
-                      ? "bg-green-100 text-green-800"
-                      : "bg-gray-100 text-gray-600"
+                    isCustom ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-600"
                   }`}
                 >
                   {isCustom ? "Custom" : "Default"}
@@ -108,14 +95,10 @@ export function CoverPhotosAdmin({ countries }: CoverPhotosAdminProps) {
               </div>
 
               <div className="p-4">
-                <h3 className="font-semibold text-gray-900">
-                  {displayName(c)}
-                </h3>
+                <h3 className="font-semibold text-gray-900">{displayName(c)}</h3>
                 <div className="mt-3 flex items-center gap-2">
                   <ImageUploadButton
-                    onUploaded={(publicId) =>
-                      handleUpload(c.countrySlug, publicId)
-                    }
+                    onUploaded={(publicId) => handleUpload(c.countrySlug, publicId)}
                     folder={`aroundtheworld50s/covers/${c.countrySlug}`}
                   />
                   {isCustom && (
