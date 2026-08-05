@@ -24,12 +24,20 @@ body {
   @apply bg-gray-50 text-gray-800 font-sans antialiased;
 }
 
-/* Blog post inline links (HTML in DB uses class="post-link") */
+/* Inline links in author-written HTML. `.post-link` is v1 markup; the
+ * descendant selectors catch bare <a> from the editor. Scoped to content
+ * containers so the navbar and tips CTA keep their own styling. */
+.post-description a,
+.tip-content a,
+.post-itinerary-section a,
 .post-link {
-  @apply text-blue-500 underline cursor-pointer transition-colors duration-200;
+  @apply cursor-pointer text-blue-600 underline transition-colors duration-200;
 }
+.post-description a:hover,
+.tip-content a:hover,
+.post-itinerary-section a:hover,
 .post-link:hover {
-  color: #1d4fd89a;
+  @apply text-blue-800;
 }
 
 /* Navbar link text stroke for readability over images — matches v1 exactly */
