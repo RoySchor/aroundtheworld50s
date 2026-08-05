@@ -28,7 +28,11 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
     extensions: [
       StarterKit.configure({
         heading: { levels: [3] },
-        link: { openOnClick: false },
+        // `post-link` matches the v1 markup already in the DB, so newly
+        // authored links carry the same class as historical ones. The CSS
+        // also targets bare `<a>` inside content containers, so links saved
+        // before this change still render correctly.
+        link: { openOnClick: false, HTMLAttributes: { class: "post-link" } },
       }),
     ],
     content: value,

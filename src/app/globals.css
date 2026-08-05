@@ -24,12 +24,30 @@ body {
   @apply bg-gray-50 text-gray-800 font-sans antialiased;
 }
 
-/* Blog post inline links (HTML in DB uses class="post-link") */
+/* Inline links inside author-written HTML.
+ *
+ * Matched two ways on purpose. `.post-link` is v1 legacy markup, where the
+ * class was baked into the stored HTML. The descendant selectors cover
+ * everything the TipTap editor produces, which is a bare `<a href>` with no
+ * class — without them, links authored in v2 render as plain body text and
+ * are indistinguishable from the surrounding prose.
+ *
+ * Scoped to the containers that render DB content (`.post-description`,
+ * `.tip-content`, itinerary items) rather than a global `a` rule, so the
+ * navbar (white with a stroke, over hero images) and the tips CTA (a
+ * full-width block that inherits its color) keep their own styling.
+ */
+.post-description a,
+.tip-content a,
+.post-itinerary-section a,
 .post-link {
-  @apply text-blue-500 underline cursor-pointer transition-colors duration-200;
+  @apply cursor-pointer text-blue-600 underline transition-colors duration-200;
 }
+.post-description a:hover,
+.tip-content a:hover,
+.post-itinerary-section a:hover,
 .post-link:hover {
-  color: #1d4fd89a;
+  @apply text-blue-800;
 }
 
 /* Navbar link text stroke for readability over images — matches v1 exactly */
