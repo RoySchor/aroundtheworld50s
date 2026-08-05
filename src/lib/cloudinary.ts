@@ -1,20 +1,12 @@
-import {
-  CLOUDINARY_BASE_URL,
-  CLOUDINARY_ASSET_PREFIX,
-} from "@/lib/constants";
+import { CLOUDINARY_BASE_URL, CLOUDINARY_ASSET_PREFIX } from "@/lib/constants";
 
 const OPTIMIZATIONS = "f_auto,q_auto";
 
 /**
  * Build a full Cloudinary URL for any public_id with optional transformations.
  */
-export function buildCloudinaryUrl(
-  publicId: string,
-  transformations?: string
-): string {
-  const transforms = transformations
-    ? `${OPTIMIZATIONS},${transformations}`
-    : OPTIMIZATIONS;
+export function buildCloudinaryUrl(publicId: string, transformations?: string): string {
+  const transforms = transformations ? `${OPTIMIZATIONS},${transformations}` : OPTIMIZATIONS;
   return `${CLOUDINARY_BASE_URL}/${transforms}/${publicId}`;
 }
 
@@ -59,9 +51,7 @@ export function cloudinaryLoader({
   width: number;
   quality?: number;
 }): string {
-  const transforms = quality
-    ? `f_auto,w_${width},q_${quality}`
-    : `f_auto,q_auto,w_${width}`;
+  const transforms = quality ? `f_auto,w_${width},q_${quality}` : `f_auto,q_auto,w_${width}`;
   return `${CLOUDINARY_BASE_URL}/${transforms}/${src}`;
 }
 

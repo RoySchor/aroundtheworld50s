@@ -8,11 +8,7 @@ export const metadata: Metadata = {
   title: "Edit Tip",
 };
 
-export default async function EditTipPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function EditTipPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const tip = await getTipById(id);
 
@@ -22,9 +18,7 @@ export default async function EditTipPage({
 
   return (
     <div className="space-y-8">
-      <ConfirmBackLink href="/admin/tips">
-        Back to Tips
-      </ConfirmBackLink>
+      <ConfirmBackLink href="/admin/tips">Back to Tips</ConfirmBackLink>
 
       <div>
         <h1 className="text-2xl font-bold">Edit Tip</h1>

@@ -2,11 +2,7 @@
 
 import { and, eq, gt, sql } from "drizzle-orm";
 import { db } from "@/server/db";
-import {
-  blogBlocks,
-  blogItineraries,
-  blogItineraryItems,
-} from "@/server/db/schema";
+import { blogBlocks, blogItineraries, blogItineraryItems } from "@/server/db/schema";
 import { getAuthenticatedAdmin } from "@/server/auth";
 import {
   createBlogItinerarySchema,
@@ -65,10 +61,7 @@ export async function createBlogItinerary(
   return { success: true, data: { id: itin.id } };
 }
 
-export async function updateBlogItinerary(
-  id: string,
-  input: unknown,
-): Promise<ActionResult> {
+export async function updateBlogItinerary(id: string, input: unknown): Promise<ActionResult> {
   await getAuthenticatedAdmin();
 
   const parsed = updateBlogItinerarySchema.safeParse(input);
@@ -102,10 +95,7 @@ export async function deleteBlogItinerary(id: string): Promise<ActionResult> {
       .update(blogItineraries)
       .set({ position: sql`${blogItineraries.position} - 1` })
       .where(
-        and(
-          eq(blogItineraries.postId, row.postId),
-          gt(blogItineraries.position, row.position),
-        ),
+        and(eq(blogItineraries.postId, row.postId), gt(blogItineraries.position, row.position)),
       );
 
     // Cascade: delete content blocks that referenced this itinerary
@@ -173,8 +163,14 @@ export async function reorderBlogItinerary(
 
   await db.transaction(async (tx) => {
     await tx.execute(sql`SET CONSTRAINTS blog_itineraries_post_position_unique DEFERRED`);
-    await tx.update(blogItineraries).set({ position: adjacent.position }).where(eq(blogItineraries.id, itin.id));
-    await tx.update(blogItineraries).set({ position: itin.position }).where(eq(blogItineraries.id, adjacent.id));
+    await tx
+      .update(blogItineraries)
+      .set({ position: adjacent.position })
+      .where(eq(blogItineraries.id, itin.id));
+    await tx
+      .update(blogItineraries)
+      .set({ position: itin.position })
+      .where(eq(blogItineraries.id, adjacent.id));
   });
 
   await revalidatePostPaths(itin.postId);
@@ -213,10 +209,7 @@ export async function createBlogItineraryItem(
   return { success: true, data: { id: item.id } };
 }
 
-export async function updateBlogItineraryItem(
-  id: string,
-  input: unknown,
-): Promise<ActionResult> {
+export async function updateBlogItineraryItem(id: string, input: unknown): Promise<ActionResult> {
   await getAuthenticatedAdmin();
 
   const parsed = updateBlogItineraryItemSchema.safeParse(input);
@@ -237,9 +230,7 @@ export async function updateBlogItineraryItem(
   return { success: true, data: undefined };
 }
 
-export async function deleteBlogItineraryItem(
-  id: string,
-): Promise<ActionResult> {
+export async function deleteBlogItineraryItem(id: string): Promise<ActionResult> {
   await getAuthenticatedAdmin();
 
   const deleted = await db.transaction(async (tx) => {
@@ -298,8 +289,14 @@ export async function reorderBlogItineraryItem(
 
   await db.transaction(async (tx) => {
     await tx.execute(sql`SET CONSTRAINTS blog_itinerary_items_itinerary_position_unique DEFERRED`);
-    await tx.update(blogItineraryItems).set({ position: adjacent.position }).where(eq(blogItineraryItems.id, item.id));
-    await tx.update(blogItineraryItems).set({ position: item.position }).where(eq(blogItineraryItems.id, adjacent.id));
+    await tx
+      .update(blogItineraryItems)
+      .set({ position: adjacent.position })
+      .where(eq(blogItineraryItems.id, item.id));
+    await tx
+      .update(blogItineraryItems)
+      .set({ position: item.position })
+      .where(eq(blogItineraryItems.id, adjacent.id));
   });
 
   const postId = await getPostIdForItinerary(item.itineraryId);

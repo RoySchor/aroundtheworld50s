@@ -36,11 +36,7 @@ export function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5 w-full">
-      {error && (
-        <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">
-          {error}
-        </div>
-      )}
+      {error && <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">{error}</div>}
       <div>
         <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
           Email
@@ -78,8 +74,7 @@ export function LoginForm() {
       </button>
       {isMobile && (
         <p className="text-sm text-gray-500 text-center mt-2">
-          Admin is only available on laptops. Please switch to a laptop to sign
-          in.
+          Admin is only available on laptops. Please switch to a laptop to sign in.
         </p>
       )}
     </form>

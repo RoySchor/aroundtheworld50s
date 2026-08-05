@@ -6,10 +6,7 @@ import { SITE_URL } from "@/lib/seo";
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [posts, tips] = await Promise.all([
-    getPublishedPosts(),
-    getPublishedTips(),
-  ]);
+  const [posts, tips] = await Promise.all([getPublishedPosts(), getPublishedTips()]);
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: SITE_URL, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },

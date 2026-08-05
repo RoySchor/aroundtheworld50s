@@ -28,11 +28,7 @@ export function CreatePostForm() {
   const isUS = countryCode.toUpperCase() === "US";
 
   const isDirty =
-    country !== "" ||
-    countryCode !== "" ||
-    title !== "" ||
-    subtitle !== "" ||
-    description !== "";
+    country !== "" || countryCode !== "" || title !== "" || subtitle !== "" || description !== "";
 
   useUnsavedChanges(isDirty);
 
@@ -73,7 +69,9 @@ export function CreatePostForm() {
       {/* Country + Country Code */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <span className="mb-1 block text-sm font-medium">Country <span className="text-red-500">*</span></span>
+          <span className="mb-1 block text-sm font-medium">
+            Country <span className="text-red-500">*</span>
+          </span>
           <CountryCombobox
             value={country}
             onChange={(val) => {
@@ -89,7 +87,9 @@ export function CreatePostForm() {
           />
         </div>
         <label className="block">
-          <span className="mb-1 block text-sm font-medium">Country Code (e.g. IL, US) <span className="text-red-500">*</span></span>
+          <span className="mb-1 block text-sm font-medium">
+            Country Code (e.g. IL, US) <span className="text-red-500">*</span>
+          </span>
           <input
             type="text"
             value={countryCode}
@@ -105,7 +105,9 @@ export function CreatePostForm() {
       {/* US State (conditional) */}
       {isUS && (
         <label className="block">
-          <span className="mb-1 block text-sm font-medium">State <span className="text-red-500">*</span></span>
+          <span className="mb-1 block text-sm font-medium">
+            State <span className="text-red-500">*</span>
+          </span>
           <select
             value={state}
             onChange={(e) => setState(e.target.value)}
@@ -124,7 +126,9 @@ export function CreatePostForm() {
 
       {/* Title */}
       <label className="block">
-        <span className="mb-1 block text-sm font-medium">Title <span className="text-red-500">*</span></span>
+        <span className="mb-1 block text-sm font-medium">
+          Title <span className="text-red-500">*</span>
+        </span>
         <input
           type="text"
           value={title}
@@ -194,10 +198,7 @@ export function CreatePostForm() {
             </button>
           </div>
         ) : (
-          <ImageUploadButton
-            onUploaded={setBackgroundImage}
-            folder="aroundtheworld50s/blog"
-          />
+          <ImageUploadButton onUploaded={setBackgroundImage} folder="aroundtheworld50s/blog" />
         )}
       </div>
 

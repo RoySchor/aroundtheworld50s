@@ -49,9 +49,7 @@ class EmbedErrorBoundary extends Component<
 
 function InstagramEmbed({ url }: { url: string }) {
   useEffect(() => {
-    const script = document.querySelector(
-      'script[src*="instagram.com/embed.js"]',
-    );
+    const script = document.querySelector('script[src*="instagram.com/embed.js"]');
     if (!script) {
       const s = document.createElement("script");
       s.src = "https://www.instagram.com/embed.js";
@@ -89,9 +87,7 @@ function InstagramEmbed({ url }: { url: string }) {
 let tiktokScriptPromise: Promise<void> | null = null;
 
 function loadTikTokScript(): Promise<void> {
-  const existing = document.querySelector(
-    'script[src*="tiktok.com/embed.js"]',
-  );
+  const existing = document.querySelector('script[src*="tiktok.com/embed.js"]');
   if (existing) existing.remove();
 
   tiktokScriptPromise = new Promise<void>((resolve) => {
@@ -129,11 +125,7 @@ function TikTokEmbed({ url }: { url: string }) {
         style={{ maxWidth: "605px", width: "100%", margin: "0 auto" }}
       >
         <section>
-          <a
-            href={`https://www.tiktok.com/@${username}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href={`https://www.tiktok.com/@${username}`} target="_blank" rel="noopener noreferrer">
             Loading TikTok video…
           </a>
         </section>

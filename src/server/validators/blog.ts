@@ -33,10 +33,14 @@ const imageGridBlockFields = {
 };
 
 const imageCarouselBlockFields = {
-  images: z.array(z.object({
-    publicId: z.string().min(1),
-    caption: z.string().optional(),
-  })).min(2, "Carousel needs at least 2 images"),
+  images: z
+    .array(
+      z.object({
+        publicId: z.string().min(1),
+        caption: z.string().optional(),
+      }),
+    )
+    .min(2, "Carousel needs at least 2 images"),
 };
 
 const itineraryWithMapBlockFields = {
@@ -53,9 +57,7 @@ type TextBlockDataShape = z.ZodObject<typeof textBlockFields>;
 type TwoColumnBlockDataShape = z.ZodObject<typeof twoColumnBlockFields>;
 type ImageGridBlockDataShape = z.ZodObject<typeof imageGridBlockFields>;
 type ImageCarouselBlockDataShape = z.ZodObject<typeof imageCarouselBlockFields>;
-type ItineraryWithMapBlockDataShape = z.ZodObject<
-  typeof itineraryWithMapBlockFields
->;
+type ItineraryWithMapBlockDataShape = z.ZodObject<typeof itineraryWithMapBlockFields>;
 type SocialEmbedBlockDataShape = z.ZodObject<typeof socialEmbedBlockFields>;
 
 // ---------------------------------------------------------------------------
@@ -112,19 +114,13 @@ export const blogBlockDataSchema = z
         message: "At least one side must be text",
       });
     }
-    if (
-      data.leftType === "image" &&
-      (!data.leftImages || data.leftImages.length === 0)
-    ) {
+    if (data.leftType === "image" && (!data.leftImages || data.leftImages.length === 0)) {
       ctx.addIssue({
         code: "custom",
         message: "Left images required when left side is image",
       });
     }
-    if (
-      data.rightType === "image" &&
-      (!data.rightImages || data.rightImages.length === 0)
-    ) {
+    if (data.rightType === "image" && (!data.rightImages || data.rightImages.length === 0)) {
       ctx.addIssue({
         code: "custom",
         message: "Right images required when right side is image",
@@ -139,10 +135,7 @@ export const blogBlockDataSchema = z
 export const createBlogPostSchema = z
   .object({
     country: z.string().min(1, "Country is required"),
-    countryCode: z
-      .string()
-      .min(2)
-      .max(3, "Country code must be 2-3 characters"),
+    countryCode: z.string().min(2).max(3, "Country code must be 2-3 characters"),
     state: z.string().nullable().optional(),
     title: z.string().min(1, "Title is required"),
     subtitle: z.string().nullable().optional(),
@@ -217,21 +210,19 @@ export type ItineraryWithMapBlockData = z.infer<ItineraryWithMapBlockDataShape>;
 export type SocialEmbedBlockData = z.infer<SocialEmbedBlockDataShape>;
 
 // Block type union — single source of truth for admin components
-export type BlockType = "text" | "two_column" | "image_grid" | "image_carousel" | "itinerary_with_map" | "social_embed";
+export type BlockType =
+  | "text"
+  | "two_column"
+  | "image_grid"
+  | "image_carousel"
+  | "itinerary_with_map"
+  | "social_embed";
 
 // Server action input types
 export type BlogBlockInput = z.infer<typeof blogBlockDataSchema>;
 export type CreateBlogPostInput = z.infer<typeof createBlogPostSchema>;
 export type UpdateBlogPostInput = z.infer<typeof updateBlogPostSchema>;
-export type CreateBlogItineraryInput = z.infer<
-  typeof createBlogItinerarySchema
->;
-export type UpdateBlogItineraryInput = z.infer<
-  typeof updateBlogItinerarySchema
->;
-export type CreateBlogItineraryItemInput = z.infer<
-  typeof createBlogItineraryItemSchema
->;
-export type UpdateBlogItineraryItemInput = z.infer<
-  typeof updateBlogItineraryItemSchema
->;
+export type CreateBlogItineraryInput = z.infer<typeof createBlogItinerarySchema>;
+export type UpdateBlogItineraryInput = z.infer<typeof updateBlogItinerarySchema>;
+export type CreateBlogItineraryItemInput = z.infer<typeof createBlogItineraryItemSchema>;
+export type UpdateBlogItineraryItemInput = z.infer<typeof updateBlogItineraryItemSchema>;

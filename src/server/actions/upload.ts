@@ -8,9 +8,7 @@ import type { ActionResult } from "./types";
  * Upload an image via FormData. Expects a "file" field and an optional "folder" field.
  * Returns the Cloudinary public_id on success.
  */
-export async function uploadImage(
-  formData: FormData,
-): Promise<ActionResult<{ publicId: string }>> {
+export async function uploadImage(formData: FormData): Promise<ActionResult<{ publicId: string }>> {
   await getAuthenticatedAdmin();
 
   const file = formData.get("file");
@@ -26,8 +24,7 @@ export async function uploadImage(
     return { success: false, error: "File must be under 10MB" };
   }
 
-  const folder =
-    (formData.get("folder") as string | null) ?? "aroundtheworld50s/uploads";
+  const folder = (formData.get("folder") as string | null) ?? "aroundtheworld50s/uploads";
 
   if (!folder.startsWith("aroundtheworld50s/")) {
     return { success: false, error: "Invalid upload folder" };

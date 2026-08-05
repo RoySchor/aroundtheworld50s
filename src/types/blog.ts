@@ -1,9 +1,4 @@
-import type {
-  BlogPost,
-  BlogBlock,
-  BlogItinerary,
-  BlogItineraryItem,
-} from "@/server/db/schema";
+import type { BlogPost, BlogBlock, BlogItinerary, BlogItineraryItem } from "@/server/db/schema";
 
 // Block data types — derived from Zod schemas (source of truth).
 // Type-only re-exports are erased at compile time, so the "server-only"

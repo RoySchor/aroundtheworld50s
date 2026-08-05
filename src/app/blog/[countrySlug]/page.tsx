@@ -33,9 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       locale: "en_US",
       title: displayName,
       description,
-      images: heroImage
-        ? [{ url: getOgImageUrl(heroImage), width: 1200, height: 630 }]
-        : undefined,
+      images: heroImage ? [{ url: getOgImageUrl(heroImage), width: 1200, height: 630 }] : undefined,
     },
   };
 }
@@ -54,9 +52,7 @@ export default async function CountryBlogPage({ params }: PageProps) {
 
   return (
     <div className="page-container">
-      {heroImage && (
-        <ParallaxHero imagePublicId={heroImage} title={displayName} />
-      )}
+      {heroImage && <ParallaxHero imagePublicId={heroImage} title={displayName} />}
 
       <div className="container">
         <div className="page-content text-center">

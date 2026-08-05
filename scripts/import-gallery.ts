@@ -34,9 +34,7 @@ function escapeSQL(str: string): string {
 async function main() {
   console.log("Fetching gallery images from Cloudinary...");
 
-  const res = await fetch(
-    "https://res.cloudinary.com/dgfx5h5jl/image/list/homePageGallery.json",
-  );
+  const res = await fetch("https://res.cloudinary.com/dgfx5h5jl/image/list/homePageGallery.json");
   if (!res.ok) {
     throw new Error(`Cloudinary fetch failed: ${res.status} ${res.statusText}`);
   }
@@ -77,9 +75,7 @@ async function main() {
   const outPath = path.join(__dirname, "import-gallery.sql");
   await fs.writeFile(outPath, lines.join("\n"), "utf-8");
   console.log(`\nSQL written to: ${outPath}`);
-  console.log(
-    `Run it against your Supabase DB via the SQL Editor or MCP execute_sql.`,
-  );
+  console.log(`Run it against your Supabase DB via the SQL Editor or MCP execute_sql.`);
 }
 
 main().catch((err) => {

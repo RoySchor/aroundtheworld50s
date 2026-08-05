@@ -24,10 +24,7 @@ export const createTipSchema = z.object({
   slug: z
     .string()
     .min(1, "Slug is required")
-    .regex(
-      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-      "Slug must be lowercase with hyphens",
-    ),
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug must be lowercase with hyphens"),
   country: z.string().min(1, "Country is required"),
   countryCode: z.string().min(2).max(3),
   state: z.string().nullable().optional(),

@@ -11,10 +11,7 @@ export async function getPublishedPosts() {
 }
 
 /** Single published post with all nested content, or undefined. */
-export async function getPostBySlugAndIndex(
-  countrySlug: string,
-  postIndex: number,
-) {
+export async function getPostBySlugAndIndex(countrySlug: string, postIndex: number) {
   return db.query.blogPosts.findFirst({
     where: and(
       eq(blogPosts.countrySlug, countrySlug),
@@ -36,10 +33,7 @@ export async function getPostBySlugAndIndex(
 /** Published posts for a country slug, newest first. Flat. */
 export async function getPostsByCountrySlug(countrySlug: string) {
   return db.query.blogPosts.findMany({
-    where: and(
-      eq(blogPosts.countrySlug, countrySlug),
-      eq(blogPosts.status, "published"),
-    ),
+    where: and(eq(blogPosts.countrySlug, countrySlug), eq(blogPosts.status, "published")),
     orderBy: [desc(blogPosts.publishedAt), desc(blogPosts.createdAt)],
   });
 }

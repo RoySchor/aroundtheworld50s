@@ -87,9 +87,7 @@ export function ImageCarouselBlock({ data }: ImageCarouselBlockProps) {
       <p className="image-carousel-counter">
         {currentIndex + 1} / {images.length}
       </p>
-      {current.caption && (
-        <p className="image-carousel-caption">{current.caption}</p>
-      )}
+      {current.caption && <p className="image-carousel-caption">{current.caption}</p>}
     </div>
   );
 }

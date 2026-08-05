@@ -19,13 +19,13 @@ This is not just another travel blog - it's a love letter to technology making c
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| **Framework** | Next.js, React |
-| **Database** | PostgreSQL via Supabase + Drizzle ORM |
-| **Images** | Cloudinary CDN |
-| **Styling** | Tailwind CSS v4 |
-| **Deployment** | Vercel |
+| Layer          | Technology                            |
+| -------------- | ------------------------------------- |
+| **Framework**  | Next.js, React                        |
+| **Database**   | PostgreSQL via Supabase + Drizzle ORM |
+| **Images**     | Cloudinary CDN                        |
+| **Styling**    | Tailwind CSS v4                       |
+| **Deployment** | Vercel                                |
 
 ## Admin Interface
 
@@ -71,7 +71,8 @@ npm run dev
 
 Requires `.env.local` — see `.env.example` for required variables.
 
-## Admin Page 
+## Admin Page
+
 Since you have to be an admin to view, here's a glimpse of its glory.
 
 <img width="1716" height="874" alt="image" src="https://github.com/user-attachments/assets/3d624eb5-438d-4b03-a309-e9ab2897c199" />
@@ -79,8 +80,6 @@ Since you have to be an admin to view, here's a glimpse of its glory.
 <img width="1467" height="786" alt="image" src="https://github.com/user-attachments/assets/f3ac0f55-addd-400c-b79e-5cac35e32abc" />
 
 <img width="1459" height="705" alt="image" src="https://github.com/user-attachments/assets/2eb8c219-cfe4-4e79-bab2-5d3229d3492a" />
-
-
 
 ---
 

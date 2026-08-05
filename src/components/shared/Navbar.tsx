@@ -7,11 +7,7 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { InstagramIcon } from "@/components/icons/InstagramIcon";
 import { TikTokIcon } from "@/components/icons/TikTokIcon";
-import {
-  NAV_LINKS_LEFT,
-  NAV_LINKS_RIGHT,
-  TRANSPARENT_NAVBAR_PATHS,
-} from "@/lib/constants";
+import { NAV_LINKS_LEFT, NAV_LINKS_RIGHT, TRANSPARENT_NAVBAR_PATHS } from "@/lib/constants";
 import { SOCIAL_LINKS } from "@/lib/constants/social-links";
 import { STATIC_ASSETS } from "@/lib/cloudinary";
 
@@ -43,8 +39,7 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isTransparent =
-    TRANSPARENT_NAVBAR_PATHS.includes(pathname) ||
-    pathname.startsWith("/blog/");
+    TRANSPARENT_NAVBAR_PATHS.includes(pathname) || pathname.startsWith("/blog/");
 
   const logoSrc = STATIC_ASSETS.logo;
 
@@ -58,11 +53,7 @@ export function Navbar() {
       <div className="hidden lg:grid grid-cols-[1fr_auto_1fr] items-center py-2">
         <div className="flex items-center justify-end space-x-6">
           {NAV_LINKS_LEFT.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="nav-link"
-            >
+            <Link key={link.href} href={link.href} className="nav-link">
               {link.label}
             </Link>
           ))}
@@ -81,11 +72,7 @@ export function Navbar() {
 
         <div className="flex items-center space-x-6">
           {NAV_LINKS_RIGHT.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="nav-link"
-            >
+            <Link key={link.href} href={link.href} className="nav-link">
               {link.label}
             </Link>
           ))}
@@ -113,11 +100,7 @@ export function Navbar() {
             className="text-white text-3xl"
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
           >
-            {mobileMenuOpen ? (
-              <X className="w-8 h-8" />
-            ) : (
-              <Menu className="w-8 h-8" />
-            )}
+            {mobileMenuOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
           </button>
         </div>
       </div>

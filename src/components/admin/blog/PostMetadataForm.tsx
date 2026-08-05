@@ -38,9 +38,7 @@ export function PostMetadataForm({ post, onStateChange }: PostMetadataFormProps)
   const [header, setHeader] = useState(post.header ?? "");
   const [description, setDescription] = useState(post.description ?? "");
   const [excerpt, setExcerpt] = useState(post.excerpt ?? "");
-  const [backgroundImage, setBackgroundImage] = useState(
-    post.backgroundImage ?? "",
-  );
+  const [backgroundImage, setBackgroundImage] = useState(post.backgroundImage ?? "");
   const [tipsCtaCopy, setTipsCtaCopy] = useState(post.tipsCtaCopy ?? "");
   const [state, setState] = useState(post.state ?? "");
 
@@ -69,7 +67,17 @@ export function PostMetadataForm({ post, onStateChange }: PostMetadataFormProps)
       tipsCtaCopy,
       state,
     });
-  }, [title, subtitle, header, description, excerpt, backgroundImage, tipsCtaCopy, state, onStateChange]);
+  }, [
+    title,
+    subtitle,
+    header,
+    description,
+    excerpt,
+    backgroundImage,
+    tipsCtaCopy,
+    state,
+    onStateChange,
+  ]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -116,14 +124,16 @@ export function PostMetadataForm({ post, onStateChange }: PostMetadataFormProps)
       {/* Read-only country info */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <span className="mb-1 block text-sm font-medium text-gray-500">
-            Country (read-only)
-          </span>
-          <p className="text-sm">{post.country} ({post.countryCode})</p>
+          <span className="mb-1 block text-sm font-medium text-gray-500">Country (read-only)</span>
+          <p className="text-sm">
+            {post.country} ({post.countryCode})
+          </p>
         </div>
         {isUS && (
           <label className="block">
-            <span className="mb-1 block text-sm font-medium">State <span className="text-red-500">*</span></span>
+            <span className="mb-1 block text-sm font-medium">
+              State <span className="text-red-500">*</span>
+            </span>
             <select
               value={state}
               onChange={(e) => setState(e.target.value)}
@@ -142,7 +152,9 @@ export function PostMetadataForm({ post, onStateChange }: PostMetadataFormProps)
       </div>
 
       <label className="block">
-        <span className="mb-1 block text-sm font-medium">Title <span className="text-red-500">*</span></span>
+        <span className="mb-1 block text-sm font-medium">
+          Title <span className="text-red-500">*</span>
+        </span>
         <input
           type="text"
           value={title}
@@ -200,9 +212,7 @@ export function PostMetadataForm({ post, onStateChange }: PostMetadataFormProps)
               className="rounded object-cover"
               style={{ width: 64, height: "auto" }}
             />
-            <span className="truncate text-sm text-gray-600">
-              {backgroundImage}
-            </span>
+            <span className="truncate text-sm text-gray-600">{backgroundImage}</span>
             <button
               type="button"
               onClick={() => setBackgroundImage("")}
@@ -233,7 +243,6 @@ export function PostMetadataForm({ post, onStateChange }: PostMetadataFormProps)
           Links to: /tips/{slugify(post.country)}
         </span>
       </label>
-
     </form>
   );
 }

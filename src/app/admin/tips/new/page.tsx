@@ -10,9 +10,7 @@ export default function NewTipPage() {
   return (
     <div>
       <div className="mb-4">
-        <ConfirmBackLink href="/admin/tips">
-          Back to Tips
-        </ConfirmBackLink>
+        <ConfirmBackLink href="/admin/tips">Back to Tips</ConfirmBackLink>
       </div>
       <h1 className="mb-6 text-2xl font-bold">Create New Tip</h1>
       <CreateTipForm />

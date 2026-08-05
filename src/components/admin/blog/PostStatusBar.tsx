@@ -2,11 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import {
-  publishBlogPost,
-  unpublishBlogPost,
-  deleteBlogPost,
-} from "@/server/actions/blog-posts";
+import { publishBlogPost, unpublishBlogPost, deleteBlogPost } from "@/server/actions/blog-posts";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 
 interface PostStatusBarProps {
@@ -34,9 +30,7 @@ export function PostStatusBar({
   function handlePublishToggle() {
     setError(null);
     startTransition(async () => {
-      const result = isPublished
-        ? await unpublishBlogPost(postId)
-        : await publishBlogPost(postId);
+      const result = isPublished ? await unpublishBlogPost(postId) : await publishBlogPost(postId);
       if (!result.success) {
         setError(result.error);
       } else {
@@ -60,9 +54,7 @@ export function PostStatusBar({
     <div className="flex flex-wrap items-center gap-4 rounded border bg-gray-50 p-4">
       <span
         className={`inline-block rounded-full px-3 py-1 text-sm font-medium ${
-          isPublished
-            ? "bg-green-100 text-green-800"
-            : "bg-yellow-100 text-yellow-800"
+          isPublished ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"
         }`}
       >
         {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -73,16 +65,10 @@ export function PostStatusBar({
         onClick={handlePublishToggle}
         disabled={isPending}
         className={`rounded px-4 py-1.5 text-sm font-medium text-white disabled:opacity-50 ${
-          isPublished
-            ? "bg-yellow-600 hover:bg-yellow-700"
-            : "bg-green-600 hover:bg-green-700"
+          isPublished ? "bg-yellow-600 hover:bg-yellow-700" : "bg-green-600 hover:bg-green-700"
         }`}
       >
-        {isPending
-          ? "..."
-          : isPublished
-            ? "Unpublish"
-            : "Publish"}
+        {isPending ? "..." : isPublished ? "Unpublish" : "Publish"}
       </button>
 
       <button

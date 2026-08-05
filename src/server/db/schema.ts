@@ -127,12 +127,8 @@ export const profiles = pgTable("profiles", {
   id: uuid("id").primaryKey(),
   role: userRole("role").notNull().default("reader"),
   displayName: text("display_name"),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
 // ---------------------------------------------------------------------------
@@ -197,18 +193,11 @@ export const blogPosts = pgTable(
     authorId: uuid("author_id").references(() => profiles.id, {
       onDelete: "set null",
     }),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
-    unique("blog_posts_country_slug_post_index_unique").on(
-      t.countrySlug,
-      t.postIndex,
-    ),
+    unique("blog_posts_country_slug_post_index_unique").on(t.countrySlug, t.postIndex),
     // Invariant: published rows have a publish timestamp; drafts don't.
     check(
       "blog_posts_status_published_at_check",
@@ -244,16 +233,10 @@ export const blogItineraries = pgTable(
     position: integer("position").notNull(),
     title: text("title").notNull(),
     mapEmbedUrl: text("map_embed_url"),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
-  (t) => [
-    unique("blog_itineraries_post_position_unique").on(t.postId, t.position),
-  ],
+  (t) => [unique("blog_itineraries_post_position_unique").on(t.postId, t.position)],
 );
 
 /**
@@ -272,19 +255,10 @@ export const blogItineraryItems = pgTable(
       .references(() => blogItineraries.id, { onDelete: "cascade" }),
     position: integer("position").notNull(),
     content: text("content").notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
-  (t) => [
-    unique("blog_itinerary_items_itinerary_position_unique").on(
-      t.itineraryId,
-      t.position,
-    ),
-  ],
+  (t) => [unique("blog_itinerary_items_itinerary_position_unique").on(t.itineraryId, t.position)],
 );
 
 // ---------------------------------------------------------------------------
@@ -346,19 +320,12 @@ export const blogBlocks = pgTable(
     position: integer("position").notNull(),
     type: blogBlockType("type").notNull(),
     data: jsonb("data").notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
     unique("blog_blocks_post_position_unique").on(t.postId, t.position),
-    check(
-      "blog_blocks_data_object_check",
-      sql`jsonb_typeof(${t.data}) = 'object'`,
-    ),
+    check("blog_blocks_data_object_check", sql`jsonb_typeof(${t.data}) = 'object'`),
   ],
 );
 
@@ -385,12 +352,8 @@ export const tips = pgTable(
     status: publishStatus("status").notNull().default("draft"),
     publishedAt: timestamp("published_at", { withTimezone: true }),
 
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
     index("tips_country_code_idx").on(t.countryCode),
@@ -418,18 +381,11 @@ export const tipSections = pgTable(
     content: text("content"),
     enabled: boolean("enabled").notNull().default(true),
     position: integer("position").notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
-    unique("tip_sections_tip_id_section_key_unique").on(
-      t.tipId,
-      t.sectionKey,
-    ),
+    unique("tip_sections_tip_id_section_key_unique").on(t.tipId, t.sectionKey),
     unique("tip_sections_tip_id_position_unique").on(t.tipId, t.position),
   ],
 );
@@ -457,12 +413,8 @@ export const galleryImages = pgTable(
     cloudinaryPublicId: text("cloudinary_public_id").notNull().unique(),
     caption: text("caption"),
     position: integer("position").notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [unique("gallery_images_position_unique").on(t.position)],
 );
@@ -485,12 +437,8 @@ export const countryCoverOverrides = pgTable("country_cover_overrides", {
   id: uuid("id").primaryKey().defaultRandom(),
   countrySlug: text("country_slug").notNull().unique(),
   coverImage: text("cover_image").notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
 // ---------------------------------------------------------------------------
@@ -518,26 +466,20 @@ export const blogBlocksRelations = relations(blogBlocks, ({ one }) => ({
   }),
 }));
 
-export const blogItinerariesRelations = relations(
-  blogItineraries,
-  ({ one, many }) => ({
-    post: one(blogPosts, {
-      fields: [blogItineraries.postId],
-      references: [blogPosts.id],
-    }),
-    items: many(blogItineraryItems),
+export const blogItinerariesRelations = relations(blogItineraries, ({ one, many }) => ({
+  post: one(blogPosts, {
+    fields: [blogItineraries.postId],
+    references: [blogPosts.id],
   }),
-);
+  items: many(blogItineraryItems),
+}));
 
-export const blogItineraryItemsRelations = relations(
-  blogItineraryItems,
-  ({ one }) => ({
-    itinerary: one(blogItineraries, {
-      fields: [blogItineraryItems.itineraryId],
-      references: [blogItineraries.id],
-    }),
+export const blogItineraryItemsRelations = relations(blogItineraryItems, ({ one }) => ({
+  itinerary: one(blogItineraries, {
+    fields: [blogItineraryItems.itineraryId],
+    references: [blogItineraries.id],
   }),
-);
+}));
 
 export const tipsRelations = relations(tips, ({ many }) => ({
   sections: many(tipSections),

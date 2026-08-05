@@ -17,9 +17,7 @@ export function TipCard({ tip }: TipCardProps) {
           <p className="tip-card-location">{formatLocation(tip)}</p>
         </div>
       </div>
-      {tip.description && (
-        <p className="tip-card-description">{tip.description}</p>
-      )}
+      {tip.description && <p className="tip-card-description">{tip.description}</p>}
     </Link>
   );
 }

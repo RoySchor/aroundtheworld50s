@@ -24,19 +24,13 @@ export function useUnsavedChanges(isDirty: boolean) {
       window.__unsavedChangesCount = (window.__unsavedChangesCount ?? 0) + 1;
       countedRef.current = true;
     } else if (!isDirty && countedRef.current) {
-      window.__unsavedChangesCount = Math.max(
-        (window.__unsavedChangesCount ?? 1) - 1,
-        0,
-      );
+      window.__unsavedChangesCount = Math.max((window.__unsavedChangesCount ?? 1) - 1, 0);
       countedRef.current = false;
     }
 
     return () => {
       if (countedRef.current) {
-        window.__unsavedChangesCount = Math.max(
-          (window.__unsavedChangesCount ?? 1) - 1,
-          0,
-        );
+        window.__unsavedChangesCount = Math.max((window.__unsavedChangesCount ?? 1) - 1, 0);
         countedRef.current = false;
       }
     };

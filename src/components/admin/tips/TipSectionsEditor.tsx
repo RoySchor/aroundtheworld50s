@@ -2,10 +2,7 @@
 
 import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import {
-  updateTipSection,
-  reorderTipSection,
-} from "@/server/actions/tips";
+import { updateTipSection, reorderTipSection } from "@/server/actions/tips";
 import { TIP_SECTION_LABELS } from "@/lib/constants/tip-sections";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
@@ -17,7 +14,11 @@ interface TipSectionsEditorProps {
   onTitleDraftsChange?: (drafts: Record<string, string>) => void;
 }
 
-export function TipSectionsEditor({ sections, onDraftsChange, onTitleDraftsChange }: TipSectionsEditorProps) {
+export function TipSectionsEditor({
+  sections,
+  onDraftsChange,
+  onTitleDraftsChange,
+}: TipSectionsEditorProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -25,8 +26,7 @@ export function TipSectionsEditor({ sections, onDraftsChange, onTitleDraftsChang
   const [titleDrafts, setTitleDrafts] = useState<Record<string, string>>({});
   const [error, setError] = useState<string | null>(null);
 
-  const hasDrafts =
-    Object.keys(drafts).length > 0 || Object.keys(titleDrafts).length > 0;
+  const hasDrafts = Object.keys(drafts).length > 0 || Object.keys(titleDrafts).length > 0;
   useUnsavedChanges(hasDrafts);
 
   useEffect(() => {
@@ -123,28 +123,20 @@ export function TipSectionsEditor({ sections, onDraftsChange, onTitleDraftsChang
 
       {sections.map((section, idx) => {
         const isExpanded = expandedId === section.id;
-        const defaultLabel =
-          TIP_SECTION_LABELS[section.sectionKey] ?? section.sectionKey;
+        const defaultLabel = TIP_SECTION_LABELS[section.sectionKey] ?? section.sectionKey;
         const label = section.title || defaultLabel;
 
         return (
-          <div
-            key={section.id}
-            className="rounded border bg-white"
-          >
+          <div key={section.id} className="rounded border bg-white">
             {/* Header */}
             <div className="flex items-center gap-3 px-4 py-3">
-              <span className="text-xs font-medium text-gray-400">
-                #{idx + 1}
-              </span>
+              <span className="text-xs font-medium text-gray-400">#{idx + 1}</span>
 
               <span className="font-medium">{label}</span>
 
               <span
                 className={`ml-1 inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
-                  section.enabled
-                    ? "bg-green-100 text-green-800"
-                    : "bg-gray-100 text-gray-500"
+                  section.enabled ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-500"
                 }`}
               >
                 {section.enabled ? "Enabled" : "Disabled"}
@@ -200,9 +192,7 @@ export function TipSectionsEditor({ sections, onDraftsChange, onTitleDraftsChang
             {isExpanded && (
               <div className="border-t px-4 py-4 space-y-4">
                 <div>
-                  <label className="mb-1 block text-sm font-medium">
-                    Section Title
-                  </label>
+                  <label className="mb-1 block text-sm font-medium">Section Title</label>
                   <input
                     type="text"
                     value={getTitleDraft(section)}
@@ -215,9 +205,7 @@ export function TipSectionsEditor({ sections, onDraftsChange, onTitleDraftsChang
                   </p>
                 </div>
                 <div>
-                  <span className="mb-1 block text-sm font-medium">
-                    Content
-                  </span>
+                  <span className="mb-1 block text-sm font-medium">Content</span>
                   <RichTextEditor
                     value={getDraft(section)}
                     onChange={(v) => setDraft(section.id, v)}

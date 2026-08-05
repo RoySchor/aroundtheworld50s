@@ -20,11 +20,7 @@ interface RichTextEditorProps {
   placeholder?: string;
 }
 
-export function RichTextEditor({
-  value,
-  onChange,
-  placeholder,
-}: RichTextEditorProps) {
+export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
   const [tab, setTab] = useState<"edit" | "raw">("edit");
 
   const editor = useEditor({
@@ -41,8 +37,7 @@ export function RichTextEditor({
     },
     editorProps: {
       attributes: {
-        class:
-          "prose prose-sm max-w-none focus:outline-none min-h-[120px] px-3 py-2",
+        class: "prose prose-sm max-w-none focus:outline-none min-h-[120px] px-3 py-2",
       },
     },
   });
@@ -101,9 +96,7 @@ export function RichTextEditor({
 
         <ToolbarButton
           active={editor.isActive("heading", { level: 3 })}
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 3 }).run()
-          }
+          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
           title="Heading"
         >
           <Heading3 size={16} />
@@ -125,11 +118,7 @@ export function RichTextEditor({
 
         <span className="mx-1 h-5 w-px bg-gray-300" />
 
-        <ToolbarButton
-          active={editor.isActive("link")}
-          onClick={handleLink}
-          title="Link"
-        >
+        <ToolbarButton active={editor.isActive("link")} onClick={handleLink} title="Link">
           <Link2 size={16} />
         </ToolbarButton>
         <ToolbarButton
@@ -203,9 +192,7 @@ function ToolbarButton({
       onClick={onClick}
       title={title}
       className={`rounded p-1.5 ${
-        active
-          ? "bg-gray-200 text-gray-900"
-          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+        active ? "bg-gray-200 text-gray-900" : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
       }`}
     >
       {children}

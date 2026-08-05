@@ -19,10 +19,7 @@ interface ItinerariesSectionProps {
   itineraries: (BlogItinerary & { items: BlogItineraryItem[] })[];
 }
 
-export function ItinerariesSection({
-  postId,
-  itineraries,
-}: ItinerariesSectionProps) {
+export function ItinerariesSection({ postId, itineraries }: ItinerariesSectionProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -138,9 +135,7 @@ export function ItinerariesSection({
           <div key={itin.id} className="rounded border bg-white p-4">
             {/* Itinerary header */}
             <div className="flex items-center gap-3">
-              <span className="text-xs font-medium text-gray-400">
-                #{itinIdx + 1}
-              </span>
+              <span className="text-xs font-medium text-gray-400">#{itinIdx + 1}</span>
 
               {editingItinId === itin.id ? (
                 <div className="flex flex-1 gap-2">
@@ -176,9 +171,7 @@ export function ItinerariesSection({
               ) : (
                 <>
                   <span className="text-sm font-medium">{itin.title}</span>
-                  {itin.mapEmbedUrl && (
-                    <span className="text-xs text-gray-400">(has map)</span>
-                  )}
+                  {itin.mapEmbedUrl && <span className="text-xs text-gray-400">(has map)</span>}
                 </>
               )}
 
@@ -225,9 +218,7 @@ export function ItinerariesSection({
             <div className="mt-3 ml-4 space-y-2">
               {itin.items.map((item, itemIdx) => (
                 <div key={item.id} className="flex items-start gap-2">
-                  <span className="mt-1 text-xs text-gray-400">
-                    {itemIdx + 1}.
-                  </span>
+                  <span className="mt-1 text-xs text-gray-400">{itemIdx + 1}.</span>
 
                   {editingItemId === item.id ? (
                     <div className="flex flex-1 gap-2">
@@ -298,10 +289,7 @@ export function ItinerariesSection({
 
               {/* Add item */}
               {addingItemItinId === itin.id ? (
-                <form
-                  onSubmit={(e) => handleAddItem(e, itin.id)}
-                  className="flex gap-2"
-                >
+                <form onSubmit={(e) => handleAddItem(e, itin.id)} className="flex gap-2">
                   <input
                     type="text"
                     value={newItemContent}
@@ -346,7 +334,9 @@ export function ItinerariesSection({
       {showAdd ? (
         <form onSubmit={handleAddItinerary} className="mt-4 space-y-3 rounded border bg-white p-4">
           <label className="block">
-            <span className="mb-1 block text-sm font-medium">Title <span className="text-red-500">*</span></span>
+            <span className="mb-1 block text-sm font-medium">
+              Title <span className="text-red-500">*</span>
+            </span>
             <input
               type="text"
               value={newTitle}

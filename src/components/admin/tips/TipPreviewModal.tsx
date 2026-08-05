@@ -34,7 +34,12 @@ export function TipPreviewModal({ tip, onClose }: TipPreviewModalProps) {
   const enabledSections = tip.sections.filter((s) => s.enabled);
 
   return (
-    <div role="dialog" aria-modal="true" aria-label="Tip preview" className="fixed inset-0 z-[200] overflow-y-auto bg-white">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Tip preview"
+      className="fixed inset-0 z-[200] overflow-y-auto bg-white"
+    >
       <div className="sticky top-0 z-10 flex items-center justify-between bg-gray-900 px-4 py-2 text-white">
         <span className="text-sm font-medium">Preview Mode</span>
         <button

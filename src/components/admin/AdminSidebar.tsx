@@ -26,8 +26,7 @@ export function AdminSidebar({ displayName }: { displayName: string }) {
       <nav className="flex-1 p-4 space-y-1">
         {ADMIN_NAV.map((link) => {
           const isActive =
-            pathname === link.href ||
-            (link.href !== "/admin" && pathname.startsWith(link.href));
+            pathname === link.href || (link.href !== "/admin" && pathname.startsWith(link.href));
           return (
             <Link
               key={link.href}

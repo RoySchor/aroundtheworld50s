@@ -16,9 +16,7 @@ export function ContactForm() {
     message: string;
   } | null>(null);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -32,11 +30,7 @@ export function ContactForm() {
       // Honeypot — bots fill hidden fields, humans don't
       if (honeypot) return;
 
-      if (
-        !formData.name.trim() ||
-        !formData.email.trim() ||
-        !formData.message.trim()
-      ) {
+      if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
         throw new Error("Please fill in all fields");
       }
 
@@ -71,8 +65,7 @@ export function ContactForm() {
       setFormData({ name: "", email: "", message: "" });
       setSubmitStatus({
         type: "success",
-        message:
-          "Thank you! Your message has been sent successfully. We'll get back to you soon!",
+        message: "Thank you! Your message has been sent successfully. We'll get back to you soon!",
       });
     } catch (error) {
       const err = error as Error & { text?: string };
@@ -80,10 +73,7 @@ export function ContactForm() {
 
       if (err.text) {
         errorMessage = "Failed to send email. Please try again later.";
-      } else if (
-        err.message.includes("service_id") ||
-        err.message.includes("template_id")
-      ) {
+      } else if (err.message.includes("service_id") || err.message.includes("template_id")) {
         errorMessage =
           "Email service is not properly configured. Please contact us directly at royschor@gmail.com";
       }
@@ -99,8 +89,8 @@ export function ContactForm() {
       <div className="contact-header">
         <h2 className="contact-title">Get in Touch</h2>
         <p className="contact-subtitle">
-          Have a question regarding a blog post, in general, or want to share
-          your own adventure? We&apos;d love to hear from you!
+          Have a question regarding a blog post, in general, or want to share your own adventure?
+          We&apos;d love to hear from you!
         </p>
       </div>
 
@@ -166,16 +156,10 @@ export function ContactForm() {
         </div>
 
         {submitStatus && (
-          <div className={`submit-status ${submitStatus.type}`}>
-            {submitStatus.message}
-          </div>
+          <div className={`submit-status ${submitStatus.type}`}>{submitStatus.message}</div>
         )}
 
-        <button
-          type="submit"
-          className="contact-submit-btn"
-          disabled={isSubmitting}
-        >
+        <button type="submit" className="contact-submit-btn" disabled={isSubmitting}>
           {isSubmitting ? "Sending..." : "Send Message"}
         </button>
       </form>

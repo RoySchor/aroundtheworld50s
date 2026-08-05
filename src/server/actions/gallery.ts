@@ -5,10 +5,7 @@ import { revalidatePath } from "next/cache";
 import { db } from "@/server/db";
 import { galleryImages } from "@/server/db/schema";
 import { getAuthenticatedAdmin } from "@/server/auth";
-import {
-  createGalleryImageSchema,
-  updateGalleryImageSchema,
-} from "@/server/validators/gallery";
+import { createGalleryImageSchema, updateGalleryImageSchema } from "@/server/validators/gallery";
 import { deleteImage } from "@/server/services/cloudinary";
 import { getMaxGalleryPosition } from "@/server/repositories/admin-gallery";
 import type { ActionResult } from "./types";
@@ -26,9 +23,7 @@ function revalidateGallery() {
 // Actions
 // ---------------------------------------------------------------------------
 
-export async function createGalleryImage(
-  input: unknown,
-): Promise<ActionResult<{ id: string }>> {
+export async function createGalleryImage(input: unknown): Promise<ActionResult<{ id: string }>> {
   await getAuthenticatedAdmin();
 
   const parsed = createGalleryImageSchema.safeParse(input);
@@ -71,10 +66,7 @@ export async function createGalleryImage(
   }
 }
 
-export async function updateGalleryImage(
-  id: string,
-  input: unknown,
-): Promise<ActionResult> {
+export async function updateGalleryImage(id: string, input: unknown): Promise<ActionResult> {
   await getAuthenticatedAdmin();
 
   const parsed = updateGalleryImageSchema.safeParse(input);
@@ -103,13 +95,10 @@ export async function deleteGalleryImage(id: string): Promise<ActionResult> {
   await getAuthenticatedAdmin();
 
   const deleted = await db.transaction(async (tx) => {
-    const [row] = await tx
-      .delete(galleryImages)
-      .where(eq(galleryImages.id, id))
-      .returning({
-        cloudinaryPublicId: galleryImages.cloudinaryPublicId,
-        position: galleryImages.position,
-      });
+    const [row] = await tx.delete(galleryImages).where(eq(galleryImages.id, id)).returning({
+      cloudinaryPublicId: galleryImages.cloudinaryPublicId,
+      position: galleryImages.position,
+    });
 
     if (!row) return null;
 
@@ -165,9 +154,7 @@ export async function reorderGalleryImage(
   }
 
   await db.transaction(async (tx) => {
-    await tx.execute(
-      sql`SET CONSTRAINTS gallery_images_position_unique DEFERRED`,
-    );
+    await tx.execute(sql`SET CONSTRAINTS gallery_images_position_unique DEFERRED`);
     await tx
       .update(galleryImages)
       .set({ position: adjacent.position })

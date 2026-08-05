@@ -2,10 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import {
-  deleteBlogBlock,
-  reorderBlogBlock,
-} from "@/server/actions/blog-blocks";
+import { deleteBlogBlock, reorderBlogBlock } from "@/server/actions/blog-blocks";
 import { BlockForm } from "./BlockForm";
 import type { BlogBlock, BlogItinerary, BlogItineraryItem } from "@/server/db/schema";
 import type { BlockType } from "@/server/validators/blog";
@@ -62,14 +59,9 @@ export function BlocksSection({ postId, blocks, itineraries }: BlocksSectionProp
 
       <div className="space-y-3">
         {blocks.map((block, idx) => (
-          <div
-            key={block.id}
-            className="rounded border bg-white p-4"
-          >
+          <div key={block.id} className="rounded border bg-white p-4">
             <div className="flex items-center gap-3">
-              <span className="text-xs font-medium text-gray-400">
-                #{idx + 1}
-              </span>
+              <span className="text-xs font-medium text-gray-400">#{idx + 1}</span>
               <span className="text-sm font-medium">
                 {BLOCK_TYPE_LABELS[block.type as BlockType] ?? block.type}
               </span>
@@ -95,11 +87,7 @@ export function BlocksSection({ postId, blocks, itineraries }: BlocksSectionProp
                 </button>
                 <button
                   type="button"
-                  onClick={() =>
-                    setEditingBlockId(
-                      editingBlockId === block.id ? null : block.id,
-                    )
-                  }
+                  onClick={() => setEditingBlockId(editingBlockId === block.id ? null : block.id)}
                   className="rounded px-2 py-1 text-xs text-blue-600 hover:bg-blue-50"
                 >
                   {editingBlockId === block.id ? "Close" : "Edit"}
@@ -133,9 +121,7 @@ export function BlocksSection({ postId, blocks, itineraries }: BlocksSectionProp
       {/* Add block */}
       {addingType ? (
         <div className="mt-4 rounded border bg-white p-4">
-          <h3 className="mb-3 text-sm font-medium">
-            New {BLOCK_TYPE_LABELS[addingType]} Block
-          </h3>
+          <h3 className="mb-3 text-sm font-medium">New {BLOCK_TYPE_LABELS[addingType]} Block</h3>
           <BlockForm
             postId={postId}
             blockType={addingType}

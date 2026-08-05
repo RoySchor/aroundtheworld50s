@@ -15,13 +15,11 @@ const ServerEnvSchema = z.object({
     .min(1, "Supabase service_role secret (never ship to the browser)"),
   DATABASE_URL: z
     .string()
-    .url(
-      "Postgres connection string used at runtime (transaction pooler on Vercel, direct locally)",
-    ),
+    .url("Postgres connection string used at runtime (transaction pooler, port 6543)"),
   DIRECT_URL: z
     .string()
     .url(
-      "Postgres direct connection string used by Drizzle migrations (pooler does not support all DDL)",
+      "Postgres connection string used by Drizzle migrations (session pooler, port 5432 — transaction mode does not support all DDL)",
     ),
   // Cloudinary credentials — required for admin image uploads (Phase 2).
   // Optional here so the dev server runs during Phases 0-1 without them.

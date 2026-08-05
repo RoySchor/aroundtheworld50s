@@ -1,12 +1,7 @@
 import "server-only";
 import { asc, desc, eq, sql } from "drizzle-orm";
 import { db } from "@/server/db";
-import {
-  blogBlocks,
-  blogItineraries,
-  blogItineraryItems,
-  blogPosts,
-} from "@/server/db/schema";
+import { blogBlocks, blogItineraries, blogItineraryItems, blogPosts } from "@/server/db/schema";
 
 /** All posts (draft + published), newest first. Flat — no blocks or itineraries. */
 export async function getAllPosts() {
@@ -32,9 +27,7 @@ export async function getPostById(id: string) {
 }
 
 /** Next available postIndex for a countrySlug (1-based). */
-export async function getNextPostIndex(
-  countrySlug: string,
-): Promise<number> {
+export async function getNextPostIndex(countrySlug: string): Promise<number> {
   const result = await db
     .select({ count: sql<number>`COUNT(*)` })
     .from(blogPosts)
