@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { slugify } from "@/lib/slugify";
+import { locationSlug } from "@/lib/slugify";
 import { PostStatusBar } from "@/components/admin/blog/PostStatusBar";
 import { PostMetadataForm } from "@/components/admin/blog/PostMetadataForm";
 import type { PostMetadataState } from "@/components/admin/blog/PostMetadataForm";
@@ -38,7 +38,7 @@ export function BlogEditClient({ post }: BlogEditClientProps) {
     description: metadata.description || null,
     backgroundImage: metadata.backgroundImage || null,
     tipsCtaCopy: metadata.tipsCtaCopy || null,
-    tipsSlug: slugify(post.country),
+    tipsSlug: locationSlug(post.country, metadata.state || null),
     blocks: post.blocks,
     itineraries: post.itineraries,
   };

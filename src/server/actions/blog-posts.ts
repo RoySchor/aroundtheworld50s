@@ -1,12 +1,13 @@
 "use server";
 
-import { and, eq, gt, isNull, sql } from "drizzle-orm";
+import { and, eq, gt, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/server/db";
 import { blogPosts, tips } from "@/server/db/schema";
 import { getAuthenticatedAdmin } from "@/server/auth";
-import { createBlogPostSchema, updateBlogPostSchema, slugify } from "@/server/validators/blog";
+import { createBlogPostSchema, updateBlogPostSchema } from "@/server/validators/blog";
+import { locationSlug } from "@/lib/slugify";
 import { getNextPostIndex } from "@/server/repositories/admin-blog";
 import { revalidatePublicTipPaths } from "./helpers";
 import type { ActionResult } from "./types";
@@ -22,23 +23,19 @@ function revalidatePublicPaths(countrySlug: string, postIndex: number) {
   revalidatePath(`/blog/${countrySlug}/${postIndex}`);
 }
 
-async function autoUnpublishTipIfEmpty(countrySlug: string, state: string | null) {
-  const stateFilter = state ? eq(blogPosts.state, state) : isNull(blogPosts.state);
-
+// Tips share the post's location slug, so a slug with no published posts left
+// means its tip page has nothing to link back to.
+async function autoUnpublishTipIfEmpty(countrySlug: string) {
   const [remaining] = await db
     .select({ count: sql<number>`COUNT(*)` })
     .from(blogPosts)
-    .where(
-      and(eq(blogPosts.countrySlug, countrySlug), stateFilter, eq(blogPosts.status, "published")),
-    );
+    .where(and(eq(blogPosts.countrySlug, countrySlug), eq(blogPosts.status, "published")));
 
   if (Number(remaining?.count ?? 0) === 0) {
-    const tipSlug = state ? slugify(state) : countrySlug;
-
     const [tip] = await db
       .update(tips)
       .set({ status: "draft", publishedAt: null })
-      .where(and(eq(tips.slug, tipSlug), eq(tips.status, "published")))
+      .where(and(eq(tips.slug, countrySlug), eq(tips.status, "published")))
       .returning({ slug: tips.slug });
 
     if (tip) {
@@ -73,7 +70,7 @@ export async function createBlogPost(input: unknown): Promise<ActionResult<{ id:
   }
 
   const data = parsed.data;
-  const countrySlug = slugify(data.country);
+  const countrySlug = locationSlug(data.country, data.state);
   const postIndex = await getNextPostIndex(countrySlug);
 
   const [post] = await db
@@ -112,13 +109,70 @@ export async function updateBlogPost(id: string, input: unknown): Promise<Action
 
   const data = parsed.data;
 
-  const [post] = await db.update(blogPosts).set(data).where(eq(blogPosts.id, id)).returning({
-    countrySlug: blogPosts.countrySlug,
-    postIndex: blogPosts.postIndex,
-    status: blogPosts.status,
+  // Changing a US post's state changes its location slug, so the post moves
+  // to the end of the new slug's list and the old list is re-indexed to stay
+  // contiguous (same rule as delete).
+  const result = await db.transaction(async (tx) => {
+    const existing = await tx.query.blogPosts.findFirst({
+      where: eq(blogPosts.id, id),
+      columns: { country: true, countrySlug: true, postIndex: true },
+    });
+    if (!existing) return null;
+
+    const newSlug =
+      data.state === undefined ? existing.countrySlug : locationSlug(existing.country, data.state);
+    const moved = newSlug !== existing.countrySlug;
+
+    let newIndex = existing.postIndex;
+    if (moved) {
+      const [target] = await tx
+        .select({ count: sql<number>`COUNT(*)` })
+        .from(blogPosts)
+        .where(eq(blogPosts.countrySlug, newSlug));
+      newIndex = Number(target?.count ?? 0) + 1;
+    }
+
+    const [post] = await tx
+      .update(blogPosts)
+      .set({ ...data, countrySlug: newSlug, postIndex: newIndex })
+      .where(eq(blogPosts.id, id))
+      .returning({
+        countrySlug: blogPosts.countrySlug,
+        postIndex: blogPosts.postIndex,
+        status: blogPosts.status,
+      });
+
+    if (moved) {
+      await tx
+        .update(blogPosts)
+        .set({ postIndex: sql`${blogPosts.postIndex} - 1` })
+        .where(
+          and(
+            eq(blogPosts.countrySlug, existing.countrySlug),
+            gt(blogPosts.postIndex, existing.postIndex),
+          ),
+        );
+    }
+
+    return { post, previous: moved ? existing : null };
   });
 
-  if (post?.status === "published") {
+  if (!result) {
+    return { success: false, error: "Post not found" };
+  }
+
+  const { post, previous } = result;
+
+  if (previous) {
+    await autoUnpublishTipIfEmpty(previous.countrySlug);
+    const [remaining] = await db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(blogPosts)
+      .where(eq(blogPosts.countrySlug, previous.countrySlug));
+    revalidateAfterDelete(previous.countrySlug, previous.postIndex, Number(remaining?.count ?? 0));
+  }
+
+  if (post.status === "published") {
     revalidatePublicPaths(post.countrySlug, post.postIndex);
   }
 
@@ -155,14 +209,13 @@ export async function unpublishBlogPost(id: string): Promise<ActionResult> {
     .returning({
       countrySlug: blogPosts.countrySlug,
       postIndex: blogPosts.postIndex,
-      state: blogPosts.state,
     });
 
   if (!post) {
     return { success: false, error: "Post not found" };
   }
 
-  await autoUnpublishTipIfEmpty(post.countrySlug, post.state);
+  await autoUnpublishTipIfEmpty(post.countrySlug);
   revalidatePublicPaths(post.countrySlug, post.postIndex);
   return { success: true, data: undefined };
 }
@@ -177,7 +230,6 @@ export async function deleteBlogPost(id: string): Promise<ActionResult> {
     const [row] = await tx.delete(blogPosts).where(eq(blogPosts.id, id)).returning({
       countrySlug: blogPosts.countrySlug,
       postIndex: blogPosts.postIndex,
-      state: blogPosts.state,
     });
 
     if (!row) return null;
@@ -199,7 +251,7 @@ export async function deleteBlogPost(id: string): Promise<ActionResult> {
   // ---------------------------------------------------------------
   // 2. Auto-unpublish tip if no published posts remain
   // ---------------------------------------------------------------
-  await autoUnpublishTipIfEmpty(deleted.countrySlug, deleted.state);
+  await autoUnpublishTipIfEmpty(deleted.countrySlug);
 
   // ---------------------------------------------------------------
   // 3. Revalidate affected blog paths

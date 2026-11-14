@@ -8,7 +8,7 @@ import { CountryCombobox } from "@/components/admin/CountryCombobox";
 import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
-import { slugify } from "@/lib/slugify";
+import { locationSlug } from "@/lib/slugify";
 
 export function CreatePostForm() {
   const [isPending, startTransition] = useTransition();
@@ -26,6 +26,7 @@ export function CreatePostForm() {
   const [tipsCtaCopy, setTipsCtaCopy] = useState("");
 
   const isUS = countryCode.toUpperCase() === "US";
+  const slug = country ? locationSlug(country, isUS ? state : null) : null;
 
   const isDirty =
     country !== "" || countryCode !== "" || title !== "" || subtitle !== "" || description !== "";
@@ -48,7 +49,7 @@ export function CreatePostForm() {
         description: description || null,
         backgroundImage: backgroundImage || null,
         tipsCtaCopy: tipsCtaCopy || null,
-        tipsSlug: country ? slugify(country) : null,
+        tipsSlug: slug,
       });
 
       // createBlogPost redirects on success, so we only get here on error
@@ -213,9 +214,7 @@ export function CreatePostForm() {
           placeholder='e.g. "See our tips for Trinidad"'
         />
         {country && (
-          <span className="mt-1 block text-xs text-gray-400">
-            Links to: /tips/{slugify(country)}
-          </span>
+          <span className="mt-1 block text-xs text-gray-400">Links to: /tips/{slug}</span>
         )}
       </label>
 
