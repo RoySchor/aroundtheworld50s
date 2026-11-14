@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { COUNTRIES } from "@/lib/country-codes";
+import { COUNTRIES, findCountryLabel } from "@/lib/country-codes";
 
 interface CountryComboboxProps {
   value: string;
@@ -86,7 +86,8 @@ export function CountryCombobox({ value, onChange, onSelect, placeholder }: Coun
         type="text"
         value={value}
         onChange={(e) => {
-          onChange(e.target.value);
+          // A fully typed name hides the dropdown, so fix its casing here instead.
+          onChange(findCountryLabel(e.target.value) ?? e.target.value);
           setOpen(true);
           // Typing changes the filtered results, so the old highlight is stale
           setHighlightIndex(-1);

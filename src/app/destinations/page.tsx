@@ -11,7 +11,7 @@ import { SITE_NAME } from "@/lib/constants";
 import { getOgImageUrl } from "@/lib/seo";
 import { DestinationDropdown } from "@/components/destinations/DestinationDropdown";
 import { WorldMap } from "@/components/destinations/WorldMap";
-import { mapLocationKey } from "@/lib/constants/world-map-coordinates";
+import { locationCoordinates, mapLocationKey } from "@/lib/constants/world-map-coordinates";
 import type { MapLocationData } from "@/components/destinations/WorldMap";
 
 export const metadata: Metadata = {
@@ -50,8 +50,12 @@ export default async function DestinationsPage() {
     const locationKey = mapLocationKey(post.country, post.countryCode, post.state);
     if (seen.has(locationKey)) continue;
     seen.add(locationKey);
+    if (!locationCoordinates[locationKey] && !locationCoordinates[post.country]) {
+      console.warn(`[destinations] No map position for "${locationKey}"; its pin is hidden.`);
+    }
     mapLocations.push({
       locationKey,
+      country: post.country,
       displayName: post.state ? `${post.state}, ${post.country}` : post.country,
       countrySlug: post.countrySlug,
       countryCode: post.countryCode,

@@ -1,5 +1,6 @@
 import "server-only";
 import { z } from "zod";
+import { canonicalCountryName } from "@/lib/country-codes";
 import { hasCountryStates } from "@/lib/constants/country-states";
 
 // ---------------------------------------------------------------------------
@@ -135,7 +136,7 @@ export const blogBlockDataSchema = z
 
 export const createBlogPostSchema = z
   .object({
-    country: z.string().min(1, "Country is required"),
+    country: z.string().min(1, "Country is required").transform(canonicalCountryName),
     countryCode: z.string().min(2).max(3, "Country code must be 2-3 characters"),
     state: z.string().nullable().optional(),
     title: z.string().min(1, "Title is required"),

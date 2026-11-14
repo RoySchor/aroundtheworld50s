@@ -9,6 +9,7 @@ import { locationCoordinates } from "@/lib/constants/world-map-coordinates";
 
 export interface MapLocationData {
   locationKey: string;
+  country: string;
   displayName: string;
   countrySlug: string;
   countryCode: string;
@@ -35,7 +36,9 @@ export function WorldMap({ locations }: WorldMapProps) {
       />
 
       {locations.map((location) => {
-        const coordinates = locationCoordinates[location.locationKey];
+        // A state without its own position falls back to its country's pin.
+        const coordinates =
+          locationCoordinates[location.locationKey] ?? locationCoordinates[location.country];
         if (!coordinates) return null;
 
         return (

@@ -151,3 +151,18 @@ export const COUNTRIES: { label: string; code: string }[] = Object.entries(COUNT
   .filter(([key]) => !ALIAS_KEYS.has(key))
   .map(([key, code]) => ({ label: titleCase(key), code }))
   .sort((a, b) => a.label.localeCompare(b.label));
+
+const CANONICAL_NAMES = new Map(COUNTRIES.map((c) => [c.label.toLowerCase(), c.label]));
+
+/**
+ * The list's spelling of a country name typed in any case ("mexico" → "Mexico"),
+ * or undefined if it isn't in the list. Map pins and page titles use the stored
+ * name as-is, so it must match the list exactly.
+ */
+export function findCountryLabel(name: string): string | undefined {
+  return CANONICAL_NAMES.get(name.trim().toLowerCase());
+}
+
+export function canonicalCountryName(name: string): string {
+  return findCountryLabel(name) ?? name.trim();
+}
