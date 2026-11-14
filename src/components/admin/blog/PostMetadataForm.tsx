@@ -4,7 +4,7 @@ import { useEffect, useState, useTransition } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { updateBlogPost } from "@/server/actions/blog-posts";
-import { US_STATES } from "@/lib/constants/us-states";
+import { getCountryStates } from "@/lib/constants/country-states";
 import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
@@ -42,7 +42,8 @@ export function PostMetadataForm({ post, onStateChange }: PostMetadataFormProps)
   const [tipsCtaCopy, setTipsCtaCopy] = useState(post.tipsCtaCopy ?? "");
   const [state, setState] = useState(post.state ?? "");
 
-  const isUS = post.countryCode.toUpperCase() === "US";
+  const stateOptions = getCountryStates(post.countryCode);
+  const hasStates = stateOptions.length > 0;
 
   const isDirty =
     title !== post.title ||
@@ -93,8 +94,8 @@ export function PostMetadataForm({ post, onStateChange }: PostMetadataFormProps)
         excerpt: excerpt || null,
         backgroundImage: backgroundImage || null,
         tipsCtaCopy: tipsCtaCopy || null,
-        tipsSlug: locationSlug(post.country, isUS ? state : null),
-        state: isUS && state ? state : null,
+        tipsSlug: locationSlug(post.country, hasStates ? state : null),
+        state: hasStates && state ? state : null,
       });
 
       if (result.success) {
@@ -129,7 +130,7 @@ export function PostMetadataForm({ post, onStateChange }: PostMetadataFormProps)
             {post.country} ({post.countryCode})
           </p>
         </div>
-        {isUS && (
+        {hasStates && (
           <label className="block">
             <span className="mb-1 block text-sm font-medium">
               State <span className="text-red-500">*</span>
@@ -141,7 +142,7 @@ export function PostMetadataForm({ post, onStateChange }: PostMetadataFormProps)
               className="w-full rounded border px-3 py-2 text-sm"
             >
               <option value="">Select a state...</option>
-              {US_STATES.map((s) => (
+              {stateOptions.map((s) => (
                 <option key={s.value} value={s.value}>
                   {s.label}
                 </option>
@@ -240,7 +241,7 @@ export function PostMetadataForm({ post, onStateChange }: PostMetadataFormProps)
           placeholder='e.g. "See our tips for Trinidad"'
         />
         <span className="mt-1 block text-xs text-gray-400">
-          Links to: /tips/{locationSlug(post.country, isUS ? state : null)}
+          Links to: /tips/{locationSlug(post.country, hasStates ? state : null)}
         </span>
       </label>
     </form>

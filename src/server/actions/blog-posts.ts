@@ -109,7 +109,7 @@ export async function updateBlogPost(id: string, input: unknown): Promise<Action
 
   const data = parsed.data;
 
-  // Changing a US post's state changes its location slug, so the post moves
+  // Changing a post's state changes its location slug, so the post moves
   // to the end of the new slug's list and the old list is re-indexed to stay
   // contiguous (same rule as delete).
   const result = await db.transaction(async (tx) => {

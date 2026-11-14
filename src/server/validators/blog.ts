@@ -1,5 +1,6 @@
 import "server-only";
 import { z } from "zod";
+import { hasCountryStates } from "@/lib/constants/country-states";
 
 // ---------------------------------------------------------------------------
 // Enum schemas (mirror Drizzle pgEnums)
@@ -148,11 +149,11 @@ export const createBlogPostSchema = z
     status: publishStatusSchema.optional().default("draft"),
   })
   .superRefine((data, ctx) => {
-    if (data.countryCode.toUpperCase() === "US" && !data.state) {
+    if (hasCountryStates(data.countryCode) && !data.state) {
       ctx.addIssue({
         code: "custom",
         path: ["state"],
-        message: "State is required for United States posts",
+        message: `State is required for ${data.country} posts`,
       });
     }
   });

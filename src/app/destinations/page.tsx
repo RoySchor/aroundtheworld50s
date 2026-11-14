@@ -11,6 +11,7 @@ import { SITE_NAME } from "@/lib/constants";
 import { getOgImageUrl } from "@/lib/seo";
 import { DestinationDropdown } from "@/components/destinations/DestinationDropdown";
 import { WorldMap } from "@/components/destinations/WorldMap";
+import { mapLocationKey } from "@/lib/constants/world-map-coordinates";
 import type { MapLocationData } from "@/components/destinations/WorldMap";
 
 export const metadata: Metadata = {
@@ -46,8 +47,7 @@ export default async function DestinationsPage() {
   const seen = new Set<string>();
   const mapLocations: MapLocationData[] = [];
   for (const post of posts) {
-    const locationKey =
-      post.state && post.countryCode === "US" ? `USA-${post.state}` : post.country;
+    const locationKey = mapLocationKey(post.country, post.countryCode, post.state);
     if (seen.has(locationKey)) continue;
     seen.add(locationKey);
     mapLocations.push({
