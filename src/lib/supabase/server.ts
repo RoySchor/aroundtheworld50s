@@ -25,7 +25,7 @@ export async function createClient() {
             );
           } catch {
             // `set` throws when called from a Server Component.
-            // Safe to ignore — the middleware in src/middleware.ts is
+            // Safe to ignore — the proxy in src/proxy.ts is
             // responsible for refreshing the session cookie.
           }
         },

@@ -5,7 +5,7 @@ import { createTip } from "@/server/actions/tips";
 import { US_STATES } from "@/lib/constants/us-states";
 import { getCountryCode } from "@/lib/country-codes";
 import { CountryCombobox } from "@/components/admin/CountryCombobox";
-import { slugify } from "@/lib/slugify";
+import { locationSlug } from "@/lib/slugify";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
 
@@ -31,7 +31,7 @@ export function CreateTipForm() {
 
     startTransition(async () => {
       const result = await createTip({
-        slug: isUS && state ? slugify(state) : slugify(country),
+        slug: locationSlug(country, isUS ? state : null),
         country,
         countryCode,
         state: isUS && state ? state : null,
@@ -116,7 +116,7 @@ export function CreateTipForm() {
             URL Path (auto-generated)
           </span>
           <p className="text-sm text-gray-700">
-            /tips/{isUS && state ? slugify(state) : slugify(country)}
+            /tips/{locationSlug(country, isUS ? state : null)}
           </p>
         </div>
       )}

@@ -8,7 +8,7 @@ import { US_STATES } from "@/lib/constants/us-states";
 import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
-import { slugify } from "@/lib/slugify";
+import { locationSlug } from "@/lib/slugify";
 import type { BlogPost } from "@/server/db/schema";
 
 export interface PostMetadataState {
@@ -93,7 +93,7 @@ export function PostMetadataForm({ post, onStateChange }: PostMetadataFormProps)
         excerpt: excerpt || null,
         backgroundImage: backgroundImage || null,
         tipsCtaCopy: tipsCtaCopy || null,
-        tipsSlug: slugify(post.country),
+        tipsSlug: locationSlug(post.country, isUS ? state : null),
         state: isUS && state ? state : null,
       });
 
@@ -240,7 +240,7 @@ export function PostMetadataForm({ post, onStateChange }: PostMetadataFormProps)
           placeholder='e.g. "See our tips for Trinidad"'
         />
         <span className="mt-1 block text-xs text-gray-400">
-          Links to: /tips/{slugify(post.country)}
+          Links to: /tips/{locationSlug(post.country, isUS ? state : null)}
         </span>
       </label>
     </form>

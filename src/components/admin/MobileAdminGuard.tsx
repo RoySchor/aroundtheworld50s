@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMobileCheck } from "@/hooks/useMobileCheck";
 
 export function MobileAdminGuard({ children }: { children: React.ReactNode }) {
@@ -15,12 +16,12 @@ export function MobileAdminGuard({ children }: { children: React.ReactNode }) {
           <p className="text-gray-600 mb-6">
             Admin is only available on laptops. Please switch to a laptop to manage the website.
           </p>
-          <a
+          <Link
             href="/"
             className="inline-block px-6 py-2 bg-gray-800 text-white rounded-full font-semibold hover:bg-gray-700 transition-colors"
           >
             Back to site
-          </a>
+          </Link>
         </div>
       </div>
     );

@@ -12,6 +12,7 @@ export const locationCoordinates: Record<string, MapCoordinate> = {
   England: { left: "48.3%", top: "38.4%" },
   France: { left: "48.6%", top: "40.9%" },
   Germany: { left: "50.9%", top: "38.9%" },
+  Greece: { left: "54.1%", top: "45.1%" },
   Iceland: { left: "45%", top: "31.2%" },
   Israel: { left: "57.5%", top: "47.4%" },
   Italy: { left: "52%", top: "43.5%" },

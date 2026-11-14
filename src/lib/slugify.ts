@@ -30,3 +30,12 @@ export function slugify(name: string): string {
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "");
 }
+
+/**
+ * Slug for a blog/tips location. US posts are grouped per state
+ * (`united-states-new-york`), everything else per country (`belgium`).
+ * Blog URLs, tips URLs, and cover overrides are all keyed by this value.
+ */
+export function locationSlug(country: string, state?: string | null): string {
+  return slugify(state ? `${country} ${state}` : country);
+}

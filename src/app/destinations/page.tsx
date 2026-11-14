@@ -55,6 +55,7 @@ export default async function DestinationsPage() {
       displayName: post.state ? `${post.state}, ${post.country}` : post.country,
       countrySlug: post.countrySlug,
       countryCode: post.countryCode,
+      state: post.state,
       backgroundImage: overrideMap.get(post.countrySlug) ?? post.backgroundImage,
     });
   }
