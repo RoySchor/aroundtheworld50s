@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, Component, type ReactNode } from "react";
+import { useEffect, useSyncExternalStore, Component, type ReactNode } from "react";
 import type { SocialEmbedBlockData } from "@/types/blog";
 
 declare global {
@@ -138,16 +138,19 @@ function TikTokEmbed({ url }: { url: string }) {
 // Main component
 // ---------------------------------------------------------------------------
 
+const noopSubscribe = () => () => {};
+
 interface SocialEmbedBlockProps {
   data: SocialEmbedBlockData;
 }
 
 export function SocialEmbedBlock({ data }: SocialEmbedBlockProps) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  // false during SSR and hydration, true once on the client — embeds need the DOM
+  const mounted = useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false,
+  );
 
   if (!mounted) {
     return (

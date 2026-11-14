@@ -1,21 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 
 const DEFAULT_BREAKPOINT = 1024;
 
 export function useMobileCheck(breakpoint = DEFAULT_BREAKPOINT) {
-  const [isMobile, setIsMobile] = useState(false);
-  const [checked, setChecked] = useState(false);
+  const query = `(max-width: ${breakpoint - 1}px)`;
 
-  useEffect(() => {
-    const mql = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
-    setIsMobile(mql.matches);
-    setChecked(true);
-    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mql.addEventListener("change", onChange);
-    return () => mql.removeEventListener("change", onChange);
-  }, [breakpoint]);
+  const subscribe = useCallback(
+    (onChange: () => void) => {
+      const mql = window.matchMedia(query);
+      mql.addEventListener("change", onChange);
+      return () => mql.removeEventListener("change", onChange);
+    },
+    [query],
+  );
 
-  return { isMobile, checked };
+  // null on the server and during hydration, so callers can wait for the real value
+  const isMobile = useSyncExternalStore(
+    subscribe,
+    () => window.matchMedia(query).matches,
+    () => null,
+  );
+
+  return { isMobile: isMobile === true, checked: isMobile !== null };
 }

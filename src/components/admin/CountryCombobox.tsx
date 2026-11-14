@@ -36,11 +36,6 @@ export function CountryCombobox({ value, onChange, onSelect, placeholder }: Coun
   const exactMatch = filtered.length === 1 && filtered[0].label.toLowerCase() === query;
   const showDropdown = open && query.length > 0 && filtered.length > 0 && !exactMatch;
 
-  // Reset highlight when filtered results change
-  useEffect(() => {
-    setHighlightIndex(-1);
-  }, [query]);
-
   // Close on outside click
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -93,6 +88,8 @@ export function CountryCombobox({ value, onChange, onSelect, placeholder }: Coun
         onChange={(e) => {
           onChange(e.target.value);
           setOpen(true);
+          // Typing changes the filtered results, so the old highlight is stale
+          setHighlightIndex(-1);
         }}
         onFocus={() => setOpen(true)}
         onKeyDown={handleKeyDown}
