@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { updateTip } from "@/server/actions/tips";
-import { US_STATES } from "@/lib/constants/us-states";
+import { getCountryStates } from "@/lib/constants/country-states";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
 import type { Tip } from "@/server/db/schema";
@@ -29,7 +29,8 @@ export function TipMetadataForm({ tip, onStateChange }: TipMetadataFormProps) {
   const [description, setDescription] = useState(tip.description ?? "");
   const [state, setState] = useState(tip.state ?? "");
 
-  const isUS = tip.countryCode.toUpperCase() === "US";
+  const stateOptions = getCountryStates(tip.countryCode);
+  const hasStates = stateOptions.length > 0;
 
   const isDirty =
     title !== tip.title || description !== (tip.description ?? "") || state !== (tip.state ?? "");
@@ -48,9 +49,8 @@ export function TipMetadataForm({ tip, onStateChange }: TipMetadataFormProps) {
     startTransition(async () => {
       const result = await updateTip(tip.id, {
         title,
-        slug: tip.slug,
         description: description || null,
-        state: isUS && state ? state : null,
+        state: hasStates && state ? state : null,
       });
 
       if (result.success) {
@@ -85,16 +85,19 @@ export function TipMetadataForm({ tip, onStateChange }: TipMetadataFormProps) {
             {tip.country} ({tip.countryCode})
           </p>
         </div>
-        {isUS && (
+        {hasStates && (
           <label className="block">
-            <span className="mb-1 block text-sm font-medium">State</span>
+            <span className="mb-1 block text-sm font-medium">
+              State <span className="text-red-500">*</span>
+            </span>
             <select
               value={state}
               onChange={(e) => setState(e.target.value)}
+              required
               className="w-full rounded border px-3 py-2 text-sm"
             >
-              <option value="">None</option>
-              {US_STATES.map((s) => (
+              <option value="">Select a state...</option>
+              {stateOptions.map((s) => (
                 <option key={s.value} value={s.value}>
                   {s.label}
                 </option>

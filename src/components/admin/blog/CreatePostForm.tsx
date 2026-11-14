@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { createBlogPost } from "@/server/actions/blog-posts";
-import { US_STATES } from "@/lib/constants/us-states";
+import { getCountryStates } from "@/lib/constants/country-states";
 import { getCountryCode } from "@/lib/country-codes";
 import { CountryCombobox } from "@/components/admin/CountryCombobox";
 import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
@@ -25,8 +25,9 @@ export function CreatePostForm() {
   const [backgroundImage, setBackgroundImage] = useState("");
   const [tipsCtaCopy, setTipsCtaCopy] = useState("");
 
-  const isUS = countryCode.toUpperCase() === "US";
-  const slug = country ? locationSlug(country, isUS ? state : null) : null;
+  const stateOptions = getCountryStates(countryCode);
+  const hasStates = stateOptions.length > 0;
+  const slug = country ? locationSlug(country, hasStates ? state : null) : null;
 
   const isDirty =
     country !== "" || countryCode !== "" || title !== "" || subtitle !== "" || description !== "";
@@ -41,7 +42,7 @@ export function CreatePostForm() {
       const result = await createBlogPost({
         country,
         countryCode,
-        state: isUS && state ? state : null,
+        state: hasStates && state ? state : null,
         title,
         subtitle: subtitle || null,
         header: header || null,
@@ -103,8 +104,8 @@ export function CreatePostForm() {
         </label>
       </div>
 
-      {/* US State (conditional) */}
-      {isUS && (
+      {/* State (only for countries split by state, e.g. US, Mexico) */}
+      {hasStates && (
         <label className="block">
           <span className="mb-1 block text-sm font-medium">
             State <span className="text-red-500">*</span>
@@ -116,7 +117,7 @@ export function CreatePostForm() {
             className="w-full rounded border px-3 py-2 text-sm"
           >
             <option value="">Select a state...</option>
-            {US_STATES.map((s) => (
+            {stateOptions.map((s) => (
               <option key={s.value} value={s.value}>
                 {s.label}
               </option>

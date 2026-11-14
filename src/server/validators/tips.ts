@@ -1,5 +1,7 @@
 import "server-only";
 import { z } from "zod";
+import { canonicalCountryName } from "@/lib/country-codes";
+import { hasCountryStates } from "@/lib/constants/country-states";
 
 // ---------------------------------------------------------------------------
 // Enum schemas (mirror Drizzle pgEnums)
@@ -20,18 +22,28 @@ export const tipSectionKeySchema = z.enum([
 // Tip schemas
 // ---------------------------------------------------------------------------
 
-export const createTipSchema = z.object({
-  slug: z
-    .string()
-    .min(1, "Slug is required")
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug must be lowercase with hyphens"),
-  country: z.string().min(1, "Country is required"),
-  countryCode: z.string().min(2).max(3),
-  state: z.string().nullable().optional(),
-  title: z.string().min(1, "Title is required"),
-  description: z.string().nullable().optional(),
-  status: publishStatusSchema.optional().default("draft"),
-});
+export const createTipSchema = z
+  .object({
+    slug: z
+      .string()
+      .min(1, "Slug is required")
+      .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug must be lowercase with hyphens"),
+    country: z.string().min(1, "Country is required").transform(canonicalCountryName),
+    countryCode: z.string().min(2).max(3),
+    state: z.string().nullable().optional(),
+    title: z.string().min(1, "Title is required"),
+    description: z.string().nullable().optional(),
+    status: publishStatusSchema.optional().default("draft"),
+  })
+  .superRefine((data, ctx) => {
+    if (hasCountryStates(data.countryCode) && !data.state) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["state"],
+        message: `State is required for ${data.country} tips`,
+      });
+    }
+  });
 
 export const updateTipSchema = z.object({
   slug: z

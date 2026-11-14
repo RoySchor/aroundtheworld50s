@@ -1,3 +1,5 @@
+import { hasCountryStates } from "@/lib/constants/country-states";
+
 export type MapCoordinate = {
   left: string;
   top: string;
@@ -21,6 +23,9 @@ export const locationCoordinates: Record<string, MapCoordinate> = {
   Jamaica: { left: "29.5%", top: "53.3%" },
   Japan: { left: "83%", top: "44%" },
   Mexico: { left: "23.3%", top: "50.5%" },
+  "Mexico-Mexico City": { left: "24%", top: "52.3%" },
+  // Cancun and Tulum
+  "Mexico-Quintana Roo": { left: "27.3%", top: "52%" },
   Netherlands: { left: "49.7%", top: "38.5%" },
   Norway: { left: "50.4%", top: "34%" },
   Panama: { left: "28.9%", top: "56.9%" },
@@ -59,3 +64,13 @@ export const locationCoordinates: Record<string, MapCoordinate> = {
   "USA-Virginia": { left: "29.9%", top: "45.1%" },
   "USA-Washington DC": { left: "30.5%", top: "44.7%" },
 };
+
+/**
+ * Key into `locationCoordinates`. Countries split by state get one pin per state
+ * (US keys use the historical "USA-" prefix); everything else gets one pin per country.
+ */
+export function mapLocationKey(country: string, countryCode: string, state: string | null): string {
+  if (!state || !hasCountryStates(countryCode)) return country;
+  const prefix = countryCode.toUpperCase() === "US" ? "USA" : country;
+  return `${prefix}-${state}`;
+}

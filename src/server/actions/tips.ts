@@ -7,6 +7,8 @@ import { tips, tipSections } from "@/server/db/schema";
 import { getAuthenticatedAdmin } from "@/server/auth";
 import { createTipSchema, updateTipSchema, updateTipSectionSchema } from "@/server/validators/tips";
 import { TIP_SECTIONS } from "@/lib/constants/tip-sections";
+import { hasCountryStates } from "@/lib/constants/country-states";
+import { locationSlug } from "@/lib/slugify";
 import type { ActionResult } from "./types";
 import { revalidateTipPaths, revalidatePublicTipPaths } from "./helpers";
 
@@ -88,19 +90,27 @@ export async function updateTip(id: string, input: unknown): Promise<ActionResul
     };
   }
 
-  const data = parsed.data;
+  const data = { ...parsed.data };
 
-  // If slug is being changed, we need to revalidate the old path too
-  let oldSlug: string | null = null;
-  if (data.slug) {
-    const existing = await db.query.tips.findFirst({
-      where: eq(tips.id, id),
-      columns: { slug: true },
-    });
-    if (existing && existing.slug !== data.slug) {
-      oldSlug = existing.slug;
-    }
+  const existing = await db.query.tips.findFirst({
+    where: eq(tips.id, id),
+    columns: { slug: true, country: true, countryCode: true },
+  });
+  if (!existing) {
+    return { success: false, error: "Tip not found" };
   }
+
+  // A tip's URL is keyed by its location, so changing the state moves the tip
+  // to the slug its posts link to (same rule as blog posts).
+  if (data.state !== undefined) {
+    if (!data.state && hasCountryStates(existing.countryCode)) {
+      return { success: false, error: `State is required for ${existing.country} tips` };
+    }
+    data.slug = locationSlug(existing.country, data.state);
+  }
+
+  // If the slug changes, the old path needs revalidating too
+  const oldSlug = data.slug && data.slug !== existing.slug ? existing.slug : null;
 
   let tip: { slug: string; status: string } | undefined;
   try {
@@ -113,7 +123,7 @@ export async function updateTip(id: string, input: unknown): Promise<ActionResul
     if (pgErr.code === "23505") {
       return {
         success: false,
-        error: "A tips page for this country already exists.",
+        error: `A tips page for ${data.state || existing.country} already exists.`,
       };
     }
     throw err;

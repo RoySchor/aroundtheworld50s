@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { createTip } from "@/server/actions/tips";
-import { US_STATES } from "@/lib/constants/us-states";
+import { getCountryStates } from "@/lib/constants/country-states";
 import { getCountryCode } from "@/lib/country-codes";
 import { CountryCombobox } from "@/components/admin/CountryCombobox";
 import { locationSlug } from "@/lib/slugify";
@@ -19,7 +19,8 @@ export function CreateTipForm() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
-  const isUS = countryCode.toUpperCase() === "US";
+  const stateOptions = getCountryStates(countryCode);
+  const hasStates = stateOptions.length > 0;
 
   const isDirty = country !== "" || countryCode !== "" || title !== "" || description !== "";
 
@@ -31,10 +32,10 @@ export function CreateTipForm() {
 
     startTransition(async () => {
       const result = await createTip({
-        slug: locationSlug(country, isUS ? state : null),
+        slug: locationSlug(country, hasStates ? state : null),
         country,
         countryCode,
-        state: isUS && state ? state : null,
+        state: hasStates && state ? state : null,
         title,
         description: description || null,
       });
@@ -90,17 +91,20 @@ export function CreateTipForm() {
         </label>
       </div>
 
-      {/* US State (conditional) */}
-      {isUS && (
+      {/* State (only for countries split by state, e.g. US, Mexico) */}
+      {hasStates && (
         <label className="block">
-          <span className="mb-1 block text-sm font-medium">State</span>
+          <span className="mb-1 block text-sm font-medium">
+            State <span className="text-red-500">*</span>
+          </span>
           <select
             value={state}
             onChange={(e) => setState(e.target.value)}
+            required
             className="w-full rounded border px-3 py-2 text-sm"
           >
             <option value="">Select a state...</option>
-            {US_STATES.map((s) => (
+            {stateOptions.map((s) => (
               <option key={s.value} value={s.value}>
                 {s.label}
               </option>
@@ -116,7 +120,7 @@ export function CreateTipForm() {
             URL Path (auto-generated)
           </span>
           <p className="text-sm text-gray-700">
-            /tips/{locationSlug(country, isUS ? state : null)}
+            /tips/{locationSlug(country, hasStates ? state : null)}
           </p>
         </div>
       )}
