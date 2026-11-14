@@ -43,6 +43,7 @@ const COUNTRY_CODES: Record<string, string> = {
   fiji: "FJ",
   finland: "FI",
   france: "FR",
+  "french polynesia": "PF",
   georgia: "GE",
   germany: "DE",
   greece: "GR",
