@@ -49,7 +49,6 @@ export function TipMetadataForm({ tip, onStateChange }: TipMetadataFormProps) {
     startTransition(async () => {
       const result = await updateTip(tip.id, {
         title,
-        slug: tip.slug,
         description: description || null,
         state: hasStates && state ? state : null,
       });
@@ -88,13 +87,16 @@ export function TipMetadataForm({ tip, onStateChange }: TipMetadataFormProps) {
         </div>
         {hasStates && (
           <label className="block">
-            <span className="mb-1 block text-sm font-medium">State</span>
+            <span className="mb-1 block text-sm font-medium">
+              State <span className="text-red-500">*</span>
+            </span>
             <select
               value={state}
               onChange={(e) => setState(e.target.value)}
+              required
               className="w-full rounded border px-3 py-2 text-sm"
             >
-              <option value="">None</option>
+              <option value="">Select a state...</option>
               {stateOptions.map((s) => (
                 <option key={s.value} value={s.value}>
                   {s.label}

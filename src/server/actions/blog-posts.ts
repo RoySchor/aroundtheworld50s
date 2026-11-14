@@ -8,6 +8,7 @@ import { blogPosts, tips } from "@/server/db/schema";
 import { getAuthenticatedAdmin } from "@/server/auth";
 import { createBlogPostSchema, updateBlogPostSchema } from "@/server/validators/blog";
 import { locationSlug } from "@/lib/slugify";
+import { hasCountryStates } from "@/lib/constants/country-states";
 import { getNextPostIndex } from "@/server/repositories/admin-blog";
 import { revalidatePublicTipPaths } from "./helpers";
 import type { ActionResult } from "./types";
@@ -115,9 +116,13 @@ export async function updateBlogPost(id: string, input: unknown): Promise<Action
   const result = await db.transaction(async (tx) => {
     const existing = await tx.query.blogPosts.findFirst({
       where: eq(blogPosts.id, id),
-      columns: { country: true, countrySlug: true, postIndex: true },
+      columns: { country: true, countryCode: true, countrySlug: true, postIndex: true },
     });
     if (!existing) return null;
+
+    if (data.state !== undefined && !data.state && hasCountryStates(existing.countryCode)) {
+      return { ok: false as const, error: `State is required for ${existing.country} posts` };
+    }
 
     const newSlug =
       data.state === undefined ? existing.countrySlug : locationSlug(existing.country, data.state);
@@ -154,11 +159,14 @@ export async function updateBlogPost(id: string, input: unknown): Promise<Action
         );
     }
 
-    return { post, previous: moved ? existing : null };
+    return { ok: true as const, post, previous: moved ? existing : null };
   });
 
   if (!result) {
     return { success: false, error: "Post not found" };
+  }
+  if (!result.ok) {
+    return { success: false, error: result.error };
   }
 
   const { post, previous } = result;

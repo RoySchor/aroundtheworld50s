@@ -94,10 +94,13 @@ export function CreateTipForm() {
       {/* State (only for countries split by state, e.g. US, Mexico) */}
       {hasStates && (
         <label className="block">
-          <span className="mb-1 block text-sm font-medium">State</span>
+          <span className="mb-1 block text-sm font-medium">
+            State <span className="text-red-500">*</span>
+          </span>
           <select
             value={state}
             onChange={(e) => setState(e.target.value)}
+            required
             className="w-full rounded border px-3 py-2 text-sm"
           >
             <option value="">Select a state...</option>
