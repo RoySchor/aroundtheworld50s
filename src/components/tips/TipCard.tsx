@@ -11,7 +11,7 @@ export function TipCard({ tip }: TipCardProps) {
   return (
     <Link href={`/tips/${tip.slug}`} className="tip-card">
       <div className="tip-card-header">
-        <CountryFlag code={tip.countryCode} country={tip.country} />
+        <CountryFlag code={tip.countryCode} country={tip.country} state={tip.state} />
         <div>
           <h2 className="tip-card-title">{tip.title}</h2>
           <p className="tip-card-location">{formatLocation(tip)}</p>

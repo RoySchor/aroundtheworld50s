@@ -3,8 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Flag from "react-world-flags";
 import { STATIC_ASSETS } from "@/lib/cloudinary";
+import { LocationFlag } from "@/components/shared/LocationFlag";
 import { locationCoordinates } from "@/lib/constants/world-map-coordinates";
 
 export interface MapLocationData {
@@ -12,6 +12,7 @@ export interface MapLocationData {
   displayName: string;
   countrySlug: string;
   countryCode: string;
+  state: string | null;
   backgroundImage: string | null;
 }
 
@@ -52,7 +53,11 @@ export function WorldMap({ locations }: WorldMapProps) {
               {hoveredLocation?.locationKey === location.locationKey && (
                 <div className="flag-pole">
                   <div className="flag">
-                    <Flag code={location.countryCode} alt={location.displayName} />
+                    <LocationFlag
+                      countryCode={location.countryCode}
+                      state={location.state}
+                      alt={location.displayName}
+                    />
                   </div>
                 </div>
               )}
